@@ -1,0 +1,1721 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+<style>
+/* Layout: one-column pocket app (max 600px), gummy jar at the top, bottom tab bar with a jelly "+" button */
+:root{
+  --bg:#FFF5F3; --surface:#FFFFFF; --surface-2:#FCE9E7; --ink:#3A1830; --ink-2:#80607A; --line:#F1D9DA;
+  --accent:#E3346A; --accent-text:#E3346A; --accent-ink:#FFFFFF; --accent-soft:#FFDCE6; --scrim:rgba(58,24,48,.42);
+  --ok:#2F9E68; --warn:#C9831A;
+  --g-straw:#F0445F; --g-orange:#FF8A2B; --g-lemon:#F5C518; --g-melon:#3DBE7A;
+  --g-soda:#2FA4E7; --g-grape:#8D5BD6; --g-cola:#8A5233; --g-milk:#F2E6D6;
+  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+  --r-panel:20px;
+  --shelf-board:color-mix(in srgb,var(--accent) 22%,var(--surface-2));
+  --shelf-edge:color-mix(in srgb,var(--accent) 38%,var(--surface-2));
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1C1118; --surface:#271922; --surface-2:#33202C; --ink:#FBEAF1; --ink-2:#C6A6B8; --line:#42303B;
+    --accent:#FF5C8D; --accent-text:#FF5C8D; --accent-ink:#2A0E1C; --accent-soft:#4B2234; --scrim:rgba(0,0,0,.6);
+    --ok:#5BD198; --warn:#F0B34A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1C1118; --surface:#271922; --surface-2:#33202C; --ink:#FBEAF1; --ink-2:#C6A6B8; --line:#42303B;
+  --accent:#FF5C8D; --accent-text:#FF5C8D; --accent-ink:#2A0E1C; --accent-soft:#4B2234; --scrim:rgba(0,0,0,.6);
+  --ok:#5BD198; --warn:#F0B34A; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+/* iOS zooms into any field under 16px on focus, which leaves the page pannable sideways */
+input,select,textarea{font-size:16px}
+html,body{overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid transparent}
+.top-in{max-width:600px;margin:0 auto;padding-inline:16px;padding-block:10px;display:flex;align-items:center;gap:10px}
+.logo{font-family:var(--f-display);font-size:24px;letter-spacing:.02em;line-height:1;display:flex;align-items:center;gap:6px}
+.logo span{color:var(--accent-text)}
+.pill{font-size:11px;letter-spacing:.06em;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill.cloud{background:var(--accent-soft);color:var(--accent-text)}
+.top .sp{flex:1}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.icon-btn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.8}
+
+.wrap{max-width:600px;margin:0 auto;padding-inline:16px;padding-block:6px 128px;display:flex;flex-direction:column;gap:18px}
+.view{display:flex;flex-direction:column;gap:18px}
+
+/* banners */
+.banner{background:var(--surface-2);border-radius:14px;padding:10px 14px;font-size:13px;color:var(--ink-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.banner b{color:var(--ink)}
+.banner .btn{margin-left:auto}
+
+/* jar */
+.jar-panel{background:var(--surface);border-radius:var(--r-panel);padding:14px 14px 12px;display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:12px;align-items:end;border:1px solid var(--line)}
+.jar-panel canvas{width:100%;height:230px;display:block;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.jar-side{display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
+.big{font-family:var(--f-display);font-size:44px;line-height:1}
+.big small{font-family:var(--f-body);font-weight:700;font-size:14px;margin-left:2px}
+.lbl{font-size:11px;letter-spacing:.08em;color:var(--ink-2)}
+.kv{display:flex;flex-direction:column;gap:0}
+.kv .v{font-weight:700;font-size:17px}
+@media (max-width:420px){.jar-panel{grid-template-columns:minmax(0,1fr) 104px}.big{font-size:38px}}
+
+
+/* buttons */
+.btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;background:var(--surface-2);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-size:14px;line-height:1.2}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:inset 0 -3px 0 rgba(0,0,0,.14),inset 0 2px 0 rgba(255,255,255,.35)}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
+.btn.sm{padding:6px 12px;font-size:12px}
+.btn.danger{color:var(--accent-text);background:transparent;border:1px solid var(--accent)}
+.btn.danger.armed{background:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.x{background:var(--ink);color:var(--bg)}
+
+/* search + chips */
+.toolbar{display:flex;flex-direction:column;gap:10px}
+.search{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* list */
+.month{display:flex;flex-direction:column;gap:6px}
+.month-h{display:flex;align-items:baseline;gap:10px;padding-inline:4px}
+.month-h h2{font-family:var(--f-display);font-weight:400;font-size:18px}
+.month-h span{font-size:12px;color:var(--ink-2)}
+.rows{background:var(--surface);border-radius:var(--r-panel);border:1px solid var(--line);overflow:hidden}
+.row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+/* one picture frame for every gummy: gummy-color border, photo inside or the default bear on a tint */
+.gframe{box-sizing:border-box;display:grid;place-items:center;overflow:hidden;flex:none;border:3px solid var(--gc);background:color-mix(in srgb,var(--gc) 16%,var(--surface));box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.gframe img{width:100%;height:100%;object-fit:cover;display:block}
+.gframe svg{width:64%;height:auto}
+.gf-row{width:44px;height:44px;border-radius:12px}
+.gf-shelf{width:100%;height:auto;aspect-ratio:4/5;border-radius:9px;border-width:3px;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 3px 6px rgba(0,0,0,.16)}
+.gf-shelf svg{width:58%}
+.gf-detail{width:96px;height:120px;border-radius:16px;border-width:5px}
+.row .nm,.row .sub{display:block}
+.row .row-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:2px}
+.row .row-tags .tag{margin-right:0}
+.row .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .sub{font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .rt{text-align:right;font-size:12px;color:var(--ink-2);display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.stars{color:var(--g-lemon);letter-spacing:1px;font-size:13px;white-space:nowrap}
+.stars i{font-style:normal;color:var(--line)}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);margin-right:4px;vertical-align:1px}
+.tag.new{background:var(--accent);color:var(--accent-ink)}
+.empty{padding:28px 18px;text-align:center;color:var(--ink-2);font-size:14px}
+
+/* calendar */
+.cal{background:var(--surface);border-radius:var(--r-panel);border:1px solid var(--line);padding:14px}
+.cal-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cal-h h2{font-family:var(--f-display);font-weight:400;font-size:20px;flex:1;text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-wd{font-size:11px;text-align:center;color:var(--ink-2);padding-bottom:2px}
+.cal-wd:first-child{color:var(--accent-text)}
+.day{aspect-ratio:1/1.08;max-width:100%;border:0;border-radius:10px;background:var(--bg);padding:4px 3px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px}
+.day.out{visibility:hidden}
+.day.today{box-shadow:inset 0 0 0 2px var(--accent)}
+.day.sel{background:var(--ink);color:var(--bg)}
+.day .dots{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:30px}
+.day .dot{width:8px;height:8px;border-radius:50%}
+.day .more{font-size:9px;line-height:1}
+.cal-sum{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--ink-2)}
+.cal-sum b{color:var(--ink);font-size:16px}
+
+/* stats */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
+.kpi .v{font-family:var(--f-display);font-size:22px;line-height:1.2}
+.kpi .v small{font-family:var(--f-body);font-size:11px;font-weight:700}
+@media (max-width:480px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.panel h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.panel h3 .s{font-weight:400;color:var(--ink-2);font-size:12px}
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar{display:grid;grid-template-columns:7.5em minmax(0,1fr) 2.6em;gap:8px;align-items:center;font-size:13px}
+.bar .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .tr{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.bar .fl{height:100%;border-radius:999px;background:var(--accent-text)}
+.bar .c{text-align:right;color:var(--ink-2)}
+.chart svg{width:100%;height:auto;display:block}
+.map{display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));gap:4px;align-items:center}
+.map .cell{aspect-ratio:1;max-width:100%;border-radius:8px;background:var(--surface-2);display:grid;place-items:center}
+.map .cell span{border-radius:50%;background:var(--accent-text);display:block}
+.map .ax{font-size:10px;color:var(--ink-2);text-align:center}
+.map-x{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);padding-left:2.4em}
+.type-line{font-size:14px}
+.type-line b{font-family:var(--f-display);font-weight:400;font-size:18px;color:var(--accent-text)}
+
+/* gummy shelf (stamp book) */
+.shelf-sum{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.shelf-sum b{font-family:var(--f-display);font-weight:400;font-size:28px;color:var(--accent-text)}
+.shelf-sum span{font-size:13px;color:var(--ink-2)}
+.shelf-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.shelf{display:flex;flex-direction:column;gap:6px}
+.shelf-h{display:flex;align-items:baseline;gap:10px;padding-inline:4px}
+.shelf-h h2{font-family:var(--f-display);font-weight:400;font-size:17px}
+.shelf-h span{font-size:12px;color:var(--ink-2)}
+.shelf-h .prog{margin-left:auto;font-variant-numeric:tabular-nums}
+/* each grid row stands on its own board */
+.shelf-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);padding:10px 8px 0;overflow:hidden}
+/* four packs per board; each pack brings its own piece of board so rows of any height line up */
+.shelf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:0;row-gap:0}
+
+.pk{background:none;border:0;padding:8px 4px 15px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;position:relative;min-width:0;font:inherit;color:inherit}
+.pk::after{content:"";position:absolute;left:-1px;right:-1px;bottom:0;height:10px;background:linear-gradient(to bottom,var(--shelf-board) 0 6px,var(--shelf-edge) 6px 10px)}
+.pk .pn{font-size:11px;line-height:1.3;font-weight:700;text-align:center;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;height:2.6em}
+.pk .stamp{position:absolute;top:2px;right:0;z-index:1;min-width:27px;height:27px;padding:0 3px;border-radius:14px;border:2px solid var(--accent);color:var(--accent-text);background:var(--surface);font-family:var(--f-display);font-size:11px;line-height:23px;transform:rotate(12deg)}
+.pk .crown{position:absolute;top:2px;left:4px;z-index:1;color:var(--g-lemon);font-size:17px;line-height:1;text-shadow:0 1px 0 rgba(0,0,0,.15)}
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding-inline:8px}
+.tab{background:none;border:0;padding:8px 0 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--ink-2)}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+.tab[aria-current="page"]{color:var(--accent-text);font-weight:700}
+.fab{justify-self:center;width:62px;height:62px;border-radius:50%;border:0;margin-top:-22px;margin-bottom:8px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;box-shadow:inset 0 -5px 0 rgba(0,0,0,.16),inset 0 4px 0 rgba(255,255,255,.35),0 6px 16px color-mix(in srgb,var(--accent) 35%,transparent);transition:transform .15s}
+.fab:active{transform:scale(.92)}
+.fab svg{width:28px;height:28px;stroke:currentColor;stroke-width:3;fill:none}
+
+/* sheets */
+.sheet{position:fixed;left:0;right:0;top:var(--vv-top,0px);height:var(--vv-h,100%);z-index:50;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center;padding-top:calc(env(safe-area-inset-top,0px) + 48px)}
+.sheet-p{background:var(--bg);width:100%;max-width:600px;max-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;border-radius:24px 24px 0 0;padding:0 16px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet-p{animation:none}.fab{transition:none}}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:12px auto 10px}
+/* title + 閉じる stay pinned while a tall sheet scrolls */
+.sheet-h{display:flex;align-items:center;gap:10px;margin:0 -16px 12px;padding:6px 16px 8px;position:sticky;top:0;z-index:3;background:var(--bg)}
+.sheet-h h2{font-family:var(--f-display);font-weight:400;font-size:20px;flex:1}
+.form{display:flex;flex-direction:column;gap:14px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f > label,.f > .fl-t{font-size:12px;font-weight:700;color:var(--ink-2);letter-spacing:.04em}
+.in{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px}
+textarea.in{resize:vertical;min-height:70px}
+/* iOS gives date/number fields a wide built-in minimum that ignores width:100% */
+.in{min-width:0;max-width:100%;display:block}
+input[type=date].in{-webkit-appearance:none;appearance:none;min-height:46px;text-align:left}
+input[type=date].in::-webkit-date-and-time-value{text-align:left}
+.f2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.colors{display:flex;gap:8px;flex-wrap:wrap}
+.cbtn{width:40px;height:40px;border-radius:12px;border:2px solid transparent;background:var(--surface);display:grid;place-items:center;padding:0}
+.cbtn[aria-pressed="true"]{border-color:var(--ink)}
+#f-colors{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+#f-colors .cbtn{width:100%;height:auto;aspect-ratio:1;max-width:48px;max-height:48px}
+#f-colors .cbtn svg{width:66%;height:auto}
+/* rating pickers sit in the middle of the sheet so either thumb reaches them */
+.starin,.shapein{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.starin button{background:none;border:0;font-size:34px;line-height:1;padding:2px 4px;color:var(--line)}
+.starin button.on{color:var(--g-lemon)}
+.shapein button{background:none;border:0;padding:5px;line-height:0;border-radius:8px}
+.pick-lbl{flex-basis:100%;text-align:center;font-size:13px;font-weight:700;color:var(--ink-2)}
+input[type=range]{width:100%;accent-color:var(--accent-text)}
+.sheet-actions{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:-20px;background:var(--bg);padding-block:10px;margin-top:4px}
+.sheet-actions .btn.primary{flex:1}
+.err{color:var(--accent-text);font-size:12px}
+.ac{position:relative}
+.ac-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 28px rgba(58,24,48,.16);max-height:320px;overflow-y:auto}
+.ac-head{font-size:11px;letter-spacing:.06em;color:var(--ink-2);padding:8px 12px 4px}
+.ac-opt{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;width:100%;border:0;border-top:1px solid var(--line);background:none;text-align:left}
+.ac-opt:first-of-type{border-top:0}
+.ac-opt[aria-selected="true"]{background:var(--surface-2)}
+.ac-opt .n{display:block;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-opt .m{display:block;font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-opt mark{background:none;color:var(--accent-text)}
+.ac-src{font-size:10px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.ac-src.mine{background:var(--accent-soft);color:var(--accent-text)}
+.ac-hint{font-size:12px;color:var(--ink-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.in.guessed{background:var(--accent-soft);border-color:transparent}
+
+/* detail */
+.dt-hero{display:flex;gap:14px;align-items:center}
+.photo-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.photo-row .hint{flex-basis:100%}
+.dt-hero h3{font-size:19px;font-weight:700;line-height:1.35}
+.dt-hero .sub{font-size:13px;color:var(--ink-2)}
+.dt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-block:14px}
+.dt-grid div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.dt-grid .v{font-weight:700}
+.meter{display:flex;gap:3px;margin-top:3px}
+.meter{align-items:center}
+.note{background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--line);white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* post */
+.post-prev{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px}
+.post-prev textarea{border:0;background:transparent;width:100%;min-height:170px;resize:vertical;padding:0;line-height:1.65}
+.post-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:6px}
+.post-meta .over{color:var(--accent-text);font-weight:700}
+.hint{font-size:12px;color:var(--ink-2)}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.snack{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 16px;box-shadow:0 8px 22px rgba(0,0,0,.14);font-size:13px;font-weight:700;white-space:nowrap;max-width:calc(100% - 32px);animation:snackin .25s ease-out}
+.snack .btn.x{padding:6px 12px}
+.snack-x{background:none;border:0;width:28px;height:28px;border-radius:50%;color:var(--ink-2);font-size:16px;line-height:1}
+@keyframes snackin{from{transform:translate(-50%,12px);opacity:0}to{transform:translateX(-50%);opacity:1}}
+@media (prefers-reduced-motion:reduce){.snack{animation:none}}
+body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
+.crop{display:flex;flex-direction:column;align-items:center;gap:10px}
+.crop-view{width:min(72vw,260px);aspect-ratio:4/5;border:5px solid var(--gc,var(--accent));border-radius:16px;overflow:hidden;touch-action:none;cursor:grab;background:var(--surface-2);box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.crop-view:active{cursor:grabbing}
+.crop-view canvas{width:100%;height:100%;display:block}
+.crop-zoom{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;max-width:300px;font-size:12px;color:var(--ink-2)}
+.crop-tools{justify-content:center}
+.settings-list{display:flex;flex-direction:column;gap:12px}
+.settings-list .panel p{margin:0;font-size:13px;color:var(--ink-2)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.shop-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.shop-item{display:flex;align-items:center;gap:6px;padding:6px 8px 6px 14px;border-top:1px solid var(--line);background:var(--bg)}
+.shop-item:first-child{border-top:0}
+.shop-item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;font-size:14px}
+.icon-btn.sm{width:32px;height:32px;border-radius:10px}
+.icon-btn.sm svg{width:16px;height:16px}
+.icon-btn:disabled{opacity:.3;cursor:default}
+.shop-add{display:flex;gap:8px}
+.theme-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.theme-btn{width:auto;height:auto;padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--ink-2)}
+.theme-btn[aria-pressed="true"]{color:var(--ink);font-weight:700;background:var(--accent-soft)}
+.sp-note{display:block;font-weight:400;font-size:11px;color:var(--ink-2);white-space:normal}
+.shop-add .in{flex:1;min-width:0}
+</style></head><body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="logo" aria-label="ぐみろぐ"><span>ぐみ</span>ろぐ</div>
+    <span class="pill" id="status">この端末に保存</span>
+    <div class="sp"></div>
+    <button class="icon-btn" id="btn-settings" aria-label="設定とデータ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <div class="banner" id="demo-banner" hidden><span><b>サンプル表示中</b>　下の記録は見本です。最初のグミを記録すると、あなたのログに切り替わります。</span></div>
+  <div class="banner" id="migrate-banner" hidden></div>
+
+  <!-- ログ -->
+  <section class="view" id="v-log">
+    <div class="jar-panel">
+      <canvas id="jar" aria-label="今月食べたグミのびん（タップするとグミが跳ねます）"></canvas>
+      <div class="jar-side">
+        <div class="kv"><span class="lbl" id="jar-month">今月</span><span class="big num" id="jar-count">0<small>粒</small></span></div>
+        <div class="kv"><span class="lbl">今月の出費</span><span class="v num" id="jar-spend">0円</span></div>
+        <div class="kv"><span class="lbl">連続記録</span><span class="v num" id="jar-streak">0日</span></div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <input class="search" id="q" type="search" placeholder="グミ名・メーカー・味・お店でさがす" aria-label="ログを検索">
+      <div class="chips" id="filters"></div>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <!-- カレンダー -->
+  <section class="view" id="v-cal" hidden>
+    <div class="cal">
+      <div class="cal-h">
+        <button class="icon-btn" id="cal-prev" aria-label="前の月"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <h2 id="cal-title"></h2>
+        <button class="icon-btn" id="cal-next" aria-label="次の月"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-sum" id="cal-sum"></div>
+    </div>
+    <div id="cal-day"></div>
+  </section>
+
+  <!-- データ -->
+  <section class="view" id="v-stats" hidden></section>
+
+  <!-- グミ棚 -->
+  <section class="view" id="v-shelf" hidden></section>
+</main>
+
+<nav class="tabbar" aria-label="メニュー">
+  <div class="tabbar-in">
+    <button class="tab" data-tab="log" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>ログ</button>
+    <button class="tab" data-tab="cal"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>カレンダー</button>
+    <button class="fab" id="fab" aria-label="グミを記録"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="tab" data-tab="stats"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>データ</button>
+    <button class="tab" data-tab="shelf"><svg viewBox="0 0 24 24"><path d="M3.5 9.5h17M3.5 19.5h17M5 3.5v16M19 3.5v16"/><rect x="7" y="4.5" width="3.5" height="5" rx="1"/><rect x="12" y="5.5" width="4" height="4" rx="1.5"/><rect x="7.5" y="13.5" width="4" height="6" rx="1"/><circle cx="15.2" cy="17" r="2.5"/></svg>グミ棚</button>
+  </div>
+</nav>
+
+<!-- 記録フォーム -->
+<div class="sheet" id="sh-form" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="form-title">
+    <div class="grab"></div>
+    <div class="sheet-h"><h2 id="form-title">グミを記録</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <form class="form" id="form" novalidate>
+      <div class="f">
+        <label for="f-name">グミの名前</label>
+        <div class="ac">
+          <input class="in" id="f-name" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ac-list" placeholder="例：果汁グミ ぶどう" required>
+          <div class="ac-list" id="ac-list" role="listbox" aria-label="グミの候補" hidden></div>
+        </div>
+        <div class="ac-hint" id="ac-hint" hidden></div>
+        <span class="err" id="f-err" hidden>グミの名前を入れてください</span>
+      </div>
+      <div class="f2">
+        <div class="f"><label for="f-maker">メーカー</label><input class="in" id="f-maker" list="dl-makers" autocomplete="off" placeholder="明治"><datalist id="dl-makers"></datalist></div>
+        <div class="f"><label for="f-flavor">味</label><input class="in" id="f-flavor" autocomplete="off" placeholder="ぶどう"></div>
+      </div>
+      <div class="f"><span class="fl-t">グミの色</span><div class="colors" id="f-colors"></div></div>
+      <div class="f"><span class="fl-t">買ったお店</span><div class="chips" id="f-shops"></div><input class="in" id="f-shop" placeholder="お店の名前（自由入力）" autocomplete="off"></div>
+      <div class="f2">
+        <div class="f"><label for="f-price">値段（円）</label><input class="in num" id="f-price" type="number" inputmode="numeric" min="0" placeholder="140"></div>
+        <div class="f"><label for="f-date">日付</label><input class="in" id="f-date" type="date"></div>
+      </div>
+      <div class="f"><span class="fl-t">おいしさ</span><div class="starin" id="f-stars"></div></div>
+      <div class="f"><span class="fl-t">かたさ</span><div class="shapein" id="f-hard-pick" data-kind="hard" role="radiogroup" aria-label="かたさ"></div><input type="hidden" id="f-hard"></div>
+      <div class="f"><span class="fl-t">すっぱさ</span><div class="shapein" id="f-sour-pick" data-kind="sour" role="radiogroup" aria-label="すっぱさ"></div><input type="hidden" id="f-sour"></div>
+      <div class="f"><span class="fl-t">タグ</span><div class="chips" id="f-tags"></div></div>
+      <div class="f"><label for="f-note">ひとこと</label><textarea class="in" id="f-note" placeholder="弾力がすごい。後半でぶどう感が来る"></textarea></div>
+      <div class="sheet-actions"><button type="button" class="btn primary" id="f-save">記録する</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- 詳細 -->
+<div class="sheet" id="sh-detail" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-label="グミの詳細">
+    <div class="grab"></div>
+    <div class="sheet-h"><h2 id="dt-no">記録</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div id="dt-body"></div>
+  </div>
+</div>
+
+<!-- ポスト -->
+<div class="sheet" id="sh-post" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="post-title">
+    <div class="grab"></div>
+    <div class="sheet-h"><h2 id="post-title">Xにポスト</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="form">
+      <div class="chips" id="post-tpl"></div>
+      <div class="post-prev">
+        <textarea id="post-text" aria-label="ポスト本文"></textarea>
+        <div class="post-meta"><span id="post-ai-state"></span><span id="post-count" class="num"></span></div>
+      </div>
+      <p class="hint">「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。写真はXの画面で追加してください。</p>
+      <div class="btn-row">
+        <a class="btn x" id="post-open" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">Xで開く</a>
+        <button class="btn ghost" id="post-copy">コピー</button>
+        <button class="btn ghost" id="post-ai" hidden>AIに書いてもらう</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 設定 -->
+<div class="sheet" id="sh-settings" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-label="設定とデータ">
+    <div class="grab"></div>
+    <div class="sheet-h"><h2>設定とデータ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="settings-list" id="settings-body"></div>
+  </div>
+</div>
+
+<!-- 写真の調整 -->
+<div class="sheet" id="sh-crop" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="crop-title">
+    <div class="grab"></div>
+    <div class="sheet-h"><h2 id="crop-title">写真を調整</h2><button class="btn sm ghost" data-close>やめる</button></div>
+    <div class="crop">
+      <div class="crop-view" id="crop-view"><canvas id="crop-cv"></canvas></div>
+      <p class="hint">ドラッグで位置、ピンチかスライダーで大きさを変えられます。</p>
+      <div class="crop-zoom"><span>小</span><input type="range" id="crop-zoom" min="1" max="5" step="0.01" value="1" aria-label="大きさ"><span>大</span></div>
+      <div class="btn-row crop-tools">
+        <button class="btn sm ghost" type="button" id="crop-rl">⟲ 左に回す</button>
+        <button class="btn sm ghost" type="button" id="crop-rr">右に回す ⟳</button>
+        <button class="btn sm ghost" type="button" id="crop-reset">元に戻す</button>
+      </div>
+    </div>
+    <div class="sheet-actions"><button class="btn primary" type="button" id="crop-ok">この写真にする</button></div>
+  </div>
+</div>
+<div class="snack" id="snack" role="status" hidden>
+  <span id="snack-t">記録しました！</span>
+  <button class="btn sm x" id="snack-post" type="button">Xにポスト</button>
+  <button class="snack-x" type="button" aria-label="閉じる" id="snack-x">×</button>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+'use strict';
+/* ---------- constants ---------- */
+const COLORS = [
+  {k:'straw',n:'いちご',v:'--g-straw'},{k:'orange',n:'オレンジ',v:'--g-orange'},{k:'lemon',n:'レモン',v:'--g-lemon'},
+  {k:'melon',n:'マスカット',v:'--g-melon'},{k:'soda',n:'ソーダ',v:'--g-soda'},{k:'grape',n:'ぶどう',v:'--g-grape'},
+  {k:'cola',n:'コーラ',v:'--g-cola'},{k:'milk',n:'ヨーグルト',v:'--g-milk'}
+];
+const MAKERS = ['明治','UHA味覚糖','カンロ','ブルボン','ハリボー','春日井製菓','ロッテ','森永製菓','ノーベル製菓','カバヤ食品','不二家','トローリ','セブンプレミアム','ファミマル','ローソン'];
+const SHOPS = ['セブン','ファミマ','ローソン','ミニストップ','デイリー','スーパー','ドラッグストア','駅ナカ'];
+const CONBINI = ['セブン','ファミマ','ローソン'];
+const TAGS = ['新商品','期間限定','地域限定','リピ確定','推し','微妙'];
+const WD = '日月火水木金土';
+const LS_KEY = 'gumilog.items.v1';
+const LS_UI = 'gumilog.ui.v1';
+const LS_SHOPS = 'gumilog.shops.v1';
+const LS_TAGS = 'gumilog.tags.v1';
+const LS_THEME = 'gumilog.theme.v1';
+const LS_PHOTOS = 'gumilog.photos.v1';
+// one color theme per gummy color: [light, dark] token sets
+const K = ['bg','surface','surface-2','ink','ink-2','line','accent','accent-ink','accent-soft','accent-text'];
+const THEMES = {
+  straw:  [['#FFF5F3','#FFFFFF','#FCE9E7','#3A1830','#80607A','#F1D9DA','#E3346A','#FFFFFF','#FFDCE6'], ['#1C1118','#271922','#33202C','#FBEAF1','#C6A6B8','#42303B','#FF5C8D','#2A0E1C','#4B2234']],
+  orange: [['#FFF6EE','#FFFFFF','#FDEBDC','#3B2112','#85664F','#F2DECB','#C04E12','#FFFFFF','#FFE1C9'], ['#1E140D','#2A1D14','#36261A','#FCEDE2','#CDAE97','#45332A','#FF8A45','#2A1204','#4A2C17']],
+  lemon:  [['#FFFBEA','#FFFFFF','#FBF1CC','#332B0E','#7A6E45','#EFE3B5','#946C00','#FFFFFF','#FFF0B3'], ['#1B180C','#262113','#322B18','#FBF4DC','#CBBE91','#423A22','#F5C518','#241B00','#463A12']],
+  melon:  [['#F2FAF4','#FFFFFF','#DFF2E5','#13301F','#557563','#CFE8D7','#18814A','#FFFFFF','#CDEFD9'], ['#0F1A14','#17251D','#1F3127','#E6F6EC','#9FC4AE','#2C4134','#4CD38A','#062614','#1D4430']],
+  soda:   [['#F1F8FD','#FFFFFF','#DDEEFA','#102A3D','#557189','#CFE3F2','#1A80C4','#FFFFFF','#CFE8FA'], ['#0D1620','#15212D','#1C2C3B','#E4F1FB','#9DB8CE','#2A3D4F','#4DB4F5','#04203A','#173A55']],
+  grape:  [['#F7F3FD','#FFFFFF','#ECE3FA','#2A1846','#6E5E8A','#E1D6F2','#7B47D1','#FFFFFF','#E6DAFB'], ['#16111F','#201929','#2A2136','#EFE6FB','#B8A8D2','#3A2F4A','#A97CF2','#1E0B3D','#36255A']],
+  cola:   [['#F8F3EF','#FFFFFF','#EEE3DA','#2E1B10','#77604F','#E5D6CA','#8A4B26','#FFFFFF','#F1DCCB'], ['#18110C','#231912','#2E2118','#F6EAE0','#C7AF9C','#3F2F24','#D08A5C','#2A1305','#4A2E1C']],
+  // yogurt: a pale creamy accent with dark text on it; accent-colored text uses a soft gray so it stays readable
+  milk:   [['#FCFBF8','#FFFFFF','#F3F1EC','#2E2B27','#7A746C','#E8E4DC','#DAD2C5','#3A332B','#F2EEE7','#7E766B'], ['#181715','#22201E','#2C2A27','#F5F2EC','#C2BCB2','#3B3834','#E9E3D9','#26221D','#3A3631','#E9E3D9']],
+};
+function isDarkUI(){
+  const t = document.documentElement.getAttribute('data-theme');
+  return t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+function applyTheme(){
+  const set = (THEMES[S.theme] || THEMES.straw)[isDarkUI() ? 1 : 0];
+  const st = document.documentElement.style;
+  // accent-text (accent used as text) defaults to the accent itself
+  K.forEach((k, i) => st.setProperty('--' + k, set[i] || set[6]));
+}
+
+/* ---------- gummy catalog (well-known products; prices are rough guides) ---------- */
+// built-in copy of the catalog (official maker sites, 2026-10-06); the shared store / catalog.json add newer entries on top
+const CATALOG_AT = '2026-10-07';
+const CATALOG = [{"n":"果汁グミ","r":"かじゅうぐみ","m":"明治","f":["ぶどう","温州みかん","マスカット"]},{"n":"果汁グミスマートパック","r":"かじゅうぐみすまーとぱっく","m":"明治","f":["ぶどう","マスカット"]},{"n":"果汁グミ推し味フルーツミックス","r":"かじゅうぐみおしあじふるーつみっくす","m":"明治","h":2,"rel":"2026-02-24"},{"n":"FRUBI by 果汁グミ","r":"ふるびばいかじゅうぐみ","m":"明治","f":["ブルーベリー&ザクロ","レモン&キウイ"]},{"n":"ポイフル","r":"ぽいふる","m":"明治","f":["ラズベリー","レモン","青リンゴ","グレープ"],"h":2},{"n":"ポイフルパウチ","r":"ぽいふるぱうち","m":"明治","f":["ラズベリー","レモン","青りんご","グレープ"],"h":2,"rel":"2026-03-31"},{"n":"アップグミ","r":"あっぷぐみ","m":"明治","f":["コーラアップ","ラムネアップ","メロンソーダアップ"],"h":5},{"n":"ピーチソーダアップ","r":"ぴーちそーだあっぷ","m":"明治","h":5},{"n":"ウメソーダアップ","r":"うめそーだあっぷ","m":"明治","h":5,"rel":"2026-01-27"},{"n":"ハニーレモンソーダアップ","r":"はにーれもんそーだあっぷ","m":"明治","h":5,"s":3,"rel":"2026-05-12"},{"n":"ホワイトソーダアップ","r":"ほわいとそーだあっぷ","m":"明治","h":5,"rel":"2026-07-07"},{"n":"ブラッドオレンジソーダアップ","r":"ぶらっどおれんじそーだあっぷ","m":"明治","h":5,"s":3,"rel":"2026-09-01"},{"n":"カジッテ","r":"かじって","m":"ロッテ","f":["グレープ&マスカット","キウイ&アップル"],"h":4},{"n":"カジッテ マニア<完熟ゴールデンパイン>","r":"かじってまにあかんじゅくごーるでんぱいん","m":"ロッテ","h":4,"s":3},{"n":"たっぷり果実とビタミングミ","r":"たっぷりかじつとびたみんぐみ","m":"ロッテ","f":["ミックスフルーツ"],"rel":"2026-08-04"},{"n":"ポケぷに","r":"ぽけぷに","m":"ロッテ","f":["レモンソーダ","コーラ","ソーダ","グレープソーダ"]},{"n":"ポケぷに<フルーツ>","r":"ぽけぷにふるーつ","m":"ロッテ","f":["みかん","りんご","マスカット","ライチ"]},{"n":"グミチョコボール","r":"ぐみちょこぼーる","m":"森永製菓","f":["国産白桃","2種のぶどうMIX"],"rel":"2026-02-03"},{"n":"ネクターグミ","r":"ねくたーぐみ","m":"不二家","f":["ピーチ","ミックス"]},{"n":"ネクター果実食感グミ","r":"ねくたーかじつしょっかんぐみ","m":"不二家","f":["和梨"]},{"n":"ポップグミ","r":"ぽっぷぐみ","m":"不二家","f":["グレープ","マスカット"]},{"n":"ガツン、とみかんグミ","r":"がつんとみかんぐみ","m":"不二家"},{"n":"ガツン、とグレープフルーツグミ","r":"がつんとぐれーぷふるーつぐみ","m":"不二家"},{"n":"まるでりんごグミ","r":"まるでりんごぐみ","m":"不二家","rel":"2026-10-06"},{"n":"アンパンマングミ","r":"あんぱんまんぐみ","m":"不二家","f":["りんご","白ぶどう","オレンジ"]},{"n":"6粒アンパンマングミ","r":"ろくつぶあんぱんまんぐみ","m":"不二家","f":["もも","ぶどう"]},{"n":"プリンセスキラキラシールグミ","r":"ぷりんせすきらきらしーるぐみ","m":"不二家","f":["ピーチ&ぶどう"],"rel":"2026-10-06"},{"n":"ペコ×サンリオキャラクターズうるつやシールグミ","r":"ぺこさんりおきゃらくたーずうるつやしーるぐみ","m":"不二家","f":["いちご&パイン"],"rel":"2026-09-15"},{"n":"ポムポムプリングミ","r":"ぽむぽむぷりんぐみ","m":"不二家","f":["りんご"],"h":2},{"n":"アニメちいかわグミ","r":"あにめちいかわぐみ","m":"不二家","f":["むちゃうまヨーグルト味"]},{"n":"ピュレグミ","r":"ぴゅれぐみ","m":"カンロ","f":["レモン","グレープ","マスカット","実りのベリー"],"s":3},{"n":"ピュレグミ プチ三角","r":"ぴゅれぐみ ぷちさんかく","m":"カンロ","f":["レモン","グレープ","マスカット"]},{"n":"ピュレグミプレミアム","r":"ぴゅれぐみぷれみあむ","m":"カンロ","f":["山梨産白桃","シャインマスカットスパークリング","幸水梨"]},{"n":"ピュレリング","r":"ぴゅれりんぐ","m":"カンロ","f":["フルーツ","ソーダ"],"s":1},{"n":"タネピュレ さくらんぼ","r":"たねぴゅれ さくらんぼ","m":"カンロ","p":194,"pt":"incl","h":3,"rel":"2026-08-21"},{"n":"ピュレサプリ アサイーベリーヨーグルト","r":"ぴゅれさぷり あさいーべりーよーぐると","m":"カンロ","p":237.6,"pt":"incl","s":2,"rel":"2026-07-21"},{"n":"カンデミーナグミ スーパーベスト","r":"かんでみーなぐみ すーぱーべすと","m":"カンロ","f":["ラムネ","グレープソーダ","コーラ"],"h":4},{"n":"カンデミーナグミ ジューシーウェーブ","r":"かんでみーなぐみ じゅーしーうぇーぶ","m":"カンロ","f":["シャインマスカットソーダ"],"h":4,"rel":"2026-09-15"},{"n":"カンデミーナグミ ストライクショット","r":"かんでみーなぐみ すとらいくしょっと","m":"カンロ","f":["モンストロベリー","わくわくメロン","ストライグレープ"],"h":4,"rel":"2026-04-21"},{"n":"カンデミーナグミ センタースプラッシュ","r":"かんでみーなぐみ せんたーすぷらっしゅ","m":"カンロ","f":["クールレモンソーダ"],"h":4,"rel":"2026-07-28"},{"n":"カンロ ザ・ストロンググミ","r":"かんろ ざ・すとろんぐぐみ","m":"カンロ","f":["ソーダ","グレープソーダ","メロンソーダ"],"h":4},{"n":"マロッシュ","r":"まろっしゅ","m":"カンロ","f":["グレープソーダ","ラムネ","フレッシュコーラ","オレンジスプラッシュ"],"h":2,"s":2},{"n":"ずとマロッシュ","r":"ずとまろっしゅ","m":"カンロ","f":["ライムジンジャーエール"],"p":214,"pt":"incl","h":2,"s":2,"rel":"2026-09-22"},{"n":"あの日夢見た雲グミ","r":"あのひゆめみたくもぐみ","m":"カンロ","f":["もくもくホワイトソーダ"],"h":1,"rel":"2026-05-26"},{"n":"空想果実 イトピスの実","r":"くうそうかじつ いとぴすのみ","m":"カンロ","p":248.4,"pt":"incl","s":3,"rel":"2026-04-28"},{"n":"とろみ~グミ","r":"とろみ～ぐみ","m":"カンロ","f":["レモン"],"p":198,"pt":"incl","h":3,"s":2,"rel":"2026-09-01"},{"n":"やさしい塩グミ","r":"やさしいしおぐみ","m":"カンロ","f":["塩グレープフルーツ"],"p":214,"pt":"incl","h":2,"rel":"2026-06-11"},{"n":"グミ学 ウマイパウダーの定理","r":"ぐみがく うまいぱうだーのていり","m":"カンロ","f":["ソーダ"],"p":198,"pt":"incl","h":4,"rel":"2026-06-02"},{"n":"カミキング","r":"かみきんぐ","m":"カンロ","h":4},{"n":"グミッツェル","r":"ぐみっつぇる","m":"カンロ","f":["グレープ","ソーダ","ラフランス","グレープフルーツ","オレンジ","ピーチ"],"p":190,"pt":"incl"},{"n":"グミッツェルプチ","r":"ぐみっつぇるぷち","m":"カンロ","f":["ソーダ","ピーチ","グレープフルーツ"],"p":170,"pt":"incl"},{"n":"ピュレショコラティエ","r":"ぴゅれしょこらてぃえ","m":"カンロ","f":["レモン&ビター","グレープ&ホワイト","ジュレin ピーチ&ビター"],"p":750,"pt":"incl"},{"n":"CYCLECUBE","r":"さいくるきゅーぶ","m":"カンロ","f":["apple","muscat"],"p":600,"pt":"incl","h":2},{"n":"コロロ","r":"ころろ","m":"UHA味覚糖","f":["巨峰","シャインマスカット","清水白桃","二十世紀梨","スイカ","沖縄パイン"]},{"n":"忍者めし","r":"にんじゃめし","m":"UHA味覚糖","f":["梅かつお","巨峰","ラムネ"],"h":4},{"n":"忍者めし鋼","r":"にんじゃめしはがね","m":"UHA味覚糖","f":["グレープ","マスカット"],"h":5},{"n":"忍者めし鋼 金剛石","r":"にんじゃめしはがね こんごうせき","m":"UHA味覚糖","f":["マスカット","ゴールデンパイン","ピーチ"],"h":5},{"n":"忍者めし 鉄の鎧","r":"にんじゃめし てつのよろい","m":"UHA味覚糖","f":["グレープ","マスカット"],"h":5},{"n":"狩人めし","r":"かりうどめし","m":"UHA味覚糖","f":["回復系エナジードリンク"]},{"n":"元太めし","r":"げんためし","m":"UHA味覚糖","f":["元太ソーダ"],"rel":"2026-08-24"},{"n":"シゲキックス","r":"しげきっくす","m":"UHA味覚糖","f":["グレープ","梅ソルト"],"h":4,"s":4},{"n":"激シゲキックス","r":"げきしげきっくす","m":"UHA味覚糖","f":["極刺激ソーダ"],"h":4,"s":5},{"n":"激Xシゲキックス","r":"げきえっくすしげきっくす","m":"UHA味覚糖","f":["Xピオーネ"],"h":4,"s":5},{"n":"コグミ","r":"こぐみ","m":"UHA味覚糖","f":["フルーツアソート","ドリンクアソート","ファミリーパック"],"h":2},{"n":"コグミ PREMIUM ドール","r":"こぐみ ぷれみあむ どーる","m":"UHA味覚糖","h":2},{"n":"コグミ トイ・ストーリー5","r":"こぐみ といすとーりーふぁいぶ","m":"UHA味覚糖","f":["スペースグレープソーダ","レンジャーメロンソーダ"]},{"n":"さけるグミ","r":"さけるぐみ","m":"UHA味覚糖","f":["巨峰","ハロウィンアップル"]},{"n":"すっぱいさけるグミ","r":"すっぱいさけるぐみ","m":"UHA味覚糖","f":["サワーレモン"],"s":4},{"n":"なが〜いさけるグミ","r":"なが〜いさけるぐみ","m":"UHA味覚糖","f":["巨峰"]},{"n":"ぷっちょグミ","r":"ぷっちょぐみ","m":"UHA味覚糖","f":["ぶどう","ソーダ"],"h":3},{"n":"グミだま","r":"ぐみだま","m":"UHA味覚糖","f":["シャインマスカット","いちご"]},{"n":"リセット","r":"りせっと","m":"UHA味覚糖","f":["レモン","グレープ"],"s":4},{"n":"ググッタ","r":"ぐぐった","m":"UHA味覚糖","f":["シャインマスカット","グレープ"],"h":5},{"n":"ぷにキャラグミ","r":"ぷにきゃらぐみ","m":"UHA味覚糖","f":["ちいかわ第2弾 マスカット","ドンキーコング","ディズニープリンセス"]},{"n":"モッチュ","r":"もっちゅ","m":"UHA味覚糖","f":["白桃","シャインマスカット","さくらんぼ"],"h":1},{"n":"お金グミ","r":"おかねぐみ","m":"UHA味覚糖","f":["ソーダ"],"s":2,"rel":"2026-06-29"},{"n":"至福の桃グミ","r":"しふくのももぐみ","m":"UHA味覚糖","h":1},{"n":"COMP完全グミ","r":"こんぷかんぜんぐみ","m":"UHA味覚糖","f":["エナジードリンク風味"]},{"n":"UHAグミサプリ","r":"ゆーえいちえーぐみさぷり","m":"UHA味覚糖","f":["マルチビタミン","ビタミンC","ビタミンD3","カルシウム","鉄","鉄&葉酸","亜鉛","亜鉛&マカ","マルチミネラル","CoQ10+DHA&EPA","VC+コラーゲン","食物繊維","ビオチン","NMN10000","美魔女 マルチビタミン","レチノール+VC","末梢血流ケア","ローズヒップ ポリフェノール","セラミド","ルテイン","還元型コエンザイムQ10","モノグルコシルヘスペリジン","鉄+ヒアルロン酸","鉄+メリロート","鉄+大豆イソフラボン"]},{"n":"UHAグミサプリKIDS","r":"ゆーえいちえーぐみさぷりきっず","m":"UHA味覚糖","f":["やさいにプラス","ルテイン","マルチビタミン","Ca・鉄","DHA"]},{"n":"フェットチーネグミ","r":"ふぇっとちーねぐみ","m":"ブルボン","f":["イタリアングレープ","イタリアンレモン","コーラ","ソーダ","レッドキウイ","アサイーボウル"],"rel":"2026-09-22"},{"n":"フェットチーネグミPREMIUM","r":"ふぇっとちーねぐみぷれみあむ","m":"ブルボン","f":["宮城県産ストロベリーブレンド","大分県産マリンレモン"],"rel":"2026-05-26"},{"n":"しゃりもにグミ","r":"しゃりもにぐみ","m":"ブルボン","f":["ヨーグルト","グレープ","ピーチ","フルーティエナジードリンク","和梨"],"s":2,"rel":"2026-10-06"},{"n":"バウンシーグミ","r":"ばうんしーぐみ","m":"ブルボン","f":["シャインマスカット"],"h":4,"rel":"2026-09-29"},{"n":"ミネラル塩グミ","r":"みねらるしおぐみ","m":"ブルボン","f":["ソルティライチ"],"rel":"2026-06-09"},{"n":"つぶグミ","r":"つぶぐみ","m":"春日井製菓","f":["グレープ","アップル","マスカット","ピーチ","グレープフルーツ"],"h":4},{"n":"つぶグミソーダ","r":"つぶぐみそーだ","m":"春日井製菓","f":["コーラ","サイダー","メロンソーダ","グレープソーダ","ジンジャーエール"],"h":4},{"n":"つぶグミヨーグルト","r":"つぶぐみよーぐると","m":"春日井製菓","h":4},{"n":"つぶグミPREMIUM","r":"つぶぐみぷれみあむ","m":"春日井製菓","f":["濃厚ぶどう"]},{"n":"グミだよ。","r":"ぐみだよ","m":"春日井製菓","f":["乳酸菌ドリンク","レモネード","アソートパック"],"h":1},{"n":"タフグミ","r":"たふぐみ","m":"カバヤ食品","f":["コーラ","ソーダ","エナジードリンク"],"h":4},{"n":"タフグミ グレーピーパンチ","r":"たふぐみぐれーぴーぱんち","m":"カバヤ食品","c":"grape","h":4},{"n":"タフグミ アップルインパルス","r":"たふぐみあっぷるいんぱるす","m":"カバヤ食品","h":4,"rel":"2026-08-25"},{"n":"タフグミ MEGA","r":"たふぐみめが","m":"カバヤ食品","f":["コーラ","ソーダ","エナジードリンク"],"h":4},{"n":"タフグミ PRO カフェイン","r":"たふぐみぷろかふぇいん","m":"カバヤ食品","f":["ジンジャーレモン"],"h":4,"rel":"2025-04-08"},{"n":"タフグミ BAR","r":"たふぐみばー","m":"カバヤ食品","f":["コーラ&ソーダ","グレープ&マスカット"],"h":4,"s":3,"rel":"2025-10-20"},{"n":"タフグミ mini","r":"たふぐみみに","m":"カバヤ食品","f":["レモン&ソーダデュオ","グレープ&マスカットデュオ"],"h":4,"rel":"2026-02-03"},{"n":"タフグミ クールクランチ","r":"たふぐみくーるくらんち","m":"カバヤ食品","f":["パイン","ピーチ"],"h":4,"rel":"2026-06-09"},{"n":"タフグミ(100円ショップ限定)","r":"たふぐみ","m":"カバヤ食品","f":["ソーダ","グレープ"],"h":4,"rel":"2024-10-28"},{"n":"しゃりinグミ","r":"しゃりいんぐみ","m":"カバヤ食品","f":["ソーダ","グレープ"],"rel":"2026-02-24"},{"n":"おとうふくん","r":"おとうふくん","m":"カバヤ食品","f":["ソーダ"],"h":1,"rel":"2025-09-30"},{"n":"すぱグミ","r":"すぱぐみ","m":"カバヤ食品","f":["レモン"],"s":4,"rel":"2026-09-01"},{"n":"ナマロワ","r":"なまろわ","m":"カバヤ食品","f":["黒ぶどう×白ぶどう","白桃×黄桃"],"h":1,"rel":"2026-09-29"},{"n":"まんまる雪ぼうやグミ","r":"まんまるゆきぼうやぐみ","m":"カバヤ食品","h":2,"rel":"2026-09-29"},{"n":"雪ふるいちごグミ","r":"ゆきふるいちごぐみ","m":"カバヤ食品","f":["いちご","いちごミルク"],"h":2,"rel":"2026-09-29"},{"n":"ペタグーグミ","r":"ぺたぐーぐみ","m":"ノーベル製菓","f":["グレープ","ソーダ","ゴールデンパイン","いちご"],"h":4},{"n":"男梅グミ","r":"おとこうめぐみ","m":"ノーベル製菓","h":4},{"n":"シンサワーズグミ","r":"しんさわーずぐみ","m":"ノーベル製菓","f":["グレープ","ラムネ"],"h":4,"s":4},{"n":"ちびサワーズグミ","r":"ちびさわーずぐみ","m":"ノーベル製菓","f":["ドリンクアソート"],"h":4},{"n":"カチカチちびカメカメサワーズグミ","r":"かちかちちびかめかめさわーずぐみ","m":"ノーベル製菓","f":["フルーツアソート"],"h":5},{"n":"キラふわグミ","r":"きらふわぐみ","m":"ノーベル製菓","f":["ソーダ","グレープ","ゴールデンパイン","ホワイトソーダ"],"h":2},{"n":"ソルベットグミ","r":"そるべっとぐみ","m":"ノーベル製菓","f":["シャインマスカット","巨峰","白桃"],"h":2},{"n":"グミザウルス","r":"ぐみざうるす","m":"ノーベル製菓","f":["グレープ"]},{"n":"グミエッグ","r":"ぐみえっぐ","m":"ノーベル製菓","f":["フルーツソーダアソート"]},{"n":"スーパーマリオグミ","r":"すーぱーまりおぐみ","m":"ノーベル製菓","f":["グレープ&ソーダ"]},{"n":"ゴールドベア 80g","r":"ごーるどべあ はりぼー","m":"ハリボー","f":["イチゴ","リンゴ","オレンジ","ラズベリー","パイナップル","レモン"],"p":218,"pt":"excl"},{"n":"ゴールドベア 200g","r":"ごーるどべあ はりぼー","m":"ハリボー","f":["イチゴ","リンゴ","オレンジ","ラズベリー","パイナップル","レモン"],"p":448,"pt":"excl"},{"n":"ハッピーコーラ 80g","r":"はっぴーこーら はりぼー","m":"ハリボー","p":218,"pt":"excl","h":3},{"n":"ハッピーコーラ 200g","r":"はっぴーこーら はりぼー","m":"ハリボー","p":448,"pt":"excl","h":3},{"n":"スターミックス 80g","r":"すたーみっくす はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"ハッピーグレープ 80g","r":"はっぴーぐれーぷ はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"グレープフルーツ 80g","r":"ぐれーぷふるーつ はりぼー","m":"ハリボー","p":218,"pt":"excl","h":2},{"n":"ピーチ 80g","r":"ぴーち はりぼー","m":"ハリボー","p":218,"pt":"excl","h":2},{"n":"サワーハッピーコーラ 80g","r":"さわーはっぴーこーら はりぼー","m":"ハリボー","p":218,"pt":"excl","s":3},{"n":"ミックスサワー 80g","r":"みっくすさわー はりぼー","m":"ハリボー","p":218,"pt":"excl","s":3},{"n":"フロッグ 175g","r":"ふろっぐ はりぼー","m":"ハリボー","p":448,"pt":"excl"},{"n":"ハッピーチェリー 175g","r":"はっぴーちぇりー はりぼー","m":"ハリボー","p":448,"pt":"excl"},{"n":"フルーティーキス","r":"ふるーてぃーきす はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"ぷるぷるゴースト","r":"ぷるぷるごーすと はりぼー","m":"ハリボー","f":["ハーブ味","レモン味","ラズベリー味"],"p":218,"pt":"excl"},{"n":"サワーグローワームス","r":"さわーぐろーわーむす とろーり","m":"トローリ","s":4},{"n":"ネオンスクイーグルス","r":"ねおんすくいーぐるす とろーり","m":"トローリ"},{"n":"タランチュラ","r":"たらんちゅら とろーり","m":"トローリ"},{"n":"オクトパスブルー","r":"おくとぱすぶるー とろーり","m":"トローリ"},{"n":"サワーオクトパス","r":"さわーおくとぱす とろーり","m":"トローリ","s":4},{"n":"シャーク","r":"しゃーく とろーり","m":"トローリ"},{"n":"ストロベリーキス","r":"すとろべりーきす とろーり","m":"トローリ","h":1},{"n":"キャンディバナナ","r":"きゃんでぃばなな とろーり","m":"トローリ","h":1},{"n":"スパゲティサワー","r":"すぱげてぃさわー とろーり","m":"トローリ","f":["コーラ","アップル","ストロベリー"],"s":4},{"n":"プラネットグミ","r":"ぷらねっとぐみ とろーり","m":"トローリ"},{"n":"ポップアイ","r":"ぽっぷあい とろーり","m":"トローリ"},{"n":"フレーバーボム","r":"ふれーばーぼむ とろーり","m":"トローリ","f":["サワーグローワームス","キス"]},{"n":"パーティーバーガーグミ","r":"ぱーてぃーばーがーぐみ とろーり","m":"トローリ"},{"n":"ビッグバーガー","r":"びっぐばーがー とろーり","m":"トローリ"},{"n":"幸せにくきゅうグミ","r":"しあわせにくきゅうぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["グレープ味","レモン味"],"h":2},{"n":"70g ちっちゃな幸せにくきゅうグミ","r":"ななじゅうぐらむ ちっちゃなしあわせにくきゅうぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["グレープ味","アップル味"]},{"n":"34g贅沢なグミ","r":"さんじゅうよんぐらむぜいたくなぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["長野のシャインマスカット","山形のさくらんぼ"],"h":2},{"n":"幻の柑橘 直七グミ","r":"まぼろしのかんきつ なおしちぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗"}];
+const FLAVOR_COLOR = [
+  [/ぶどう|グレープ(?!フルーツ)|巨峰|ブルーベリー|カシス|ブラックベリー/, 'grape'], [/マスカット|メロン|青りんご|キウイ|ライム|抹茶|洋梨|ラフランス|すだち|かぼす/, 'melon'],
+  [/レモン|檸檬|パイン|グレフル|グレープフルーツ|はちみつ|蜂蜜|マンゴー|バナナ|ジンジャー|しょうが|パッション/, 'lemon'], [/みかん|オレンジ|柑橘|ネーブル|ゆず/, 'orange'],
+  [/いちご|苺|ストロベリー|もも|桃|ピーチ|りんご|林檎|アップル|梅|さくらんぼ|チェリー|ざくろ|すいか|ラズベリー|クランベリー/, 'straw'], [/ソーダ|ラムネ|サイダー|ブルーハワイ|エナジー/, 'soda'],
+  [/コーラ|チョコ|コーヒー|カフェ|紅茶/, 'cola'], [/ミルク|ヨーグルト|乳酸菌|カルピス|練乳|ココナッツ/, 'milk'],
+];
+const toHira = t => t.replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+const toKata = t => t.replace(/[\u3041-\u3096]/g, ch => String.fromCharCode(ch.charCodeAt(0) + 0x60));
+// test raw, hiragana and katakana spellings so「れもん」「ピーチ」「ぶどう」all hit
+const colorFromText = t => {
+  const raw = String(t || '').normalize('NFKC'); if (!raw.trim()) return null;
+  const forms = [raw, toHira(raw), toKata(raw)];
+  for (const [re, k] of FLAVOR_COLOR) if (forms.some(f => re.test(f))) return k;
+  return null;
+};
+
+// shared catalog from the artifact's store (kept up to date by Claude); the list above is the offline fallback
+let REMOTE_CAT = [], REMOTE_CAT_AT = '';
+const taxed = c => c.p == null || c.p === '' ? null : (c.pt === 'excl' ? Math.round(+c.p * 1.08) : +c.p);
+function catList(){
+  const seen = new Set(), out = [];
+  const key = c => c.m + '|' + String(c.n).normalize('NFKC').replace(/\s/g, '');
+  for (const c of REMOTE_CAT){ const k = key(c); if (seen.has(k)) continue; seen.add(k); out.push({...c, p: taxed(c)}); }
+  for (const c of CATALOG){ const k = key(c); if (seen.has(k)) continue; seen.add(k); out.push({...c, p: taxed(c)}); }
+  return out;
+}
+const clampLvl = v => Number.isFinite(+v) && +v >= 1 ? Math.min(5, Math.round(+v)) : null;
+const IN_CLAUDE = !!(window.claude && window.claude.use);
+const normCat = c => ({n:c.n, r:String(c.r || ''), m:c.m, f:Array.isArray(c.f) ? c.f.map(String) : [], p:c.p ?? null, pt:c.pt ?? null,
+  h:clampLvl(c.h), s:clampLvl(c.s), c:COLORS.some(x => x.k === c.c) ? c.c : null, rel:typeof c.rel === 'string' ? c.rel : null, url:typeof c.url === 'string' ? c.url : ''});
+const isCat = c => c && typeof c.n === 'string' && typeof c.m === 'string';
+const isRecent = (rel, ref) => { if (!rel) return false; const d = (parseYmd(ref || todayStr()) - parseYmd(rel)) / 86400000; return d >= -14 && d <= 120; };
+
+/* ---------- utils ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseYmd = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const todayStr = () => ymd(new Date());
+const ym = s => s.slice(0,7);
+const yen = n => (n||0).toLocaleString('ja-JP') + '円';
+const newId = () => 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const cssv = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const colorOf = k => cssv((COLORS.find(c => c.k === k) || COLORS[0]).v);
+const starsHTML = r => '<span class="stars" aria-label="おいしさ' + r + '">' + '★'.repeat(r) + '<i>' + '★'.repeat(5-r) + '</i></span>';
+const starsTxt = r => '★'.repeat(r) + '☆'.repeat(5-r);
+const mdLabel = s => { const d = parseYmd(s); return `${d.getMonth()+1}/${d.getDate()}(${WD[d.getDay()]})`; };
+const shift = (days) => { const d = new Date(); d.setDate(d.getDate() - days); return ymd(d); };
+function hash(str){ let h = 2166136261; for (const ch of str){ h ^= ch.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function lsGet(k, f){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; } catch(e){ return f; } }
+function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+
+function bearSVG(colorKey, size=34){
+  const c = colorOf(colorKey);
+  const stroke = colorKey === 'milk' ? 'stroke="#C9B79E" stroke-width="1.2"' : '';
+  return `<svg width="${size}" height="${size*1.1}" viewBox="0 0 40 44" aria-hidden="true"><g fill="${c}" ${stroke}>
+  <circle cx="11" cy="8" r="5"/><circle cx="29" cy="8" r="5"/><ellipse cx="9" cy="27" rx="4.5" ry="4"/><ellipse cx="31" cy="27" rx="4.5" ry="4"/>
+  <circle cx="13" cy="39" r="5"/><circle cx="27" cy="39" r="5"/><ellipse cx="20" cy="30" rx="11.5" ry="11"/><circle cx="20" cy="14" r="10"/></g>
+  <ellipse cx="15" cy="10" rx="3" ry="2" fill="#fff" opacity=".55"/><ellipse cx="15" cy="26" rx="2.5" ry="4" fill="#fff" opacity=".3"/></svg>`;
+}
+
+/* ---------- demo data (shown only while the log is empty) ---------- */
+const DEMO = [
+  {name:'果汁グミ ぶどう',maker:'明治',flavor:'ぶどう',color:'grape',shop:'セブン',price:140,d:1,rating:4,hard:2,sour:2,tags:['リピ確定'],note:'安定のおいしさ。迷ったらこれ'},
+  {name:'シゲキックス スーパーハード',maker:'UHA味覚糖',flavor:'レモン',color:'lemon',shop:'ローソン',price:150,d:1,rating:5,hard:5,sour:5,tags:['推し'],note:'すっぱさで目が覚める'},
+  {name:'ピュレグミ レモン',maker:'カンロ',flavor:'レモン',color:'lemon',shop:'ファミマ',price:162,d:3,rating:4,hard:2,sour:4,tags:[],note:'粉の酸っぱさがクセになる'},
+  {name:'コロロ マスカット',maker:'UHA味覚糖',flavor:'マスカット',color:'melon',shop:'セブン',price:140,d:4,rating:5,hard:1,sour:2,tags:['推し'],note:'ほぼ果実。ぷるぷる'},
+  {name:'フェットチーネグミ イタリアングレープ',maker:'ブルボン',flavor:'グレープ',color:'grape',shop:'ドラッグストア',price:98,d:6,rating:4,hard:3,sour:3,tags:[],note:''},
+  {name:'ゴールドベア',maker:'ハリボー',flavor:'ミックス',color:'orange',shop:'スーパー',price:258,d:8,rating:3,hard:5,sour:1,tags:[],note:'あごが鍛えられる'},
+  {name:'つぶグミ',maker:'春日井製菓',flavor:'フルーツミックス',color:'straw',shop:'スーパー',price:178,d:9,rating:4,hard:3,sour:2,tags:[],note:''},
+  {name:'忍者めし 鋼',maker:'UHA味覚糖',flavor:'グレープ',color:'grape',shop:'ファミマ',price:150,d:12,rating:4,hard:5,sour:2,tags:['新商品'],note:'噛みごたえ最強クラス'},
+  {name:'タフグミ',maker:'カバヤ食品',flavor:'ソーダ',color:'soda',shop:'ローソン',price:120,d:14,rating:3,hard:4,sour:3,tags:[],note:''},
+  {name:'果汁グミ ぶどう',maker:'明治',flavor:'ぶどう',color:'grape',shop:'ミニストップ',price:140,d:17,rating:4,hard:2,sour:2,tags:['リピ確定'],note:''},
+  {name:'ピュレグミ コーラ',maker:'カンロ',flavor:'コーラ',color:'cola',shop:'セブン',price:162,d:21,rating:5,hard:2,sour:3,tags:['期間限定'],note:'コーラ×すっぱ粉が天才'},
+  {name:'さけるグミ',maker:'UHA味覚糖',flavor:'',color:'straw',shop:'駅ナカ',price:150,d:26,rating:3,hard:3,sour:2,tags:[],note:'さいて食べるのが楽しい'},
+  {name:'コロロ グレープ',maker:'UHA味覚糖',flavor:'グレープ',color:'grape',shop:'セブン',price:140,d:33,rating:5,hard:1,sour:2,tags:[],note:''},
+  {name:'シゲキックス ソーダ',maker:'UHA味覚糖',flavor:'ソーダ',color:'soda',shop:'ファミマ',price:150,d:38,rating:4,hard:4,sour:5,tags:['新商品'],note:''}
+].map((g,i) => ({id:'demo'+i, kind:'gummy', ...g, date:shift(g.d), createdAt:Date.now()-g.d*86400000-i, demo:true}));
+
+/* ---------- state ---------- */
+const S = {
+  mode: 'local',            // 'local' | 'cloud'
+  local: lsGet(LS_KEY, []),
+  cloud: null,
+  ui: Object.assign({tab:'log', filter:'all', calMonth:null, selDay:null}, lsGet(LS_UI, {})),
+  q: '',
+  cap: {db:null, col:null, downloads:null, sample:null},
+  unsubs: [], readOnly: false,
+  shops: (() => { const v = lsGet(LS_SHOPS, null); return Array.isArray(v) && v.length ? v : [...SHOPS]; })(),
+  tags: (() => { const v = lsGet(LS_TAGS, null); return Array.isArray(v) ? v : [...TAGS]; })(),
+  theme: (() => { const v = lsGet(LS_THEME, 'straw'); return THEMES[v] ? v : 'straw'; })(),
+  localPhotos: lsGet(LS_PHOTOS, {}),   // name -> data URL (this browser)
+  cloudPhotos: {},                     // name -> data URL (account)
+};
+const realItems = () => (S.mode === 'cloud' ? S.cloud : S.local) || [];
+const isDemo = () => realItems().length === 0;
+const items = () => isDemo() ? DEMO : realItems();
+const byDateDesc = (a,b) => b.date.localeCompare(a.date) || (b.createdAt||0) - (a.createdAt||0);
+const byDateAsc = (a,b) => -byDateDesc(a,b);
+
+function numbering(list){
+  const m = new Map(); [...list].sort(byDateAsc).forEach((it,i) => m.set(it.id, i+1)); return m;
+}
+function repeatCount(list){ const m = new Map(); list.forEach(it => m.set(it.name, (m.get(it.name)||0)+1)); return m; }
+
+/* ---------- storage ---------- */
+async function putItem(it){
+  const body = {...it}; delete body.id; delete body.demo;
+  if (S.mode === 'cloud'){
+    try { await S.cap.col.doc(it.id).set(body); return; }
+    catch(err){
+      if (!err || err.code !== 'invalid_argument') throw err;
+      // this viewer may read but not write the account store: keep working in this browser
+      goLocal(true); toast('この共有のしかたではアカウントに保存できないため、この端末に保存しました');
+    }
+  }
+  {
+    const i = S.local.findIndex(x => x.id === it.id);
+    if (i >= 0) S.local[i] = it; else S.local.push(it);
+    if (!lsSet(LS_KEY, S.local)) toast('この端末の保存容量がいっぱいです。書き出してから古い記録を消してください');
+    renderAll();
+  }
+}
+async function removeItem(it){
+  if (S.mode === 'cloud'){
+    await S.cap.col.doc(it.id).delete();
+  } else {
+    S.local = S.local.filter(x => x.id !== it.id); lsSet(LS_KEY, S.local); renderAll();
+  }
+}
+function goLocal(readOnly){
+  S.unsubs.forEach(u => { try { u(); } catch(e){} }); S.unsubs = [];
+  S.mode = 'local'; S.cloud = null; S.cap.col = null; S.readOnly = !!readOnly; renderAll();
+}
+
+async function connect(){
+  if (!window.claude || !window.claude.use) return;
+  const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+  claude.use('downloads').then(d => { S.cap.downloads = d; }).catch(()=>{});
+  claude.use('sample').then(s => {
+    S.cap.sample = s; $('#post-ai').hidden = !s;
+  }).catch(()=>{});
+  if (db){
+    db.collection('catalog').onSnapshot(snap => {
+      REMOTE_CAT = snap.docs.map(d => d.data()).filter(isCat).map(normCat);
+      REMOTE_CAT_AT = snap.docs.map(d => d.data().updated || '').sort().pop() || '';
+      if (!$('#sh-settings').hidden) renderSettings();
+    }, () => {});
+  }
+  if (!db || !user) return;
+  const uid = await user.id();
+  if (!uid) return;
+  if (await user.can('data.write') === false){ S.readOnly = true; renderAll(); return; }
+  S.cap.db = db;
+  S.cap.col = db.collection('data/users/' + uid);
+  S.unsubs.push(S.cap.col.doc('settings').onSnapshot(snap => {
+    const d = snap.exists ? snap.data() : null;
+    if (d && Array.isArray(d.shops) && d.shops.length){ S.shops = d.shops.map(String); lsSet(LS_SHOPS, S.shops); }
+    if (d && Array.isArray(d.tags)){ S.tags = d.tags.map(String); lsSet(LS_TAGS, S.tags); }
+    if (d && THEMES[d.theme] && d.theme !== S.theme){ S.theme = d.theme; lsSet(LS_THEME, S.theme); applyTheme(); renderAll(); jarDraw(); }
+    if (d){ renderShopChips(); renderTagChips(); if (!$('#sh-settings').hidden) renderShopEditor(); }
+  }, () => {}));
+  S.unsubs.push(S.cap.col.where('kind','==','photo').onSnapshot(snap => {
+    const m = {}; snap.docs.forEach(d => { const v = d.data(); if (v && typeof v.name === 'string' && typeof v.data === 'string' && v.data.startsWith('data:image/')) m[v.name] = v.data; });
+    S.cloudPhotos = m; renderAll();
+  }, () => {}));
+  S.unsubs.push(S.cap.col.where('kind','==','gummy').onSnapshot(snap => {
+    S.cloud = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    if (S.mode !== 'cloud'){ S.mode = 'cloud'; }
+    renderAll();
+  }, err => {
+    goLocal(false);
+    toast('クラウドに接続できませんでした。この端末に保存します');
+  }));
+}
+
+/* ---------- after-save snackbar ---------- */
+let snackT = 0;
+function showSnack(it, first){
+  const el = $('#snack'), no = numbering(items()).get(it.id);
+  $('#snack-t').textContent = first ? '最初の一粒を記録しました！' : `記録しました！${no ? '　No.' + no : ''}`;
+  el.hidden = false; document.body.classList.add('has-snack');
+  $('#snack-post').onclick = () => { hideSnack(); openPost(it); };
+  clearTimeout(snackT); snackT = setTimeout(hideSnack, 7000);
+}
+function hideSnack(){ clearTimeout(snackT); $('#snack').hidden = true; document.body.classList.remove('has-snack'); }
+
+/* ---------- toast ---------- */
+let toastT = 0;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600); }
+
+/* ---------- stats ---------- */
+function streakOf(list){
+  const set = new Set(list.map(i => i.date));
+  const d = new Date(); if (!set.has(ymd(d))) d.setDate(d.getDate()-1);
+  let n = 0; while (set.has(ymd(d))){ n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+function bestStreak(list){
+  const days = [...new Set(list.map(i => i.date))].sort(); let best = 0, cur = 0, prev = null;
+  for (const s of days){ const d = parseYmd(s); if (prev && (d - prev) / 86400000 === 1) cur++; else cur = 1; best = Math.max(best, cur); prev = d; }
+  return best;
+}
+function countBy(list, f){ const m = new Map(); list.forEach(it => { const k = f(it); if (k) m.set(k, (m.get(k)||0)+1); }); return [...m.entries()].sort((a,b) => b[1]-a[1]); }
+function monthStats(list, key){
+  const l = list.filter(i => ym(i.date) === key);
+  const best = [...l].sort((a,b) => b.rating - a.rating || byDateDesc(a,b))[0];
+  return { list:l, count:l.length, spend:l.reduce((s,i) => s + (+i.price||0), 0), news:l.filter(i => (i.tags||[]).includes('新商品')).length, topMaker:(countBy(l, i => i.maker)[0]||[])[0], best };
+}
+
+/* ---------- jar (canvas physics) ---------- */
+const Jar = { bodies:[], R:14, W:0, H:0, raf:0, key:'', calm:0 };
+function jarGeom(){ const pad = 10; return { l:pad+6, r:Jar.W-pad-6, top:34, b:Jar.H-10 }; }
+function jarSetup(){
+  const cv = $('#jar'); const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth || 300, h = cv.clientHeight || 230;
+  cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+  cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
+  Jar.W = w; Jar.H = h;
+}
+function jarRadius(n){
+  const g = jarGeom(); const area = (g.r-g.l) * (g.b-g.top);
+  return Math.max(6, Math.min(16, Math.sqrt(area*0.42 / (Math.max(n,1)*Math.PI))));
+}
+function makeBody(it, drop){
+  const g = jarGeom(); const R = Jar.R; const rnd = hash(it.id);
+  return { id:it.id, color:it.color, x: g.l + R + (rnd % 1000)/1000 * (g.r-g.l-2*R), y: drop ? -R*2 : g.top + ((rnd>>10)%1000)/1000*(g.b-g.top-2*R), vx:0, vy:0, rot:((rnd>>20)%628)/100 - 3.14 };
+}
+function jarStep(){
+  const g = jarGeom(), R = Jar.R, B = Jar.bodies; let ke = 0;
+  for (const b of B){ b.vy += 0.38; b.vx *= 0.985; b.vy *= 0.995; b.x += b.vx; b.y += b.vy; }
+  for (let it = 0; it < 3; it++){
+    for (let i = 0; i < B.length; i++){
+      const a = B[i];
+      for (let j = i+1; j < B.length; j++){
+        const c = B[j]; const dx = c.x-a.x, dy = c.y-a.y; const d2 = dx*dx+dy*dy, min = 2*R;
+        if (d2 < min*min && d2 > 0.0001){
+          const d = Math.sqrt(d2), nx = dx/d, ny = dy/d, o = (min-d)/2;
+          a.x -= nx*o; a.y -= ny*o; c.x += nx*o; c.y += ny*o;
+          const rv = (c.vx-a.vx)*nx + (c.vy-a.vy)*ny;
+          if (rv < 0){ const imp = -rv*0.6; a.vx -= nx*imp; a.vy -= ny*imp; c.vx += nx*imp; c.vy += ny*imp; }
+        }
+      }
+      if (a.x < g.l+R){ a.x = g.l+R; a.vx = Math.abs(a.vx)*0.3; }
+      if (a.x > g.r-R){ a.x = g.r-R; a.vx = -Math.abs(a.vx)*0.3; }
+      if (a.y > g.b-R){ a.y = g.b-R; a.vy = -Math.abs(a.vy)*0.2; a.vx *= 0.8; }
+      if (a.y < g.top - 6 + R && a.vy < 0){ a.y = g.top - 6 + R; a.vy = Math.abs(a.vy)*0.3; }   // bump the lid, don't fly out
+    }
+  }
+  for (const b of B){ b.rot += b.vx*0.03; ke += b.vx*b.vx + b.vy*b.vy; }
+  return ke;
+}
+function drawBear(ctx, b, R){
+  const s = R/18; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot); ctx.scale(s, s); ctx.translate(-20,-24);
+  ctx.fillStyle = colorOf(b.color); ctx.globalAlpha = 0.92;
+  const C = (x,y,r) => { ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); };
+  const E = (x,y,rx,ry) => { ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2); ctx.fill(); };
+  C(11,8,5); C(29,8,5); E(9,27,4.5,4); E(31,27,4.5,4); C(13,39,5); C(27,39,5); E(20,30,11.5,11); C(20,14,10);
+  if (b.color === 'milk'){ ctx.globalAlpha = .5; ctx.strokeStyle = '#B9A68B'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(20,14,10,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(20,30,11.5,11,0,0,Math.PI*2); ctx.stroke(); }
+  ctx.globalAlpha = 0.5; ctx.fillStyle = '#fff'; E(15,10,3,2); ctx.globalAlpha = 0.25; E(15,26,2.5,4);
+  ctx.restore();
+}
+function jarDraw(){
+  const cv = $('#jar'), ctx = cv.getContext('2d'), g = jarGeom();
+  ctx.clearRect(0,0,Jar.W,Jar.H);
+  const line = cssv('--line'), ink2 = cssv('--ink-2'), surf2 = cssv('--surface-2');
+  // jar body
+  const L = g.l-6, Rr = g.r+6, T = g.top-8, Bt = g.b+4, rad = 22;
+  ctx.beginPath(); ctx.moveTo(L+12, T); ctx.lineTo(Rr-12, T); ctx.quadraticCurveTo(Rr, T, Rr, T+16);
+  ctx.lineTo(Rr, Bt-rad); ctx.quadraticCurveTo(Rr, Bt, Rr-rad, Bt); ctx.lineTo(L+rad, Bt); ctx.quadraticCurveTo(L, Bt, L, Bt-rad); ctx.lineTo(L, T+16); ctx.quadraticCurveTo(L, T, L+12, T); ctx.closePath();
+  ctx.fillStyle = surf2; ctx.globalAlpha = .45; ctx.fill(); ctx.globalAlpha = 1;
+  for (const b of Jar.bodies) drawBear(ctx, b, Jar.R);
+  ctx.lineWidth = 2.5; ctx.strokeStyle = line; ctx.stroke();
+  // lid
+  ctx.fillStyle = cssv('--accent'); const lw = (Rr-L)*0.62, lx = (L+Rr)/2 - lw/2;
+  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(lx, 4, lw, 18, 7) : ctx.rect(lx,4,lw,18); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(lx+8, 8, lw-16, 3);
+  // glass shine
+  ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(L+12, T+24); ctx.lineTo(L+12, T+70); ctx.stroke();
+  if (!Jar.bodies.length){
+    ctx.fillStyle = ink2; ctx.font = '600 13px ' + cssv('--f-body'); ctx.textAlign = 'center';
+    ctx.fillText('まだ空っぽ', (L+Rr)/2, (T+Bt)/2 - 4); ctx.font = '12px ' + cssv('--f-body'); ctx.fillText('記録するとグミが入るよ', (L+Rr)/2, (T+Bt)/2 + 16);
+  }
+}
+const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function jarLoop(){
+  cancelAnimationFrame(Jar.raf);
+  const tick = () => {
+    const ke = jarStep(); jarDraw();
+    Jar.calm = ke < 0.02*Jar.bodies.length + 0.01 ? Jar.calm+1 : 0;
+    if (Jar.calm < 40) Jar.raf = requestAnimationFrame(tick);
+  };
+  Jar.calm = 0; Jar.raf = requestAnimationFrame(tick);
+}
+// tap the jar: bears near the finger hop up, the rest jiggle
+function jarPoke(x, y){
+  if (!Jar.bodies.length) return;
+  const calm = reduceMotion();
+  for (const b of Jar.bodies){
+    const dx = b.x - x, dy = b.y - y, d = Math.hypot(dx, dy);
+    const near = Math.max(0, 1 - d / 110);
+    const kick = (calm ? 1.2 : 3.2 + Math.random() * 2.6) * (0.3 + near);
+    b.vy -= kick;
+    b.vx += (dx / (d + 1)) * (calm ? .4 : 2.4) * near + (Math.random() - .5) * (calm ? .3 : 1.4);
+  }
+  jarLoop();
+}
+function jarSync(force){
+  const key = ym(todayStr());
+  const list = items().filter(i => ym(i.date) === key).sort(byDateAsc);
+  const R = jarRadius(list.length);
+  const ids = new Set(list.map(i => i.id));
+  const known = new Set(Jar.bodies.map(b => b.id));
+  const rebuild = force || Jar.key !== key || Math.abs(R - Jar.R) > 1.2 || Jar.bodies.some(b => !ids.has(b.id)) && list.length < Jar.bodies.length - 1;
+  if (rebuild){
+    Jar.R = R; Jar.key = key;
+    Jar.bodies = list.map(it => makeBody(it, false));
+    for (let i = 0; i < 500; i++) jarStep();
+    jarDraw();
+    return;
+  }
+  Jar.bodies = Jar.bodies.filter(b => ids.has(b.id));
+  const added = list.filter(i => !known.has(i.id));
+  Jar.bodies.forEach(b => { const it = list.find(i => i.id === b.id); if (it) b.color = it.color; });
+  added.forEach((it, k) => { const b = makeBody(it, true); b.y -= k*Jar.R*2.2; Jar.bodies.push(b); });
+  if (added.length && !reduceMotion()) jarLoop();
+  else { if (added.length) for (let i = 0; i < 400; i++) jarStep(); jarDraw(); }
+}
+
+/* ---------- render: log ---------- */
+const FILTERS = [{k:'all',n:'すべて'},{k:'new',n:'新商品'},{k:'five',n:'★5'},{k:'rep',n:'リピ'}];
+function renderLog(){
+  const all = items(), now = todayStr();
+  const ms = monthStats(all, ym(now));
+  $('#jar-month').textContent = `${+now.slice(5,7)}月のびん`;
+  $('#jar-count').innerHTML = `${ms.count}<small>粒</small>`;
+  $('#jar-spend').textContent = yen(ms.spend);
+  $('#jar-streak').textContent = streakOf(all) + '日';
+  $('#filters').innerHTML = FILTERS.map(f => `<button class="chip" data-filter="${f.k}" aria-pressed="${S.ui.filter===f.k}">${f.n}</button>`).join('');
+  const rep = repeatCount(all), nums = numbering(all), q = S.q.trim().toLowerCase();
+  let list = [...all].sort(byDateDesc);
+  if (q) list = list.filter(i => [i.name,i.maker,i.flavor,i.shop,i.note,(i.tags||[]).join(' ')].join(' ').toLowerCase().includes(q));
+  if (S.ui.filter === 'new') list = list.filter(i => (i.tags||[]).includes('新商品'));
+  if (S.ui.filter === 'five') list = list.filter(i => i.rating === 5);
+  if (S.ui.filter === 'rep') list = list.filter(i => rep.get(i.name) > 1);
+  if (!list.length){ $('#list').innerHTML = `<div class="rows"><div class="empty">${q || S.ui.filter!=='all' ? '条件に合うグミはありません' : 'まだ記録がありません。下の＋から最初のグミを記録しましょう'}</div></div>`; return; }
+  const groups = new Map(); list.forEach(i => { const k = ym(i.date); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(i); });
+  let html = '';
+  for (const [k, arr] of groups){
+    const [y, m] = k.split('-');
+    const spend = arr.reduce((s,i) => s + (+i.price||0), 0);
+    html += `<div class="month"><div class="month-h"><h2>${+y}年${+m}月</h2><span class="num">${arr.length}袋・${yen(spend)}</span></div><div class="rows">`;
+    html += arr.map(i => rowHTML(i, rep, nums)).join('');
+    html += `</div></div>`;
+  }
+  $('#list').innerHTML = html;
+}
+function rowHTML(i, rep, nums){
+  const tags = (i.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('');
+  const r = rep.get(i.name) > 1 ? `<span class="tag">${rep.get(i.name)}回目まで</span>` : '';
+  return `<button class="row" data-open="${esc(i.id)}">
+    ${gframe(i.name, i.color, 'row')}
+    <span style="min-width:0">${tags ? `<span class="row-tags">${tags}</span>` : ''}<span class="nm">${esc(i.name)}</span><span class="sub">${esc([i.maker, i.flavor].filter(Boolean).join('・'))}${i.shop ? '　@' + esc(i.shop) : ''}</span></span>
+    <span class="rt">${starsHTML(i.rating||0)}<span class="num">${mdLabel(i.date)}${i.price ? '・' + yen(+i.price) : ''}</span></span>
+  </button>`;
+}
+
+
+/* ---------- render: calendar ---------- */
+function renderCal(){
+  const all = items();
+  const cm = S.ui.calMonth || ym(todayStr());
+  const [y, m] = cm.split('-').map(Number);
+  $('#cal-title').textContent = `${y}年${m}月`;
+  const first = new Date(y, m-1, 1), days = new Date(y, m, 0).getDate();
+  const byDay = new Map(); all.filter(i => ym(i.date) === cm).forEach(i => { if (!byDay.has(i.date)) byDay.set(i.date, []); byDay.get(i.date).push(i); });
+  let html = [...WD].map(w => `<div class="cal-wd">${w}</div>`).join('');
+  for (let i = 0; i < first.getDay(); i++) html += `<div class="day out"></div>`;
+  const today = todayStr();
+  for (let d = 1; d <= days; d++){
+    const key = `${y}-${pad(m)}-${pad(d)}`, arr = byDay.get(key) || [];
+    const dots = arr.slice(0,4).map(i => `<span class="dot" style="background:${colorOf(i.color)}"></span>`).join('');
+    html += `<button class="day${key===today?' today':''}${key===S.ui.selDay?' sel':''}" data-day="${key}" aria-label="${m}月${d}日 ${arr.length}件"><span class="num">${d}</span><span class="dots">${dots}</span>${arr.length>4?`<span class="more">+${arr.length-4}</span>`:''}</button>`;
+  }
+  $('#cal-grid').innerHTML = html;
+  const ms = monthStats(all, cm), activeDays = byDay.size;
+  $('#cal-sum').innerHTML = `<span><b class="num">${ms.count}</b> 袋</span><span><b class="num">${activeDays}</b> 日グミ活</span><span><b class="num">${yen(ms.spend)}</b></span><span>新商品 <b class="num">${ms.news}</b></span>`;
+  const sel = S.ui.selDay && ym(S.ui.selDay) === cm ? S.ui.selDay : null;
+  if (sel){
+    const arr = (byDay.get(sel) || []).sort(byDateDesc), rep = repeatCount(all), nums = numbering(all);
+    const d = parseYmd(sel);
+    $('#cal-day').innerHTML = `<div class="month"><div class="month-h"><h2>${d.getMonth()+1}月${d.getDate()}日(${WD[d.getDay()]})</h2><span>${arr.length}袋</span></div><div class="rows">${arr.length ? arr.map(i => rowHTML(i, rep, nums)).join('') : '<div class="empty">この日の記録はありません</div>'}</div></div>`;
+  } else $('#cal-day').innerHTML = `<p class="hint" style="margin:0;text-align:center">日付をタップすると、その日に食べたグミが出ます</p>`;
+}
+
+/* ---------- render: stats ---------- */
+function renderStats(){
+  const all = items(), now = todayStr(), key = ym(now);
+  const ms = monthStats(all, key);
+  const unique = new Set(all.map(i => i.name)).size;
+  const avg = all.length ? (all.reduce((s,i) => s + (i.rating||0), 0) / all.length) : 0;
+  // last 6 months
+  const months = []; const d0 = parseYmd(now); d0.setDate(1);
+  for (let k = 5; k >= 0; k--){ const d = new Date(d0.getFullYear(), d0.getMonth()-k, 1); const kk = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; months.push({k:kk, m:d.getMonth()+1, n:all.filter(i => ym(i.date) === kk).length}); }
+  const maxN = Math.max(4, ...months.map(x => x.n)); const top = Math.ceil(maxN/4)*4;
+  const W = 320, H = 150, pl = 26, pb = 22, pt = 14, cw = (W-pl-6)/6;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="月ごとの袋数">`;
+  for (let t = 0; t <= 4; t++){ const v = top*t/4, y = H-pb - (H-pb-pt)*t/4; svg += `<line x1="${pl}" x2="${W-4}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${y+3.5}" text-anchor="end" font-size="10" fill="var(--ink-2)">${v}</text>`; }
+  months.forEach((x, i) => {
+    const h = (H-pb-pt) * x.n / top, bx = pl + i*cw + cw*0.2, bw = cw*0.6, by = H-pb-h;
+    svg += `<rect x="${bx}" y="${by}" width="${bw}" height="${Math.max(h,0)}" rx="6" fill="${x.k===key?'var(--accent)':'var(--accent-soft)'}"/>`;
+    if (x.n) svg += `<text x="${bx+bw/2}" y="${by-4}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--ink)">${x.n}</text>`;
+    svg += `<text x="${bx+bw/2}" y="${H-6}" text-anchor="middle" font-size="10" fill="var(--ink-2)">${x.m}月</text>`;
+  });
+  svg += `</svg>`;
+  const bars = (arr) => { const mx = Math.max(1, ...arr.map(a => a[1])); return arr.length ? `<div class="bars">${arr.slice(0,6).map(([n,c]) => `<div class="bar"><span class="n">${esc(n)}</span><span class="tr"><span class="fl" style="width:${c/mx*100}%;display:block"></span></span><span class="c num">${c}</span></div>`).join('')}</div>` : '<p class="hint" style="margin:0">記録がたまると出てきます</p>'; };
+  // taste map
+  const grid = Array.from({length:5}, () => Array(5).fill(0));
+  all.forEach(i => { if (i.hard && i.sour) grid[i.sour-1][i.hard-1]++; });
+  const gmax = Math.max(1, ...grid.flat());
+  let map = '';
+  for (let s = 5; s >= 1; s--){
+    map += `<span class="ax">${s===5?'すっぱ':s===1?'あま':''}</span>`;
+    for (let h = 1; h <= 5; h++){ const c = grid[s-1][h-1]; const sz = c ? 22 + 58 * c / gmax : 0; map += `<div class="cell" title="かたさ${h}・すっぱさ${s}：${c}袋">${c ? `<span style="width:${sz}%;height:${sz}%;opacity:${.45 + .55*c/gmax}"></span>` : ''}</div>`; }
+  }
+  const mh = all.length ? all.reduce((s,i) => s + (i.hard||3), 0) / all.length : 3;
+  const msour = all.length ? all.reduce((s,i) => s + (i.sour||3), 0) / all.length : 3;
+  const type = `${mh >= 3.5 ? 'かため' : mh <= 2.5 ? 'やわらか' : 'ほどよい弾力'}×${msour >= 3.5 ? 'すっぱい' : msour <= 2.5 ? 'あまい' : 'あまずっぱ'}`;
+  const best = [...all].filter(i => (i.rating||0) === 5);
+  const bestUnique = [...new Map(best.map(i => [i.name, i])).values()].slice(0, 5);
+  $('#v-stats').innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><div class="lbl">${+key.slice(5)}月の袋数</div><div class="v num">${ms.count}<small>袋</small></div></div>
+      <div class="kpi"><div class="lbl">${+key.slice(5)}月の出費</div><div class="v num">${(ms.spend).toLocaleString('ja-JP')}<small>円</small></div></div>
+      <div class="kpi"><div class="lbl">ぜんぶで</div><div class="v num">${all.length}<small>袋</small></div></div>
+      <div class="kpi"><div class="lbl">食べた種類</div><div class="v num">${unique}<small>種</small></div></div>
+    </div>
+    <div class="panel"><h3>${+key.slice(5)}月のまとめ<span class="s">推しメーカー：${esc(ms.topMaker || '—')}　ベスト：${esc(ms.best ? ms.best.name : '—')}</span></h3>
+      <div class="btn-row"><button class="btn primary sm" id="post-month">今月のまとめをポスト</button></div></div>
+    <div class="panel chart"><h3>月ごとの袋数<span class="s">直近6か月</span></h3>${svg}</div>
+    <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
+      <div class="type-line">あなたは <b>${type}</b> 派　<span class="hint">平均おいしさ ${avg.toFixed(1)}</span></div>
+      <div class="map">${map}</div><div class="map-x"><span>ふにゃ</span><span>かたさ →</span><span>かちかち</span></div></div>
+    <div class="panel"><h3>メーカーランキング</h3>${bars(countBy(all, i => i.maker))}</div>
+    <div class="panel"><h3>よく買うお店</h3>${bars(countBy(all, i => i.shop))}</div>
+    <div class="panel"><h3>殿堂入り<span class="s">★5をつけたグミ</span></h3>${bestUnique.length ? `<div class="rows" style="border:0">${bestUnique.map(i => rowHTML(i, repeatCount(all), numbering(all))).join('')}</div>` : '<p class="hint" style="margin:0">★5のグミはまだありません</p>'}</div>`;
+}
+
+/* ---------- own photos (one per gummy, replaces the drawn bag) ---------- */
+// photos are small JPEG data URLs kept next to the records, so no separate file storage is needed
+const photoOf = name => (S.mode === 'cloud' ? S.cloudPhotos[name] : S.localPhotos[name]) || '';
+const photoDocId = name => 'p' + hash('photo|' + name).toString(36) + hash(name + '|photo').toString(36);
+/* ---------- photo crop editor: pan, zoom, rotate in 90° steps ---------- */
+const CROP = { img:null, rot:0, zoom:1, ox:0, oy:0, w:0, h:0, done:null, ptrs:new Map(), pinch:0 };
+function loadImage(file){
+  return new Promise((res, rej) => { const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); res(img); }; img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('image')); }; img.src = url; });
+}
+function cropDims(){
+  const W = CROP.img.naturalWidth, H = CROP.img.naturalHeight, side = CROP.rot % 180 !== 0;
+  const RW = side ? H : W, RH = side ? W : H;
+  const s = Math.max(CROP.w / RW, CROP.h / RH) * CROP.zoom;   // cover the frame, then zoom
+  return {W, H, s, DW: RW * s, DH: RH * s};
+}
+function cropClamp(){
+  const d = cropDims(), mx = Math.max(0, (d.DW - CROP.w) / 2), my = Math.max(0, (d.DH - CROP.h) / 2);
+  CROP.ox = Math.min(mx, Math.max(-mx, CROP.ox)); CROP.oy = Math.min(my, Math.max(-my, CROP.oy));
+}
+function cropPaint(ctx, k){
+  const d = cropDims();
+  ctx.save(); ctx.scale(k, k);
+  ctx.translate(CROP.w / 2 + CROP.ox, CROP.h / 2 + CROP.oy); ctx.rotate(CROP.rot * Math.PI / 180);
+  ctx.drawImage(CROP.img, -d.W * d.s / 2, -d.H * d.s / 2, d.W * d.s, d.H * d.s);
+  ctx.restore();
+}
+function cropDraw(){
+  const cv = $('#crop-cv'), dpr = window.devicePixelRatio || 1, ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
+  cropPaint(ctx, dpr);
+}
+function cropSize(){
+  const v = $('#crop-view'); CROP.w = v.clientWidth; CROP.h = v.clientHeight;
+  const cv = $('#crop-cv'), dpr = window.devicePixelRatio || 1; cv.width = Math.round(CROP.w * dpr); cv.height = Math.round(CROP.h * dpr);
+}
+function setZoom(z){ CROP.zoom = Math.min(5, Math.max(1, z)); $('#crop-zoom').value = CROP.zoom; cropClamp(); cropDraw(); }
+async function openCrop(file, color){
+  CROP.img = await loadImage(file);
+  CROP.rot = 0; CROP.zoom = 1; CROP.ox = 0; CROP.oy = 0; CROP.ptrs.clear();
+  $('#crop-view').style.setProperty('--gc', colorOf(color));
+  $('#crop-zoom').value = 1;
+  openSheet('#sh-crop');
+  requestAnimationFrame(() => { cropSize(); cropClamp(); cropDraw(); });
+  return new Promise(res => { CROP.done = res; });
+}
+function cropResult(){
+  // 256x320 output, same 4:5 frame as on screen
+  const c = document.createElement('canvas'); c.width = 256; c.height = 320;
+  const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 256, 320);
+  cropPaint(ctx, 256 / CROP.w);
+  let q = .82, out = c.toDataURL('image/jpeg', q);
+  while (out.length > 60000 && q > .4){ q -= .1; out = c.toDataURL('image/jpeg', q); }
+  return out;
+}
+function wireCrop(){
+  const v = $('#crop-view');
+  v.addEventListener('pointerdown', e => { v.setPointerCapture(e.pointerId); CROP.ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY}); CROP.pinch = 0; });
+  v.addEventListener('pointermove', e => {
+    const p = CROP.ptrs.get(e.pointerId); if (!p) return;
+    if (CROP.ptrs.size === 1){ CROP.ox += e.clientX - p.x; CROP.oy += e.clientY - p.y; }
+    p.x = e.clientX; p.y = e.clientY;
+    if (CROP.ptrs.size >= 2){
+      const [a, b] = [...CROP.ptrs.values()], dist = Math.hypot(a.x - b.x, a.y - b.y);
+      if (CROP.pinch) setZoom(CROP.zoom * dist / CROP.pinch);
+      CROP.pinch = dist;
+    }
+    cropClamp(); cropDraw();
+  });
+  const up = e => { CROP.ptrs.delete(e.pointerId); CROP.pinch = 0; };
+  v.addEventListener('pointerup', up); v.addEventListener('pointercancel', up);
+  v.addEventListener('wheel', e => { e.preventDefault(); setZoom(CROP.zoom * (e.deltaY < 0 ? 1.08 : 1 / 1.08)); }, {passive:false});
+  $('#crop-zoom').addEventListener('input', e => setZoom(+e.target.value));
+  $('#crop-rl').addEventListener('click', () => { CROP.rot = (CROP.rot + 270) % 360; CROP.ox = CROP.oy = 0; cropClamp(); cropDraw(); });
+  $('#crop-rr').addEventListener('click', () => { CROP.rot = (CROP.rot + 90) % 360; CROP.ox = CROP.oy = 0; cropClamp(); cropDraw(); });
+  $('#crop-reset').addEventListener('click', () => { CROP.rot = 0; CROP.ox = CROP.oy = 0; setZoom(1); });
+  $('#crop-ok').addEventListener('click', () => { const out = cropResult(); closeSheet('#sh-crop'); const d = CROP.done; CROP.done = null; d && d(out); });
+  // closing the sheet any other way cancels
+  new MutationObserver(() => { if ($('#sh-crop').hidden && CROP.done){ const d = CROP.done; CROP.done = null; d(null); } })
+    .observe($('#sh-crop'), {attributes:true, attributeFilter:['hidden']});
+}
+async function setPhoto(name, data){
+  if (S.mode === 'cloud'){
+    try {
+      const ref = S.cap.col.doc(photoDocId(name));
+      if (data) await ref.set({kind:'photo', name, data, updated:todayStr()}); else await ref.delete();
+      return;
+    } catch(err){
+      if (!err || err.code !== 'invalid_argument') throw err;
+      goLocal(true); toast('この共有のしかたではアカウントに保存できないため、この端末に保存しました');
+    }
+  }
+  if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
+  if (!lsSet(LS_PHOTOS, S.localPhotos)){ delete S.localPhotos[name]; throw {code:'local_full'}; }
+  renderAll();
+}
+// the photo gets a frame in the gummy's own color so the shelf keeps its colors
+function gframe(name, color, size){
+  const p = photoOf(name);
+  return `<span class="gframe gf-${size}" style="--gc:${colorOf(color)}">${p ? `<img src="${p}" alt="${esc(name)}の写真">` : bearSVG(color, 30)}</span>`;
+}
+
+/* ---------- gummy shelf (stamp book) ---------- */
+function shelfData(){
+  const all = items();
+  const got = new Map();   // name -> {latest record, count, first date, best rating}
+  [...all].sort(byDateAsc).forEach(i => {
+    const g = got.get(i.name);
+    if (g){ g.count++; g.last = i; g.best = Math.max(g.best, i.rating || 0); return; }
+    got.set(i.name, {name:i.name, first:i.date, last:i, count:1, best:i.rating || 0});
+  });
+  // every catalog variant, including ones already bought (candidates() hides those)
+  const cat = [];
+  for (const c of catList()) for (const f of (c.f && c.f.length ? c.f : [''])){
+    cat.push({name: f ? `${c.n} ${f}` : c.n, maker:c.m, flavor:f, color:colorFromText(f) || c.c || colorFromText(c.n) || 'straw', price:c.p, hard:c.h, sour:c.s});
+  }
+  return {got, cat};
+}
+function renderShelf(){
+  const {got, cat} = shelfData();
+  // one shelf, most recently bought on top
+  const mine = [...got.values()].sort((a, b) => b.last.date.localeCompare(a.last.date) || (b.last.createdAt || 0) - (a.last.createdAt || 0));
+  const catNames = new Set(cat.map(c => c.name));
+  const inCat = mine.filter(g => catNames.has(g.name)).length;
+  const makers = new Set(mine.map(g => g.last.maker).filter(Boolean)).size;
+  const topRep = [...mine].sort((a, b) => b.count - a.count)[0];
+  const card = g => `<button class="pk" data-open="${esc(g.last.id)}" aria-label="${esc(g.name)}、${g.count}回">
+      ${g.best === 5 ? '<span class="crown" aria-hidden="true">★</span>' : ''}${g.count > 1 ? `<span class="stamp num">×${g.count}</span>` : ''}
+      ${gframe(g.name, g.last.color, 'shelf')}<span class="pn">${esc(g.name)}</span></button>`;
+  $('#v-shelf').innerHTML = `
+    <div class="shelf-sum">
+      <div><b class="num">${got.size}</b> <span>種類</span></div>
+      <div><b class="num">${makers}</b> <span>メーカー</span></div>
+      ${cat.length ? `<div><span>カタログ ${inCat} / ${cat.length}</span></div>` : ''}
+      ${topRep && topRep.count > 1 ? `<div><span>いちばんリピ：<strong>${esc(topRep.name)}</strong> ×${topRep.count}</span></div>` : ''}
+    </div>
+    <p class="hint" style="margin:0">最近買ったグミほど上に並びます。</p>
+    ${mine.length ? `<div class="shelf-box"><div class="shelf-grid">${mine.map(card).join('')}</div></div>`
+      : '<div class="rows"><div class="empty">まだ棚は空っぽです。グミを記録すると、ここに並んでいきます</div></div>'}`;
+}
+
+/* ---------- render all ---------- */
+let lastShelf = null;
+function renderAll(){
+  const demo = isDemo();
+  $('#demo-banner').hidden = !demo;
+  const st = $('#status');
+  st.textContent = S.mode === 'cloud' ? 'クラウドに保存' : 'この端末に保存';
+  st.className = 'pill' + (S.mode === 'cloud' ? ' cloud' : '');
+  const mb = $('#migrate-banner');
+  if (S.mode === 'cloud' && (S.local.length || Object.keys(S.localPhotos).length)){
+    mb.hidden = false;
+    mb.innerHTML = `<span>この端末に<b>${S.local.length}件</b>の記録が残っています。</span><button class="btn sm primary" id="migrate">クラウドに移す</button>`;
+  } else mb.hidden = true;
+  renderLog(); renderCal(); renderStats(); renderShelf();
+  jarSync(false);
+  const makers = [...new Set([...realItems().map(i => i.maker).filter(Boolean), ...MAKERS])];
+  $('#dl-makers').innerHTML = makers.map(n => `<option value="${esc(n)}"></option>`).join('');
+  // a gummy bought for the first time joins the shelf
+  if (!demo){
+    const names = new Set(realItems().map(i => i.name));
+    if (lastShelf){ const nw = [...names].filter(n => !lastShelf.has(n)); if (nw.length === 1) setTimeout(() => toast(`グミ棚に「${nw[0]}」が並びました`), 2600); }
+    lastShelf = names;
+  }
+}
+
+/* ---------- tabs ---------- */
+function setTab(t){
+  S.ui.tab = t; lsSet(LS_UI, {tab:t, filter:S.ui.filter});
+  ['log','cal','stats','shelf'].forEach(k => { $('#v-' + k).hidden = k !== t; });
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === t ? 'page' : 'false'));
+  if (t === 'log'){ jarSetup(); jarSync(true); }
+  window.scrollTo(0,0);
+}
+
+/* ---------- sheets ---------- */
+let lastFocus = null;
+function openSheet(id){ lastFocus = document.activeElement; const s = $(id); s.hidden = false; document.body.style.overflow = 'hidden'; setTimeout(() => { const f = s.querySelector('input,button,textarea'); f && f.focus({preventScroll:true}); }, 30); }
+function closeSheet(id){ $(id).hidden = true; if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) document.body.style.overflow = ''; lastFocus && lastFocus.focus && lastFocus.focus({preventScroll:true}); }
+document.querySelectorAll('.sheet').forEach(s => {
+  s.addEventListener('click', e => { if (e.target === s || e.target.closest('[data-close]')) closeSheet('#' + s.id); });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ const open = [...document.querySelectorAll('.sheet')].reverse().find(s => !s.hidden); open && closeSheet('#' + open.id); } });
+
+/* ---------- hardness / sourness shapes ---------- */
+const LEVEL_LBL = {
+  rating: ['いまいち','まあまあ','おいしい','かなりおいしい','最高！'],
+  hard: ['ふにゃふにゃ','やわらかめ','ふつう','しっかり','かちかち'],
+  sour: ['あまあま','あまめ','あまずっぱ','すっぱめ','すっぱ！'],
+};
+// hard: circle → square as the corners sharpen. sour: smooth drop → spiky burst as it gets sharper
+function shapeSVG(kind, lv, on, size){
+  size = size || 30;
+  const fill = on ? 'var(--accent-text)' : 'var(--line)';
+  if (kind === 'hard'){
+    const rx = [12, 8.5, 5.5, 3, .6][lv - 1];
+    return `<svg width="${size}" height="${size}" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="${rx}" fill="${fill}"/></svg>`;
+  }
+  if (lv === 1) return `<svg width="${size}" height="${size}" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="${fill}"/></svg>`;
+  const n = [0, 6, 8, 10, 12][lv - 1], inner = [1, .84, .72, .6, .48][lv - 1], R = 13;
+  const pts = [];
+  for (let i = 0; i < n * 2; i++){
+    const r = i % 2 ? R * inner : R, a = Math.PI * i / n - Math.PI / 2;
+    pts.push((14 + r * Math.cos(a)).toFixed(2) + ',' + (14 + r * Math.sin(a)).toFixed(2));
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 28 28" aria-hidden="true"><polygon points="${pts.join(' ')}" fill="${fill}" stroke="${fill}" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+}
+// unlike stars, only the chosen level lights up
+const shapesHTML = (kind, n, size) => [1,2,3,4,5].map(k => shapeSVG(kind, k, k === n, size)).join('');
+function renderShapePick(kind){
+  const v = +$('#f-' + kind).value || 3;
+  $('#f-' + kind + '-pick').innerHTML = [1,2,3,4,5].map(k => `<button type="button" role="radio" aria-checked="${k === v}" data-lv="${k}" aria-label="${LEVEL_LBL[kind][k-1]}">${shapeSVG(kind, k, k === v)}</button>`).join('')
+    + `<span class="pick-lbl">${LEVEL_LBL[kind][v-1]}</span>`;
+}
+
+/* ---------- form ---------- */
+const F = { touched:new Set(), editing:null, color:'straw', rating:4, tags:[] };
+function buildFormStatic(){
+  $('#f-colors').innerHTML = COLORS.map(c => `<button type="button" class="cbtn" data-color="${c.k}" aria-label="${c.n}" aria-pressed="false">${bearSVG(c.k, 26)}</button>`).join('');
+  renderShopChips();
+  renderTagChips();
+  $('#f-stars').innerHTML = [1,2,3,4,5].map(n => `<button type="button" data-star="${n}" aria-label="${n}つ星">★</button>`).join('') + '<span class="pick-lbl" id="f-stars-lbl"></span>';
+}
+/* ---------- editable candidate lists (shops, tags) ---------- */
+const LISTS = {
+  shops: { title:'お店', defaults:SHOPS, ls:LS_SHOPS, max:30, field:'shop', placeholder:'例：成城石井、ドンキ、〇〇駅のNewDays',
+           used: () => countBy(realItems(), i => i.shop).map(x => x[0]) },
+  tags:  { title:'タグ', defaults:TAGS, ls:LS_TAGS, max:12, field:'tags', placeholder:'例：ハード系、コラボ、おみやげ',
+           used: () => countBy(realItems().flatMap(i => (i.tags || []).map(t => ({t}))), x => x.t).map(x => x[0]),
+           special: {'新商品':'ログで目立つ表示・Xのハッシュタグ・絞り込みに使います'} },
+};
+function renderShopChips(){
+  $('#f-shops').innerHTML = S.shops.map(s => `<button type="button" class="chip" data-shop="${esc(s)}" aria-pressed="false">${esc(s)}</button>`).join('');
+  if (!$('#sh-form').hidden) syncFormUI();
+}
+function renderTagChips(){
+  const list = [...S.tags, ...F.tags.filter(t => !S.tags.includes(t))];
+  $('#f-tags').innerHTML = list.map(t => `<button type="button" class="chip" data-tag="${esc(t)}" aria-pressed="${F.tags.includes(t)}">${esc(t)}</button>`).join('');
+}
+let listSaveT = 0;
+function saveList(key){
+  lsSet(LISTS[key].ls, S[key]);
+  renderShopChips(); renderTagChips(); renderListEditor(key);
+  if (S.mode === 'cloud' && S.cap.col){
+    clearTimeout(listSaveT);
+    listSaveT = setTimeout(saveSettingsDoc, 600);
+  }
+}
+function saveSettingsDoc(){
+  if (S.mode !== 'cloud' || !S.cap.col) return;
+  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme}).catch(() => toast('設定を保存できませんでした'));
+}
+function renderThemePicker(){
+  const box = $('#theme-picker'); if (!box) return;
+  box.innerHTML = COLORS.map(c => `<button type="button" class="cbtn theme-btn" data-gtheme="${c.k}" aria-pressed="${S.theme === c.k}" aria-label="${c.n}テーマ">${bearSVG(c.k, 26)}<span>${c.n}</span></button>`).join('');
+}
+function renderListEditor(key){
+  const box = $('#' + key + '-editor'); if (!box) return;
+  const L = LISTS[key], arr = S[key];
+  const used = L.used().filter(n => !arr.includes(n)).slice(0, 8);
+  box.innerHTML = `<div class="shop-list">${arr.map((n, i) => `<div class="shop-item"><span class="nm">${esc(n)}${L.special && L.special[n] ? `<small class="sp-note">${esc(L.special[n])}</small>` : ''}</span>
+      <button class="icon-btn sm" data-list="${key}" data-up="${i}" aria-label="${esc(n)}を上へ" ${i===0?'disabled':''}><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
+      <button class="icon-btn sm" data-list="${key}" data-down="${i}" aria-label="${esc(n)}を下へ" ${i===arr.length-1?'disabled':''}><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="icon-btn sm" data-list="${key}" data-del="${i}" aria-label="${esc(n)}を外す"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`).join('') || '<p>候補がありません。下から追加してください。</p>'}</div>
+    <form class="shop-add" data-list-add="${key}"><input class="in" id="${key}-new" maxlength="${L.max}" placeholder="${esc(L.placeholder)}" autocomplete="off" aria-label="${L.title}を追加"><button class="btn sm primary" type="submit">追加</button></form>
+    ${used.length ? `<p>記録に出てくる${L.title}：</p><div class="chips">${used.map(n => `<button class="chip" data-list="${key}" data-add="${esc(n)}">＋ ${esc(n)}</button>`).join('')}</div>` : ''}
+    <div class="btn-row"><button class="btn sm ghost" data-list="${key}" data-reset>最初の候補に戻す</button></div>`;
+}
+function renderShopEditor(){ renderListEditor('shops'); renderListEditor('tags'); }
+function wireShopEditor(){
+  $('#settings-body').addEventListener('click', e => {
+    const th = e.target.closest('[data-gtheme]');
+    if (th){
+      S.theme = th.dataset.gtheme; lsSet(LS_THEME, S.theme); applyTheme(); renderAll(); jarDraw(); renderThemePicker();
+      clearTimeout(listSaveT); listSaveT = setTimeout(saveSettingsDoc, 600); return;
+    }
+    const t = e.target.closest('[data-list]'); if (!t) return;
+    const key = t.dataset.list, a = [...S[key]];
+    if (t.hasAttribute('data-reset')){ S[key] = [...LISTS[key].defaults]; saveList(key); toast('最初の候補に戻しました'); return; }
+    if (t.dataset.add != null){ if (!a.includes(t.dataset.add)) a.push(t.dataset.add); }
+    else if (t.dataset.del != null){ a.splice(+t.dataset.del, 1); }
+    else if (t.dataset.up != null || t.dataset.down != null){ const i = +(t.dataset.up ?? t.dataset.down), j = t.dataset.up != null ? i-1 : i+1; if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; }
+    else return;
+    S[key] = a; saveList(key);
+  });
+  $('#settings-body').addEventListener('submit', e => {
+    const key = e.target.dataset && e.target.dataset.listAdd; if (!key) return; e.preventDefault();
+    const inp = $('#' + key + '-new'); const v = inp.value.trim().replace(/^#/, '').slice(0, LISTS[key].max); if (!v) return;
+    if (S[key].includes(v)){ toast('もう候補に入っています'); return; }
+    S[key] = [...S[key], v]; saveList(key); setTimeout(() => $('#' + key + '-new') && $('#' + key + '-new').focus(), 0);
+  });
+}
+function syncFormUI(){
+  document.querySelectorAll('#f-colors .cbtn').forEach(b => b.setAttribute('aria-pressed', b.dataset.color === F.color));
+  const shop = $('#f-shop').value.trim();
+  document.querySelectorAll('#f-shops .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.shop === shop));
+  renderTagChips();
+  document.querySelectorAll('#f-stars button').forEach(b => b.classList.toggle('on', +b.dataset.star <= F.rating));
+  $('#f-stars-lbl').textContent = LEVEL_LBL.rating[F.rating - 1] || '';
+  renderShapePick('hard'); renderShapePick('sour');
+}
+function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
+  F.editing = mode === 'edit' ? base : null;
+  const b = base || {};
+  $('#form-title').textContent = mode === 'edit' ? '記録を直す' : mode === 'again' ? 'また買った！' : 'グミを記録';
+  $('#f-save').textContent = mode === 'edit' ? '保存する' : '記録する';
+  $('#f-name').value = b.name || ''; $('#f-maker').value = b.maker || ''; $('#f-flavor').value = b.flavor || '';
+  $('#f-shop').value = b.shop || ''; $('#f-price').value = b.price ?? '';
+  $('#f-date').value = mode === 'edit' ? b.date : todayStr();
+  $('#f-hard').value = b.hard || 3; $('#f-sour').value = b.sour || 3;
+  $('#f-note').value = mode === 'edit' ? (b.note || '') : '';
+  F.color = b.color || 'straw'; F.rating = b.rating || 4;
+  F.tags = mode === 'again' ? (b.tags||[]).filter(t => t !== '新商品') : [...(b.tags || [])];
+  $('#f-err').hidden = true;
+  F.touched = new Set(mode === 'edit' ? ['maker','flavor','price','color','hard','sour'] : mode === 'again' ? ['color','hard','sour'] : []);
+  AC.applied = b.name || ''; closeAC(); setHint(''); clearGuessed();
+  syncFormUI(); openSheet('#sh-form');
+}
+/* ---------- name autocomplete + autofill ---------- */
+const norm = s => String(s || '').normalize('NFKC').toLowerCase()
+  .replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)).replace(/[\s・ーｰ\-_.。、,!！?？~〜]/g, '');
+const AC = { list:[], active:-1, open:false, applied:'' };
+function candidates(){
+  const mine = new Map();
+  [...realItems()].sort(byDateDesc).forEach(i => {
+    const m = mine.get(i.name);
+    if (m){ m.count++; if (!m.price && i.price) m.price = i.price; return; }
+    mine.set(i.name, {src:'mine', name:i.name, maker:i.maker, flavor:i.flavor, color:i.color, price:i.price, hard:i.hard, sour:i.sour, count:1, last:i.date, shop:i.shop});
+  });
+  const out = [...mine.values()];
+  for (const c of catList()){
+    const vs = c.f && c.f.length ? c.f : [''];
+    for (const f of vs){
+      const name = f ? `${c.n} ${f}` : c.n;
+      if (mine.has(name)) continue;
+      out.push({src:'cat', name, maker:c.m, flavor:f, color:colorFromText(f) || c.c || colorFromText(c.n) || 'straw', price:c.p, hard:c.h, sour:c.s, reading:(c.r || '') + ' ' + f, rel:c.rel || null});
+    }
+  }
+  out.forEach(c => {
+    c.kName = norm(c.name);
+    // name + reading words: where a typed query should match; maker/flavor match only as a whole substring
+    c.kWords = [...new Set([c.name, ...String(c.reading || '').split(/\s+/)].flatMap(t => [norm(t), ...String(t).split(/[\s　]+/).map(norm)]).filter(Boolean))];
+    c.kSide = [norm(c.maker), norm(c.flavor)].filter(Boolean);
+  });
+  return out;
+}
+// typo-tolerant match: q's characters appear in order inside a short window of k (e.g.「かじゅぐみ」→ かじゅうぐみ)
+function nearMatch(q, k){
+  if (q.length < 3) return false;
+  const win = q.length + Math.max(1, Math.floor(q.length / 3));
+  for (let st = k.indexOf(q[0]); st >= 0; st = k.indexOf(q[0], st + 1)){
+    let i = 1;
+    for (let j = st + 1; j < k.length && j - st < win && i < q.length; j++) if (k[j] === q[i]) i++;
+    if (i === q.length) return true;
+  }
+  return false;
+}
+function searchCands(raw){
+  const q = norm(raw), all = candidates();
+  if (!q) return {head:'最近のグミ', list: all.filter(c => c.src === 'mine').slice(0, 6)};
+  const strong = [], weak = [];
+  for (const c of all){
+    let sc = 0;
+    if (c.kWords.some(w => w.startsWith(q))) sc = 5;
+    else if (c.kSide.some(w => w.startsWith(q))) sc = 4;
+    else if (c.kWords.some(w => w.includes(q))) sc = 3;
+    else if (c.kSide.some(w => w.includes(q))) sc = 2;
+    const mine = c.src === 'mine' ? 1.5 + Math.min(c.count, 5) * .1 : 0;
+    if (sc) strong.push([sc + mine, c]);
+    else if (c.kWords.some(w => nearMatch(q, w))) weak.push([1 + mine, c]);
+  }
+  const byScore = (a, b) => b[0] - a[0] || a[1].name.length - b[1].name.length;
+  strong.sort(byScore); weak.sort(byScore);
+  // typo matches only fill in when the exact matches are few
+  const list = strong.length >= 3 ? strong : [...strong, ...weak.slice(0, 3)];
+  return {head: strong.length ? '候補' : 'もしかして', list: list.slice(0, 7).map(x => x[1])};
+}
+function hl(name, raw){
+  const q = String(raw || '').trim(); if (!q) return esc(name);
+  const i = name.toLowerCase().indexOf(q.toLowerCase()); if (i < 0) return esc(name);
+  return esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
+}
+function renderAC(){
+  const box = $('#ac-list'), raw = $('#f-name').value;
+  const {head, list} = searchCands(raw);
+  AC.list = list; if (AC.active >= list.length) AC.active = list.length - 1;
+  if (!list.length || (list.length === 1 && list[0].name === raw.trim() && AC.applied === raw.trim())){ closeAC(); return; }
+  box.innerHTML = `<div class="ac-head">${head}</div>` + list.map((c, i) => `<button type="button" class="ac-opt" role="option" id="ac-${i}" data-ac="${i}" aria-selected="${i === AC.active}">
+      ${bearSVG(c.color, 24)}<span style="min-width:0"><span class="n">${hl(c.name, raw)}</span><span class="m">${esc([c.maker, c.price ? '約' + yen(c.price) : ''].filter(Boolean).join('・'))}${c.src === 'mine' ? `・${c.count}回目まで` : ''}</span></span>
+      <span class="ac-src${c.src === 'mine' ? ' mine' : ''}">${c.src === 'mine' ? '前に食べた' : isRecent(c.rel) ? '新商品' : 'カタログ'}</span></button>`).join('');
+  box.hidden = false; AC.open = true;
+  $('#f-name').setAttribute('aria-expanded', 'true');
+  $('#f-name').setAttribute('aria-activedescendant', AC.active >= 0 ? 'ac-' + AC.active : '');
+}
+function closeAC(){ $('#ac-list').hidden = true; AC.open = false; AC.active = -1; $('#f-name').setAttribute('aria-expanded', 'false'); $('#f-name').removeAttribute('aria-activedescendant'); }
+function setHint(html){ const h = $('#ac-hint'); h.innerHTML = html || ''; h.hidden = !html; }
+function clearGuessed(){ document.querySelectorAll('#form .guessed').forEach(el => el.classList.remove('guessed')); }
+function applyCand(c, note){
+  const filled = [];
+  const put = (id, key, v) => {
+    if (v == null || v === '') return;
+    const el = $(id);
+    if (F.touched.has(key) && el.value) return;
+    el.value = v; el.classList.add('guessed'); filled.push(key);
+  };
+  if (c.name) $('#f-name').value = c.name;
+  AC.applied = $('#f-name').value.trim();
+  put('#f-maker', 'maker', c.maker); put('#f-flavor', 'flavor', c.flavor); put('#f-price', 'price', c.price);
+  if (c.color && !F.touched.has('color')){ F.color = c.color; filled.push('color'); }
+  if (c.hard && !F.touched.has('hard')) $('#f-hard').value = c.hard;
+  if (c.sour && !F.touched.has('sour')) $('#f-sour').value = c.sour;
+  if (c.rel && isRecent(c.rel, $('#f-date').value) && !F.touched.has('tags') && !F.tags.includes('新商品')) F.tags = [...F.tags, '新商品'];
+  syncFormUI(); closeAC();
+  if (note) setHint(note);
+}
+function noteFor(c){
+  if (c.src === 'mine') return `前回（${mdLabel(c.last)}${c.shop ? '・' + esc(c.shop) : ''}）の記録から入力しました。色のついた欄は自動入力です。`;
+  if (c.src === 'cat') return `カタログから入力しました。${c.price ? '値段はメーカーの希望小売価格（税込の目安）です。お店の値段と違えば直してください。' : 'メーカーが値段を公開していないため、値段は入っていません。'}${c.rel && isRecent(c.rel, $('#f-date').value) ? '発売から間もないので「新商品」タグを付けました。' : ''}`;
+  return c.note || '';
+}
+function predictLocal(raw){
+  const name = raw.trim(); if (!name) return false;
+  const k = norm(name);
+  const exact = candidates().find(c => c.kName === k);
+  if (exact){ applyCand({...exact, name: exact.name}, noteFor(exact)); return true; }
+  const base = catList().sort((a, b) => b.n.length - a.n.length).find(c => k.includes(norm(c.n)) || norm((c.r || '').split(' ')[0]) && k.includes(norm((c.r || '').split(' ')[0])));
+  if (base){
+    const rest = name.replace(base.n, '').replace(/^[\s　・]+|[\s　]+$/g, '');
+    applyCand({name, maker:base.m, flavor:rest || (base.f ? '' : ''), color:colorFromText(rest) || base.c || colorFromText(name) || null, price:base.p, hard:base.h, sour:base.s, rel:base.rel},
+      `「${esc(base.n)}」シリーズとして予測しました。値段は目安です。`);
+    return true;
+  }
+  const col = colorFromText(name);
+  if (col && !F.touched.has('color')){ F.color = col; syncFormUI(); }
+  return false;
+}
+async function predictAI(){
+  const sample = S.cap.sample, name = $('#f-name').value.trim(); if (!sample || !name) return;
+  setHint('AIが予測中…');
+  const keys = COLORS.map(c => `${c.k}(${c.n})`).join(', ');
+  const prompt = `日本のコンビニやスーパーで売られているグミの商品名から、メーカーなどを推測してください。\n商品名：「${name}」\n次のJSONだけを返してください：{"maker": string|null, "flavor": string|null, "price": number|null, "color": string|null, "hard": 1-5|null, "sour": 1-5|null, "sure": boolean}\n- maker：日本で一般的なメーカー表記（例：明治、カンロ、UHA味覚糖、ブルボン、春日井製菓、ハリボー）\n- flavor：味だけを短く\n- price：コンビニでの税込の目安価格（円・整数）\n- color：次のどれか ${keys} のキー\n- hard：1がふにゃふにゃ、5がかちかち。sour：1があまい、5がすっぱい\n- 知らない商品や自信がない項目はnullにし、sureはfalseにする。作り話はしない。`;
+  try {
+    const r = await sample.json(prompt, {modelTier:'quick', cache:true});
+    if (!r || typeof r !== 'object') throw {code:'bad'};
+    const clamp = v => (Number.isFinite(+v) && +v >= 1) ? Math.min(5, Math.max(1, Math.round(+v))) : null;
+    applyCand({
+      maker: typeof r.maker === 'string' ? r.maker.slice(0, 40) : null,
+      flavor: typeof r.flavor === 'string' ? r.flavor.slice(0, 40) : null,
+      price: Number.isFinite(+r.price) && +r.price > 0 && +r.price < 5000 ? Math.round(+r.price) : null,
+      color: COLORS.some(c => c.k === r.color) ? r.color : null, hard: clamp(r.hard), sour: clamp(r.sour)
+    }, r.sure ? 'AIの予測で入力しました。違っていたら直してください。' : 'AIもよく知らない商品のようです。入った欄は参考程度にしてください。');
+  } catch(err){
+    setHint(err && err.code === 'not_granted' ? 'AIの利用が許可されていないので予測できませんでした' : err && err.code === 'rate_limited' ? '少し時間をおいてからもう一度試してください' : '予測できませんでした。手で入力してください');
+  }
+}
+function wireAutocomplete(){
+  const inp = $('#f-name');
+  inp.addEventListener('input', () => { AC.active = -1; AC.applied = ''; setHint(''); renderAC(); });
+  inp.addEventListener('focus', () => { if (!inp.value.trim() || !AC.applied) renderAC(); });
+  inp.addEventListener('blur', () => setTimeout(() => {
+    if (document.activeElement && document.activeElement.closest && document.activeElement.closest('#ac-list')) return;
+    closeAC();
+    const v = inp.value.trim();
+    if (v && AC.applied !== v){
+      AC.applied = v;
+      if (!predictLocal(v)){
+        setHint(S.cap.sample ? 'カタログにない商品です。<button type="button" class="btn sm ghost" id="ac-ai">AIでメーカーと値段を予測</button>' : 'カタログにない商品です。メーカーなどは手で入力してください。');
+      }
+    }
+  }, 120));
+  inp.addEventListener('keydown', e => {
+    if (!AC.open){ if (e.key === 'ArrowDown'){ renderAC(); e.preventDefault(); } return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault(); const n = AC.list.length;
+      AC.active = e.key === 'ArrowDown' ? (AC.active + 1) % n : (AC.active - 1 + n) % n; renderAC();
+      const el = $('#ac-' + AC.active); el && el.scrollIntoView({block:'nearest'});
+    } else if (e.key === 'Enter' && AC.active >= 0){
+      e.preventDefault(); const c = AC.list[AC.active]; applyCand(c, noteFor(c));
+    } else if (e.key === 'Escape'){ e.stopPropagation(); closeAC(); }
+  });
+  $('#ac-list').addEventListener('mousedown', e => e.preventDefault());
+  $('#ac-list').addEventListener('click', e => { const b = e.target.closest('[data-ac]'); if (!b) return; const c = AC.list[+b.dataset.ac]; applyCand(c, noteFor(c)); });
+  $('#ac-hint').addEventListener('click', e => { if (e.target.closest('#ac-ai')) predictAI(); });
+  [['#f-maker','maker'],['#f-flavor','flavor'],['#f-price','price']].forEach(([id, key]) => $(id).addEventListener('input', () => { F.touched.add(key); $(id).classList.remove('guessed'); }));
+  $('#f-flavor').addEventListener('input', () => {
+    if (F.touched.has('color')) return;
+    const k = colorFromText($('#f-flavor').value);
+    if (k && k !== F.color){ F.color = k; syncFormUI(); }
+  });
+  ['hard','sour'].forEach(kind => $('#f-' + kind + '-pick').addEventListener('click', e => {
+    const b = e.target.closest('[data-lv]'); if (!b) return;
+    $('#f-' + kind).value = b.dataset.lv; F.touched.add(kind); renderShapePick(kind);
+  }));
+  $('#f-colors').addEventListener('click', () => F.touched.add('color'));
+}
+function wireForm(){
+  buildFormStatic();
+  $('#f-colors').addEventListener('click', e => { const b = e.target.closest('[data-color]'); if (b){ F.color = b.dataset.color; syncFormUI(); } });
+  $('#f-shops').addEventListener('click', e => { const b = e.target.closest('[data-shop]'); if (b){ $('#f-shop').value = $('#f-shop').value === b.dataset.shop ? '' : b.dataset.shop; syncFormUI(); } });
+  $('#f-shop').addEventListener('input', syncFormUI);
+  $('#f-tags').addEventListener('click', e => { const b = e.target.closest('[data-tag]'); if (b){ F.touched.add('tags'); const t = b.dataset.tag; F.tags = F.tags.includes(t) ? F.tags.filter(x => x !== t) : [...F.tags, t]; syncFormUI(); } });
+  $('#f-stars').addEventListener('click', e => { const b = e.target.closest('[data-star]'); if (b){ F.rating = +b.dataset.star; syncFormUI(); } });
+  wireAutocomplete();
+  $('#form').addEventListener('input', e => { if (e.target.classList && e.target.id !== 'f-name') e.target.classList.remove('guessed'); });
+  // Enter in a text field just ends editing (closes the keyboard) instead of submitting; only the 記録する button saves
+  $('#form').addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || e.isComposing || e.keyCode === 229 || e.defaultPrevented) return;
+    const t = e.target;
+    if (t.tagName !== 'INPUT' || ['button','submit','checkbox','radio','range','file'].includes(t.type)) return;
+    e.preventDefault();
+    t.blur();   // finish typing and put the keyboard away
+  });
+  // the form itself never saves (implicit Enter submission is swallowed); saving is the button's click only
+  $('#form').addEventListener('submit', e => e.preventDefault());
+  $('#f-save').addEventListener('click', async e => {
+    e.preventDefault();
+    const name = $('#f-name').value.trim();
+    if (!name){ $('#f-err').hidden = false; $('#f-name').focus(); return; }
+    const btn = $('#f-save'); btn.disabled = true;
+    const base = F.editing;
+    const it = {
+      id: base ? base.id : newId(), kind:'gummy', name,
+      maker: $('#f-maker').value.trim(), flavor: $('#f-flavor').value.trim(), color: F.color,
+      shop: $('#f-shop').value.trim(), price: $('#f-price').value === '' ? null : Math.max(0, Math.round(+$('#f-price').value)),
+      date: $('#f-date').value || todayStr(), rating: F.rating, hard: +$('#f-hard').value, sour: +$('#f-sour').value,
+      tags: F.tags, note: $('#f-note').value.trim(), createdAt: base ? base.createdAt : Date.now(),
+    };
+    const wasDemo = isDemo();
+    // close the sheet first so the bear dropping into the jar is in view
+    closeSheet('#sh-form');
+    if (!base){
+      if (S.ui.tab !== 'log') setTab('log'); else window.scrollTo({top:0, behavior: reduceMotion() ? 'auto' : 'smooth'});
+      if (wasDemo) Jar.bodies = [];
+      await new Promise(r => setTimeout(r, 220));
+    }
+    try {
+      await putItem(it);
+      if (!base) showSnack(it, wasDemo); else toast('保存しました');
+    } catch(err){
+      toast(err && err.code === 'quota_exceeded' ? '保存できる件数の上限です。古い記録を消すと保存できます' : '保存できませんでした。もう一度試してください');
+      openSheet('#sh-form');
+    } finally { btn.disabled = false; }
+  });
+}
+
+/* ---------- detail ---------- */
+let delArmed = false;
+function openDetail(id){
+  const all = items(); const it = all.find(i => i.id === id); if (!it) return;
+  const nums = numbering(all), rep = repeatCount(all);
+  delArmed = false;
+  const meter = (kind, n) => n ? `<div class="meter">${shapesHTML(kind, n, 16)}<span class="hint" style="margin-left:6px">${LEVEL_LBL[kind][n-1]}</span></div>` : '<div class="v">—</div>';
+  $('#dt-no').textContent = it.demo ? 'サンプルの記録' : `No.${nums.get(it.id)}`;
+  $('#dt-body').innerHTML = `
+    <div class="dt-hero">${gframe(it.name, it.color, 'detail')}
+      <div style="min-width:0"><div>${(it.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('')}</div><h3>${esc(it.name)}</h3><div class="sub">${esc([it.maker, it.flavor].filter(Boolean).join('・'))}</div>${starsHTML(it.rating||0)}</div></div>
+    <div class="dt-grid">
+      <div><span class="lbl">日付</span><div class="v num">${mdLabel(it.date)}</div></div>
+      <div><span class="lbl">お店・値段</span><div class="v">${esc(it.shop || '—')}${it.price != null && it.price !== '' ? '・' + yen(+it.price) : ''}</div></div>
+      <div><span class="lbl">かたさ</span>${meter('hard', it.hard||0)}</div>
+      <div><span class="lbl">すっぱさ</span>${meter('sour', it.sour||0)}</div>
+      <div><span class="lbl">買った回数</span><div class="v num">${rep.get(it.name)}回</div></div>
+      <div><span class="lbl">色</span><div class="v">${esc((COLORS.find(c => c.k === it.color)||COLORS[0]).n)}</div></div>
+    </div>
+    ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
+    ${it.demo ? '' : `<div class="photo-row">
+      <label class="btn sm ghost" for="dt-photo">${photoOf(it.name) ? '写真を変える' : '自分で撮った写真をつける'}</label>
+      <input type="file" id="dt-photo" accept="image/*" hidden>
+      ${photoOf(it.name) ? '<button class="btn sm ghost" id="dt-photo-del" type="button">写真を外す</button>' : ''}
+      <span class="hint">写真は「${esc(it.name)}」の画像として、グミ棚とログに使われます。</span>
+    </div>`}
+    <div class="sheet-actions">
+      <button class="btn primary" id="dt-post">Xにポスト</button>
+      ${it.demo ? '' : `<button class="btn" id="dt-again">また買った</button><button class="btn ghost" id="dt-edit">直す</button><button class="btn danger" id="dt-del">削除</button>`}
+    </div>`;
+  $('#dt-post').onclick = () => { closeSheet('#sh-detail'); openPost(it); };
+  if (!it.demo){
+    $('#dt-photo').onchange = async e => {
+      const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+      try {
+        const data = await openCrop(f, it.color); if (!data) return;
+        await setPhoto(it.name, data); toast('写真をつけました'); openDetail(it.id);
+      }
+      catch(err){ toast(err && err.code === 'local_full' ? 'この端末の保存容量がいっぱいで保存できませんでした' : 'この写真は保存できませんでした'); }
+    };
+    if ($('#dt-photo-del')) $('#dt-photo-del').onclick = async () => {
+      try { await setPhoto(it.name, ''); toast('写真を外しました'); openDetail(it.id); } catch(err){ toast('写真を外せませんでした'); }
+    };
+    $('#dt-again').onclick = () => { closeSheet('#sh-detail'); openForm(it, 'again'); };
+    $('#dt-edit').onclick = () => { closeSheet('#sh-detail'); openForm(it, 'edit'); };
+    $('#dt-del').onclick = async (e) => {
+      const b = e.currentTarget;
+      if (!delArmed){ delArmed = true; b.classList.add('armed'); b.textContent = 'もう一度押すと削除'; return; }
+      b.disabled = true;
+      try { await removeItem(it); closeSheet('#sh-detail'); toast('削除しました'); } catch(err){ toast('削除できませんでした'); b.disabled = false; }
+    };
+  }
+  openSheet('#sh-detail');
+}
+
+/* ---------- post to X ---------- */
+const P = { item:null, kind:'item', tpl:'detail', ctl:null };
+function xLen(s){ let n = 0; for (const ch of s){ const c = ch.codePointAt(0); n += (c <= 0x10FF || (c >= 0x2000 && c <= 0x200D) || (c >= 0x2010 && c <= 0x201F) || (c >= 0x2032 && c <= 0x2037)) ? 1 : 2; } return n; }
+// every template: product name and comment first, no maker/flavor/number, the same two hashtags
+const POST_TAGS = '#ぐみろぐ #グミ';
+const dotsTxt = n => '●'.repeat(n) + '○'.repeat(5 - n);
+function itemPost(it, tpl){
+  const head = [`【${it.name}】`, it.note || null];
+  if (tpl === 'simple') return [...head, POST_TAGS].filter(Boolean).join('\n');
+  return [...head,
+    `おいしさ：${starsTxt(it.rating || 0)}`,
+    it.hard ? `かたさ：${dotsTxt(it.hard)}` : null,
+    it.sour ? `すっぱさ：${dotsTxt(it.sour)}` : null,
+    it.shop ? `購入場所：${it.shop}` : null,
+    '',
+    POST_TAGS].filter(v => v !== null).join('\n').replace(/\n{3,}/g, '\n\n');
+}
+function monthPost(){
+  const all = items(), key = ym(todayStr()), ms = monthStats(all, key);
+  return [`【${+key.slice(5)}月のぐみろぐ】`, `${ms.count}袋 / ${yen(ms.spend)}`, `新商品 ${ms.news}個`, `推しメーカー：${ms.topMaker || '—'}`, `月間ベスト：${ms.best ? ms.best.name : '—'}`, `連続記録 ${streakOf(all)}日`, POST_TAGS].join('\n');
+}
+function setPostText(t){ $('#post-text').value = t; updatePost(); }
+function updatePost(){
+  const t = $('#post-text').value, n = xLen(t);
+  $('#post-count').innerHTML = `<span class="${n>280?'over':''}">${n}</span> / 280`;
+  $('#post-open').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(t);
+}
+function openPost(it, kind){
+  P.item = it; P.kind = kind || 'item';
+  $('#post-title').textContent = P.kind === 'month' ? '今月のまとめをポスト' : 'Xにポスト';
+  const tpls = P.kind === 'item' ? [{k:'detail',n:'くわしく'},{k:'simple',n:'シンプル'}] : [];
+  $('#post-tpl').innerHTML = tpls.map(t => `<button class="chip" data-tpl="${t.k}" aria-pressed="${P.tpl===t.k}">${t.n}</button>`).join('');
+  $('#post-tpl').hidden = !tpls.length;
+  $('#post-ai').hidden = !S.cap.sample || P.kind !== 'item';
+  $('#post-ai-state').textContent = '';
+  if (P.kind === 'month') setPostText(monthPost());
+  else setPostText(itemPost(it, P.tpl));
+  openSheet('#sh-post');
+}
+function wirePost(){
+  $('#post-text').addEventListener('input', updatePost);
+  $('#post-tpl').addEventListener('click', e => { const b = e.target.closest('[data-tpl]'); if (!b) return; P.tpl = b.dataset.tpl; document.querySelectorAll('#post-tpl .chip').forEach(c => c.setAttribute('aria-pressed', c === b)); setPostText(itemPost(P.item, P.tpl)); });
+  $('#post-copy').addEventListener('click', () => {
+    const t = $('#post-text').value;
+    const fallback = () => { const ta = $('#post-text'); ta.focus(); ta.select(); toast('選択しました。コピーしてください'); };
+    try { navigator.clipboard.writeText(t).then(() => toast('コピーしました'), fallback); } catch(e){ fallback(); }
+  });
+  $('#post-ai').addEventListener('click', async () => {
+    const sample = S.cap.sample; if (!sample || !P.item) return;
+    if (P.ctl) P.ctl.abort();
+    const ctl = P.ctl = new AbortController(); const btn = $('#post-ai'); btn.disabled = true;
+    $('#post-ai-state').textContent = 'AIが考え中…';
+    const it = P.item;
+    const data = {名前:it.name, お店:it.shop, おいしさ:`${it.rating}/5`, かたさ:`${it.hard}/5（5がかちかち）`, すっぱさ:`${it.sour}/5（5がすっぱい）`, タグ:it.tags, ひとこと:it.note, 同じグミを買った回数:repeatCount(items()).get(it.name)};
+    const prompt = `グミが大好きな人のX（旧Twitter）投稿文を作ってください。以下の記録をもとに、日本語で1つだけ。\n条件：1行目に商品名、続けてひとことの内容を入れる／メーカー名・味の名前・番号は書かない／本文は全角100文字以内／明るく楽しい口調／食感やすっぱさの感想を入れる／事実にない情報は足さない／ハッシュタグは最後に改行して「#ぐみろぐ #グミ」の2つだけ／本文だけを出力し、前置きや引用符は付けない。\n記録：${JSON.stringify(data)}`;
+    try {
+      const r = await sample(prompt, {cache:false, signal:ctl.signal, modelTier:'quick', onText:({text}) => { $('#post-text').value = text; updatePost(); }});
+      setPostText(r.text.trim()); $('#post-ai-state').textContent = 'AIが書きました。自由に直せます';
+    } catch(err){
+      if (err && err.text) setPostText(err.text.trim());
+      $('#post-ai-state').textContent = err && err.code === 'not_granted' ? 'AIの利用が許可されていません' : err && err.code === 'rate_limited' ? '少し時間をおいてください' : err && err.code === 'cancelled' ? '' : 'AIで作れませんでした';
+      if (err && err.code === 'not_granted') btn.hidden = true;
+    } finally { btn.disabled = false; }
+  });
+}
+
+/* ---------- settings ---------- */
+function renderSettings(){
+  setTimeout(() => { renderShopEditor(); renderThemePicker(); }, 0);
+  const real = realItems();
+  const dl = !!S.cap.downloads || !IN_CLAUDE;   // outside Claude a normal browser download works
+  $('#settings-body').innerHTML = `
+    <div class="panel"><h3>保存先</h3>
+      <p>${S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
+      <p>記録数：<b class="num">${real.length}</b>件</p></div>
+    <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
+    <div class="panel"><h3>グミカタログ</h3>
+      <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
+      <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
+    <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
+    <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
+    <div class="panel"><h3>書き出し</h3>
+      <p>${dl ? 'バックアップ用のJSONか、表計算ソフトで開けるCSVを保存できます。' : 'この画面ではファイルを保存できません。'}</p>
+      <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
+    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録を戻せます。同じ記録は重複しません。</p>
+      <div class="btn-row"><label class="btn sm" for="im-file">JSONを読み込む</label><input type="file" id="im-file" accept="application/json,.json" hidden></div></div>`;
+  const save = async (filename, data) => {
+    if (!S.cap.downloads){
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], {type: filename.endsWith('.csv') ? 'text/csv' : 'application/json'}));
+      a.download = filename; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); return;
+    }
+    try { await S.cap.downloads.save({filename, data}); toast('保存しました'); }
+    catch(e){ if (e && e.code !== 'declined') toast('保存できませんでした'); }
+  };
+  const stamp = todayStr().replace(/-/g,'');
+  const clean = () => realItems().map(i => { const o = {...i}; delete o.photoData; delete o.photo; return o; });
+  $('#ex-json').onclick = () => save(`gumilog-${stamp}.json`, JSON.stringify(clean(), null, 2));
+  $('#ex-csv').onclick = () => {
+    const cols = ['date','name','maker','flavor','shop','price','rating','hard','sour','tags','note'];
+    const head = ['日付','名前','メーカー','味','お店','値段','おいしさ','かたさ','すっぱさ','タグ','ひとこと'];
+    const q = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+    const rows = [...realItems()].sort(byDateAsc).map(i => cols.map(c => q(c === 'tags' ? (i.tags||[]).join(' ') : i[c])).join(','));
+    save(`gumilog-${stamp}.csv`, '﻿' + [head.map(q).join(','), ...rows].join('\r\n'));
+  };
+  $('#im-file').onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      const arr = JSON.parse(await file.text()); if (!Array.isArray(arr)) throw 0;
+      const have = new Set(realItems().map(i => i.id)); let n = 0;
+      for (const raw of arr){
+        if (!raw || typeof raw.name !== 'string' || typeof raw.date !== 'string') continue;
+        const it = {id: (typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,60}$/.test(raw.id) && raw.id !== 'settings') ? raw.id : newId(), kind:'gummy', name:raw.name.slice(0,120), maker:String(raw.maker||'').slice(0,60), flavor:String(raw.flavor||'').slice(0,60), color:COLORS.some(c => c.k === raw.color) ? raw.color : 'straw', shop:String(raw.shop||'').slice(0,60), price: raw.price == null || raw.price === '' ? null : +raw.price || 0, date:/^\d{4}-\d{2}-\d{2}$/.test(raw.date) ? raw.date : todayStr(), rating:Math.min(5,Math.max(1,+raw.rating||3)), hard:Math.min(5,Math.max(1,+raw.hard||3)), sour:Math.min(5,Math.max(1,+raw.sour||3)), tags:Array.isArray(raw.tags) ? raw.tags.map(String).slice(0,10) : [], note:String(raw.note||'').slice(0,1000), createdAt:+raw.createdAt || Date.now()};
+        if (have.has(it.id)) continue;
+        await putItem(it); have.add(it.id); n++;
+      }
+      toast(`${n}件を読み込みました`); renderSettings();
+    } catch(err){ toast('読み込めませんでした。ぐみろぐで書き出したJSONを選んでください'); }
+  };
+}
+
+/* ---------- events ---------- */
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+$('#fab').addEventListener('click', () => openForm(null, 'new'));
+$('#btn-settings').addEventListener('click', () => { renderSettings(); openSheet('#sh-settings'); });
+$('#q').addEventListener('input', e => { S.q = e.target.value; renderLog(); });
+$('#app').addEventListener('click', async e => {
+  const f = e.target.closest('[data-filter]'); if (f){ S.ui.filter = f.dataset.filter; lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter}); renderLog(); return; }
+  const o = e.target.closest('[data-open]'); if (o){ openDetail(o.dataset.open); return; }
+  const d = e.target.closest('[data-day]'); if (d){ S.ui.selDay = S.ui.selDay === d.dataset.day ? null : d.dataset.day; renderCal(); return; }
+  if (e.target.closest('#post-month')){ openPost(null, 'month'); return; }
+  if (e.target.closest('#migrate')){
+    const btn = e.target.closest('#migrate'); btn.disabled = true; btn.textContent = '移しています…';
+    try {
+      for (const it of S.local){
+        const body = {...it}; delete body.id; delete body.photoData;
+        await S.cap.col.doc(it.id).set(body);
+      }
+      for (const [name, data] of Object.entries(S.localPhotos)) await S.cap.col.doc(photoDocId(name)).set({kind:'photo', name, data, updated:todayStr()});
+      S.local = []; lsSet(LS_KEY, []); S.localPhotos = {}; lsSet(LS_PHOTOS, {}); toast('クラウドに移しました'); renderAll();
+    } catch(err){ toast('途中で止まりました。もう一度押すと続きから移します'); btn.disabled = false; btn.textContent = 'クラウドに移す'; }
+  }
+});
+$('#cal-prev').addEventListener('click', () => { const [y,m] = (S.ui.calMonth || ym(todayStr())).split('-').map(Number); const d = new Date(y, m-2, 1); S.ui.calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; renderCal(); });
+$('#cal-next').addEventListener('click', () => { const [y,m] = (S.ui.calMonth || ym(todayStr())).split('-').map(Number); const d = new Date(y, m, 1); S.ui.calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; renderCal(); });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); renderAll(); jarDraw(); });
+new MutationObserver(() => { applyTheme(); renderAll(); jarDraw(); }).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+if ('ResizeObserver' in window){ let lw = 0; new ResizeObserver(() => { const w = $('#jar').clientWidth; if (w && Math.abs(w - lw) > 4){ lw = w; jarSetup(); jarSync(true); } }).observe($('#jar')); }
+
+/* ---------- boot ---------- */
+applyTheme();
+$('#snack-x').addEventListener('click', hideSnack);
+wireCrop();
+// fit sheets to the part of the screen not covered by the on-screen keyboard
+if (window.visualViewport){
+  const vv = window.visualViewport, st = document.documentElement.style;
+  const fit = () => { st.setProperty('--vv-h', vv.height + 'px'); st.setProperty('--vv-top', vv.offsetTop + 'px'); };
+  vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
+}
+$('#jar').addEventListener('pointerdown', e => { const r = e.currentTarget.getBoundingClientRect(); jarPoke(e.clientX - r.left, e.clientY - r.top); });
+wireForm(); wirePost(); wireShopEditor();
+jarSetup();
+setTab(['log','cal','stats','shelf'].includes(S.ui.tab) ? S.ui.tab : (S.ui.tab === 'badge' ? 'shelf' : 'log'));
+renderAll();
+connect().catch(() => {});
+if (!IN_CLAUDE){
+  // on the public site, catalog.json next to the page carries catalog updates without touching the app
+  fetch('catalog.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(j => {
+    const arr = Array.isArray(j) ? j : (j && Array.isArray(j.items) ? j.items : null); if (!arr) return;
+    REMOTE_CAT = arr.filter(isCat).map(normCat); REMOTE_CAT_AT = (j && j.updated) || ''; renderAll();
+  }).catch(() => {});
+}
+})();
+</script>
+</body></html>
