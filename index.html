@@ -36,6 +36,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 input,select,textarea{font-size:16px}
 html,body{overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none}
 button{cursor:pointer}
+/* tell phones these are taps, not double-tap-zoom candidates, so they react without the ~300ms wait */
+button,a,label,input,select,textarea,.row,.pk{touch-action:manipulation}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
 h1,h2,h3{text-wrap:balance;margin:0}
 .num{font-variant-numeric:tabular-nums}
@@ -68,6 +70,8 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .lbl{font-size:11px;letter-spacing:.08em;color:var(--ink-2)}
 .kv{display:flex;flex-direction:column;gap:0}
 .kv .v{font-weight:700;font-size:17px}
+.kv.stock{background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit}
+.jar-side{gap:10px}
 @media (max-width:420px){.jar-panel{grid-template-columns:minmax(0,1fr) 104px}.big{font-size:38px}}
 
 
@@ -86,6 +90,9 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .search{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 16px}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px}
+/* the six log filters share one row on a phone */
+#filters{flex-wrap:nowrap;justify-content:space-between;gap:4px}
+#filters .chip{padding:5px 8px;white-space:nowrap;flex:0 1 auto}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
 /* list */
@@ -155,6 +162,11 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .map .ax{font-size:10px;color:var(--ink-2);text-align:center}
 .map-x{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);padding-left:2.4em}
 .type-line{font-size:14px}
+/* label / value pairs, one per line so long gummy names wrap instead of being cut */
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+.facts dt{color:var(--ink-2)}
+.facts dd{margin:0;font-weight:700;overflow-wrap:anywhere;min-width:0}
+.best-pick{padding:6px 10px;font-weight:700;font-size:14px;border-radius:10px}
 .type-line b{font-family:var(--f-display);font-weight:400;font-size:18px;color:var(--accent-text)}
 
 /* gummy shelf (stamp book) */
@@ -217,10 +229,27 @@ input[type=date].in::-webkit-date-and-time-value{text-align:left}
 .starin button{background:none;border:0;font-size:34px;line-height:1;padding:2px 4px;color:var(--line)}
 .starin button.on{color:var(--g-lemon)}
 .shapein button{background:none;border:0;padding:5px;line-height:0;border-radius:8px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 4px;font-weight:700;font-size:14px;color:var(--ink-2)}
+.seg button:active{transform:scale(.97)}
+.seg button[aria-checked="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.dt-status{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.rate-hint{margin:-4px 0 0;text-align:center}
+.done-mark{display:inline-flex;flex:none;width:1em;height:1em;margin-left:6px;vertical-align:-.12em}
+.done-mark svg{width:100%;height:100%}
+.row .nm{display:flex;align-items:center;min-width:0}
+.row .nm .nm-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.unrated{font-size:11px;color:var(--ink-2)}
+.pick-lbl.none{font-weight:500}
 .pick-lbl{flex-basis:100%;text-align:center;font-size:13px;font-weight:700;color:var(--ink-2)}
 input[type=range]{width:100%;accent-color:var(--accent-text)}
 .sheet-actions{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:-20px;background:var(--bg);padding-block:10px;margin-top:4px}
 .sheet-actions .btn.primary{flex:1}
+.check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);font-weight:500}
+.check input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.nospend{font-size:10px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:0 5px;margin-left:3px}
+.row .rt .nospend{margin-left:0;line-height:1.5}
+.lbl .nospend{margin-left:6px;vertical-align:1px}
 .err{color:var(--accent-text);font-size:12px}
 .ac{position:relative}
 .ac-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 28px rgba(58,24,48,.16);max-height:320px;overflow-y:auto}
@@ -243,7 +272,7 @@ input[type=range]{width:100%;accent-color:var(--accent-text)}
 .dt-hero h3{font-size:19px;font-weight:700;line-height:1.35}
 .dt-hero .sub{font-size:13px;color:var(--ink-2)}
 .dt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-block:14px}
-.dt-grid div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.dt-grid > div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
 .dt-grid .v{font-weight:700}
 .meter{display:flex;gap:3px;margin-top:3px}
 .meter{align-items:center}
@@ -280,6 +309,14 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 .icon-btn.sm svg{width:16px;height:16px}
 .icon-btn:disabled{opacity:.3;cursor:default}
 .shop-add{display:flex;gap:8px}
+.switch-row{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.switch-row > span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.switch-row b{font-size:14px}
+.switch-row input{appearance:none;-webkit-appearance:none;flex:none;width:46px;height:28px;border-radius:14px;background:var(--line);position:relative;margin:0;transition:background .15s}
+.switch-row input::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.switch-row input:checked{background:var(--accent)}
+.switch-row input:checked::after{transform:translateX(18px)}
+@media (prefers-reduced-motion:reduce){.switch-row input,.switch-row input::after{transition:none}}
 .theme-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .theme-btn{width:auto;height:auto;padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--ink-2)}
 .theme-btn[aria-pressed="true"]{color:var(--ink);font-weight:700;background:var(--accent-soft)}
@@ -303,11 +340,12 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
   <!-- ログ -->
   <section class="view" id="v-log">
     <div class="jar-panel">
-      <canvas id="jar" aria-label="今月食べたグミのびん（タップするとグミが跳ねます）"></canvas>
+      <canvas id="jar" aria-label="今月買ったグミのびん（タップするとグミが跳ねます）"></canvas>
       <div class="jar-side">
         <div class="kv"><span class="lbl" id="jar-month">今月</span><span class="big num" id="jar-count">0<small>粒</small></span></div>
         <div class="kv"><span class="lbl">今月の出費</span><span class="v num" id="jar-spend">0円</span></div>
         <div class="kv"><span class="lbl">連続記録</span><span class="v num" id="jar-streak">0日</span></div>
+        <button class="kv stock" type="button" data-filter="stock" aria-label="手持ちのグミを表示"><span class="lbl">手持ちのグミ</span><span class="v num" id="jar-stock">0袋</span></button>
       </div>
     </div>
     <div class="toolbar">
@@ -370,9 +408,12 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
       <div class="f"><span class="fl-t">グミの色</span><div class="colors" id="f-colors"></div></div>
       <div class="f"><span class="fl-t">買ったお店</span><div class="chips" id="f-shops"></div><input class="in" id="f-shop" placeholder="お店の名前（自由入力）" autocomplete="off"></div>
       <div class="f2">
-        <div class="f"><label for="f-price">値段（円）</label><input class="in num" id="f-price" type="number" inputmode="numeric" min="0" placeholder="140"></div>
+        <div class="f"><label for="f-price">値段（円）</label><input class="in num" id="f-price" type="number" inputmode="numeric" min="0" placeholder="140">
+          <label class="check" for="f-nospend"><input type="checkbox" id="f-nospend"><span>出費から除外</span></label></div>
         <div class="f"><label for="f-date">日付</label><input class="in" id="f-date" type="date"></div>
       </div>
+      <div class="f"><span class="fl-t">食べた？</span><div class="seg" id="f-status" role="radiogroup" aria-label="食べたかどうか"></div></div>
+      <p class="hint rate-hint" id="f-rate-hint">おいしさ・かたさ・すっぱさは、わからなければ空のままで大丈夫です。選んだものをもう一度タップすると取り消せます。</p>
       <div class="f"><span class="fl-t">おいしさ</span><div class="starin" id="f-stars"></div></div>
       <div class="f"><span class="fl-t">かたさ</span><div class="shapein" id="f-hard-pick" data-kind="hard" role="radiogroup" aria-label="かたさ"></div><input type="hidden" id="f-hard"></div>
       <div class="f"><span class="fl-t">すっぱさ</span><div class="shapein" id="f-sour-pick" data-kind="sour" role="radiogroup" aria-label="すっぱさ"></div><input type="hidden" id="f-sour"></div>
@@ -459,7 +500,10 @@ const COLORS = [
 const MAKERS = ['明治','UHA味覚糖','カンロ','ブルボン','ハリボー','春日井製菓','ロッテ','森永製菓','ノーベル製菓','カバヤ食品','不二家','トローリ','セブンプレミアム','ファミマル','ローソン'];
 const SHOPS = ['セブン','ファミマ','ローソン','ミニストップ','デイリー','スーパー','ドラッグストア','駅ナカ'];
 const CONBINI = ['セブン','ファミマ','ローソン'];
-const TAGS = ['新商品','期間限定','地域限定','リピ確定','推し','微妙'];
+const TAGS = ['新商品','期間限定','店舗限定','リピ確定','推し','微妙'];
+// a tag list that was saved while still the untouched old default gets the new default
+const OLD_TAGS = ['新商品','期間限定','地域限定','リピ確定','推し','微妙'];
+const upgradeTags = v => Array.isArray(v) && v.join('|') === OLD_TAGS.join('|') ? [...TAGS] : v;
 const WD = '日月火水木金土';
 const LS_KEY = 'gumilog.items.v1';
 const LS_UI = 'gumilog.ui.v1';
@@ -467,6 +511,8 @@ const LS_SHOPS = 'gumilog.shops.v1';
 const LS_TAGS = 'gumilog.tags.v1';
 const LS_THEME = 'gumilog.theme.v1';
 const LS_PHOTOS = 'gumilog.photos.v1';
+const LS_STOCK = 'gumilog.showStock.v1';
+const LS_BEST = 'gumilog.bestPicks.v1';
 // one color theme per gummy color: [light, dark] token sets
 const K = ['bg','surface','surface-2','ink','ink-2','line','accent','accent-ink','accent-soft','accent-text'];
 const THEMES = {
@@ -540,7 +586,7 @@ const yen = n => (n||0).toLocaleString('ja-JP') + '円';
 const newId = () => 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const cssv = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const colorOf = k => cssv((COLORS.find(c => c.k === k) || COLORS[0]).v);
-const starsHTML = r => '<span class="stars" aria-label="おいしさ' + r + '">' + '★'.repeat(r) + '<i>' + '★'.repeat(5-r) + '</i></span>';
+const starsHTML = r => r ? '<span class="stars" aria-label="おいしさ' + r + '">' + '★'.repeat(r) + '<i>' + '★'.repeat(5-r) + '</i></span>' : '<span class="unrated">未評価</span>';
 const starsTxt = r => '★'.repeat(r) + '☆'.repeat(5-r);
 const mdLabel = s => { const d = parseYmd(s); return `${d.getMonth()+1}/${d.getDate()}(${WD[d.getDay()]})`; };
 const shift = (days) => { const d = new Date(); d.setDate(d.getDate() - days); return ymd(d); };
@@ -551,10 +597,10 @@ function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return t
 function bearSVG(colorKey, size=34){
   const c = colorOf(colorKey);
   const stroke = colorKey === 'milk' ? 'stroke="#C9B79E" stroke-width="1.2"' : '';
-  return `<svg width="${size}" height="${size*1.1}" viewBox="0 0 40 44" aria-hidden="true"><g fill="${c}" ${stroke}>
+  return `<svg width="${size}" height="${Math.round(size*47/42)}" viewBox="-1 -1 42 47" style="overflow:visible" aria-hidden="true"><g fill="${c}" ${stroke}>
   <circle cx="11" cy="8" r="5"/><circle cx="29" cy="8" r="5"/><ellipse cx="9" cy="27" rx="4.5" ry="4"/><ellipse cx="31" cy="27" rx="4.5" ry="4"/>
   <circle cx="13" cy="39" r="5"/><circle cx="27" cy="39" r="5"/><ellipse cx="20" cy="30" rx="11.5" ry="11"/><circle cx="20" cy="14" r="10"/></g>
-  <ellipse cx="15" cy="10" rx="3" ry="2" fill="#fff" opacity=".55"/><ellipse cx="15" cy="26" rx="2.5" ry="4" fill="#fff" opacity=".3"/></svg>`;
+  <path d="M13.58 12.98A6.5 6.5 0 0 1 17.05 8.21" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".4"/><path d="M12.1 28.75A8 8 0 0 1 16.37 22.87" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".4"/></svg>`;
 }
 
 /* ---------- demo data (shown only while the log is empty) ---------- */
@@ -585,8 +631,10 @@ const S = {
   cap: {db:null, col:null, downloads:null, sample:null},
   unsubs: [], readOnly: false,
   shops: (() => { const v = lsGet(LS_SHOPS, null); return Array.isArray(v) && v.length ? v : [...SHOPS]; })(),
-  tags: (() => { const v = lsGet(LS_TAGS, null); return Array.isArray(v) ? v : [...TAGS]; })(),
+  tags: (() => { const v = upgradeTags(lsGet(LS_TAGS, null)); return Array.isArray(v) ? v : [...TAGS]; })(),
   theme: (() => { const v = lsGet(LS_THEME, 'straw'); return THEMES[v] ? v : 'straw'; })(),
+  bestPicks: lsGet(LS_BEST, {}) || {},          // 'YYYY-MM' -> chosen ベストグミ name
+  showStock: lsGet(LS_STOCK, true) !== false,   // 手持ちのグミ on the log screen
   localPhotos: lsGet(LS_PHOTOS, {}),   // name -> data URL (this browser)
   cloudPhotos: {},                     // name -> data URL (account)
 };
@@ -654,7 +702,9 @@ async function connect(){
   S.unsubs.push(S.cap.col.doc('settings').onSnapshot(snap => {
     const d = snap.exists ? snap.data() : null;
     if (d && Array.isArray(d.shops) && d.shops.length){ S.shops = d.shops.map(String); lsSet(LS_SHOPS, S.shops); }
-    if (d && Array.isArray(d.tags)){ S.tags = d.tags.map(String); lsSet(LS_TAGS, S.tags); }
+    if (d && Array.isArray(d.tags)){ S.tags = upgradeTags(d.tags.map(String)); lsSet(LS_TAGS, S.tags); }
+    if (d && d.bestPicks && typeof d.bestPicks === 'object' && JSON.stringify(d.bestPicks) !== JSON.stringify(S.bestPicks)){ S.bestPicks = d.bestPicks; lsSet(LS_BEST, S.bestPicks); renderStats(); }
+    if (d && typeof d.showStock === 'boolean' && d.showStock !== S.showStock){ S.showStock = d.showStock; lsSet(LS_STOCK, S.showStock); renderLog(); if (!$('#sh-settings').hidden) renderStockToggle(); }
     if (d && THEMES[d.theme] && d.theme !== S.theme){ S.theme = d.theme; lsSet(LS_THEME, S.theme); applyTheme(); renderAll(); jarDraw(); }
     if (d){ renderShopChips(); renderTagChips(); if (!$('#sh-settings').hidden) renderShopEditor(); }
   }, () => {}));
@@ -700,10 +750,16 @@ function bestStreak(list){
   return best;
 }
 function countBy(list, f){ const m = new Map(); list.forEach(it => { const k = f(it); if (k) m.set(k, (m.get(k)||0)+1); }); return [...m.entries()].sort((a,b) => b[1]-a[1]); }
+// ベストグミ: picked by the user from that month's ★5 gummies; until picked, the latest ★5
+function monthBest(list, key){
+  const five = [...new Set(list.filter(i => ym(i.date) === key && i.rating === 5).sort(byDateDesc).map(i => i.name))];
+  const pick = S.bestPicks[key];
+  return { name: five.includes(pick) ? pick : (five[0] || null), options: five, picked: five.includes(pick) };
+}
 function monthStats(list, key){
   const l = list.filter(i => ym(i.date) === key);
   const best = [...l].sort((a,b) => b.rating - a.rating || byDateDesc(a,b))[0];
-  return { list:l, count:l.length, spend:l.reduce((s,i) => s + (+i.price||0), 0), news:l.filter(i => (i.tags||[]).includes('新商品')).length, topMaker:(countBy(l, i => i.maker)[0]||[])[0], best };
+  return { list:l, count:l.length, spend:l.reduce((s,i) => s + spendOf(i), 0), news:l.filter(i => (i.tags||[]).includes('新商品')).length, topMaker:(countBy(l, i => i.maker)[0]||[])[0], best };
 }
 
 /* ---------- jar (canvas physics) ---------- */
@@ -751,11 +807,16 @@ function jarStep(){
 function drawBear(ctx, b, R){
   const s = R/18; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot); ctx.scale(s, s); ctx.translate(-20,-24);
   ctx.fillStyle = colorOf(b.color); ctx.globalAlpha = 0.92;
-  const C = (x,y,r) => { ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); };
-  const E = (x,y,rx,ry) => { ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2); ctx.fill(); };
-  C(11,8,5); C(29,8,5); E(9,27,4.5,4); E(31,27,4.5,4); C(13,39,5); C(27,39,5); E(20,30,11.5,11); C(20,14,10);
+  // all parts go into one path and are filled once: separate translucent fills left a darker ring where a paw overlapped the body
+  const sub = (x,y,rx,ry) => { ctx.moveTo(x + rx, y); ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2); };
+  ctx.beginPath();
+  sub(11,8,5,5); sub(29,8,5,5); sub(9,27,4.5,4); sub(31,27,4.5,4); sub(13,39,5,5); sub(27,39,5,5); sub(20,30,11.5,11); sub(20,14,10,10);
+  ctx.fill('nonzero');
   if (b.color === 'milk'){ ctx.globalAlpha = .5; ctx.strokeStyle = '#B9A68B'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(20,14,10,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(20,30,11.5,11,0,0,Math.PI*2); ctx.stroke(); }
-  ctx.globalAlpha = 0.5; ctx.fillStyle = '#fff'; E(15,10,3,2); ctx.globalAlpha = 0.25; E(15,26,2.5,4);
+  // head and belly get the same thin shine arc on their upper-left
+  ctx.globalAlpha = 0.4; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(20, 14, 6.5, Math.PI * 1.05, Math.PI * 1.35); ctx.stroke();
+  ctx.beginPath(); ctx.arc(20, 30, 8, Math.PI * 1.05, Math.PI * 1.35); ctx.stroke();
   ctx.restore();
 }
 function jarDraw(){
@@ -764,11 +825,14 @@ function jarDraw(){
   const line = cssv('--line'), ink2 = cssv('--ink-2'), surf2 = cssv('--surface-2');
   // jar body
   const L = g.l-6, Rr = g.r+6, T = g.top-8, Bt = g.b+4, rad = 22;
-  ctx.beginPath(); ctx.moveTo(L+12, T); ctx.lineTo(Rr-12, T); ctx.quadraticCurveTo(Rr, T, Rr, T+16);
-  ctx.lineTo(Rr, Bt-rad); ctx.quadraticCurveTo(Rr, Bt, Rr-rad, Bt); ctx.lineTo(L+rad, Bt); ctx.quadraticCurveTo(L, Bt, L, Bt-rad); ctx.lineTo(L, T+16); ctx.quadraticCurveTo(L, T, L+12, T); ctx.closePath();
-  ctx.fillStyle = surf2; ctx.globalAlpha = .45; ctx.fill(); ctx.globalAlpha = 1;
+  // keep the jar outline in its own Path2D: drawing the bears replaces the context's current path,
+  // so a plain ctx.stroke() afterwards outlined the last bear's shine instead of the jar
+  const jar = new Path2D();
+  jar.moveTo(L+12, T); jar.lineTo(Rr-12, T); jar.quadraticCurveTo(Rr, T, Rr, T+16);
+  jar.lineTo(Rr, Bt-rad); jar.quadraticCurveTo(Rr, Bt, Rr-rad, Bt); jar.lineTo(L+rad, Bt); jar.quadraticCurveTo(L, Bt, L, Bt-rad); jar.lineTo(L, T+16); jar.quadraticCurveTo(L, T, L+12, T); jar.closePath();
+  ctx.fillStyle = surf2; ctx.globalAlpha = .45; ctx.fill(jar); ctx.globalAlpha = 1;
   for (const b of Jar.bodies) drawBear(ctx, b, Jar.R);
-  ctx.lineWidth = 2.5; ctx.strokeStyle = line; ctx.stroke();
+  ctx.lineWidth = 2.5; ctx.strokeStyle = line; ctx.stroke(jar);
   // lid
   ctx.fillStyle = cssv('--accent'); const lw = (Rr-L)*0.62, lx = (L+Rr)/2 - lw/2;
   ctx.beginPath(); ctx.roundRect ? ctx.roundRect(lx, 4, lw, 18, 7) : ctx.rect(lx,4,lw,18); ctx.fill();
@@ -827,7 +891,7 @@ function jarSync(force){
 }
 
 /* ---------- render: log ---------- */
-const FILTERS = [{k:'all',n:'すべて'},{k:'new',n:'新商品'},{k:'five',n:'★5'},{k:'rep',n:'リピ'}];
+const FILTERS = [{k:'all',n:'すべて'},{k:'stock',n:'手持ち'},{k:'unopened',n:'未開封'},{k:'new',n:'新商品'},{k:'five',n:'★5'},{k:'rep',n:'リピ'}];
 function renderLog(){
   const all = items(), now = todayStr();
   const ms = monthStats(all, ym(now));
@@ -835,19 +899,25 @@ function renderLog(){
   $('#jar-count').innerHTML = `${ms.count}<small>粒</small>`;
   $('#jar-spend').textContent = yen(ms.spend);
   $('#jar-streak').textContent = streakOf(all) + '日';
-  $('#filters').innerHTML = FILTERS.map(f => `<button class="chip" data-filter="${f.k}" aria-pressed="${S.ui.filter===f.k}">${f.n}</button>`).join('');
+  // bags still on hand: not opened yet, or opened but not finished
+  $('#jar-stock').textContent = all.filter(i => statusOf(i) !== 'finished').length + '袋';
+  document.querySelector('.kv.stock').hidden = !S.showStock;
+  if (!S.showStock && S.ui.filter === 'stock') S.ui.filter = 'all';
+  $('#filters').innerHTML = FILTERS.filter(f => S.showStock || f.k !== 'stock').map(f => `<button class="chip" data-filter="${f.k}" aria-pressed="${S.ui.filter===f.k}">${f.n}</button>`).join('');
   const rep = repeatCount(all), nums = numbering(all), q = S.q.trim().toLowerCase();
   let list = [...all].sort(byDateDesc);
   if (q) list = list.filter(i => [i.name,i.maker,i.flavor,i.shop,i.note,(i.tags||[]).join(' ')].join(' ').toLowerCase().includes(q));
   if (S.ui.filter === 'new') list = list.filter(i => (i.tags||[]).includes('新商品'));
   if (S.ui.filter === 'five') list = list.filter(i => i.rating === 5);
+  if (S.ui.filter === 'unopened') list = list.filter(i => statusOf(i) === 'unopened');
+  if (S.ui.filter === 'stock') list = list.filter(i => statusOf(i) !== 'finished');
   if (S.ui.filter === 'rep') list = list.filter(i => rep.get(i.name) > 1);
   if (!list.length){ $('#list').innerHTML = `<div class="rows"><div class="empty">${q || S.ui.filter!=='all' ? '条件に合うグミはありません' : 'まだ記録がありません。下の＋から最初のグミを記録しましょう'}</div></div>`; return; }
   const groups = new Map(); list.forEach(i => { const k = ym(i.date); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(i); });
   let html = '';
   for (const [k, arr] of groups){
     const [y, m] = k.split('-');
-    const spend = arr.reduce((s,i) => s + (+i.price||0), 0);
+    const spend = arr.reduce((s,i) => s + spendOf(i), 0);
     html += `<div class="month"><div class="month-h"><h2>${+y}年${+m}月</h2><span class="num">${arr.length}袋・${yen(spend)}</span></div><div class="rows">`;
     html += arr.map(i => rowHTML(i, rep, nums)).join('');
     html += `</div></div>`;
@@ -855,12 +925,13 @@ function renderLog(){
   $('#list').innerHTML = html;
 }
 function rowHTML(i, rep, nums){
+  const st = statusOf(i);
   const tags = (i.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('');
   const r = rep.get(i.name) > 1 ? `<span class="tag">${rep.get(i.name)}回目まで</span>` : '';
   return `<button class="row" data-open="${esc(i.id)}">
     ${gframe(i.name, i.color, 'row')}
-    <span style="min-width:0">${tags ? `<span class="row-tags">${tags}</span>` : ''}<span class="nm">${esc(i.name)}</span><span class="sub">${esc([i.maker, i.flavor].filter(Boolean).join('・'))}${i.shop ? '　@' + esc(i.shop) : ''}</span></span>
-    <span class="rt">${starsHTML(i.rating||0)}<span class="num">${mdLabel(i.date)}${i.price ? '・' + yen(+i.price) : ''}</span></span>
+    <span style="min-width:0">${tags ? `<span class="row-tags">${tags}</span>` : ''}<span class="nm"><span class="nm-t">${esc(i.name)}</span>${statusMark(i)}</span><span class="sub">${esc([i.maker, i.flavor].filter(Boolean).join('・'))}${i.shop ? '　@' + esc(i.shop) : ''}</span></span>
+    <span class="rt">${starsHTML(i.rating||0)}<span class="num">${mdLabel(i.date)}${i.price ? '・' + yen(+i.price) : ''}</span>${i.noSpend ? '<span class="nospend">出費外</span>' : ''}</span>
   </button>`;
 }
 
@@ -889,15 +960,21 @@ function renderCal(){
     const arr = (byDay.get(sel) || []).sort(byDateDesc), rep = repeatCount(all), nums = numbering(all);
     const d = parseYmd(sel);
     $('#cal-day').innerHTML = `<div class="month"><div class="month-h"><h2>${d.getMonth()+1}月${d.getDate()}日(${WD[d.getDay()]})</h2><span>${arr.length}袋</span></div><div class="rows">${arr.length ? arr.map(i => rowHTML(i, rep, nums)).join('') : '<div class="empty">この日の記録はありません</div>'}</div></div>`;
-  } else $('#cal-day').innerHTML = `<p class="hint" style="margin:0;text-align:center">日付をタップすると、その日に食べたグミが出ます</p>`;
+  } else $('#cal-day').innerHTML = `<p class="hint" style="margin:0;text-align:center">日付をタップすると、その日に買ったグミが出ます</p>`;
 }
 
 /* ---------- render: stats ---------- */
+function bestCell(all, key){
+  const b = monthBest(all, key);
+  if (!b.options.length) return '—<span class="hint" style="display:block;font-weight:400">今月★5をつけたグミから選べます</span>';
+  if (b.options.length === 1) return esc(b.name);
+  return `<select class="in best-pick" id="best-pick" aria-label="今月のベストグミ">${b.options.map(n => `<option value="${esc(n)}" ${n === b.name ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+}
 function renderStats(){
   const all = items(), now = todayStr(), key = ym(now);
   const ms = monthStats(all, key);
   const unique = new Set(all.map(i => i.name)).size;
-  const avg = all.length ? (all.reduce((s,i) => s + (i.rating||0), 0) / all.length) : 0;
+  const rated = all.filter(i => i.rating), avg = rated.length ? rated.reduce((s,i) => s + i.rating, 0) / rated.length : 0;
   // last 6 months
   const months = []; const d0 = parseYmd(now); d0.setDate(1);
   for (let k = 5; k >= 0; k--){ const d = new Date(d0.getFullYear(), d0.getMonth()-k, 1); const kk = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; months.push({k:kk, m:d.getMonth()+1, n:all.filter(i => ym(i.date) === kk).length}); }
@@ -922,9 +999,9 @@ function renderStats(){
     map += `<span class="ax">${s===5?'すっぱ':s===1?'あま':''}</span>`;
     for (let h = 1; h <= 5; h++){ const c = grid[s-1][h-1]; const sz = c ? 22 + 58 * c / gmax : 0; map += `<div class="cell" title="かたさ${h}・すっぱさ${s}：${c}袋">${c ? `<span style="width:${sz}%;height:${sz}%;opacity:${.45 + .55*c/gmax}"></span>` : ''}</div>`; }
   }
-  const mh = all.length ? all.reduce((s,i) => s + (i.hard||3), 0) / all.length : 3;
-  const msour = all.length ? all.reduce((s,i) => s + (i.sour||3), 0) / all.length : 3;
-  const type = `${mh >= 3.5 ? 'かため' : mh <= 2.5 ? 'やわらか' : 'ほどよい弾力'}×${msour >= 3.5 ? 'すっぱい' : msour <= 2.5 ? 'あまい' : 'あまずっぱ'}`;
+  const mean = (k) => { const l = all.filter(i => i[k]); return l.length ? l.reduce((s,i) => s + i[k], 0) / l.length : 3; };
+  const mh = mean('hard'), msour = mean('sour');
+  const type = `${mh >= 3.5 ? 'かため' : mh <= 2.5 ? 'やわらか' : 'もちもち'}×${msour >= 3.5 ? 'すっぱい' : msour <= 2.5 ? 'あまい' : 'あまずっぱ'}`;
   const best = [...all].filter(i => (i.rating||0) === 5);
   const bestUnique = [...new Map(best.map(i => [i.name, i])).values()].slice(0, 5);
   $('#v-stats').innerHTML = `
@@ -932,13 +1009,15 @@ function renderStats(){
       <div class="kpi"><div class="lbl">${+key.slice(5)}月の袋数</div><div class="v num">${ms.count}<small>袋</small></div></div>
       <div class="kpi"><div class="lbl">${+key.slice(5)}月の出費</div><div class="v num">${(ms.spend).toLocaleString('ja-JP')}<small>円</small></div></div>
       <div class="kpi"><div class="lbl">ぜんぶで</div><div class="v num">${all.length}<small>袋</small></div></div>
-      <div class="kpi"><div class="lbl">食べた種類</div><div class="v num">${unique}<small>種</small></div></div>
+      <div class="kpi"><div class="lbl">買った種類</div><div class="v num">${unique}<small>種</small></div></div>
     </div>
-    <div class="panel"><h3>${+key.slice(5)}月のまとめ<span class="s">推しメーカー：${esc(ms.topMaker || '—')}　ベスト：${esc(ms.best ? ms.best.name : '—')}</span></h3>
+    <div class="panel"><h3>${+key.slice(5)}月のまとめ</h3>
+      <dl class="facts"><dt>推しメーカー</dt><dd>${esc(ms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, key)}</dd></dl>
       <div class="btn-row"><button class="btn primary sm" id="post-month">今月のまとめをポスト</button></div></div>
     <div class="panel chart"><h3>月ごとの袋数<span class="s">直近6か月</span></h3>${svg}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
-      <div class="type-line">あなたは <b>${type}</b> 派　<span class="hint">平均おいしさ ${avg.toFixed(1)}</span></div>
+      <div class="type-line">あなたは <b>${type}</b> 派</div>
+      <div class="hint">平均おいしさ ${avg ? avg.toFixed(1) : '—'}</div>
       <div class="map">${map}</div><div class="map-x"><span>ふにゃ</span><span>かたさ →</span><span>かちかち</span></div></div>
     <div class="panel"><h3>メーカーランキング</h3>${bars(countBy(all, i => i.maker))}</div>
     <div class="panel"><h3>よく買うお店</h3>${bars(countBy(all, i => i.shop))}</div>
@@ -1130,6 +1209,16 @@ document.querySelectorAll('.sheet').forEach(s => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape'){ const open = [...document.querySelectorAll('.sheet')].reverse().find(s => !s.hidden); open && closeSheet('#' + open.id); } });
 
 /* ---------- hardness / sourness shapes ---------- */
+// eating status of a bag; records made before this field existed count as 食べた
+const STATUS = [{k:'unopened', n:'まだ食べてない', short:'未開封'}, {k:'eating', n:'食べた', short:'食べた'}, {k:'finished', n:'完食', short:'完食'}];
+// finished bags get a check right after the name instead of a tag
+const DONE_MARK = '<span class="done-mark" role="img" aria-label="完食"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="var(--ok)"/><path d="M4.4 8.3l2.4 2.4 4.8-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+// unopened bags get an empty dashed ring in the same spot: "not yet" next to the filled "done" check
+const UNOPENED_MARK = '<span class="done-mark" role="img" aria-label="未開封"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.6" fill="none" stroke="var(--ink-2)" stroke-width="1.8" pathLength="16" stroke-dasharray="1.15 0.85" transform="rotate(-78 8 8)"/></svg></span>';
+const statusMark = it => ({finished: DONE_MARK, unopened: UNOPENED_MARK})[statusOf(it)] || '';
+// gifts and the like can be kept out of 今月の出費 while still recording a price
+const spendOf = it => it.noSpend ? 0 : (+it.price || 0);
+const statusOf = it => STATUS.some(x => x.k === it.status) ? it.status : 'eating';
 const LEVEL_LBL = {
   rating: ['いまいち','まあまあ','おいしい','かなりおいしい','最高！'],
   hard: ['ふにゃふにゃ','やわらかめ','ふつう','しっかり','かちかち'],
@@ -1155,13 +1244,13 @@ function shapeSVG(kind, lv, on, size){
 // unlike stars, only the chosen level lights up
 const shapesHTML = (kind, n, size) => [1,2,3,4,5].map(k => shapeSVG(kind, k, k === n, size)).join('');
 function renderShapePick(kind){
-  const v = +$('#f-' + kind).value || 3;
+  const v = +$('#f-' + kind).value || 0;   // 0 = not recorded
   $('#f-' + kind + '-pick').innerHTML = [1,2,3,4,5].map(k => `<button type="button" role="radio" aria-checked="${k === v}" data-lv="${k}" aria-label="${LEVEL_LBL[kind][k-1]}">${shapeSVG(kind, k, k === v)}</button>`).join('')
-    + `<span class="pick-lbl">${LEVEL_LBL[kind][v-1]}</span>`;
+    + `<span class="pick-lbl${v ? '' : ' none'}">${v ? LEVEL_LBL[kind][v-1] : '未記録'}</span>`;
 }
 
 /* ---------- form ---------- */
-const F = { touched:new Set(), editing:null, color:'straw', rating:4, tags:[] };
+const F = { status:'eating', touched:new Set(), editing:null, color:'straw', rating:4, tags:[] };
 function buildFormStatic(){
   $('#f-colors').innerHTML = COLORS.map(c => `<button type="button" class="cbtn" data-color="${c.k}" aria-label="${c.n}" aria-pressed="false">${bearSVG(c.k, 26)}</button>`).join('');
   renderShopChips();
@@ -1176,6 +1265,10 @@ const LISTS = {
            used: () => countBy(realItems().flatMap(i => (i.tags || []).map(t => ({t}))), x => x.t).map(x => x[0]),
            special: {'新商品':'ログで目立つ表示・Xのハッシュタグ・絞り込みに使います'} },
 };
+function syncStatusSeg(box, value){
+  if (!box.firstElementChild) box.innerHTML = STATUS.map(x => `<button type="button" role="radio" data-status="${x.k}">${x.n}</button>`).join('');
+  box.querySelectorAll('[data-status]').forEach(b => b.setAttribute('aria-checked', b.dataset.status === value));
+}
 function renderShopChips(){
   $('#f-shops').innerHTML = S.shops.map(s => `<button type="button" class="chip" data-shop="${esc(s)}" aria-pressed="false">${esc(s)}</button>`).join('');
   if (!$('#sh-form').hidden) syncFormUI();
@@ -1195,7 +1288,12 @@ function saveList(key){
 }
 function saveSettingsDoc(){
   if (S.mode !== 'cloud' || !S.cap.col) return;
-  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme}).catch(() => toast('設定を保存できませんでした'));
+  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks}).catch(() => toast('設定を保存できませんでした'));
+}
+function renderStockToggle(){
+  const box = $('#stock-toggle'); if (!box) return;
+  box.innerHTML = `<label class="switch-row" for="opt-stock"><span><b>手持ちのグミを表示</b><span class="hint">ログ画面に、まだ食べてない・食べた袋の数を出します</span></span>
+    <input type="checkbox" id="opt-stock" role="switch" ${S.showStock ? 'checked' : ''}></label>`;
 }
 function renderThemePicker(){
   const box = $('#theme-picker'); if (!box) return;
@@ -1215,6 +1313,11 @@ function renderListEditor(key){
 }
 function renderShopEditor(){ renderListEditor('shops'); renderListEditor('tags'); }
 function wireShopEditor(){
+  $('#settings-body').addEventListener('change', e => {
+    if (e.target.id !== 'opt-stock') return;
+    S.showStock = e.target.checked; lsSet(LS_STOCK, S.showStock); renderLog();
+    clearTimeout(listSaveT); listSaveT = setTimeout(saveSettingsDoc, 600);
+  });
   $('#settings-body').addEventListener('click', e => {
     const th = e.target.closest('[data-gtheme]');
     if (th){
@@ -1243,7 +1346,9 @@ function syncFormUI(){
   document.querySelectorAll('#f-shops .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.shop === shop));
   renderTagChips();
   document.querySelectorAll('#f-stars button').forEach(b => b.classList.toggle('on', +b.dataset.star <= F.rating));
-  $('#f-stars-lbl').textContent = LEVEL_LBL.rating[F.rating - 1] || '';
+  $('#f-stars-lbl').textContent = LEVEL_LBL.rating[F.rating - 1] || '未記録';
+  $('#f-stars-lbl').classList.toggle('none', !F.rating);
+  syncStatusSeg($('#f-status'), F.status);
   renderShapePick('hard'); renderShapePick('sour');
 }
 function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
@@ -1253,11 +1358,15 @@ function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
   $('#f-save').textContent = mode === 'edit' ? '保存する' : '記録する';
   $('#f-name').value = b.name || ''; $('#f-maker').value = b.maker || ''; $('#f-flavor').value = b.flavor || '';
   $('#f-shop').value = b.shop || ''; $('#f-price').value = b.price ?? '';
+  $('#f-nospend').checked = mode === 'edit' && !!b.noSpend;   // per purchase, never carried over
   $('#f-date').value = mode === 'edit' ? b.date : todayStr();
-  $('#f-hard').value = b.hard || 3; $('#f-sour').value = b.sour || 3;
+  $('#f-hard').value = b.hard || ''; $('#f-sour').value = b.sour || '';
   $('#f-note').value = mode === 'edit' ? (b.note || '') : '';
-  F.color = b.color || 'straw'; F.rating = b.rating || 4;
-  F.tags = mode === 'again' ? (b.tags||[]).filter(t => t !== '新商品') : [...(b.tags || [])];
+  F.color = b.color || 'straw';
+  // a new or repeat purchase starts unrated; editing keeps what was recorded
+  F.rating = mode === 'new' ? 0 : (b.rating || 0);   // edit and また買った keep the rating
+  F.status = mode === 'edit' ? statusOf(b) : 'eating';
+  F.tags = [...(b.tags || [])];
   $('#f-err').hidden = true;
   F.touched = new Set(mode === 'edit' ? ['maker','flavor','price','color','hard','sour'] : mode === 'again' ? ['color','hard','sour'] : []);
   AC.applied = b.name || ''; closeAC(); setHint(''); clearGuessed();
@@ -1271,8 +1380,9 @@ function candidates(){
   const mine = new Map();
   [...realItems()].sort(byDateDesc).forEach(i => {
     const m = mine.get(i.name);
-    if (m){ m.count++; if (!m.price && i.price) m.price = i.price; return; }
-    mine.set(i.name, {src:'mine', name:i.name, maker:i.maker, flavor:i.flavor, color:i.color, price:i.price, hard:i.hard, sour:i.sour, count:1, last:i.date, shop:i.shop});
+    // newest record wins; an older one fills whatever the newest left empty (e.g. a bag not tasted yet)
+    if (m){ m.count++; for (const k of ['price','rating','hard','sour','maker','flavor']) if (!m[k] && i[k]) m[k] = i[k]; return; }
+    mine.set(i.name, {src:'mine', name:i.name, maker:i.maker, flavor:i.flavor, color:i.color, price:i.price, rating:i.rating, hard:i.hard, sour:i.sour, tags:[...(i.tags || [])], count:1, last:i.date, shop:i.shop});
   });
   const out = [...mine.values()];
   for (const c of catList()){
@@ -1356,12 +1466,17 @@ function applyCand(c, note){
   if (c.color && !F.touched.has('color')){ F.color = c.color; filled.push('color'); }
   if (c.hard && !F.touched.has('hard')) $('#f-hard').value = c.hard;
   if (c.sour && !F.touched.has('sour')) $('#f-sour').value = c.sour;
+  // a gummy bought before also brings its rating and tags (shop, date and note stay per purchase)
+  if (c.src === 'mine'){
+    if (c.rating && !F.touched.has('rating')) F.rating = c.rating;
+    if (c.tags && !F.touched.has('tags')) F.tags = [...c.tags];
+  }
   if (c.rel && isRecent(c.rel, $('#f-date').value) && !F.touched.has('tags') && !F.tags.includes('新商品')) F.tags = [...F.tags, '新商品'];
   syncFormUI(); closeAC();
   if (note) setHint(note);
 }
 function noteFor(c){
-  if (c.src === 'mine') return `前回（${mdLabel(c.last)}${c.shop ? '・' + esc(c.shop) : ''}）の記録から入力しました。色のついた欄は自動入力です。`;
+  if (c.src === 'mine') return `前回（${mdLabel(c.last)}${c.shop ? '・' + esc(c.shop) : ''}）の記録から、お店・日付・ひとこと以外を入力しました。`;
   if (c.src === 'cat') return `カタログから入力しました。${c.price ? '値段はメーカーの希望小売価格（税込の目安）です。お店の値段と違えば直してください。' : 'メーカーが値段を公開していないため、値段は入っていません。'}${c.rel && isRecent(c.rel, $('#f-date').value) ? '発売から間もないので「新商品」タグを付けました。' : ''}`;
   return c.note || '';
 }
@@ -1436,7 +1551,8 @@ function wireAutocomplete(){
   });
   ['hard','sour'].forEach(kind => $('#f-' + kind + '-pick').addEventListener('click', e => {
     const b = e.target.closest('[data-lv]'); if (!b) return;
-    $('#f-' + kind).value = b.dataset.lv; F.touched.add(kind); renderShapePick(kind);
+    // tapping the chosen level again clears it
+    $('#f-' + kind).value = +$('#f-' + kind).value === +b.dataset.lv ? '' : b.dataset.lv; F.touched.add(kind); renderShapePick(kind);
   }));
   $('#f-colors').addEventListener('click', () => F.touched.add('color'));
 }
@@ -1446,7 +1562,8 @@ function wireForm(){
   $('#f-shops').addEventListener('click', e => { const b = e.target.closest('[data-shop]'); if (b){ $('#f-shop').value = $('#f-shop').value === b.dataset.shop ? '' : b.dataset.shop; syncFormUI(); } });
   $('#f-shop').addEventListener('input', syncFormUI);
   $('#f-tags').addEventListener('click', e => { const b = e.target.closest('[data-tag]'); if (b){ F.touched.add('tags'); const t = b.dataset.tag; F.tags = F.tags.includes(t) ? F.tags.filter(x => x !== t) : [...F.tags, t]; syncFormUI(); } });
-  $('#f-stars').addEventListener('click', e => { const b = e.target.closest('[data-star]'); if (b){ F.rating = +b.dataset.star; syncFormUI(); } });
+  $('#f-stars').addEventListener('click', e => { const b = e.target.closest('[data-star]'); if (b){ F.touched.add('rating'); F.rating = F.rating === +b.dataset.star ? 0 : +b.dataset.star; syncFormUI(); } });
+  $('#f-status').addEventListener('click', e => { const b = e.target.closest('[data-status]'); if (b){ F.status = b.dataset.status; syncStatusSeg($('#f-status'), F.status); } });
   wireAutocomplete();
   $('#form').addEventListener('input', e => { if (e.target.classList && e.target.id !== 'f-name') e.target.classList.remove('guessed'); });
   // Enter in a text field just ends editing (closes the keyboard) instead of submitting; only the 記録する button saves
@@ -1468,8 +1585,8 @@ function wireForm(){
     const it = {
       id: base ? base.id : newId(), kind:'gummy', name,
       maker: $('#f-maker').value.trim(), flavor: $('#f-flavor').value.trim(), color: F.color,
-      shop: $('#f-shop').value.trim(), price: $('#f-price').value === '' ? null : Math.max(0, Math.round(+$('#f-price').value)),
-      date: $('#f-date').value || todayStr(), rating: F.rating, hard: +$('#f-hard').value, sour: +$('#f-sour').value,
+      shop: $('#f-shop').value.trim(), price: $('#f-price').value === '' ? null : Math.max(0, Math.round(+$('#f-price').value)), noSpend: $('#f-nospend').checked,
+      date: $('#f-date').value || todayStr(), rating: F.rating || null, hard: +$('#f-hard').value || null, sour: +$('#f-sour').value || null, status: F.status,
       tags: F.tags, note: $('#f-note').value.trim(), createdAt: base ? base.createdAt : Date.now(),
     };
     const wasDemo = isDemo();
@@ -1500,16 +1617,18 @@ function openDetail(id){
   $('#dt-no').textContent = it.demo ? 'サンプルの記録' : `No.${nums.get(it.id)}`;
   $('#dt-body').innerHTML = `
     <div class="dt-hero">${gframe(it.name, it.color, 'detail')}
-      <div style="min-width:0"><div>${(it.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('')}</div><h3>${esc(it.name)}</h3><div class="sub">${esc([it.maker, it.flavor].filter(Boolean).join('・'))}</div>${starsHTML(it.rating||0)}</div></div>
+      <div style="min-width:0"><div>${(it.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('')}</div><h3>${esc(it.name)}${statusMark(it)}</h3><div class="sub">${esc([it.maker, it.flavor].filter(Boolean).join('・'))}</div>${starsHTML(it.rating||0)}</div></div>
     <div class="dt-grid">
       <div><span class="lbl">日付</span><div class="v num">${mdLabel(it.date)}</div></div>
-      <div><span class="lbl">お店・値段</span><div class="v">${esc(it.shop || '—')}${it.price != null && it.price !== '' ? '・' + yen(+it.price) : ''}</div></div>
+      <div><span class="lbl">お店・値段${it.noSpend ? '<span class="nospend">出費外</span>' : ''}</span><div class="v">${esc(it.shop || '—')}${it.price != null && it.price !== '' ? '・' + yen(+it.price) : ''}</div></div>
       <div><span class="lbl">かたさ</span>${meter('hard', it.hard||0)}</div>
       <div><span class="lbl">すっぱさ</span>${meter('sour', it.sour||0)}</div>
       <div><span class="lbl">買った回数</span><div class="v num">${rep.get(it.name)}回</div></div>
       <div><span class="lbl">色</span><div class="v">${esc((COLORS.find(c => c.k === it.color)||COLORS[0]).n)}</div></div>
     </div>
     ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
+    <div class="dt-status"><span class="lbl">食べた？</span><div class="seg" id="dt-status" role="radiogroup" aria-label="食べたかどうか">${STATUS.map(x => `<button type="button" role="radio" data-status="${x.k}" aria-checked="${statusOf(it) === x.k}" ${it.demo ? 'disabled' : ''}>${x.n}</button>`).join('')}</div>
+      ${it.demo ? '' : `<p class="hint" id="dt-rate-hint" style="margin:0" ${statusOf(it) !== 'unopened' && !it.rating ? '' : 'hidden'}>食べたら「直す」からおいしさを記録しましょう</p>`}</div>
     ${it.demo ? '' : `<div class="photo-row">
       <label class="btn sm ghost" for="dt-photo">${photoOf(it.name) ? '写真を変える' : '自分で撮った写真をつける'}</label>
       <input type="file" id="dt-photo" accept="image/*" hidden>
@@ -1533,8 +1652,21 @@ function openDetail(id){
     if ($('#dt-photo-del')) $('#dt-photo-del').onclick = async () => {
       try { await setPhoto(it.name, ''); toast('写真を外しました'); openDetail(it.id); } catch(err){ toast('写真を外せませんでした'); }
     };
+    let cur = it;
+    $('#dt-status').onclick = e => {
+      const b = e.target.closest('[data-status]'); if (!b || b.dataset.status === statusOf(cur)) return;
+      const prev = cur, next = {...cur, status: b.dataset.status};
+      cur = next; syncStatusSeg($('#dt-status'), next.status);   // show the choice at once
+      $('#dt-body h3').innerHTML = esc(next.name) + statusMark(next);
+      const h = $('#dt-rate-hint'); if (h) h.hidden = next.status === 'unopened' || !!next.rating;
+      // save just after the tap has been painted (a timer, so it still runs if frames are paused)
+      setTimeout(async () => {
+        try { await putItem(next); }   // the button itself shows the change; no toast
+        catch(err){ cur = prev; syncStatusSeg($('#dt-status'), prev.status); $('#dt-body h3').innerHTML = esc(prev.name) + statusMark(prev); toast('変更できませんでした'); }
+      }, 30);
+    };
     $('#dt-again').onclick = () => { closeSheet('#sh-detail'); openForm(it, 'again'); };
-    $('#dt-edit').onclick = () => { closeSheet('#sh-detail'); openForm(it, 'edit'); };
+    $('#dt-edit').onclick = () => { closeSheet('#sh-detail'); openForm(cur, 'edit'); };
     $('#dt-del').onclick = async (e) => {
       const b = e.currentTarget;
       if (!delArmed){ delArmed = true; b.classList.add('armed'); b.textContent = 'もう一度押すと削除'; return; }
@@ -1555,7 +1687,7 @@ function itemPost(it, tpl){
   const head = [`【${it.name}】`, it.note || null];
   if (tpl === 'simple') return [...head, POST_TAGS].filter(Boolean).join('\n');
   return [...head,
-    `おいしさ：${starsTxt(it.rating || 0)}`,
+    it.rating ? `おいしさ：${starsTxt(it.rating)}` : null,
     it.hard ? `かたさ：${dotsTxt(it.hard)}` : null,
     it.sour ? `すっぱさ：${dotsTxt(it.sour)}` : null,
     it.shop ? `購入場所：${it.shop}` : null,
@@ -1564,7 +1696,7 @@ function itemPost(it, tpl){
 }
 function monthPost(){
   const all = items(), key = ym(todayStr()), ms = monthStats(all, key);
-  return [`【${+key.slice(5)}月のぐみろぐ】`, `${ms.count}袋 / ${yen(ms.spend)}`, `新商品 ${ms.news}個`, `推しメーカー：${ms.topMaker || '—'}`, `月間ベスト：${ms.best ? ms.best.name : '—'}`, `連続記録 ${streakOf(all)}日`, POST_TAGS].join('\n');
+  return [`【${+key.slice(5)}月のぐみろぐ】`, `${ms.count}袋 / ${yen(ms.spend)}`, `新商品 ${ms.news}個`, `推しメーカー：${ms.topMaker || '—'}`, `月間ベスト：${monthBest(all, key).name || '—'}`, `連続記録 ${streakOf(all)}日`, POST_TAGS].join('\n');
 }
 function setPostText(t){ $('#post-text').value = t; updatePost(); }
 function updatePost(){
@@ -1598,7 +1730,7 @@ function wirePost(){
     const ctl = P.ctl = new AbortController(); const btn = $('#post-ai'); btn.disabled = true;
     $('#post-ai-state').textContent = 'AIが考え中…';
     const it = P.item;
-    const data = {名前:it.name, お店:it.shop, おいしさ:`${it.rating}/5`, かたさ:`${it.hard}/5（5がかちかち）`, すっぱさ:`${it.sour}/5（5がすっぱい）`, タグ:it.tags, ひとこと:it.note, 同じグミを買った回数:repeatCount(items()).get(it.name)};
+    const data = {名前:it.name, お店:it.shop, 食べた:STATUS.find(x => x.k === statusOf(it)).n, おいしさ:it.rating ? `${it.rating}/5` : '未記録', かたさ:it.hard ? `${it.hard}/5（5がかちかち）` : '未記録', すっぱさ:it.sour ? `${it.sour}/5（5がすっぱい）` : '未記録', タグ:it.tags, ひとこと:it.note, 同じグミを買った回数:repeatCount(items()).get(it.name)};
     const prompt = `グミが大好きな人のX（旧Twitter）投稿文を作ってください。以下の記録をもとに、日本語で1つだけ。\n条件：1行目に商品名、続けてひとことの内容を入れる／メーカー名・味の名前・番号は書かない／本文は全角100文字以内／明るく楽しい口調／食感やすっぱさの感想を入れる／事実にない情報は足さない／ハッシュタグは最後に改行して「#ぐみろぐ #グミ」の2つだけ／本文だけを出力し、前置きや引用符は付けない。\n記録：${JSON.stringify(data)}`;
     try {
       const r = await sample(prompt, {cache:false, signal:ctl.signal, modelTier:'quick', onText:({text}) => { $('#post-text').value = text; updatePost(); }});
@@ -1613,7 +1745,7 @@ function wirePost(){
 
 /* ---------- settings ---------- */
 function renderSettings(){
-  setTimeout(() => { renderShopEditor(); renderThemePicker(); }, 0);
+  setTimeout(() => { renderShopEditor(); renderThemePicker(); renderStockToggle(); }, 0);
   const real = realItems();
   const dl = !!S.cap.downloads || !IN_CLAUDE;   // outside Claude a normal browser download works
   $('#settings-body').innerHTML = `
@@ -1621,6 +1753,7 @@ function renderSettings(){
       <p>${S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
       <p>記録数：<b class="num">${real.length}</b>件</p></div>
     <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
+    <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
     <div class="panel"><h3>グミカタログ</h3>
       <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
       <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
@@ -1643,10 +1776,10 @@ function renderSettings(){
   const clean = () => realItems().map(i => { const o = {...i}; delete o.photoData; delete o.photo; return o; });
   $('#ex-json').onclick = () => save(`gumilog-${stamp}.json`, JSON.stringify(clean(), null, 2));
   $('#ex-csv').onclick = () => {
-    const cols = ['date','name','maker','flavor','shop','price','rating','hard','sour','tags','note'];
-    const head = ['日付','名前','メーカー','味','お店','値段','おいしさ','かたさ','すっぱさ','タグ','ひとこと'];
+    const cols = ['date','name','maker','flavor','shop','price','noSpend','status','rating','hard','sour','tags','note'];
+    const head = ['日付','名前','メーカー','味','お店','値段','出費から除外','食べた？','おいしさ','かたさ','すっぱさ','タグ','ひとこと'];
     const q = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
-    const rows = [...realItems()].sort(byDateAsc).map(i => cols.map(c => q(c === 'tags' ? (i.tags||[]).join(' ') : i[c])).join(','));
+    const rows = [...realItems()].sort(byDateAsc).map(i => cols.map(c => q(c === 'tags' ? (i.tags||[]).join(' ') : c === 'status' ? STATUS.find(x => x.k === statusOf(i)).n : c === 'noSpend' ? (i.noSpend ? '○' : '') : i[c])).join(','));
     save(`gumilog-${stamp}.csv`, '﻿' + [head.map(q).join(','), ...rows].join('\r\n'));
   };
   $('#im-file').onchange = async e => {
@@ -1656,7 +1789,7 @@ function renderSettings(){
       const have = new Set(realItems().map(i => i.id)); let n = 0;
       for (const raw of arr){
         if (!raw || typeof raw.name !== 'string' || typeof raw.date !== 'string') continue;
-        const it = {id: (typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,60}$/.test(raw.id) && raw.id !== 'settings') ? raw.id : newId(), kind:'gummy', name:raw.name.slice(0,120), maker:String(raw.maker||'').slice(0,60), flavor:String(raw.flavor||'').slice(0,60), color:COLORS.some(c => c.k === raw.color) ? raw.color : 'straw', shop:String(raw.shop||'').slice(0,60), price: raw.price == null || raw.price === '' ? null : +raw.price || 0, date:/^\d{4}-\d{2}-\d{2}$/.test(raw.date) ? raw.date : todayStr(), rating:Math.min(5,Math.max(1,+raw.rating||3)), hard:Math.min(5,Math.max(1,+raw.hard||3)), sour:Math.min(5,Math.max(1,+raw.sour||3)), tags:Array.isArray(raw.tags) ? raw.tags.map(String).slice(0,10) : [], note:String(raw.note||'').slice(0,1000), createdAt:+raw.createdAt || Date.now()};
+        const it = {id: (typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,60}$/.test(raw.id) && raw.id !== 'settings') ? raw.id : newId(), kind:'gummy', name:raw.name.slice(0,120), maker:String(raw.maker||'').slice(0,60), flavor:String(raw.flavor||'').slice(0,60), color:COLORS.some(c => c.k === raw.color) ? raw.color : 'straw', shop:String(raw.shop||'').slice(0,60), price: raw.price == null || raw.price === '' ? null : +raw.price || 0, date:/^\d{4}-\d{2}-\d{2}$/.test(raw.date) ? raw.date : todayStr(), rating:clampLvl(raw.rating), hard:clampLvl(raw.hard), sour:clampLvl(raw.sour), status:STATUS.some(x => x.k === raw.status) ? raw.status : 'eating', noSpend: raw.noSpend === true, tags:Array.isArray(raw.tags) ? raw.tags.map(String).slice(0,10) : [], note:String(raw.note||'').slice(0,1000), createdAt:+raw.createdAt || Date.now()};
         if (have.has(it.id)) continue;
         await putItem(it); have.add(it.id); n++;
       }
@@ -1671,7 +1804,9 @@ $('#fab').addEventListener('click', () => openForm(null, 'new'));
 $('#btn-settings').addEventListener('click', () => { renderSettings(); openSheet('#sh-settings'); });
 $('#q').addEventListener('input', e => { S.q = e.target.value; renderLog(); });
 $('#app').addEventListener('click', async e => {
-  const f = e.target.closest('[data-filter]'); if (f){ S.ui.filter = f.dataset.filter; lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter}); renderLog(); return; }
+  const f = e.target.closest('[data-filter]'); if (f){ S.ui.filter = f.dataset.filter; lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter}); renderLog();
+    if (f.classList.contains('stock')) $('#filters').scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
+    return; }
   const o = e.target.closest('[data-open]'); if (o){ openDetail(o.dataset.open); return; }
   const d = e.target.closest('[data-day]'); if (d){ S.ui.selDay = S.ui.selDay === d.dataset.day ? null : d.dataset.day; renderCal(); return; }
   if (e.target.closest('#post-month')){ openPost(null, 'month'); return; }
@@ -1696,6 +1831,11 @@ if ('ResizeObserver' in window){ let lw = 0; new ResizeObserver(() => { const w 
 /* ---------- boot ---------- */
 applyTheme();
 $('#snack-x').addEventListener('click', hideSnack);
+$('#v-stats').addEventListener('change', e => {
+  if (e.target.id !== 'best-pick') return;
+  S.bestPicks = {...S.bestPicks, [ym(todayStr())]: e.target.value}; lsSet(LS_BEST, S.bestPicks);
+  clearTimeout(listSaveT); listSaveT = setTimeout(saveSettingsDoc, 600);
+});
 wireCrop();
 // fit sheets to the part of the screen not covered by the on-screen keyboard
 if (window.visualViewport){
