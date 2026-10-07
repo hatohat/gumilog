@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="e22987c730"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="efe064271b"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -286,6 +286,13 @@ input[type=range]{width:100%;accent-color:var(--accent-text)}
 .cat-problems{font-size:12px!important;color:var(--danger,#c0392b)!important;line-height:1.6}
 .suggest{margin:10px 0 0;font-size:13px}
 .suggest a{color:var(--accent-text,var(--accent));font-weight:700}
+.cat-match{margin-top:12px;padding:10px 12px;border:1px dashed var(--accent);border-radius:12px;background:var(--accent-soft)}
+.cat-match p{margin:0 0 8px;font-size:13px;font-weight:700}
+.cat-match .btn-row{flex-wrap:wrap}
+.cat-match .btn[data-match-n]{width:100%;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:0;line-height:1.4}
+.cm-m{font-weight:400;font-size:12px;opacity:.75}
+.cm-row{padding-top:10px;border-top:1px solid var(--line);margin-top:10px}
+.cm-row .cat-match{margin-top:6px}
 .prev-buy{font-size:12px;color:var(--ink-2);margin-top:2px;line-height:1.5}
 .meter{display:flex;gap:3px;margin-top:3px}
 .meter{align-items:center}
@@ -558,6 +565,8 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // app changes only, newest first; shown under 設定 → アップデート情報 → アプリ (times in JST).
 // Catalog additions are not listed here: the カタログ tab reads them from the catalog's 追加日 column.
 const UPDATES = [
+  {v:87, at:'2026-10-08 00:13', t:'「名前を合わせますか？」の候補を出す判断を直しました。「たべっ子どうぶつピーチ」のように短く書いた名前でも、正しい候補が出やすくなりました。'},
+  {v:86, at:'2026-10-08 00:08', t:'カタログにない名前で記録したグミに、カタログの近いグミが入ったら「名前を合わせますか？」と出るようになりました。設定の「カタログと名前をそろえる」からまとめて直すこともできます。'},
   {v:85, at:'2026-10-07 23:53', t:'アップデート情報を「アプリ」と「カタログ」に分けました。「カタログ」では、新しく追加されたグミを見られます。'},
   {v:83, at:'2026-10-07 23:42', t:'グミの詳細からカタログに提案するとき、値段もフォームに入るようにしました。'},
   {v:82, at:'2026-10-07 23:12', t:'カタログにないグミを、フォームから教えられるようになりました（設定の「グミカタログ」や、カタログにないグミの詳細から開けます）。'},
@@ -589,6 +598,7 @@ const LS_BIG = 'gumilog.photosBig.v1';
 const LS_STOCK = 'gumilog.showStock.v1';
 const LS_BEST = 'gumilog.bestPicks.v1';
 const LS_POSTTPL = 'gumilog.postTpls.v1';
+const LS_NAMESKIP = 'gumilog.nameSkip.v1';
 // one color theme per gummy color: [light, dark] token sets
 const K = ['bg','surface','surface-2','ink','ink-2','line','accent','accent-ink','accent-soft','accent-text'];
 const THEMES = {
@@ -763,7 +773,8 @@ const S = {
   shops: (() => { const v = lsGet(LS_SHOPS, null); return Array.isArray(v) && v.length ? v : [...SHOPS]; })(),
   tags: (() => { const v = upgradeTags(lsGet(LS_TAGS, null)); return Array.isArray(v) ? v : [...TAGS]; })(),
   theme: (() => { const v = lsGet(LS_THEME, 'straw'); return THEMES[v] ? v : 'straw'; })(),
-  postTpls: lsGet(LS_POSTTPL, {}) || {},         // {detail, simple}: the viewer's own Xポスト templates (empty = default)
+  postTpls: lsGet(LS_POSTTPL, {}) || {},
+  nameSkip: (v => Array.isArray(v) ? v : [])(lsGet(LS_NAMESKIP, [])),   // record names the viewer said have no catalog match         // {detail, simple}: the viewer's own Xポスト templates (empty = default)
   bestPicks: lsGet(LS_BEST, {}) || {},          // 'YYYY-MM' -> chosen ベストグミ name
   showStock: lsGet(LS_STOCK, true) !== false,   // 手持ちのグミ on the log screen
   localPhotos: lsGet(LS_PHOTOS, {}),   // name -> data URL (this browser)
@@ -838,6 +849,7 @@ async function connect(){
     if (d && Array.isArray(d.shops) && d.shops.length){ S.shops = d.shops.map(String); lsSet(LS_SHOPS, S.shops); }
     if (d && Array.isArray(d.tags)){ S.tags = upgradeTags(d.tags.map(String)); lsSet(LS_TAGS, S.tags); }
     if (d && d.bestPicks && typeof d.bestPicks === 'object' && JSON.stringify(d.bestPicks) !== JSON.stringify(S.bestPicks)){ S.bestPicks = d.bestPicks; lsSet(LS_BEST, S.bestPicks); renderStats(); }
+    if (d && Array.isArray(d.nameSkip) && d.nameSkip.join('|') !== S.nameSkip.join('|')){ S.nameSkip = d.nameSkip.map(String); lsSet(LS_NAMESKIP, S.nameSkip); }
     if (d && d.postTpls && typeof d.postTpls === 'object' && JSON.stringify(d.postTpls) !== JSON.stringify(S.postTpls)){ S.postTpls = d.postTpls; lsSet(LS_POSTTPL, S.postTpls); if (!$('#sh-settings').hidden) renderTplEditor(); }
     if (d && typeof d.showStock === 'boolean' && d.showStock !== S.showStock){ S.showStock = d.showStock; lsSet(LS_STOCK, S.showStock); renderLog(); if (!$('#sh-settings').hidden) renderStockToggle(); }
     if (d && THEMES[d.theme] && d.theme !== S.theme){ S.theme = d.theme; lsSet(LS_THEME, S.theme); applyTheme(); renderAll(); jarDraw(); }
@@ -1473,7 +1485,7 @@ function saveList(key){
 }
 function saveSettingsDoc(){
   if (S.mode !== 'cloud' || !S.cap.col) return;
-  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks, postTpls:S.postTpls}).catch(() => toast('設定を保存できませんでした'));
+  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks, postTpls:S.postTpls, nameSkip:S.nameSkip}).catch(() => toast('設定を保存できませんでした'));
 }
 let tplSaveT = 0, tplFocus = 'detail';
 function renderTplEditor(){
@@ -1860,6 +1872,80 @@ function inCatalog(name){
   return catList().some(c => norm(c.n) === n || (c.f || []).some(f => norm(`${c.n} ${f}`) === n));
 }
 
+/* ---------- lining a record up with the catalog ----------
+   A gummy recorded before it was in the catalog keeps the name the viewer typed. Once a close catalog
+   product exists we offer it (never rename on our own: spellings vary), and one tap renames every record
+   of that name. Photos on records stay put; an old per-name photo moves to the new name. */
+const looseName = s => norm(String(s || '').normalize('NFKC')
+  .replace(/[（(][^（）()]*\d+\s*(g|ｇ|グラム|個|袋|粒|本)[^（）()]*[）)]/gi, '')   // (65g), （1袋）
+  .replace(/\d+(\.\d+)?\s*(g|グラム)(?![a-z])/gi, '')
+  .replace(/味/g, ''));
+// two-letter pieces in common: dice compares whole names, overlap asks how much of the shorter one is inside the longer
+// (a record typed as 「たべっ子どうぶつピーチ」 is mostly inside 「シャリっと食感たべっ子どうぶつグミ ピーチ」)
+function likeness(a, b){
+  if (a === b) return {dice:1, overlap:1};
+  if (a.length < 2 || b.length < 2) return {dice:0, overlap:0};
+  const grams = s => { const m = new Map(); for (let i = 0; i < s.length - 1; i++){ const g = s.slice(i, i + 2); m.set(g, (m.get(g) || 0) + 1); } return m; };
+  const A = grams(a), B = grams(b); let both = 0;
+  for (const [g, n] of A) both += Math.min(n, B.get(g) || 0);
+  return {dice: 2 * both / (a.length + b.length - 2), overlap: both / (Math.min(a.length, b.length) - 1)};
+}
+// up to 3 catalog names that look like the same product, best first
+function catMatches(it){
+  const me = looseName(it.name), mk = norm(it.maker || '');
+  if (me.length < 2) return [];
+  const out = [];
+  for (const c of catList()) for (const f of (c.f && c.f.length ? c.f : [''])){
+    const name = f ? `${c.n} ${f}` : c.n, them = looseName(name), L = likeness(me, them);
+    let score = L.dice;
+    if (Math.min(me.length, them.length) >= 5) score = Math.max(score, L.overlap * 0.9);
+    const fl = looseName(f);
+    if (fl.length >= 2 && me.includes(fl)) score += 0.1;   // the flavor is in the typed name
+    if (me.length >= 4 && them.length >= 4 && (me.includes(them) || them.includes(me))) score = Math.max(score, 0.75 * Math.min(me.length, them.length) / Math.max(me.length, them.length) + 0.25);
+    if (mk) score += (norm(c.m).includes(mk) || mk.includes(norm(c.m))) ? 0.1 : -0.15;   // a different maker written on the record
+    if (score >= 0.7) out.push({c, f, name, score});
+  }
+  out.sort((a, b) => b.score - a.score);
+  return out.filter(m => m.score >= out[0].score - 0.2).slice(0, 3);   // only the ones nearly as good as the best
+}
+const needsMatch = it => it && !it.demo && !inCatalog(it.name) && !S.nameSkip.includes(it.name);
+function matchHTML(it){
+  const ms = catMatches(it); if (!ms.length) return '';
+  return `<div class="cat-match" data-match-old="${esc(it.name)}"><p>カタログに近いグミがあります。名前を合わせますか？</p>
+    <div class="btn-row">${ms.map(m => `<button type="button" class="btn sm" data-match-n="${esc(m.c.n)}" data-match-m="${esc(m.c.m)}" data-match-f="${esc(m.f)}">${esc(m.name)}<span class="cm-m">（${esc(m.c.m)}）</span></button>`).join('')}
+    <button type="button" class="btn sm ghost" data-match-skip>ちがう</button></div></div>`;
+}
+async function renameToCatalog(oldName, c, f){
+  const newName = f ? `${c.n} ${f}` : c.n;
+  const recs = realItems().filter(i => i.name === oldName);
+  for (const i of recs) await putItem({...i, name:newName, maker:c.m, flavor:f || i.flavor});
+  // the photo from before photos were per record was keyed by the name
+  if (photoOf(oldName) && !photoOf(newName)){
+    const big = bigOf(oldName);
+    try { await setPhoto(newName, photoOf(oldName), big ? big.data : null, newName); await setPhoto(oldName, ''); } catch(e){}
+  }
+  let picks = false;
+  for (const [m, v] of Object.entries(S.bestPicks)) if (v === oldName){ S.bestPicks[m] = newName; picks = true; }
+  if (picks){ lsSet(LS_BEST, S.bestPicks); saveSettingsDoc(); }
+  renderAll();
+  return {newName, n:recs.length};
+}
+function skipMatch(name){
+  if (!S.nameSkip.includes(name)) S.nameSkip.push(name);
+  lsSet(LS_NAMESKIP, S.nameSkip); saveSettingsDoc();
+}
+// one handler for the detail sheet and the settings list
+async function onMatchClick(e, after){
+  const box = e.target.closest('[data-match-old]'); if (!box) return false;
+  const old = box.dataset.matchOld, b = e.target.closest('button'); if (!b) return true;
+  if (b.hasAttribute('data-match-skip')){ skipMatch(old); toast('このグミには候補を出さないようにしました'); after(null); return true; }
+  const c = catList().find(x => x.n === b.dataset.matchN && x.m === b.dataset.matchM); if (!c) return true;
+  box.querySelectorAll('button').forEach(x => { x.disabled = true; });
+  try { const r = await renameToCatalog(old, c, b.dataset.matchF); toast(`${r.n}件の記録を「${r.newName}」にしました`); after(r.newName); }
+  catch(err){ toast('名前を変えられませんでした'); box.querySelectorAll('button').forEach(x => { x.disabled = false; }); }
+  return true;
+}
+
 /* ---------- detail ---------- */
 // the purchase of the same gummy just before this one, with how many days apart
 function prevBuy(all, it){
@@ -1870,7 +1956,9 @@ function prevBuy(all, it){
   return `<div class="prev-buy num">前回 ${y}/${m}/${d}<br>${days ? `${days}日ぶり` : '同じ日'}</div>`;
 }
 let delArmed = false;
+let DT_ID = null;
 function openDetail(id){
+  DT_ID = id;
   const all = items(); const it = all.find(i => i.id === id); if (!it) return;
   const nums = numbering(all), rep = repeatCount(all);
   const pKey = photoKeyFor(it), pOwn = pKey === ownKey(it);
@@ -1888,7 +1976,8 @@ function openDetail(id){
       <div><span class="lbl">すっぱさ</span>${meter('sour', it.sour||0)}</div>
     </div>
     ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
-    ${!it.demo && !inCatalog(it.name) ? `<p class="suggest hint">カタログにないグミです。<a href="${esc(suggestUrl(it))}" target="_blank" rel="noopener">カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。</p>` : ''}
+    ${needsMatch(it) ? matchHTML(it) : ''}
+    ${!it.demo && !inCatalog(it.name) && !(needsMatch(it) && catMatches(it).length) ? `<p class="suggest hint">カタログにないグミです。<a href="${esc(suggestUrl(it))}" target="_blank" rel="noopener">カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。</p>` : ''}
     <div class="dt-status"><span class="lbl">食べた？</span><div class="seg" id="dt-status" role="radiogroup" aria-label="食べたかどうか">${STATUS.map(x => `<button type="button" role="radio" data-status="${x.k}" aria-checked="${statusOf(it) === x.k}" ${it.demo ? 'disabled' : ''}>${x.n}</button>`).join('')}</div>
       ${it.demo ? '' : `<p class="hint" id="dt-rate-hint" style="margin:0" ${statusOf(it) !== 'unopened' && !it.rating ? '' : 'hidden'}>食べたら「直す」からおいしさを記録しましょう</p>`}</div>
     ${it.demo ? '' : `<div class="photo-row">
@@ -2089,6 +2178,15 @@ function wirePost(){
 }
 
 /* ---------- settings ---------- */
+function matchListHTML(){
+  const seen = new Set(), rows = [];
+  for (const it of [...realItems()].sort(byDateDesc)){
+    if (seen.has(it.name)) continue; seen.add(it.name);
+    if (needsMatch(it)){ const h = matchHTML(it); if (h) rows.push(`<div class="cm-row"><b>${esc(it.name)}</b>${h}</div>`); }
+  }
+  return rows.length ? `<div class="panel" id="match-panel"><h3>カタログと名前をそろえる<span class="s">${rows.length}件</span></h3>
+    <p class="hint" style="margin:0">カタログに入っていない名前で記録したグミのうち、近いグミがカタログに入ったものです。合わせると、同じ名前の記録がまとめて変わります（写真や評価はそのまま）。</p>${rows.join('')}</div>` : '';
+}
 let UPD_TAB = 'app';
 function updListHTML(){
   if (UPD_TAB === 'app') return `<ul class="updates">${UPDATES.slice(0, 15).map(u => `<li><span class="u-at num">${esc(updAt(u.at))}<span class="u-v">Ver.${u.v}</span></span><span class="u-t">${esc(u.t)}</span></li>`).join('')}</ul>`;
@@ -2114,6 +2212,7 @@ function renderSettings(){
       <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
       ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
       <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
+    ${matchListHTML()}
     <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
     <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
     <div class="panel"><h3>Xにポストの文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
@@ -2143,7 +2242,7 @@ function renderSettings(){
     const recs = clean(), photos = {};
     for (const k of new Set(recs.flatMap(i => [ownKey(i), i.name]))) if (photoOf(k)) photos[k] = photoOf(k);
     const out = {app:'gumilog', format:2, exported:new Date().toISOString(), items:recs, photos,
-      settings:{shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks, postTpls:S.postTpls}};
+      settings:{shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks, postTpls:S.postTpls, nameSkip:S.nameSkip}};
     save(`gumilog-${stamp}.json`, JSON.stringify(out));
   };
   $('#ex-csv').onclick = () => {
@@ -2247,6 +2346,8 @@ function checkUpdate(){
 }
 $('#jar').addEventListener('pointerdown', e => { const r = e.currentTarget.getBoundingClientRect(); jarPoke(e.clientX - r.left, e.clientY - r.top); });
 wireForm(); wirePost(); wireShopEditor();
+$('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT_ID)));
+$('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 jarSetup();
 setTab(['log','cal','stats','shelf'].includes(S.ui.tab) ? S.ui.tab : (S.ui.tab === 'badge' ? 'shelf' : 'log'));
 renderAll();
