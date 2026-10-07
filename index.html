@@ -410,6 +410,9 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
         <div class="f"><label for="f-flavor">味</label><input class="in" id="f-flavor" autocomplete="off" placeholder="ぶどう"></div>
       </div>
       <div class="f"><span class="fl-t">グミの色</span><div class="colors" id="f-colors"></div></div>
+      <div class="f"><span class="fl-t">写真</span><div class="photo-row" style="margin-top:0"><span id="f-photo-thumb"></span>
+        <label class="btn sm ghost" for="f-photo" id="f-photo-lbl">自分で撮った写真をつける</label><input type="file" id="f-photo" accept="image/*" hidden>
+        <button type="button" class="btn sm ghost" id="f-photo-del" hidden>外す</button></div></div>
       <div class="f"><span class="fl-t">買ったお店</span><div class="chips" id="f-shops"></div><input class="in" id="f-shop" placeholder="お店の名前（自由入力）" autocomplete="off"></div>
       <div class="f2">
         <div class="f"><label for="f-price">値段（円）</label><input class="in num" id="f-price" type="number" inputmode="numeric" min="0" placeholder="140">
@@ -1302,7 +1305,7 @@ function renderShapePick(kind){
 }
 
 /* ---------- form ---------- */
-const F = { status:'eating', touched:new Set(), editing:null, color:'straw', rating:4, tags:[] };
+const F = { status:'eating', touched:new Set(), editing:null, color:'straw', rating:4, tags:[], photo:null, photoDel:false };
 function buildFormStatic(){
   $('#f-colors').innerHTML = COLORS.map(c => `<button type="button" class="cbtn" data-color="${c.k}" aria-label="${c.n}" aria-pressed="false">${bearSVG(c.k, 26)}</button>`).join('');
   renderShopChips();
@@ -1402,6 +1405,15 @@ function syncFormUI(){
   $('#f-stars-lbl').classList.toggle('none', !F.rating);
   syncStatusSeg($('#f-status'), F.status);
   renderShapePick('hard'); renderShapePick('sour');
+  renderFormPhoto();
+}
+// photos belong to the gummy name, so the form shows that name's photo and a newly picked one waits for the save
+function renderFormPhoto(){
+  const name = $('#f-name').value.trim();
+  const p = F.photo ? F.photo.small : F.photoDel ? '' : (name && photoOf(name));
+  $('#f-photo-thumb').innerHTML = `<span class="gframe gf-row" style="--gc:${colorOf(F.color)}">${p ? `<img src="${p}" alt="写真">` : bearSVG(F.color, 30)}</span>`;
+  $('#f-photo-lbl').textContent = p ? '写真を変える' : '自分で撮った写真をつける';
+  $('#f-photo-del').hidden = !p;
 }
 function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
   F.editing = mode === 'edit' ? base : null;
@@ -1419,6 +1431,7 @@ function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
   F.rating = mode === 'new' ? 0 : (b.rating || 0);   // edit and また買った keep the rating
   F.status = mode === 'edit' ? statusOf(b) : 'eating';
   F.tags = [...(b.tags || [])];
+  F.photo = null; F.photoDel = false;
   $('#f-err').hidden = true;
   F.touched = new Set(mode === 'edit' ? ['maker','flavor','price','color','hard','sour'] : mode === 'again' ? ['color','hard','sour'] : []);
   AC.applied = b.name || ''; closeAC(); setHint(''); clearGuessed();
@@ -1628,6 +1641,13 @@ function wireForm(){
   });
   // the form itself never saves (implicit Enter submission is swallowed); saving is the button's click only
   $('#form').addEventListener('submit', e => e.preventDefault());
+  $('#f-name').addEventListener('input', renderFormPhoto);
+  $('#f-photo').addEventListener('change', async e => {
+    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    try { const out = await openCrop(f, F.color); if (out && out.small){ F.photo = out; F.photoDel = false; renderFormPhoto(); } }
+    catch(err){ toast('この写真は読み込めませんでした'); }
+  });
+  $('#f-photo-del').addEventListener('click', () => { F.photo = null; F.photoDel = true; renderFormPhoto(); });
   $('#f-save').addEventListener('click', async e => {
     e.preventDefault();
     const name = $('#f-name').value.trim();
@@ -1641,7 +1661,7 @@ function wireForm(){
       date: $('#f-date').value || todayStr(), rating: F.rating || null, hard: +$('#f-hard').value || null, sour: +$('#f-sour').value || null, status: F.status,
       tags: F.tags, note: $('#f-note').value.trim(), createdAt: base ? base.createdAt : Date.now(),
     };
-    const wasDemo = isDemo();
+    const wasDemo = isDemo(), photo = F.photo, photoDel = F.photoDel;
     // close the sheet first so the bear dropping into the jar is in view
     closeSheet('#sh-form');
     if (!base){
@@ -1652,6 +1672,10 @@ function wireForm(){
     try {
       await putItem(it);
       if (!base) showSnack(it, wasDemo); else toast('保存しました');
+      try {
+        if (photo) await setPhoto(name, photo.small, photo.big);
+        else if (photoDel && photoOf(name)) await setPhoto(name, '');
+      } catch(err){ toast(err && err.code === 'local_full' ? '記録はできましたが、端末の容量がいっぱいで写真は保存できませんでした' : '記録はできましたが、写真は保存できませんでした'); }
     } catch(err){
       toast(err && err.code === 'quota_exceeded' ? '保存できる件数の上限です。古い記録を消すと保存できます' : '保存できませんでした。もう一度試してください');
       openSheet('#sh-form');
