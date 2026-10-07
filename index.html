@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="e3285c274d"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="28af9aae5f"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -277,6 +277,16 @@ input[type=range]{width:100%;accent-color:var(--accent-text)}
 .dt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-block:14px}
 .dt-grid > div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
 .dt-grid .v{font-weight:700}
+/* 買った回数 takes two rows on the left so かたさ and すっぱさ stack beside it */
+.dt-grid .dt-buys{grid-row:span 2}
+.tpl-row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.tpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tpl-in{min-height:150px;resize:vertical;line-height:1.6;font-family:inherit}
+.tpl-slots .chip{font-size:13px}
+.cat-problems{font-size:12px!important;color:var(--danger,#c0392b)!important;line-height:1.6}
+.suggest{margin:10px 0 0;font-size:13px}
+.suggest a{color:var(--accent-text,var(--accent));font-weight:700}
+.prev-buy{font-size:12px;color:var(--ink-2);margin-top:2px;line-height:1.5}
 .meter{display:flex;gap:3px;margin-top:3px}
 .meter{align-items:center}
 .note{background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--line);white-space:pre-wrap;overflow-wrap:anywhere}
@@ -531,10 +541,10 @@ const paintOf = k => isRb(k) ? 'var(--rainbow)' : colorOf(k);   // for CSS backg
 const MAKERS = ['明治','UHA味覚糖','カンロ','ブルボン','ハリボー','春日井製菓','ロッテ','森永製菓','ノーベル製菓','カバヤ食品','不二家','トローリ','セブンプレミアム','ファミマル','ローソン'];
 const SHOPS = ['セブン','ファミマ','ローソン','ミニストップ','デイリー','スーパー','ドラッグストア','駅ナカ'];
 const CONBINI = ['セブン','ファミマ','ローソン'];
-const TAGS = ['新商品','期間限定','店舗限定','リピ確定','推し','微妙'];
+const TAGS = ['新商品','期間限定','店舗限定','リピ確定','推し'];
 // a tag list that was saved while still the untouched old default gets the new default
-const OLD_TAGS = ['新商品','期間限定','地域限定','リピ確定','推し','微妙'];
-const upgradeTags = v => Array.isArray(v) && v.join('|') === OLD_TAGS.join('|') ? [...TAGS] : v;
+const OLD_TAGS = [['新商品','期間限定','地域限定','リピ確定','推し','微妙'], ['新商品','期間限定','店舗限定','リピ確定','推し','微妙']];
+const upgradeTags = v => Array.isArray(v) && OLD_TAGS.some(o => o.join('|') === v.join('|')) ? [...TAGS] : v;
 const WD = '日月火水木金土';
 const LS_KEY = 'gumilog.items.v1';
 const LS_UI = 'gumilog.ui.v1';
@@ -544,6 +554,13 @@ const LS_THEME = 'gumilog.theme.v1';
 const LS_PHOTOS = 'gumilog.photos.v1';
 // newest first; shown under 設定 → アップデート情報 (times in JST)
 const UPDATES = [
+  {v:82, at:'2026-10-07 23:12', t:'カタログにないグミを、フォームから教えられるようになりました（設定の「グミカタログ」や、カタログにないグミの詳細から開けます）。'},
+  {v:81, at:'2026-10-07 22:47', t:'グミカタログを表（catalog.csv）で管理するようにしました。表を直してアップロードするだけで、候補に反映されます。'},
+  {v:80, at:'2026-10-07 22:38', t:'設定から「Xにポスト」の文章のテンプレートを自由に変えられるようになりました。タグの初期候補から「微妙」をなくしました。'},
+  {v:79, at:'2026-10-07 22:34', t:'グミの詳細の並びを変えました。買った回数を左に、かたさとすっぱさを右に縦に並べています。'},
+  {v:78, at:'2026-10-07 22:32', t:'グミの詳細から「色」の欄をなくしました（色は写真の枠でわかるため）。'},
+  {v:77, at:'2026-10-07 22:30', t:'2回目以降に買ったグミの詳細に、前回買った日と何日ぶりかを表示するようにしました。'},
+  {v:76, at:'2026-10-07 22:26', t:'「JSONで保存」に写真と設定も入るようになりました。別の端末やアドレスに引っ越すときも、写真ごと戻せます。'},
   {v:75, at:'2026-10-07 18:46', t:'カンデミーナグミ スーパーベストやタフグミなど、1袋にいろいろな味が入ったグミを、味ごとではなく1つの商品として選べるようにしました。'},
   {v:74, at:'2026-10-07 18:41', t:'アップデート情報の文章を、です・ます調にしました。'},
   {v:73, at:'2026-10-07 18:36', t:'写真を記録ごとにつけられるようになりました。また買ったグミにも別の写真をつけられます。グミ棚にはいちばん新しい写真が出ます。'},
@@ -566,6 +583,7 @@ const updAt = at => { const m = String(at).match(/^\d{4}-(\d\d)-(\d\d) (\d\d:\d\
 const LS_BIG = 'gumilog.photosBig.v1';
 const LS_STOCK = 'gumilog.showStock.v1';
 const LS_BEST = 'gumilog.bestPicks.v1';
+const LS_POSTTPL = 'gumilog.postTpls.v1';
 // one color theme per gummy color: [light, dark] token sets
 const K = ['bg','surface','surface-2','ink','ink-2','line','accent','accent-ink','accent-soft','accent-text'];
 const THEMES = {
@@ -612,13 +630,59 @@ const colorFromText = t => {
 };
 
 // shared catalog from the artifact's store (kept up to date by Claude); the list above is the offline fallback
-let REMOTE_CAT = [], REMOTE_CAT_AT = '';
+let REMOTE_CAT = [], REMOTE_CAT_AT = '', CAT_PROBLEMS = [];
+/* ---------- catalog sheet (catalog.csv), the same rules as tools/catalog.py ---------- */
+const CAT_COLORS = {'いちご':'straw','オレンジ':'orange','レモン':'lemon','マスカット':'melon','ソーダ':'soda','ぶどう':'grape','コーラ':'cola','ヨーグルト':'milk','虹色':'rainbow'};
+// Excel's plain "CSV" on a Japanese machine is Shift_JIS, "CSV UTF-8" and Numbers are UTF-8
+function decodeSheet(buf){
+  try { return new TextDecoder('utf-8', {fatal:true}).decode(buf).replace(/^\ufeff/, ''); }
+  catch(e){ return new TextDecoder('shift_jis').decode(buf); }
+}
+function csvRows(text){
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++){
+    const ch = text[i];
+    if (q){ if (ch === '"'){ if (text[i+1] === '"'){ cell += '"'; i++; } else q = false; } else cell += ch; continue; }
+    if (ch === '"') q = true;
+    else if (ch === ','){ row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r'){ if (ch === '\r' && text[i+1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell || row.length){ row.push(cell); rows.push(row); }
+  return rows;
+}
+function parseCatCsv(text){
+  const [head = [], ...body] = csvRows(text), col = {}, items = [], problems = [], seen = new Set();
+  head.forEach((h, i) => { col[h.trim()] = i; });
+  if (!('商品名' in col) || !('メーカー' in col)) return {items, problems:['1行目: 「商品名」「メーカー」の列が見つかりません']};
+  const date = v => { const m = v.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/); return m && +m[2] >= 1 && +m[2] <= 12 && +m[3] >= 1 && +m[3] <= 31 ? `${m[1]}-${pad(+m[2])}-${pad(+m[3])}` : null; };
+  body.forEach((cells, i) => {
+    const ln = i + 2, g = h => h in col ? String(cells[col[h]] ?? '').trim() : '';
+    if (!cells.some(c => c.trim())) return;
+    const n = g('商品名'), m = g('メーカー');
+    if (!n || !m){ problems.push(`${ln}行目: 商品名とメーカーは必須です`); return; }
+    const key = m + '|' + n.replace(/\s/g, '');
+    if (seen.has(key)){ problems.push(`${ln}行目: 「${m} ${n}」が重複しています`); return; }
+    seen.add(key);
+    const bad = [], p = g('価格').replace(/[,円]/g, ''), lvl = h => { const v = g(h); if (v && !/^[1-5]$/.test(v)) bad.push(`${h}は1〜5です`); return /^[1-5]$/.test(v) ? +v : null; };
+    if (p && !Number.isFinite(+p)) bad.push('価格が数字ではありません');
+    const tax = g('税'); if (tax && !['税込','税抜'].includes(tax)) bad.push('税は「税込」か「税抜」です');
+    const h = lvl('かたさ'), sr = lvl('すっぱさ');
+    const c = g('色'); if (c && !CAT_COLORS[c]) bad.push(`色「${c}」が使えません`);
+    const rel = g('発売日'); if (rel && !date(rel)) bad.push('発売日の形が違います');
+    if (bad.length) problems.push(`${ln}行目（${n}）: ${bad.join('、')}`);
+    items.push({n, r:g('よみ'), m, f:g('味').split('｜').map(x => x.trim()).filter(Boolean), p: p && Number.isFinite(+p) ? +p : null,
+      pt:{'税込':'incl','税抜':'excl'}[tax] || null, h, s:sr, c:CAT_COLORS[c] || null,
+      rel:rel ? date(rel) : null, url:g('公式URL'), updated:date(g('更新日')) || ''});
+  });
+  return {items, problems};
+}
 const taxed = c => c.p == null || c.p === '' ? null : (c.pt === 'excl' ? Math.round(+c.p * 1.08) : +c.p);
 function catList(){
   const seen = new Set(), out = [];
   const key = c => c.m + '|' + String(c.n).normalize('NFKC').replace(/\s/g, '');
   for (const c of REMOTE_CAT){ const k = key(c); if (seen.has(k)) continue; seen.add(k); out.push({...c, p: taxed(c)}); }
-  for (const c of CATALOG){ const k = key(c); if (seen.has(k)) continue; seen.add(k); out.push({...c, p: taxed(c)}); }
+  if (!REMOTE_CAT.length) for (const c of CATALOG){ const k = key(c); if (seen.has(k)) continue; seen.add(k); out.push({...c, p: taxed(c)}); }
   return out;
 }
 const clampLvl = v => Number.isFinite(+v) && +v >= 1 ? Math.min(5, Math.round(+v)) : null;
@@ -693,6 +757,7 @@ const S = {
   shops: (() => { const v = lsGet(LS_SHOPS, null); return Array.isArray(v) && v.length ? v : [...SHOPS]; })(),
   tags: (() => { const v = upgradeTags(lsGet(LS_TAGS, null)); return Array.isArray(v) ? v : [...TAGS]; })(),
   theme: (() => { const v = lsGet(LS_THEME, 'straw'); return THEMES[v] ? v : 'straw'; })(),
+  postTpls: lsGet(LS_POSTTPL, {}) || {},         // {detail, simple}: the viewer's own Xポスト templates (empty = default)
   bestPicks: lsGet(LS_BEST, {}) || {},          // 'YYYY-MM' -> chosen ベストグミ name
   showStock: lsGet(LS_STOCK, true) !== false,   // 手持ちのグミ on the log screen
   localPhotos: lsGet(LS_PHOTOS, {}),   // name -> data URL (this browser)
@@ -767,6 +832,7 @@ async function connect(){
     if (d && Array.isArray(d.shops) && d.shops.length){ S.shops = d.shops.map(String); lsSet(LS_SHOPS, S.shops); }
     if (d && Array.isArray(d.tags)){ S.tags = upgradeTags(d.tags.map(String)); lsSet(LS_TAGS, S.tags); }
     if (d && d.bestPicks && typeof d.bestPicks === 'object' && JSON.stringify(d.bestPicks) !== JSON.stringify(S.bestPicks)){ S.bestPicks = d.bestPicks; lsSet(LS_BEST, S.bestPicks); renderStats(); }
+    if (d && d.postTpls && typeof d.postTpls === 'object' && JSON.stringify(d.postTpls) !== JSON.stringify(S.postTpls)){ S.postTpls = d.postTpls; lsSet(LS_POSTTPL, S.postTpls); if (!$('#sh-settings').hidden) renderTplEditor(); }
     if (d && typeof d.showStock === 'boolean' && d.showStock !== S.showStock){ S.showStock = d.showStock; lsSet(LS_STOCK, S.showStock); renderLog(); if (!$('#sh-settings').hidden) renderStockToggle(); }
     if (d && THEMES[d.theme] && d.theme !== S.theme){ S.theme = d.theme; lsSet(LS_THEME, S.theme); applyTheme(); renderAll(); jarDraw(); }
     if (d){ renderShopChips(); renderTagChips(); if (!$('#sh-settings').hidden) renderShopEditor(); }
@@ -1401,7 +1467,37 @@ function saveList(key){
 }
 function saveSettingsDoc(){
   if (S.mode !== 'cloud' || !S.cap.col) return;
-  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks}).catch(() => toast('設定を保存できませんでした'));
+  S.cap.col.doc('settings').set({kind:'settings', shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks, postTpls:S.postTpls}).catch(() => toast('設定を保存できませんでした'));
+}
+let tplSaveT = 0, tplFocus = 'detail';
+function renderTplEditor(){
+  const box = $('#tpl-editor'); if (!box) return;
+  box.innerHTML = `<p class="hint" style="margin:0 0 8px">{おいしさ} などは記録の内容に置きかわります。記録していない項目がある行は、ポストするときにその行ごと消えます。</p>
+    ${Object.keys(POST_TPL_DEFAULT).map(k => `<div class="tpl-row"><div class="tpl-h"><b>${POST_TPL_NAMES[k]}</b>
+      <button type="button" class="btn sm ghost" data-tpl-reset="${k}" ${postTplOf(k) === POST_TPL_DEFAULT[k] ? 'disabled' : ''}>初期に戻す</button></div>
+      <textarea class="in tpl-in" data-tpl-edit="${k}" rows="7" aria-label="${POST_TPL_NAMES[k]}のテンプレート">${esc(postTplOf(k))}</textarea></div>`).join('')}
+    <span class="fl-t" style="margin-top:6px">入れられる項目<span class="hint">（タップで、最後に触った欄のカーソル位置に入ります）</span></span>
+    <div class="chips tpl-slots">${POST_SLOTS.map(x => `<button type="button" class="chip" data-slot="${x}">{${x}}</button>`).join('')}</div>`;
+  const save = () => { lsSet(LS_POSTTPL, S.postTpls); clearTimeout(tplSaveT); tplSaveT = setTimeout(saveSettingsDoc, 600); };
+  box.querySelectorAll('[data-tpl-edit]').forEach(ta => {
+    for (const ev of ['focus', 'pointerdown']) ta.addEventListener(ev, () => { tplFocus = ta.dataset.tplEdit; });
+    ta.addEventListener('input', () => {
+      const k = ta.dataset.tplEdit; S.postTpls[k] = ta.value === POST_TPL_DEFAULT[k] ? '' : ta.value; save();
+      box.querySelector(`[data-tpl-reset="${k}"]`).disabled = postTplOf(k) === POST_TPL_DEFAULT[k];
+    });
+  });
+  box.querySelectorAll('[data-tpl-reset]').forEach(b => b.addEventListener('click', () => { S.postTpls[b.dataset.tplReset] = ''; save(); renderTplEditor(); }));
+  // keep the textarea's caret: insert without stealing focus first
+  box.querySelectorAll('[data-slot]').forEach(b => {
+    b.addEventListener('pointerdown', e => e.preventDefault());
+    b.addEventListener('click', () => {
+      const ta = box.querySelector(`[data-tpl-edit="${tplFocus}"]`), ins = `{${b.dataset.slot}}`;
+      const live = document.activeElement === ta;   // without a caret in that box, add to the end
+      const a = live ? ta.selectionStart : ta.value.length, z = live ? ta.selectionEnd : a;
+      ta.value = ta.value.slice(0, a) + ins + ta.value.slice(z); ta.setSelectionRange(a + ins.length, a + ins.length);
+      ta.dispatchEvent(new Event('input'));
+    });
+  });
 }
 function renderStockToggle(){
   const box = $('#stock-toggle'); if (!box) return;
@@ -1743,7 +1839,30 @@ function wireForm(){
   });
 }
 
+/* ---------- suggesting new gummies (Google Form; answers are checked by hand before they reach catalog.csv) ---------- */
+const SUGGEST_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdGzcsBv4JCY3JmN0GrGf9F9Lev5_NrOsamjaFlChoEgS6tMQ/viewform';
+const SUGGEST_FIELDS = {name:'entry.1072942396', maker:'entry.146467384', flavor:'entry.1551221881'};
+function suggestUrl(it){
+  if (!it) return SUGGEST_FORM;
+  const q = new URLSearchParams({usp:'pp_url'});
+  for (const [k, f] of Object.entries(SUGGEST_FIELDS)) if (it[k]) q.set(f, it[k]);
+  return SUGGEST_FORM + '?' + q.toString().replace(/\+/g, '%20');   // a literal + is already %2B
+}
+// a record whose name matches no catalog product (with or without its flavor)
+function inCatalog(name){
+  const n = norm(name);
+  return catList().some(c => norm(c.n) === n || (c.f || []).some(f => norm(`${c.n} ${f}`) === n));
+}
+
 /* ---------- detail ---------- */
+// the purchase of the same gummy just before this one, with how many days apart
+function prevBuy(all, it){
+  const prev = all.filter(x => x.name === it.name && x.id !== it.id && byDateDesc(x, it) > 0).sort(byDateDesc)[0];
+  if (!prev) return '';
+  const [y, m, d] = prev.date.split('-').map(Number);
+  const days = Math.round((parseYmd(it.date) - parseYmd(prev.date)) / 86400000);
+  return `<div class="prev-buy num">前回 ${y}/${m}/${d}<br>${days ? `${days}日ぶり` : '同じ日'}</div>`;
+}
 let delArmed = false;
 function openDetail(id){
   const all = items(); const it = all.find(i => i.id === id); if (!it) return;
@@ -1758,12 +1877,12 @@ function openDetail(id){
     <div class="dt-grid">
       <div><span class="lbl">日付</span><div class="v num">${mdLabel(it.date)}</div></div>
       <div><span class="lbl">お店・値段${it.noSpend ? '<span class="nospend">出費外</span>' : ''}</span><div class="v">${esc(it.shop || '—')}${it.price != null && it.price !== '' ? '・' + yen(+it.price) : ''}</div></div>
+      <div class="dt-buys"><span class="lbl">買った回数</span><div class="v num">${rep.get(it.name)}回</div>${prevBuy(all, it)}</div>
       <div><span class="lbl">かたさ</span>${meter('hard', it.hard||0)}</div>
       <div><span class="lbl">すっぱさ</span>${meter('sour', it.sour||0)}</div>
-      <div><span class="lbl">買った回数</span><div class="v num">${rep.get(it.name)}回</div></div>
-      <div><span class="lbl">色</span><div class="v">${esc((COLORS.find(c => c.k === it.color)||COLORS[0]).n)}</div></div>
     </div>
     ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
+    ${!it.demo && !inCatalog(it.name) ? `<p class="suggest hint">カタログにないグミです。<a href="${esc(suggestUrl(it))}" target="_blank" rel="noopener">カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。</p>` : ''}
     <div class="dt-status"><span class="lbl">食べた？</span><div class="seg" id="dt-status" role="radiogroup" aria-label="食べたかどうか">${STATUS.map(x => `<button type="button" role="radio" data-status="${x.k}" aria-checked="${statusOf(it) === x.k}" ${it.demo ? 'disabled' : ''}>${x.n}</button>`).join('')}</div>
       ${it.demo ? '' : `<p class="hint" id="dt-rate-hint" style="margin:0" ${statusOf(it) !== 'unopened' && !it.rating ? '' : 'hidden'}>食べたら「直す」からおいしさを記録しましょう</p>`}</div>
     ${it.demo ? '' : `<div class="photo-row">
@@ -1820,16 +1939,27 @@ function xLen(s){ let n = 0; for (const ch of s){ const c = ch.codePointAt(0); n
 // every template: product name and comment first, no maker/flavor/number, the same two hashtags
 const POST_TAGS = '#ぐみろぐ #グミ';
 const dotsTxt = n => '●'.repeat(n) + '○'.repeat(5 - n);
+// templates are plain text with {項目} slots; a line with any slot that is empty for this record is dropped
+const POST_TPL_DEFAULT = {
+  detail: `【{商品名}】\n{ひとこと}\nおいしさ：{おいしさ}\nかたさ：{かたさ}\nすっぱさ：{すっぱさ}\n購入場所：{お店}\n\n${POST_TAGS}`,
+  simple: `【{商品名}】\n{ひとこと}\n${POST_TAGS}`,
+};
+const POST_TPL_NAMES = {detail:'くわしく', simple:'シンプル'};
+const POST_SLOTS = ['商品名','ひとこと','おいしさ','かたさ','すっぱさ','お店','値段','メーカー','味','日付','買った回数','タグ'];
+const postTplOf = k => (typeof S.postTpls[k] === 'string' && S.postTpls[k].trim()) ? S.postTpls[k] : POST_TPL_DEFAULT[k];
+function slotValues(it){
+  const d = parseYmd(it.date);
+  return {商品名:it.name, ひとこと:it.note || '', おいしさ:it.rating ? starsTxt(it.rating) : '', かたさ:it.hard ? dotsTxt(it.hard) : '', すっぱさ:it.sour ? dotsTxt(it.sour) : '',
+    お店:it.shop || '', 値段:it.price != null && it.price !== '' ? yen(+it.price) : '', メーカー:it.maker || '', 味:it.flavor || '',
+    日付:`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`, 買った回数:`${items().filter(x => x.name === it.name && byDateDesc(x, it) >= 0).length || 1}回目`,
+    タグ:(it.tags || []).map(t => '#' + t.replace(/\s+/g, '')).join(' ')};
+}
 function itemPost(it, tpl){
-  const head = [`【${it.name}】`, it.note || null];
-  if (tpl === 'simple') return [...head, POST_TAGS].filter(Boolean).join('\n');
-  return [...head,
-    it.rating ? `おいしさ：${starsTxt(it.rating)}` : null,
-    it.hard ? `かたさ：${dotsTxt(it.hard)}` : null,
-    it.sour ? `すっぱさ：${dotsTxt(it.sour)}` : null,
-    it.shop ? `購入場所：${it.shop}` : null,
-    '',
-    POST_TAGS].filter(v => v !== null).join('\n').replace(/\n{3,}/g, '\n\n');
+  const v = slotValues(it), re = /\{([^{}\n]{1,10})\}/g;
+  return postTplOf(tpl).split('\n')
+    .filter(line => { const used = [...line.matchAll(re)].map(m => m[1]).filter(k => k in v); return used.every(k => v[k]); })
+    .map(line => line.replace(re, (m, k) => k in v ? v[k] : m))
+    .join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 function monthPost(){
   const all = items(), key = ym(todayStr()), ms = monthStats(all, key);
@@ -1954,7 +2084,7 @@ function wirePost(){
 
 /* ---------- settings ---------- */
 function renderSettings(){
-  setTimeout(() => { renderShopEditor(); renderThemePicker(); renderStockToggle(); }, 0);
+  setTimeout(() => { renderShopEditor(); renderThemePicker(); renderStockToggle(); renderTplEditor(); }, 0);
   const real = realItems();
   const dl = !!S.cap.downloads || !IN_CLAUDE;   // outside Claude a normal browser download works
   $('#settings-body').innerHTML = `
@@ -1965,13 +2095,17 @@ function renderSettings(){
     <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
     <div class="panel"><h3>グミカタログ</h3>
       <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
+      <div class="btn-row"><a class="btn sm" href="${esc(SUGGEST_FORM)}" target="_blank" rel="noopener">新しいグミを教える</a></div>
+      <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
+      ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
       <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
     <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
     <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
+    <div class="panel"><h3>Xにポストの文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
     <div class="panel"><h3>書き出し</h3>
-      <p>${dl ? 'バックアップ用のJSONか、表計算ソフトで開けるCSVを保存できます。' : 'この画面ではファイルを保存できません。'}</p>
+      <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
       <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
-    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録を戻せます。同じ記録は重複しません。</p>
+    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録と写真を戻せます。同じ記録は重複せず、すでにある写真はそのままです。</p>
       <div class="btn-row"><label class="btn sm" for="im-file">JSONを読み込む</label><input type="file" id="im-file" accept="application/json,.json" hidden></div></div>
     <div class="panel"><h3>アップデート情報<span class="s">最近の15件</span></h3>
       <ul class="updates">${UPDATES.slice(0, 15).map(u => `<li><span class="u-at num">${esc(updAt(u.at))}<span class="u-v">Ver.${u.v}</span></span><span class="u-t">${esc(u.t)}</span></li>`).join('')}</ul></div>`;
@@ -1985,7 +2119,14 @@ function renderSettings(){
   };
   const stamp = todayStr().replace(/-/g,'');
   const clean = () => realItems().map(i => { const o = {...i}; delete o.photoData; delete o.photo; return o; });
-  $('#ex-json').onclick = () => save(`gumilog-${stamp}.json`, JSON.stringify(clean(), null, 2));
+  // one file carries records, photos (the small ones; the big copies expire anyway) and settings
+  $('#ex-json').onclick = () => {
+    const recs = clean(), photos = {};
+    for (const k of new Set(recs.flatMap(i => [ownKey(i), i.name]))) if (photoOf(k)) photos[k] = photoOf(k);
+    const out = {app:'gumilog', format:2, exported:new Date().toISOString(), items:recs, photos,
+      settings:{shops:S.shops, tags:S.tags, theme:S.theme, showStock:S.showStock, bestPicks:S.bestPicks, postTpls:S.postTpls}};
+    save(`gumilog-${stamp}.json`, JSON.stringify(out));
+  };
   $('#ex-csv').onclick = () => {
     const cols = ['date','name','maker','flavor','shop','price','noSpend','status','rating','hard','sour','tags','note'];
     const head = ['日付','名前','メーカー','味','お店','値段','出費から除外','食べた？','おいしさ','かたさ','すっぱさ','タグ','ひとこと'];
@@ -1996,15 +2137,35 @@ function renderSettings(){
   $('#im-file').onchange = async e => {
     const file = e.target.files[0]; if (!file) return;
     try {
-      const arr = JSON.parse(await file.text()); if (!Array.isArray(arr)) throw 0;
-      const have = new Set(realItems().map(i => i.id)); let n = 0;
+      const j = JSON.parse(await file.text());
+      // older files are a bare array of records
+      const arr = Array.isArray(j) ? j : j && Array.isArray(j.items) ? j.items : null; if (!arr) throw 0;
+      const have = new Set(realItems().map(i => i.id)); let n = 0, np = 0, pf = 0;
       for (const raw of arr){
         if (!raw || typeof raw.name !== 'string' || typeof raw.date !== 'string') continue;
         const it = {id: (typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,60}$/.test(raw.id) && raw.id !== 'settings') ? raw.id : newId(), kind:'gummy', name:raw.name.slice(0,120), maker:String(raw.maker||'').slice(0,60), flavor:String(raw.flavor||'').slice(0,60), color:COLORS.some(c => c.k === raw.color) ? raw.color : 'straw', shop:String(raw.shop||'').slice(0,60), price: raw.price == null || raw.price === '' ? null : +raw.price || 0, date:/^\d{4}-\d{2}-\d{2}$/.test(raw.date) ? raw.date : todayStr(), rating:clampLvl(raw.rating), hard:clampLvl(raw.hard), sour:clampLvl(raw.sour), status:STATUS.some(x => x.k === raw.status) ? raw.status : 'eating', noSpend: raw.noSpend === true, tags:Array.isArray(raw.tags) ? raw.tags.map(String).slice(0,10) : [], note:String(raw.note||'').slice(0,1000), createdAt:+raw.createdAt || Date.now()};
         if (have.has(it.id)) continue;
         await putItem(it); have.add(it.id); n++;
       }
-      toast(`${n}件を読み込みました`); renderSettings();
+      const ph = j && !Array.isArray(j) && j.photos && typeof j.photos === 'object' ? j.photos : {};
+      for (const [k, d] of Object.entries(ph)){
+        if (typeof k !== 'string' || !k || k.length > 130 || typeof d !== 'string' || !/^data:image\/(jpeg|png|webp);base64,/.test(d) || d.length > 250000 || photoOf(k)) continue;
+        const rec = realItems().find(i => ownKey(i) === k || i.name === k);
+        try { await setPhoto(k, d, null, rec ? rec.name : k); np++; } catch(err){ pf++; }
+      }
+      const st = j && !Array.isArray(j) && j.settings;
+      if (st && typeof st === 'object'){
+        const add = (cur, more) => [...cur, ...(Array.isArray(more) ? more.map(String).filter(x => x && !cur.includes(x)) : [])];
+        S.shops = add(S.shops, st.shops); lsSet(LS_SHOPS, S.shops);
+        S.tags = add(S.tags, st.tags); lsSet(LS_TAGS, S.tags);
+        if (st.bestPicks && typeof st.bestPicks === 'object'){ for (const [m, v] of Object.entries(st.bestPicks)) if (!S.bestPicks[m] && typeof v === 'string') S.bestPicks[m] = v; lsSet(LS_BEST, S.bestPicks); }
+        if (S.theme === 'straw' && THEMES[st.theme]){ S.theme = st.theme; lsSet(LS_THEME, S.theme); applyTheme(); jarDraw(); }
+        if (typeof st.showStock === 'boolean'){ S.showStock = st.showStock; lsSet(LS_STOCK, S.showStock); }
+        if (st.postTpls && typeof st.postTpls === 'object') for (const k of Object.keys(POST_TPL_DEFAULT)) if (!S.postTpls[k] && typeof st.postTpls[k] === 'string') S.postTpls[k] = st.postTpls[k];
+        lsSet(LS_POSTTPL, S.postTpls);
+        saveSettingsDoc(); renderShopChips(); renderTagChips();
+      }
+      toast(`${n}件の記録${np ? `と${np}枚の写真` : ''}を読み込みました${pf ? `（${pf}枚の写真は容量がいっぱいで入りませんでした）` : ''}`); renderAll(); renderSettings();
     } catch(err){ toast('読み込めませんでした。ぐみろぐで書き出したJSONを選んでください'); }
   };
 }
@@ -2075,11 +2236,17 @@ if (!IN_CLAUDE){
   // a home-screen web app on iOS keeps showing its cached page, so look for a newer build and jump to it
   checkUpdate();
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkUpdate(); });
-  // on the public site, catalog.json next to the page carries catalog updates without touching the app
-  fetch('catalog.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(j => {
+  // on the public site, the catalog sheet (catalog.csv) next to the page carries catalog updates without touching the app;
+  // catalog.json is the older format, read only when the sheet is missing
+  fetch('catalog.csv', {cache:'no-cache'}).then(r => r.ok ? r.arrayBuffer() : null).then(buf => {
+    if (!buf) throw 0;
+    const {items, problems} = parseCatCsv(decodeSheet(buf)); if (!items.length) throw 0;
+    REMOTE_CAT = items.filter(isCat).map(normCat); REMOTE_CAT_AT = items.reduce((a, c) => c.updated > a ? c.updated : a, '');
+    CAT_PROBLEMS = problems; renderAll();
+  }).catch(() => fetch('catalog.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(j => {
     const arr = Array.isArray(j) ? j : (j && Array.isArray(j.items) ? j.items : null); if (!arr) return;
     REMOTE_CAT = arr.filter(isCat).map(normCat); REMOTE_CAT_AT = (j && j.updated) || ''; renderAll();
-  }).catch(() => {});
+  })).catch(() => {});
 }
 })();
 </script>
