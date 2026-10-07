@@ -281,6 +281,10 @@ input[type=range]{width:100%;accent-color:var(--accent-text)}
 /* post */
 .post-prev{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px}
 .post-prev textarea{border:0;background:transparent;width:100%;min-height:170px;resize:vertical;padding:0;line-height:1.65}
+.photo-share{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px}
+.photo-share img{width:56px;height:70px;object-fit:cover;border-radius:8px;flex:none}
+.ps-body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ps-body b{font-size:14px}
 .post-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:6px}
 .post-meta .over{color:var(--accent-text);font-weight:700}
 .hint{font-size:12px;color:var(--ink-2)}
@@ -444,7 +448,19 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
         <textarea id="post-text" aria-label="ポスト本文"></textarea>
         <div class="post-meta"><span id="post-ai-state"></span><span id="post-count" class="num"></span></div>
       </div>
-      <p class="hint">「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。写真はXの画面で追加してください。</p>
+      <div class="photo-share" id="post-photo" hidden>
+        <img id="post-photo-img" alt="">
+        <div class="ps-body">
+          <b>写真つきでポスト</b>
+          <span class="hint" id="post-photo-hint"></span>
+          <div class="btn-row">
+            <button class="btn sm x" type="button" id="post-share" hidden>写真つきでシェア</button>
+            <button class="btn sm ghost" type="button" id="post-photo-copy" hidden>写真をコピー</button>
+            <button class="btn sm ghost" type="button" id="post-photo-save" hidden>写真を保存</button>
+          </div>
+        </div>
+      </div>
+      <p class="hint" id="post-hint">「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。</p>
       <div class="btn-row">
         <a class="btn x" id="post-open" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">Xで開く</a>
         <button class="btn ghost" id="post-copy">コピー</button>
@@ -511,6 +527,7 @@ const LS_SHOPS = 'gumilog.shops.v1';
 const LS_TAGS = 'gumilog.tags.v1';
 const LS_THEME = 'gumilog.theme.v1';
 const LS_PHOTOS = 'gumilog.photos.v1';
+const LS_BIG = 'gumilog.photosBig.v1';
 const LS_STOCK = 'gumilog.showStock.v1';
 const LS_BEST = 'gumilog.bestPicks.v1';
 // one color theme per gummy color: [light, dark] token sets
@@ -637,6 +654,8 @@ const S = {
   showStock: lsGet(LS_STOCK, true) !== false,   // 手持ちのグミ on the log screen
   localPhotos: lsGet(LS_PHOTOS, {}),   // name -> data URL (this browser)
   cloudPhotos: {},                     // name -> data URL (account)
+  localBig: lsGet(LS_BIG, {}),         // name -> {data, at}: full-size copy for posting, kept 3 days
+  cloudBig: {},
 };
 const realItems = () => (S.mode === 'cloud' ? S.cloud : S.local) || [];
 const isDemo = () => realItems().length === 0;
@@ -711,6 +730,14 @@ async function connect(){
   S.unsubs.push(S.cap.col.where('kind','==','photo').onSnapshot(snap => {
     const m = {}; snap.docs.forEach(d => { const v = d.data(); if (v && typeof v.name === 'string' && typeof v.data === 'string' && v.data.startsWith('data:image/')) m[v.name] = v.data; });
     S.cloudPhotos = m; renderAll();
+  }, () => {}));
+  S.unsubs.push(S.cap.col.where('kind','==','photoBig').onSnapshot(snap => {
+    const m = {};
+    snap.docs.forEach(d => { const v = d.data();
+      if (!v || typeof v.name !== 'string' || typeof v.data !== 'string' || !v.data.startsWith('data:image/')) return;
+      if (bigExpired(v.at)) { S.cap.col.doc(d.id).delete().catch(() => {}); return; }
+      m[v.name] = {data:v.data, at:v.at}; });
+    S.cloudBig = m;
   }, () => {}));
   S.unsubs.push(S.cap.col.where('kind','==','gummy').onSnapshot(snap => {
     S.cloud = snap.docs.map(d => ({id:d.id, ...d.data()}));
@@ -1028,6 +1055,18 @@ function renderStats(){
 // photos are small JPEG data URLs kept next to the records, so no separate file storage is needed
 const photoOf = name => (S.mode === 'cloud' ? S.cloudPhotos[name] : S.localPhotos[name]) || '';
 const photoDocId = name => 'p' + hash('photo|' + name).toString(36) + hash(name + '|photo').toString(36);
+// the full-size copy is only for posting to X: it is dropped 3 days after it was added, the small one stays
+const BIG_KEEP = 3 * 86400000;
+const bigExpired = at => !(at > 0) || Date.now() - at > BIG_KEEP;
+const bigDocId = name => 'b' + photoDocId(name).slice(1);
+function bigOf(name){ const b = (S.mode === 'cloud' ? S.cloudBig : S.localBig)[name]; return b && !bigExpired(b.at) ? b : null; }
+const postPhotoOf = name => (bigOf(name) || {}).data || photoOf(name);
+function pruneLocalBig(){
+  let changed = false;
+  for (const [k, v] of Object.entries(S.localBig)) if (!v || bigExpired(v.at)){ delete S.localBig[k]; changed = true; }
+  if (changed) lsSet(LS_BIG, S.localBig);
+}
+pruneLocalBig();
 /* ---------- photo crop editor: pan, zoom, rotate in 90° steps ---------- */
 const CROP = { img:null, rot:0, zoom:1, ox:0, oy:0, w:0, h:0, done:null, ptrs:new Map(), pinch:0 };
 function loadImage(file){
@@ -1070,14 +1109,21 @@ async function openCrop(file, color){
   requestAnimationFrame(() => { cropSize(); cropClamp(); cropDraw(); });
   return new Promise(res => { CROP.done = res; });
 }
+function cropRender(w, max, q0){
+  // same 4:5 frame as on screen
+  const h = Math.round(w * 5 / 4), c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+  ctx.imageSmoothingQuality = 'high';
+  cropPaint(ctx, w / CROP.w);
+  let q = q0, out = c.toDataURL('image/jpeg', q);
+  while (out.length > max && q > .45){ q -= .08; out = c.toDataURL('image/jpeg', q); }
+  return out.length > max ? '' : out;
+}
 function cropResult(){
-  // 256x320 output, same 4:5 frame as on screen
-  const c = document.createElement('canvas'); c.width = 256; c.height = 320;
-  const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 256, 320);
-  cropPaint(ctx, 256 / CROP.w);
-  let q = .82, out = c.toDataURL('image/jpeg', q);
-  while (out.length > 60000 && q > .4){ q -= .1; out = c.toDataURL('image/jpeg', q); }
-  return out;
+  // small 256x320 for the shelf and log, plus a 1080x1350 copy for posting (smaller if it will not fit)
+  const small = cropRender(256, 60000, .82) || cropRender(192, 60000, .7);
+  const big = cropRender(1080, 230000, .85) || cropRender(810, 230000, .8);
+  return {small, big};
 }
 function wireCrop(){
   const v = $('#crop-view');
@@ -1105,11 +1151,14 @@ function wireCrop(){
   new MutationObserver(() => { if ($('#sh-crop').hidden && CROP.done){ const d = CROP.done; CROP.done = null; d(null); } })
     .observe($('#sh-crop'), {attributes:true, attributeFilter:['hidden']});
 }
-async function setPhoto(name, data){
+async function setPhoto(name, data, big){
+  const at = Date.now();
   if (S.mode === 'cloud'){
     try {
-      const ref = S.cap.col.doc(photoDocId(name));
+      const ref = S.cap.col.doc(photoDocId(name)), bref = S.cap.col.doc(bigDocId(name));
       if (data) await ref.set({kind:'photo', name, data, updated:todayStr()}); else await ref.delete();
+      if (data && big) await bref.set({kind:'photoBig', name, data:big, at}).catch(() => {});
+      else await bref.delete().catch(() => {});
       return;
     } catch(err){
       if (!err || err.code !== 'invalid_argument') throw err;
@@ -1118,6 +1167,9 @@ async function setPhoto(name, data){
   }
   if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
   if (!lsSet(LS_PHOTOS, S.localPhotos)){ delete S.localPhotos[name]; throw {code:'local_full'}; }
+  pruneLocalBig();
+  if (data && big) S.localBig[name] = {data:big, at}; else delete S.localBig[name];
+  if (!lsSet(LS_BIG, S.localBig)){ delete S.localBig[name]; lsSet(LS_BIG, S.localBig); }
   renderAll();
 }
 // the photo gets a frame in the gummy's own color so the shelf keeps its colors
@@ -1633,7 +1685,7 @@ function openDetail(id){
       <label class="btn sm ghost" for="dt-photo">${photoOf(it.name) ? '写真を変える' : '自分で撮った写真をつける'}</label>
       <input type="file" id="dt-photo" accept="image/*" hidden>
       ${photoOf(it.name) ? '<button class="btn sm ghost" id="dt-photo-del" type="button">写真を外す</button>' : ''}
-      <span class="hint">写真は「${esc(it.name)}」の画像として、グミ棚とログに使われます。</span>
+      <span class="hint">写真は「${esc(it.name)}」の画像として、グミ棚とログに使われます。${bigNote(it.name)}</span>
     </div>`}
     <div class="sheet-actions">
       <button class="btn primary" id="dt-post">Xにポスト</button>
@@ -1644,8 +1696,8 @@ function openDetail(id){
     $('#dt-photo').onchange = async e => {
       const f = e.target.files[0]; e.target.value = ''; if (!f) return;
       try {
-        const data = await openCrop(f, it.color); if (!data) return;
-        await setPhoto(it.name, data); toast('写真をつけました'); openDetail(it.id);
+        const out = await openCrop(f, it.color); if (!out || !out.small) return;
+        await setPhoto(it.name, out.small, out.big); toast('写真をつけました'); openDetail(it.id);
       }
       catch(err){ toast(err && err.code === 'local_full' ? 'この端末の保存容量がいっぱいで保存できませんでした' : 'この写真は保存できませんでした'); }
     };
@@ -1714,9 +1766,81 @@ function openPost(it, kind){
   $('#post-ai-state').textContent = '';
   if (P.kind === 'month') setPostText(monthPost());
   else setPostText(itemPost(it, P.tpl));
+  setupPhotoShare();
   openSheet('#sh-post');
 }
+/* ---------- posting with the gummy's own photo ----------
+   X's web intent only carries text, so the photo travels another way:
+   1) the phone's share sheet (photo + text straight into the X app) where the page may use it,
+   2) else the photo on the clipboard, pasted into X's composer,
+   3) else the photo saved as a file to pick in X. */
+// decode by hand: the artifact frame may block fetch() even for data: URLs
+const dataUrlToBlob = async d => {
+  const [head, b64] = d.split(','), type = (head.match(/data:([^;]+)/) || [])[1] || 'image/jpeg';
+  const bin = atob(b64), buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return new Blob([buf], {type});
+};
+function bigNote(name){
+  const b = bigOf(name); if (!b) return '';
+  const d = new Date(b.at + BIG_KEEP);
+  return `Xにポストする用の大きい写真は${d.getMonth()+1}/${d.getDate()}まで残り、そのあとは小さい写真だけになります。`;
+}
+function photoFile(){
+  const d = P.item && postPhotoOf(P.item.name); if (!d) return null;
+  return dataUrlToBlob(d).then(b => new File([b], 'gumilog.jpg', {type:'image/jpeg'}));
+}
+function canShareFiles(){
+  try { return !!(navigator.canShare && navigator.canShare({files:[new File([new Blob(['x'], {type:'image/jpeg'})], 'a.jpg', {type:'image/jpeg'})]})); }
+  catch(e){ return false; }
+}
+function setupPhotoShare(){
+  const d = P.kind === 'item' && P.item && photoOf(P.item.name);
+  $('#post-photo').hidden = !d;
+  if (!d) return;
+  $('#post-photo-img').src = d;
+  const share = canShareFiles(), copy = !!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write);
+  $('#post-share').hidden = !share;
+  $('#post-photo-copy').hidden = share || !copy;
+  $('#post-photo-save').hidden = share;
+  $('#post-photo-hint').textContent = share ? '共有画面でXを選ぶと、写真と文章が入った投稿画面が開きます。'
+    : copy ? '写真をコピーしてから「Xで開く」を押し、Xの投稿画面で長押しして「ペースト」すると写真が付きます。'
+    : '写真を保存してから「Xで開く」を押し、Xの投稿画面で写真を選んでください。';
+  if (!bigOf(P.item.name)) $('#post-photo-hint').textContent += '（大きい写真は登録から3日で消えるので、小さい写真で投稿されます）';
+}
+async function pngFromDataUrl(d){
+  const img = new Image(); img.src = d; await img.decode();
+  const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+  c.getContext('2d').drawImage(img, 0, 0);
+  return new Promise(r => c.toBlob(r, 'image/png'));
+}
+function wirePhotoShare(){
+  $('#post-share').addEventListener('click', async () => {
+    try { const f = await photoFile(); await navigator.share({files:[f], text:$('#post-text').value}); }
+    catch(e){ if (e && e.name !== 'AbortError') toast('共有できませんでした。「Xで開く」から投稿してください'); }
+  });
+  $('#post-photo-copy').addEventListener('click', () => {
+    const d = postPhotoOf(P.item.name);
+    // the item must be created inside the tap; Safari accepts a promise for the image
+    try {
+      navigator.clipboard.write([new ClipboardItem({'image/png': pngFromDataUrl(d)})])
+        .then(() => toast('写真をコピーしました。Xの投稿画面で長押し→ペースト'), () => { toast('この画面ではコピーできませんでした。写真を保存します'); savePhoto(); });
+    } catch(e){ savePhoto(); }
+  });
+  $('#post-photo-save').addEventListener('click', savePhoto);
+}
+async function savePhoto(){
+  const f = await photoFile(); if (!f) return;
+  const name = `gumilog-${todayStr().replace(/-/g,'')}.jpg`;
+  if (S.cap.downloads){
+    try { await S.cap.downloads.save({filename:name, data:f}); toast('写真を保存しました'); } catch(e){ if (e && e.code !== 'declined') toast('保存できませんでした'); }
+    return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(f); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
 function wirePost(){
+  wirePhotoShare();
   $('#post-text').addEventListener('input', updatePost);
   $('#post-tpl').addEventListener('click', e => { const b = e.target.closest('[data-tpl]'); if (!b) return; P.tpl = b.dataset.tpl; document.querySelectorAll('#post-tpl .chip').forEach(c => c.setAttribute('aria-pressed', c === b)); setPostText(itemPost(P.item, P.tpl)); });
   $('#post-copy').addEventListener('click', () => {
@@ -1818,7 +1942,9 @@ $('#app').addEventListener('click', async e => {
         await S.cap.col.doc(it.id).set(body);
       }
       for (const [name, data] of Object.entries(S.localPhotos)) await S.cap.col.doc(photoDocId(name)).set({kind:'photo', name, data, updated:todayStr()});
-      S.local = []; lsSet(LS_KEY, []); S.localPhotos = {}; lsSet(LS_PHOTOS, {}); toast('クラウドに移しました'); renderAll();
+      pruneLocalBig();
+      for (const [name, b] of Object.entries(S.localBig)) await S.cap.col.doc(bigDocId(name)).set({kind:'photoBig', name, data:b.data, at:b.at}).catch(() => {});
+      S.local = []; lsSet(LS_KEY, []); S.localPhotos = {}; lsSet(LS_PHOTOS, {}); S.localBig = {}; lsSet(LS_BIG, {}); toast('クラウドに移しました'); renderAll();
     } catch(err){ toast('途中で止まりました。もう一度押すと続きから移します'); btn.disabled = false; btn.textContent = 'クラウドに移す'; }
   }
 });
