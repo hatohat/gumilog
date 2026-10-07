@@ -48,15 +48,10 @@
    "n": "ポイフル",
    "r": "ぽいふる",
    "m": "明治",
-   "f": [
-    "ラズベリー",
-    "レモン",
-    "青リンゴ",
-    "グレープ"
-   ],
    "h": 2,
    "url": "https://www.meiji.co.jp/products/candy_gum/04439.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "ポイフルパウチ",
@@ -398,14 +393,10 @@
    "n": "カンデミーナグミ スーパーベスト",
    "r": "かんでみーなぐみ すーぱーべすと",
    "m": "カンロ",
-   "f": [
-    "ラムネ",
-    "グレープソーダ",
-    "コーラ"
-   ],
    "h": 4,
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1618_ext_2_0.pdf",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "カンデミーナグミ ジューシーウェーブ",
@@ -1029,31 +1020,19 @@
    "n": "つぶグミ",
    "r": "つぶぐみ",
    "m": "春日井製菓",
-   "f": [
-    "グレープ",
-    "アップル",
-    "マスカット",
-    "ピーチ",
-    "グレープフルーツ"
-   ],
    "h": 4,
    "url": "https://www.kasugai.co.jp/product/tsubugumi_fruits/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "つぶグミソーダ",
    "r": "つぶぐみそーだ",
    "m": "春日井製菓",
-   "f": [
-    "コーラ",
-    "サイダー",
-    "メロンソーダ",
-    "グレープソーダ",
-    "ジンジャーエール"
-   ],
    "h": 4,
    "url": "https://www.kasugai.co.jp/product/gumi_tubugumi_soda/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "つぶグミヨーグルト",
@@ -1090,14 +1069,10 @@
    "n": "タフグミ",
    "r": "たふぐみ",
    "m": "カバヤ食品",
-   "f": [
-    "コーラ",
-    "ソーダ",
-    "エナジードリンク"
-   ],
    "h": 4,
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3140.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "タフグミ グレーピーパンチ",
@@ -1121,14 +1096,10 @@
    "n": "タフグミ MEGA",
    "r": "たふぐみめが",
    "m": "カバヤ食品",
-   "f": [
-    "コーラ",
-    "ソーダ",
-    "エナジードリンク"
-   ],
    "h": 4,
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3145.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "タフグミ PRO カフェイン",
@@ -1384,35 +1355,21 @@
    "n": "ゴールドベア 80g",
    "r": "ごーるどべあ はりぼー",
    "m": "ハリボー",
-   "f": [
-    "イチゴ",
-    "リンゴ",
-    "オレンジ",
-    "ラズベリー",
-    "パイナップル",
-    "レモン"
-   ],
    "p": 218,
    "pt": "excl",
    "url": "https://www.mitsubishi-shokuhin.com/confectionery/haribo/20220803087052.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "ゴールドベア 200g",
    "r": "ごーるどべあ はりぼー",
    "m": "ハリボー",
-   "f": [
-    "イチゴ",
-    "リンゴ",
-    "オレンジ",
-    "ラズベリー",
-    "パイナップル",
-    "レモン"
-   ],
    "p": 448,
    "pt": "excl",
    "url": "https://www.mitsubishi-shokuhin.com/confectionery/haribo/20220803087106.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-07",
+   "c": "rainbow"
   },
   {
    "n": "ハッピーコーラ 80g",
