@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="28af9aae5f"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="eb7a6c74ce"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -554,6 +554,7 @@ const LS_THEME = 'gumilog.theme.v1';
 const LS_PHOTOS = 'gumilog.photos.v1';
 // newest first; shown under 設定 → アップデート情報 (times in JST)
 const UPDATES = [
+  {v:83, at:'2026-10-07 23:42', t:'グミの詳細からカタログに提案するとき、値段もフォームに入るようにしました。'},
   {v:82, at:'2026-10-07 23:12', t:'カタログにないグミを、フォームから教えられるようになりました（設定の「グミカタログ」や、カタログにないグミの詳細から開けます）。'},
   {v:81, at:'2026-10-07 22:47', t:'グミカタログを表（catalog.csv）で管理するようにしました。表を直してアップロードするだけで、候補に反映されます。'},
   {v:80, at:'2026-10-07 22:38', t:'設定から「Xにポスト」の文章のテンプレートを自由に変えられるようになりました。タグの初期候補から「微妙」をなくしました。'},
@@ -1841,11 +1842,11 @@ function wireForm(){
 
 /* ---------- suggesting new gummies (Google Form; answers are checked by hand before they reach catalog.csv) ---------- */
 const SUGGEST_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdGzcsBv4JCY3JmN0GrGf9F9Lev5_NrOsamjaFlChoEgS6tMQ/viewform';
-const SUGGEST_FIELDS = {name:'entry.1072942396', maker:'entry.146467384', flavor:'entry.1551221881'};
+const SUGGEST_FIELDS = {name:'entry.1072942396', maker:'entry.146467384', flavor:'entry.1551221881', price:'entry.303233871'};
 function suggestUrl(it){
   if (!it) return SUGGEST_FORM;
   const q = new URLSearchParams({usp:'pp_url'});
-  for (const [k, f] of Object.entries(SUGGEST_FIELDS)) if (it[k]) q.set(f, it[k]);
+  for (const [k, f] of Object.entries(SUGGEST_FIELDS)) if (it[k] != null && it[k] !== '') q.set(f, String(it[k]));
   return SUGGEST_FORM + '?' + q.toString().replace(/\+/g, '%20');   // a literal + is already %2B
 }
 // a record whose name matches no catalog product (with or without its flavor)
