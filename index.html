@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="9d28504c97"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="962e1eeb26"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -184,7 +184,28 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .type-line b{font-family:var(--f-display);font-weight:400;font-size:18px;color:var(--accent-text)}
 
 /* gummy shelf (stamp book) */
-.shelf-sum{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.shelf-sum{display:block}
+.shelf-sum > div{display:inline-flex;align-items:baseline;gap:4px;margin:0 12px 4px 0}
+/* the image button sits at the right end of the first line; the numbers flow around it */
+.shelf-sum .shelf-img{float:right;margin:2px 0 6px 6px;padding:7px 10px;font-size:12.5px;gap:5px}
+.shelf-sum .shelf-img svg{width:16px;height:16px}
+.si-seg{margin-bottom:12px}
+.btn-row .month-img{padding:6px 12px;font-size:12px;gap:5px}
+.btn-row .month-img svg{width:15px;height:15px}
+.sg-text{margin:0 0 8px;font-weight:700;line-height:1.6}
+.sf-fail{margin:10px 0 0;font-size:13px;color:var(--ink-2);line-height:1.6}
+.sf-fail .btn{margin-top:6px}
+.sg-actions{display:flex;gap:10px;margin-top:12px}
+.sg-actions .btn.ghost{flex:0 0 auto;padding-inline:20px}
+.sg-actions .btn.primary{flex:1}
+.crop-actions{display:flex;gap:10px}
+.crop-actions .btn.ghost{flex:0 0 auto;padding-inline:18px}
+.crop-actions .btn.primary{flex:1}
+.si-prev{background:var(--surface-2);border-radius:16px;padding:10px;display:grid;place-items:center;min-height:200px}
+.si-prev img{display:block;width:100%;height:auto;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.si-prev img:not([src]){display:none}
+.si-btns{margin-top:12px}
+.si-btns .btn{flex:1}
 .shelf-sum b{font-family:var(--f-display);font-weight:400;font-size:28px;color:var(--accent-text)}
 .shelf-sum span{font-size:13px;color:var(--ink-2)}
 .shelf-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -218,9 +239,8 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .sheet-p{background:var(--bg);width:100%;max-width:600px;max-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;border-radius:24px 24px 0 0;padding:0 16px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
 @keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.sheet-p{animation:none}.fab{transition:none}}
-.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:12px auto 10px}
 /* title + 閉じる stay pinned while a tall sheet scrolls */
-.sheet-h{display:flex;align-items:center;gap:10px;margin:0 -16px 12px;padding:6px 16px 8px;position:sticky;top:0;z-index:3;background:var(--bg)}
+.sheet-h{display:flex;align-items:center;gap:10px;margin:0 -16px 12px;padding:18px 16px 8px;position:sticky;top:0;z-index:3;background:var(--bg)}
 .sheet-h h2{font-family:var(--f-display);font-weight:400;font-size:20px;flex:1}
 .form{display:flex;flex-direction:column;gap:14px}
 .f{display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -284,6 +304,15 @@ input[type=range]{width:100%;accent-color:var(--accent-text)}
 /* detail */
 .dt-hero{display:flex;gap:14px;align-items:center}
 .photo-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+/* photo prompts: a dashed accent button with a camera, and a camera badge on the photo frame itself */
+.photo-cta{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px dashed var(--accent);background:var(--accent-soft);color:var(--accent-text);font-weight:700;font-size:14px;cursor:pointer}
+.photo-cta svg,.btn .cam{width:18px;height:18px;flex:none}
+.cam{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gf-tap{position:relative;display:inline-block;cursor:pointer;flex:none}
+.cam-badge{position:absolute;right:-6px;bottom:-6px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;border:2px solid var(--bg);box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.cam-badge svg{width:16px;height:16px}
+.gf-tap.sm .cam-badge{width:22px;height:22px;right:-5px;bottom:-5px}
+.gf-tap.sm .cam-badge svg{width:12px;height:12px}
 .photo-row .hint{flex-basis:100%}
 .dt-hero h3{font-size:19px;font-weight:700;line-height:1.35}
 .dt-hero .sub{font-size:13px;color:var(--ink-2)}
@@ -295,6 +324,18 @@ input[type=range]{width:100%;accent-color:var(--accent-text)}
 .tpl-row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .tpl-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .tpl-in{min-height:150px;resize:vertical;line-height:1.6;font-family:inherit}
+/* the textarea's text is transparent and sits over a copy of it where {項目} are colored */
+:root{--slot:#2563EB;--slot-bg:rgba(37,99,235,.12);--slot-ng:#D9363E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--slot:#86AEFF;--slot-bg:rgba(134,174,255,.18);--slot-ng:#FF7A80}}
+:root[data-theme="dark"]{--slot:#86AEFF;--slot-bg:rgba(134,174,255,.18);--slot-ng:#FF7A80}
+.tpl-wrap{position:relative}
+.tpl-hl,.tpl-wrap .tpl-in{font-size:16px;line-height:1.6;font-family:inherit;padding:10px 12px;letter-spacing:normal;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;tab-size:4}
+.tpl-hl{position:absolute;inset:0;overflow:hidden;border:1px solid transparent;border-radius:12px;background:var(--surface);color:var(--ink);pointer-events:none}
+.tpl-wrap .tpl-in{position:relative;background:transparent;color:transparent;caret-color:var(--ink);resize:none;overflow:hidden}
+.tpl-wrap .tpl-in::selection{color:transparent;background:rgba(37,99,235,.25)}
+.slot{color:var(--slot);background:var(--slot-bg);border-radius:4px}
+.slot.ng{color:var(--slot-ng);background:none;text-decoration:underline wavy}
+.tpl-slots .chip{color:var(--slot);border-color:var(--slot-bg)}
 .tpl-slots .chip{font-size:13px}
 .cat-problems{font-size:12px!important;color:var(--danger,#c0392b)!important;line-height:1.6}
 .suggest{margin:10px 0 0;font-size:13px}
@@ -436,7 +477,6 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 <!-- 記録フォーム -->
 <div class="sheet" id="sh-form" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="form-title">
-    <div class="grab"></div>
     <div class="sheet-h"><h2 id="form-title">グミを記録</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <form class="form" id="form" novalidate>
       <div class="f">
@@ -453,7 +493,7 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
         <div class="f"><label for="f-flavor">味</label><input class="in" id="f-flavor" autocomplete="off" placeholder="ぶどう"></div>
       </div>
       <div class="f"><span class="fl-t">グミの色</span><div class="colors" id="f-colors"></div></div>
-      <div class="f"><span class="fl-t">写真</span><div class="photo-row" style="margin-top:0"><span id="f-photo-thumb"></span>
+      <div class="f"><span class="fl-t">写真</span><div class="photo-row" style="margin-top:0"><label class="gf-tap sm" for="f-photo" id="f-photo-thumb"></label>
         <label class="btn sm ghost" for="f-photo" id="f-photo-lbl">自分で撮った写真をつける</label><input type="file" id="f-photo" accept="image/*" hidden>
         <button type="button" class="btn sm ghost" id="f-photo-del" hidden>外す</button></div></div>
       <div class="f"><span class="fl-t">買ったお店</span><div class="chips" id="f-shops"></div><input class="in" id="f-shop" placeholder="お店の名前（自由入力）" autocomplete="off"></div>
@@ -463,12 +503,12 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
         <div class="f"><label for="f-date">日付</label><input class="in" id="f-date" type="date"></div>
       </div>
       <div class="f"><span class="fl-t">食べた？</span><div class="seg" id="f-status" role="radiogroup" aria-label="食べたかどうか"></div></div>
+      <div class="f"><label for="f-note">ひとこと</label><textarea class="in" id="f-note" placeholder="弾力がすごい。後半でぶどう感が来る"></textarea></div>
+      <div class="f"><span class="fl-t">タグ</span><div class="chips" id="f-tags"></div></div>
       <p class="hint rate-hint" id="f-rate-hint">おいしさ・かたさ・すっぱさは、わからなければ空のままで大丈夫です。選んだものをもう一度タップすると取り消せます。</p>
       <div class="f"><span class="fl-t">おいしさ</span><div class="starin" id="f-stars"></div></div>
       <div class="f"><span class="fl-t">かたさ</span><div class="shapein" id="f-hard-pick" data-kind="hard" role="radiogroup" aria-label="かたさ"></div><input type="hidden" id="f-hard"></div>
       <div class="f"><span class="fl-t">すっぱさ</span><div class="shapein" id="f-sour-pick" data-kind="sour" role="radiogroup" aria-label="すっぱさ"></div><input type="hidden" id="f-sour"></div>
-      <div class="f"><span class="fl-t">タグ</span><div class="chips" id="f-tags"></div></div>
-      <div class="f"><label for="f-note">ひとこと</label><textarea class="in" id="f-note" placeholder="弾力がすごい。後半でぶどう感が来る"></textarea></div>
       <div class="sheet-actions"><button type="button" class="btn primary" id="f-save">記録する</button></div>
     </form>
   </div>
@@ -477,17 +517,33 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 <!-- 詳細 -->
 <div class="sheet" id="sh-detail" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-label="グミの詳細">
-    <div class="grab"></div>
     <div class="sheet-h"><h2 id="dt-no">記録</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div id="dt-body"></div>
   </div>
 </div>
 
 <!-- ポスト -->
+<div class="sheet" id="sh-shelfimg" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="si-title">
+    <div class="sheet-h"><h2 id="si-title">グミ棚を画像に</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <span class="fl-t" id="si-count-l">並べる数（新しい順）</span>
+    <div class="seg si-seg" id="si-count" role="radiogroup" aria-label="並べる数"></div>
+    <div class="si-prev"><img id="si-img" alt="グミ棚の画像"><p class="hint" id="si-wait">画像を作っています…</p></div>
+    <p class="hint" id="si-hint"></p>
+    <div class="btn-row si-btns"><button class="btn primary" type="button" id="si-share">共有する</button><button class="btn ghost" type="button" id="si-save">画像を保存</button></div>
+  </div>
+</div>
+<div class="sheet" id="sh-suggest" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="sg-title">
+    <div class="sheet-h"><h2 id="sg-title">カタログに提案してみませんか？</h2></div>
+    <p class="sg-text" id="sg-text"></p>
+    <p class="hint" style="margin:0">フォームから教えてもらえると、確認してカタログに追加します。追加されると、みんなの名前の候補に出るようになります。</p>
+    <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>あとで</button><a class="btn primary" id="sg-go" href="#" target="_blank" rel="noopener" data-suggest="{}">提案する</a></div>
+  </div>
+</div>
 <div class="sheet" id="sh-post" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="post-title">
-    <div class="grab"></div>
-    <div class="sheet-h"><h2 id="post-title">Xにポスト</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="sheet-h"><h2 id="post-title">共有</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div class="form">
       <div class="chips" id="post-tpl"></div>
       <div class="post-prev">
@@ -519,7 +575,6 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 <!-- 設定 -->
 <div class="sheet" id="sh-news" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-label="お知らせ">
-    <div class="grab"></div>
     <div class="sheet-h"><h2>お知らせ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div class="seg upd-seg" id="upd-seg" role="tablist" aria-label="お知らせの種類"></div>
     <div class="panel" style="margin-top:12px"><div id="upd-list"></div></div>
@@ -527,7 +582,6 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 </div>
 <div class="sheet" id="sh-settings" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-label="設定とデータ">
-    <div class="grab"></div>
     <div class="sheet-h"><h2>設定とデータ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div class="settings-list" id="settings-body"></div>
   </div>
@@ -536,8 +590,7 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 <!-- 写真の調整 -->
 <div class="sheet" id="sh-crop" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="crop-title">
-    <div class="grab"></div>
-    <div class="sheet-h"><h2 id="crop-title">写真を調整</h2><button class="btn sm ghost" data-close>やめる</button></div>
+    <div class="sheet-h"><h2 id="crop-title">写真を調整</h2></div>
     <div class="crop">
       <div class="crop-view" id="crop-view"><canvas id="crop-cv"></canvas></div>
       <p class="hint">ドラッグで位置、ピンチかスライダーで大きさを変えられます。</p>
@@ -548,12 +601,29 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
         <button class="btn sm ghost" type="button" id="crop-reset">元に戻す</button>
       </div>
     </div>
-    <div class="sheet-actions"><button class="btn primary" type="button" id="crop-ok">この写真にする</button></div>
+    <!-- nothing at the top-right: the photo picker's confirm is there on most phones, so a habitual tap must not cancel -->
+    <div class="sheet-actions crop-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="crop-ok">この写真にする</button></div>
+  </div>
+</div>
+<div class="sheet" id="sh-sform" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="sf-title">
+    <div class="sheet-h"><h2 id="sf-title">カタログに提案する</h2></div>
+    <p class="hint" style="margin:0 0 10px">送る前に内容を確かめてください。直してから送れます。</p>
+    <div class="form" id="sf-form">
+      <div class="f"><label for="sf-name">商品名</label><input class="in" id="sf-name" autocomplete="off" placeholder="例：忍者めし鋼 金剛石 ゴールデンパイン"><span class="err" id="sf-err" hidden>商品名を入れてください</span></div>
+      <div class="f2">
+        <div class="f"><label for="sf-maker">メーカー</label><input class="in" id="sf-maker" autocomplete="off" placeholder="例：UHA味覚糖"></div>
+        <div class="f"><label for="sf-flavor">味</label><input class="in" id="sf-flavor" autocomplete="off" placeholder="いろいろ入りは「アソート」"></div>
+      </div>
+      <div class="f"><label for="sf-price">値段（円）</label><input class="in num" id="sf-price" type="number" inputmode="numeric" min="0" placeholder="わからなければ空のまま"></div>
+    </div>
+    <p class="sf-fail" id="sf-fail" hidden>この画面からは送れませんでした。下のボタンからフォームを開いて送ってください。<br><a class="btn sm" id="sf-fallback" href="#" target="_blank" rel="noopener">フォームを開いて送る</a></p>
+    <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="sf-send">送信する</button></div>
   </div>
 </div>
 <div class="snack" id="snack" role="status" hidden>
   <span id="snack-t">記録しました！</span>
-  <button class="btn sm x" id="snack-post" type="button">Xにポスト</button>
+  <button class="btn sm x" id="snack-post" type="button">共有</button>
   <button class="snack-x" type="button" aria-label="閉じる" id="snack-x">×</button>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -587,6 +657,18 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // app changes only, newest first; shown under お知らせ → アプリ (times in JST).
 // Catalog additions are not listed here: the お知らせ → カタログ tab reads them from the catalog's 追加日 column.
 const UPDATES = [
+  {v:112, at:'2026-10-11 02:29', t:'データ画面の月のまとめも、画像にして保存したり LINE や X に共有したりできるようになりました。'},
+  {v:111, at:'2026-10-11 02:26', t:'カタログへの提案を、アプリの中で内容を確かめてそのまま送れるようになりました（フォームのページを開かなくても送れます）。'},
+  {v:110, at:'2026-10-11 02:21', t:'カタログにないグミや、カタログにない味を記録したときに、「カタログに提案してみませんか？」と案内が出るようになりました。'},
+  {v:107, at:'2026-10-11 02:14', t:'写真の調整画面で、右上にあった「やめる」をなくし、下の「この写真にする」の横に移しました。画面の外側をタップしても閉じないようにしました（写真を選ぶ画面の右上で決定した流れで押しても大丈夫なように）。'},
+  {v:103, at:'2026-10-11 02:04', t:'グミ棚を画像にして、保存したり LINE や X に共有したりできるようになりました（グミ棚の右上の「画像で保存・共有」から）。'},
+  {v:102, at:'2026-10-11 01:58', t:'共有の文章の設定画面で、{おいしさ} などの差し込み項目を青く色分けしました。使えない書き方は赤で表示します。'},
+  {v:101, at:'2026-10-11 01:51', t:'「Xにポスト」のボタンと画面の名前を「共有」に変えました。'},
+  {v:100, at:'2026-10-11 01:44', t:'記録画面の並びを変えました。「食べた？」の下が、ひとこと・タグ・おいしさ・かたさ・すっぱさの順になります。'},
+  {v:99, at:'2026-10-11 01:42', t:'記録画面の「写真」の欄で、写真がないときに出ていたクマのアイコンをなくしました。'},
+  {v:98, at:'2026-10-11 01:38', t:'写真をつけるボタンにカメラのマークをつけて目立たせました。左上の写真の枠をタップしても写真をつけられます。'},
+  {v:96, at:'2026-10-11 01:31', t:'カタログにあるシリーズでも、カタログにない味で記録したグミには「カタログに提案する」が出るようにしました。'},
+  {v:95, at:'2026-10-11 01:17', t:'記録画面などの上についていた、つまみのような線をなくしました（引っぱって閉じられると間違えやすいため）。'},
   {v:92, at:'2026-10-09 10:26', t:'お知らせの「カタログ」を、更新ごとに「新たに○件のグミを追加しました」とまとめて表示するようにしました。押すと追加されたグミの一覧が開きます。'},
   {v:91, at:'2026-10-09 10:23', t:'お知らせを開いたとき、まだ見ていなかった情報に赤い「NEW」の印がつくようにしました。'},
   {v:90, at:'2026-10-09 10:20', t:'画面右上にお知らせ（ベルのマーク）を追加しました。アプリとカタログの新しい情報はここで見られ、まだ見ていないものがあると赤い印がつきます。'},
@@ -652,7 +734,7 @@ function applyTheme(){
 /* ---------- gummy catalog (well-known products; prices are rough guides) ---------- */
 // built-in copy of the catalog (official maker sites, 2026-10-06); the shared store / catalog.json add newer entries on top
 const CATALOG_AT = '2026-10-11';
-const CATALOG = [{"n":"果汁グミ","r":"かじゅうぐみ","m":"明治","f":["ぶどう","温州みかん","マスカット"]},{"n":"果汁グミスマートパック","r":"かじゅうぐみすまーとぱっく","m":"明治","f":["ぶどう","マスカット"]},{"n":"果汁グミ推し味フルーツミックス","r":"かじゅうぐみおしあじふるーつみっくす","m":"明治","h":2,"rel":"2026-02-24"},{"n":"FRUBI by 果汁グミ","r":"ふるびばいかじゅうぐみ","m":"明治","f":["ブルーベリー&ザクロ","レモン&キウイ"]},{"n":"ポイフル","r":"ぽいふる","m":"明治","c":"rainbow","h":2},{"n":"ポイフルパウチ","r":"ぽいふるぱうち","m":"明治","f":["ラズベリー","レモン","青りんご","グレープ"],"h":2,"rel":"2026-03-31"},{"n":"アップグミ","r":"あっぷぐみ","m":"明治","f":["コーラアップ","ラムネアップ","メロンソーダアップ"],"h":5},{"n":"ピーチソーダアップ","r":"ぴーちそーだあっぷ","m":"明治","h":5},{"n":"ウメソーダアップ","r":"うめそーだあっぷ","m":"明治","h":5,"rel":"2026-01-27"},{"n":"ハニーレモンソーダアップ","r":"はにーれもんそーだあっぷ","m":"明治","h":5,"s":3,"rel":"2026-05-12"},{"n":"ホワイトソーダアップ","r":"ほわいとそーだあっぷ","m":"明治","h":5,"rel":"2026-07-07"},{"n":"ブラッドオレンジソーダアップ","r":"ぶらっどおれんじそーだあっぷ","m":"明治","h":5,"s":3,"rel":"2026-09-01"},{"n":"カジッテ","r":"かじって","m":"ロッテ","f":["グレープ&マスカット","キウイ&アップル"],"h":4},{"n":"カジッテ マニア<完熟ゴールデンパイン>","r":"かじってまにあかんじゅくごーるでんぱいん","m":"ロッテ","h":4,"s":3},{"n":"たっぷり果実とビタミングミ","r":"たっぷりかじつとびたみんぐみ","m":"ロッテ","f":["ミックスフルーツ"],"rel":"2026-08-04"},{"n":"ポケぷに","r":"ぽけぷに","m":"ロッテ","f":["レモンソーダ","コーラ","ソーダ","グレープソーダ"]},{"n":"ポケぷに<フルーツ>","r":"ぽけぷにふるーつ","m":"ロッテ","f":["みかん","りんご","マスカット","ライチ"]},{"n":"グミチョコボール","r":"ぐみちょこぼーる","m":"森永製菓","f":["国産白桃","2種のぶどうMIX"],"rel":"2026-02-03"},{"n":"ネクターグミ","r":"ねくたーぐみ","m":"不二家","f":["ピーチ","ミックス"]},{"n":"ネクター果実食感グミ","r":"ねくたーかじつしょっかんぐみ","m":"不二家","f":["和梨"]},{"n":"ポップグミ","r":"ぽっぷぐみ","m":"不二家","f":["グレープ","マスカット"]},{"n":"ガツン、とみかんグミ","r":"がつんとみかんぐみ","m":"不二家"},{"n":"ガツン、とグレープフルーツグミ","r":"がつんとぐれーぷふるーつぐみ","m":"不二家"},{"n":"まるでりんごグミ","r":"まるでりんごぐみ","m":"不二家","rel":"2026-10-06"},{"n":"アンパンマングミ","r":"あんぱんまんぐみ","m":"不二家","f":["りんご","白ぶどう","オレンジ"]},{"n":"6粒アンパンマングミ","r":"ろくつぶあんぱんまんぐみ","m":"不二家","f":["もも","ぶどう"]},{"n":"プリンセスキラキラシールグミ","r":"ぷりんせすきらきらしーるぐみ","m":"不二家","f":["ピーチ&ぶどう"],"rel":"2026-10-06"},{"n":"ペコ×サンリオキャラクターズうるつやシールグミ","r":"ぺこさんりおきゃらくたーずうるつやしーるぐみ","m":"不二家","f":["いちご&パイン"],"rel":"2026-09-15"},{"n":"ポムポムプリングミ","r":"ぽむぽむぷりんぐみ","m":"不二家","f":["りんご"],"h":2},{"n":"アニメちいかわグミ","r":"あにめちいかわぐみ","m":"不二家","f":["むちゃうまヨーグルト味"]},{"n":"ピュレグミ","r":"ぴゅれぐみ","m":"カンロ","f":["レモン","グレープ","マスカット","実りのベリー"],"s":3},{"n":"ピュレグミ プチ三角","r":"ぴゅれぐみ ぷちさんかく","m":"カンロ","f":["レモン","グレープ","マスカット"]},{"n":"ピュレグミプレミアム","r":"ぴゅれぐみぷれみあむ","m":"カンロ","f":["山梨産白桃","シャインマスカットスパークリング","幸水梨"]},{"n":"ピュレリング","r":"ぴゅれりんぐ","m":"カンロ","f":["フルーツ","ソーダ"],"s":1},{"n":"タネピュレ さくらんぼ","r":"たねぴゅれ さくらんぼ","m":"カンロ","p":194,"pt":"incl","h":3,"rel":"2026-08-21"},{"n":"ピュレサプリ アサイーベリーヨーグルト","r":"ぴゅれさぷり あさいーべりーよーぐると","m":"カンロ","p":237.6,"pt":"incl","s":2,"rel":"2026-07-21"},{"n":"カンデミーナグミ スーパーベスト","r":"かんでみーなぐみ すーぱーべすと","m":"カンロ","c":"rainbow","h":4},{"n":"カンデミーナグミ ジューシーウェーブ","r":"かんでみーなぐみ じゅーしーうぇーぶ","m":"カンロ","f":["シャインマスカットソーダ"],"h":4,"rel":"2026-09-15"},{"n":"カンデミーナグミ ストライクショット","r":"かんでみーなぐみ すとらいくしょっと","m":"カンロ","f":["モンストロベリー","わくわくメロン","ストライグレープ"],"h":4,"rel":"2026-04-21"},{"n":"カンデミーナグミ センタースプラッシュ","r":"かんでみーなぐみ せんたーすぷらっしゅ","m":"カンロ","f":["クールレモンソーダ"],"h":4,"rel":"2026-07-28"},{"n":"カンロ ザ・ストロンググミ","r":"かんろ ざ・すとろんぐぐみ","m":"カンロ","f":["ソーダ","グレープソーダ","メロンソーダ"],"h":4},{"n":"マロッシュ","r":"まろっしゅ","m":"カンロ","f":["グレープソーダ","ラムネ","フレッシュコーラ","オレンジスプラッシュ"],"h":2,"s":2},{"n":"ずとマロッシュ","r":"ずとまろっしゅ","m":"カンロ","f":["ライムジンジャーエール"],"p":214,"pt":"incl","h":2,"s":2,"rel":"2026-09-22"},{"n":"あの日夢見た雲グミ","r":"あのひゆめみたくもぐみ","m":"カンロ","f":["もくもくホワイトソーダ"],"h":1,"rel":"2026-05-26"},{"n":"空想果実 イトピスの実","r":"くうそうかじつ いとぴすのみ","m":"カンロ","p":248.4,"pt":"incl","s":3,"rel":"2026-04-28"},{"n":"とろみ~グミ","r":"とろみ～ぐみ","m":"カンロ","f":["レモン"],"p":198,"pt":"incl","h":3,"s":2,"rel":"2026-09-01"},{"n":"やさしい塩グミ","r":"やさしいしおぐみ","m":"カンロ","f":["塩グレープフルーツ"],"p":214,"pt":"incl","h":2,"rel":"2026-06-11"},{"n":"グミ学 ウマイパウダーの定理","r":"ぐみがく うまいぱうだーのていり","m":"カンロ","f":["ソーダ"],"p":198,"pt":"incl","h":4,"rel":"2026-06-02"},{"n":"カミキング","r":"かみきんぐ","m":"カンロ","h":4},{"n":"グミッツェル","r":"ぐみっつぇる","m":"カンロ","f":["グレープ","ソーダ","ラフランス","グレープフルーツ","オレンジ","ピーチ"],"p":190,"pt":"incl"},{"n":"グミッツェルプチ","r":"ぐみっつぇるぷち","m":"カンロ","f":["ソーダ","ピーチ","グレープフルーツ"],"p":170,"pt":"incl"},{"n":"ピュレショコラティエ","r":"ぴゅれしょこらてぃえ","m":"カンロ","f":["レモン&ビター","グレープ&ホワイト","ジュレin ピーチ&ビター"],"p":750,"pt":"incl"},{"n":"CYCLECUBE","r":"さいくるきゅーぶ","m":"カンロ","f":["apple","muscat"],"p":600,"pt":"incl","h":2},{"n":"コロロ","r":"ころろ","m":"UHA味覚糖","f":["巨峰","シャインマスカット","清水白桃","二十世紀梨","スイカ","沖縄パイン"]},{"n":"忍者めし","r":"にんじゃめし","m":"UHA味覚糖","f":["梅かつお","巨峰","ラムネ"],"h":4},{"n":"忍者めし鋼","r":"にんじゃめしはがね","m":"UHA味覚糖","f":["グレープ","マスカット"],"h":5},{"n":"忍者めし鋼 金剛石","r":"にんじゃめしはがね こんごうせき","m":"UHA味覚糖","f":["マスカット","ゴールデンパイン","ピーチ"],"h":5},{"n":"忍者めし 鉄の鎧","r":"にんじゃめし てつのよろい","m":"UHA味覚糖","f":["グレープ","マスカット"],"h":5},{"n":"狩人めし","r":"かりうどめし","m":"UHA味覚糖","f":["回復系エナジードリンク"]},{"n":"元太めし","r":"げんためし","m":"UHA味覚糖","f":["元太ソーダ"],"rel":"2026-08-24"},{"n":"シゲキックス","r":"しげきっくす","m":"UHA味覚糖","f":["グレープ","梅ソルト"],"h":4,"s":4},{"n":"激シゲキックス","r":"げきしげきっくす","m":"UHA味覚糖","f":["極刺激ソーダ"],"h":4,"s":5},{"n":"激Xシゲキックス","r":"げきえっくすしげきっくす","m":"UHA味覚糖","f":["Xピオーネ"],"h":4,"s":5},{"n":"コグミ","r":"こぐみ","m":"UHA味覚糖","f":["フルーツアソート","ドリンクアソート","ファミリーパック"],"h":2},{"n":"コグミ PREMIUM ドール","r":"こぐみ ぷれみあむ どーる","m":"UHA味覚糖","h":2},{"n":"コグミ トイ・ストーリー5","r":"こぐみ といすとーりーふぁいぶ","m":"UHA味覚糖","f":["スペースグレープソーダ","レンジャーメロンソーダ"]},{"n":"さけるグミ","r":"さけるぐみ","m":"UHA味覚糖","f":["巨峰","ハロウィンアップル"]},{"n":"すっぱいさけるグミ","r":"すっぱいさけるぐみ","m":"UHA味覚糖","f":["サワーレモン"],"s":4},{"n":"なが〜いさけるグミ","r":"なが〜いさけるぐみ","m":"UHA味覚糖","f":["巨峰"]},{"n":"ぷっちょグミ","r":"ぷっちょぐみ","m":"UHA味覚糖","f":["ぶどう","ソーダ"],"h":3},{"n":"グミだま","r":"ぐみだま","m":"UHA味覚糖","f":["シャインマスカット","いちご"]},{"n":"リセット","r":"りせっと","m":"UHA味覚糖","f":["レモン","グレープ"],"s":4},{"n":"ググッタ","r":"ぐぐった","m":"UHA味覚糖","f":["シャインマスカット","グレープ"],"h":5},{"n":"ぷにキャラグミ","r":"ぷにきゃらぐみ","m":"UHA味覚糖","f":["ちいかわ第2弾 マスカット","ドンキーコング","ディズニープリンセス"]},{"n":"モッチュ","r":"もっちゅ","m":"UHA味覚糖","f":["白桃","シャインマスカット","さくらんぼ"],"h":1},{"n":"お金グミ","r":"おかねぐみ","m":"UHA味覚糖","f":["ソーダ"],"s":2,"rel":"2026-06-29"},{"n":"至福の桃グミ","r":"しふくのももぐみ","m":"UHA味覚糖","h":1},{"n":"COMP完全グミ","r":"こんぷかんぜんぐみ","m":"UHA味覚糖","f":["エナジードリンク風味"]},{"n":"UHAグミサプリ","r":"ゆーえいちえーぐみさぷり","m":"UHA味覚糖","f":["マルチビタミン","ビタミンC","ビタミンD3","カルシウム","鉄","鉄&葉酸","亜鉛","亜鉛&マカ","マルチミネラル","CoQ10+DHA&EPA","VC+コラーゲン","食物繊維","ビオチン","NMN10000","美魔女 マルチビタミン","レチノール+VC","末梢血流ケア","ローズヒップ ポリフェノール","セラミド","ルテイン","還元型コエンザイムQ10","モノグルコシルヘスペリジン","鉄+ヒアルロン酸","鉄+メリロート","鉄+大豆イソフラボン"]},{"n":"UHAグミサプリKIDS","r":"ゆーえいちえーぐみさぷりきっず","m":"UHA味覚糖","f":["やさいにプラス","ルテイン","マルチビタミン","Ca・鉄","DHA"]},{"n":"フェットチーネグミ","r":"ふぇっとちーねぐみ","m":"ブルボン","f":["イタリアングレープ","イタリアンレモン","コーラ","ソーダ","レッドキウイ","アサイーボウル"],"rel":"2026-09-22"},{"n":"フェットチーネグミPREMIUM","r":"ふぇっとちーねぐみぷれみあむ","m":"ブルボン","f":["宮城県産ストロベリーブレンド","大分県産マリンレモン","ピーチパイン","長野県産ぶどう三姉妹®","愛媛県産紅まどんな®","青森県産世界一りんご"],"rel":"2026-05-26"},{"n":"しゃりもにグミ","r":"しゃりもにぐみ","m":"ブルボン","f":["ヨーグルト","グレープ","ピーチ","フルーティエナジードリンク","和梨","ソーダ"],"s":2,"rel":"2026-10-06"},{"n":"バウンシーグミ","r":"ばうんしーぐみ","m":"ブルボン","f":["シャインマスカット"],"h":4,"rel":"2026-09-29"},{"n":"ミネラル塩グミ","r":"みねらるしおぐみ","m":"ブルボン","f":["ソルティライチ"],"rel":"2026-06-09"},{"n":"つぶグミ","r":"つぶぐみ","m":"春日井製菓","c":"rainbow","h":4},{"n":"つぶグミソーダ","r":"つぶぐみそーだ","m":"春日井製菓","c":"rainbow","h":4},{"n":"つぶグミヨーグルト","r":"つぶぐみよーぐると","m":"春日井製菓","h":4},{"n":"つぶグミPREMIUM","r":"つぶぐみぷれみあむ","m":"春日井製菓","f":["濃厚ぶどう"]},{"n":"グミだよ。","r":"ぐみだよ","m":"春日井製菓","f":["乳酸菌ドリンク","レモネード","アソートパック"],"h":1},{"n":"タフグミ","r":"たふぐみ","m":"カバヤ食品","c":"rainbow","h":4},{"n":"タフグミ グレーピーパンチ","r":"たふぐみぐれーぴーぱんち","m":"カバヤ食品","c":"grape","h":4},{"n":"タフグミ アップルインパルス","r":"たふぐみあっぷるいんぱるす","m":"カバヤ食品","h":4,"rel":"2026-08-25"},{"n":"タフグミ MEGA","r":"たふぐみめが","m":"カバヤ食品","c":"rainbow","h":4},{"n":"タフグミ PRO カフェイン","r":"たふぐみぷろかふぇいん","m":"カバヤ食品","f":["ジンジャーレモン"],"h":4,"rel":"2025-04-08"},{"n":"タフグミ BAR","r":"たふぐみばー","m":"カバヤ食品","f":["コーラ&ソーダ","グレープ&マスカット"],"h":4,"s":3,"rel":"2025-10-20"},{"n":"タフグミ mini","r":"たふぐみみに","m":"カバヤ食品","f":["レモン&ソーダデュオ","グレープ&マスカットデュオ"],"h":4,"rel":"2026-02-03"},{"n":"タフグミ クールクランチ","r":"たふぐみくーるくらんち","m":"カバヤ食品","f":["パイン","ピーチ"],"h":4,"rel":"2026-06-09"},{"n":"タフグミ(100円ショップ限定)","r":"たふぐみ","m":"カバヤ食品","f":["ソーダ","グレープ"],"h":4,"rel":"2024-10-28"},{"n":"しゃりinグミ","r":"しゃりいんぐみ","m":"カバヤ食品","f":["ソーダ","グレープ"],"rel":"2026-02-24"},{"n":"おとうふくん","r":"おとうふくん","m":"カバヤ食品","f":["ソーダ"],"h":1,"rel":"2025-09-30"},{"n":"すぱグミ","r":"すぱぐみ","m":"カバヤ食品","f":["レモン"],"s":4,"rel":"2026-09-01"},{"n":"ナマロワ","r":"なまろわ","m":"カバヤ食品","f":["黒ぶどう×白ぶどう","白桃×黄桃"],"h":1,"rel":"2026-09-29"},{"n":"まんまる雪ぼうやグミ","r":"まんまるゆきぼうやぐみ","m":"カバヤ食品","h":2,"rel":"2026-09-29"},{"n":"雪ふるいちごグミ","r":"ゆきふるいちごぐみ","m":"カバヤ食品","f":["いちご","いちごミルク"],"h":2,"rel":"2026-09-29"},{"n":"ペタグーグミ","r":"ぺたぐーぐみ","m":"ノーベル製菓","f":["グレープ","ソーダ","ゴールデンパイン","いちご"],"h":4},{"n":"男梅グミ","r":"おとこうめぐみ","m":"ノーベル製菓","h":4},{"n":"シンサワーズグミ","r":"しんさわーずぐみ","m":"ノーベル製菓","f":["グレープ","ラムネ"],"h":4,"s":4},{"n":"ちびサワーズグミ","r":"ちびさわーずぐみ","m":"ノーベル製菓","f":["ドリンクアソート"],"h":4},{"n":"カチカチちびカメカメサワーズグミ","r":"かちかちちびかめかめさわーずぐみ","m":"ノーベル製菓","f":["フルーツアソート"],"h":5},{"n":"キラふわグミ","r":"きらふわぐみ","m":"ノーベル製菓","f":["ソーダ","グレープ","ゴールデンパイン","ホワイトソーダ"],"h":2},{"n":"ソルベットグミ","r":"そるべっとぐみ","m":"ノーベル製菓","f":["シャインマスカット","巨峰","白桃"],"h":2},{"n":"グミザウルス","r":"ぐみざうるす","m":"ノーベル製菓","f":["グレープ"]},{"n":"グミエッグ","r":"ぐみえっぐ","m":"ノーベル製菓","f":["フルーツソーダアソート"]},{"n":"スーパーマリオグミ","r":"すーぱーまりおぐみ","m":"ノーベル製菓","f":["グレープ&ソーダ"]},{"n":"ゴールドベア 80g","r":"ごーるどべあ はりぼー","m":"ハリボー","p":218,"pt":"excl","c":"rainbow"},{"n":"ゴールドベア 200g","r":"ごーるどべあ はりぼー","m":"ハリボー","p":448,"pt":"excl","c":"rainbow"},{"n":"ハッピーコーラ 80g","r":"はっぴーこーら はりぼー","m":"ハリボー","p":218,"pt":"excl","h":3},{"n":"ハッピーコーラ 200g","r":"はっぴーこーら はりぼー","m":"ハリボー","p":448,"pt":"excl","h":3},{"n":"スターミックス 80g","r":"すたーみっくす はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"ハッピーグレープ 80g","r":"はっぴーぐれーぷ はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"グレープフルーツ 80g","r":"ぐれーぷふるーつ はりぼー","m":"ハリボー","p":218,"pt":"excl","h":2},{"n":"ピーチ 80g","r":"ぴーち はりぼー","m":"ハリボー","p":218,"pt":"excl","h":2},{"n":"サワーハッピーコーラ 80g","r":"さわーはっぴーこーら はりぼー","m":"ハリボー","p":218,"pt":"excl","s":3},{"n":"ミックスサワー 80g","r":"みっくすさわー はりぼー","m":"ハリボー","p":218,"pt":"excl","s":3},{"n":"フロッグ 175g","r":"ふろっぐ はりぼー","m":"ハリボー","p":448,"pt":"excl"},{"n":"ハッピーチェリー 175g","r":"はっぴーちぇりー はりぼー","m":"ハリボー","p":448,"pt":"excl"},{"n":"フルーティーキス","r":"ふるーてぃーきす はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"ぷるぷるゴースト","r":"ぷるぷるごーすと はりぼー","m":"ハリボー","f":["ハーブ味","レモン味","ラズベリー味"],"p":218,"pt":"excl"},{"n":"サワーグローワームス","r":"さわーぐろーわーむす とろーり","m":"トローリ","s":4},{"n":"ネオンスクイーグルス","r":"ねおんすくいーぐるす とろーり","m":"トローリ"},{"n":"タランチュラ","r":"たらんちゅら とろーり","m":"トローリ"},{"n":"オクトパスブルー","r":"おくとぱすぶるー とろーり","m":"トローリ"},{"n":"サワーオクトパス","r":"さわーおくとぱす とろーり","m":"トローリ","s":4},{"n":"シャーク","r":"しゃーく とろーり","m":"トローリ"},{"n":"ストロベリーキス","r":"すとろべりーきす とろーり","m":"トローリ","h":1},{"n":"キャンディバナナ","r":"きゃんでぃばなな とろーり","m":"トローリ","h":1},{"n":"スパゲティサワー","r":"すぱげてぃさわー とろーり","m":"トローリ","f":["コーラ","アップル","ストロベリー"],"s":4},{"n":"プラネットグミ","r":"ぷらねっとぐみ とろーり","m":"トローリ"},{"n":"ポップアイ","r":"ぽっぷあい とろーり","m":"トローリ"},{"n":"フレーバーボム","r":"ふれーばーぼむ とろーり","m":"トローリ","f":["サワーグローワームス","キス"]},{"n":"パーティーバーガーグミ","r":"ぱーてぃーばーがーぐみ とろーり","m":"トローリ"},{"n":"ビッグバーガー","r":"びっぐばーがー とろーり","m":"トローリ"},{"n":"幸せにくきゅうグミ","r":"しあわせにくきゅうぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["グレープ味","レモン味"],"h":2},{"n":"70g ちっちゃな幸せにくきゅうグミ","r":"ななじゅうぐらむ ちっちゃなしあわせにくきゅうぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["グレープ味","アップル味"]},{"n":"34g贅沢なグミ","r":"さんじゅうよんぐらむぜいたくなぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["長野のシャインマスカット","山形のさくらんぼ"],"h":2},{"n":"幻の柑橘 直七グミ","r":"まぼろしのかんきつ なおしちぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗"},{"n":"シャリっと食感たべっ子どうぶつグミ","r":"しゃりっとしょっかんたべっこどうぶつぐみ","m":"ギンビス","f":["ピーチ","マンゴー","ブルーベリー&ラズベリー"],"p":200,"pt":"excl","rel":"2026-09-14","added":"2026-10-07"},{"n":"たべっ子どうぶつグミ","r":"たべっこどうぶつぐみ","m":"ギンビス","f":["ぶどう"],"p":200,"pt":"excl","h":4,"added":"2026-10-07"},{"n":"つぶじゃりグミ","r":"つぶじゃりぐみ","m":"ブルボン","f":["いちご"],"p":173,"pt":"incl","added":"2026-10-09"},{"n":"即攻元気グミ","r":"そっこうげんきぐみ","m":"明治","f":["栄養ドリンク"],"h":4,"rel":"2026-08-11","added":"2026-10-09"},{"n":"果実食感グミ","r":"かじつしょっかんぐみ","m":"明治","f":["マンゴー"],"rel":"2026-09-29","added":"2026-10-09"},{"n":"肝油グミ","r":"かんゆぐみ","m":"クリート","f":["オレンジ"],"rel":"2024-03-04","added":"2026-10-09"},{"n":"ぐみとたび","r":"ぐみとたび","m":"カンロ","f":["マスカットソーダ"],"added":"2026-10-09"},{"n":"むっち実グミ","r":"むっちみぐみ","m":"クリート","f":["青りんご","ピーチ","グレープ","すいか","シャインマスカット"],"rel":"2026-09-08","added":"2026-10-09"},{"n":"凄GUMI","r":"すごぐみ","m":"宝仙堂","f":["ガラナ系コーラ"],"rel":"2025-10-27","added":"2026-10-11"},{"n":"ザクラメグミ ミニ","r":"ざくらめぐみ みに","m":"クローマライフ","f":["コーラ"],"p":216,"pt":"incl","rel":"2026-08-21","added":"2026-10-11"},{"n":"コロロSOUR","r":"ころろさわー","m":"UHA味覚糖","f":["グリーンアップル"],"p":192,"pt":"incl","s":4,"added":"2026-10-11"},{"n":"ぎゅぎゅっと特濃蒟蒻畑","r":"ぎゅぎゅっととくのうこんにゃくばたけ","m":"マンナンライフ","f":["ぶどう","温州みかん","上州どどめ"],"added":"2026-10-11"},{"n":"ヨーグレットグミ","r":"よーぐれっとぐみ","m":"アトリオン製菓","f":["ヨーグルト"],"added":"2026-10-11"},{"n":"もっちりヨーグレットグミ","r":"もっちりよーぐれっとぐみ","m":"アトリオン製菓","f":["ヨーグルト"],"h":2,"added":"2026-10-11"},{"n":"ヨーグレットグミフリュイ","r":"よーぐれっとぐみふりゅい","m":"アトリオン製菓","f":["ブルーベリーヨーグルト"],"added":"2026-10-11"},{"n":"すっパイレモングミ","r":"すっぱいれもんぐみ","m":"アトリオン製菓","f":["レモン"],"s":4,"added":"2026-10-11"},{"n":"朝グミ","r":"あさぐみ","m":"アトリオン製菓","f":["バナナ","いちご"],"added":"2026-10-11"},{"n":"ニッポンエールグミ","r":"にっぽんえーるぐみ","m":"JA全農","f":["茨城県産栗","茨城県産芋","京都府産宇治抹茶","北海道産夕張メロン","北海道産ハスカップ","北海道産和ハッカ","青森県産世界一りんご","青森県産王林","青森県産飛馬ふじ","岩手県産やまぶどう","岩手県産冬恋りんご","宮城県産仙台いちご","秋田県産北限の桃","山形県産さくらんぼ","山形県産高徳りんご","山形県産ラ・フランス","山形県産月山ぶどう","福島県産あかつき桃","茨城県産ブルーベリー","茨城県産いばらキッス","栃木県産とちあいか苺","栃木県産スカイベリー®","群馬県産やよいひめ苺","埼玉県産あまりん苺","埼玉県産彩玉梨","千葉県産豊水梨","東京都産東京ゴールドキウイ","東京都八丈島産八丈フルーツレモン","神奈川県産湘南ゴールド","山梨県産サンシャインレッド","山梨県産甲斐キング","長野県産シャインマスカット","長野県産りんご三兄弟®","新潟県産ル レクチエ","富山県産呉羽梨","富山県産入善ジャンボ西瓜","石川県産ルビーロマン","福井県産完熟福太夫うめ","福井県産越のルビートマト","岐阜県飛騨産飛騨りんご","静岡県産クラウンメロン","静岡県産ルビーグレープフルーツ","愛知県産サンベリー蒲郡","愛知県産蒲郡みかん","三重県産マイヤーレモン","滋賀県産みおしずく苺","京都府京丹後市産京たんごメロン","大阪府産デラウェア","兵庫県産豊岡ぶどう","奈良県産古都華いちご","和歌山県産有田みかん","和歌山県産じゃばら®","和歌山県産南高梅","鳥取県産二十世紀梨","島根県産神紅ぶどう","岡山県産マスカット・オブ・アレキサンドリア","岡山県産白桃","広島県産世羅なし","広島県産はっさく＆レモン","山口県産ゆめほっぺ®","徳島県産すだち","香川県産香緑キウイ","愛媛県産紅まどんな®","高知県産四万十ぶしゅかん","高知県産ゆず","福岡県産甘うぃキウイ","福岡県産あまおう苺","佐賀県産いちごさん","長崎県産びわ","長崎県産長崎恋みかん","熊本県産ゆうべに苺","熊本県産すいか","熊本県産ハニーローザ","大分県産完熟かぼす","宮崎県産日向夏","宮崎県産マンゴー","鹿児島県産辺塚だいだい","鹿児島県産パッションフルーツ","鹿児島県産大将季＆紅甘夏","沖縄県産シークワーサー","沖縄県産パイナップル","鹿児島県屋久島産たんかん","沖縄県西表島産ピーチパイン"],"added":"2026-10-11"},{"n":"ニッポンエール 雫グミ","r":"にっぽんえーる しずくぐみ","m":"JA全農","f":["山形県産さくらんぼ","岡山県産清水白桃","山梨県産すもも","愛媛県産紅まどんな®"],"added":"2026-10-11"},{"n":"ニッポンエール ジュレグミ","r":"にっぽんえーる じゅれぐみ","m":"JA全農","f":["北海道産夕張メロン","長野県産シャインマスカット","福岡県産あまおう苺"],"added":"2026-10-11"},{"n":"ニッポンエール ふる～じょんグミ","r":"にっぽんえーる ふるーじょんぐみ","m":"JA全農","f":["京たんごメロン×古都華いちご"],"added":"2026-10-11"},{"n":"ニッポンエール 蜜グミ","r":"にっぽんえーる みつぐみ","m":"JA全農","f":["すもも"],"added":"2026-10-11"},{"n":"ニッポンエール ミルグミ","r":"にっぽんえーる みるぐみ","m":"JA全農","added":"2026-10-11"},{"n":"ガチャピンのシャインマスカットグミ","r":"がちゃぴんのしゃいんますかっとぐみ","m":"JA全農","added":"2026-10-11"},{"n":"ムックのさくらんぼグミ","r":"むっくのさくらんぼぐみ","m":"JA全農","added":"2026-10-11"},{"n":"神セブングミ","r":"かみせぶんぐみ","m":"JA全農","added":"2026-10-11"},{"n":"みかんグミ同盟","r":"みかんぐみどうめい","m":"JA全農","added":"2026-10-11"},{"n":"ザクラメグミ","r":"ざくらめぐみ","m":"クローマライフ","f":["サイダー","グレープ","シャインマスカット"],"p":216,"pt":"incl","rel":"2026-07-07","added":"2026-10-11"}];
+const CATALOG = [{"n":"果汁グミ","r":"かじゅうぐみ","m":"明治","f":["ぶどう","温州みかん","マスカット"]},{"n":"果汁グミスマートパック","r":"かじゅうぐみすまーとぱっく","m":"明治","f":["ぶどう","マスカット"]},{"n":"果汁グミ推し味フルーツミックス","r":"かじゅうぐみおしあじふるーつみっくす","m":"明治","h":2,"rel":"2026-02-24"},{"n":"FRUBI by 果汁グミ","r":"ふるびばいかじゅうぐみ","m":"明治","f":["ブルーベリー&ザクロ","レモン&キウイ"]},{"n":"ポイフル","r":"ぽいふる","m":"明治","c":"rainbow","h":2},{"n":"ポイフルパウチ","r":"ぽいふるぱうち","m":"明治","f":["ラズベリー","レモン","青りんご","グレープ"],"h":2,"rel":"2026-03-31"},{"n":"アップグミ","r":"あっぷぐみ","m":"明治","f":["コーラアップ","ラムネアップ","メロンソーダアップ"],"h":5},{"n":"ピーチソーダアップ","r":"ぴーちそーだあっぷ","m":"明治","h":5},{"n":"ウメソーダアップ","r":"うめそーだあっぷ","m":"明治","h":5,"rel":"2026-01-27"},{"n":"ハニーレモンソーダアップ","r":"はにーれもんそーだあっぷ","m":"明治","h":5,"s":3,"rel":"2026-05-12"},{"n":"ホワイトソーダアップ","r":"ほわいとそーだあっぷ","m":"明治","h":5,"rel":"2026-07-07"},{"n":"ブラッドオレンジソーダアップ","r":"ぶらっどおれんじそーだあっぷ","m":"明治","h":5,"s":3,"rel":"2026-09-01"},{"n":"カジッテ","r":"かじって","m":"ロッテ","f":["グレープ&マスカット","キウイ&アップル"],"h":4},{"n":"カジッテ マニア<完熟ゴールデンパイン>","r":"かじってまにあかんじゅくごーるでんぱいん","m":"ロッテ","h":4,"s":3},{"n":"たっぷり果実とビタミングミ","r":"たっぷりかじつとびたみんぐみ","m":"ロッテ","f":["ミックスフルーツ"],"rel":"2026-08-04"},{"n":"ポケぷに","r":"ぽけぷに","m":"ロッテ","f":["レモンソーダ","コーラ","ソーダ","グレープソーダ"]},{"n":"ポケぷに<フルーツ>","r":"ぽけぷにふるーつ","m":"ロッテ","f":["みかん","りんご","マスカット","ライチ"]},{"n":"グミチョコボール","r":"ぐみちょこぼーる","m":"森永製菓","f":["国産白桃","2種のぶどうMIX"],"rel":"2026-02-03"},{"n":"ネクターグミ","r":"ねくたーぐみ","m":"不二家","f":["ピーチ","ミックス"]},{"n":"ネクター果実食感グミ","r":"ねくたーかじつしょっかんぐみ","m":"不二家","f":["和梨"]},{"n":"ポップグミ","r":"ぽっぷぐみ","m":"不二家","f":["グレープ","マスカット"]},{"n":"ガツン、とみかんグミ","r":"がつんとみかんぐみ","m":"不二家"},{"n":"ガツン、とグレープフルーツグミ","r":"がつんとぐれーぷふるーつぐみ","m":"不二家"},{"n":"まるでりんごグミ","r":"まるでりんごぐみ","m":"不二家","rel":"2026-10-06"},{"n":"アンパンマングミ","r":"あんぱんまんぐみ","m":"不二家","c":"rainbow"},{"n":"6粒アンパンマングミ","r":"ろくつぶあんぱんまんぐみ","m":"不二家","f":["もも","ぶどう"]},{"n":"プリンセスキラキラシールグミ","r":"ぷりんせすきらきらしーるぐみ","m":"不二家","f":["ピーチ&ぶどう"],"rel":"2026-10-06"},{"n":"ペコ×サンリオキャラクターズうるつやシールグミ","r":"ぺこさんりおきゃらくたーずうるつやしーるぐみ","m":"不二家","f":["いちご&パイン"],"rel":"2026-09-15"},{"n":"ポムポムプリングミ","r":"ぽむぽむぷりんぐみ","m":"不二家","f":["りんご"],"h":2},{"n":"アニメちいかわグミ","r":"あにめちいかわぐみ","m":"不二家","f":["むちゃうまヨーグルト味"]},{"n":"ピュレグミ","r":"ぴゅれぐみ","m":"カンロ","f":["レモン","グレープ","マスカット","実りのベリー"],"s":3},{"n":"ピュレグミ プチ三角","r":"ぴゅれぐみ ぷちさんかく","m":"カンロ","f":["レモン","グレープ","マスカット"]},{"n":"ピュレグミプレミアム","r":"ぴゅれぐみぷれみあむ","m":"カンロ","f":["山梨産白桃","シャインマスカットスパークリング","幸水梨"]},{"n":"ピュレリング","r":"ぴゅれりんぐ","m":"カンロ","f":["フルーツ","ソーダ"],"s":1},{"n":"タネピュレ さくらんぼ","r":"たねぴゅれ さくらんぼ","m":"カンロ","p":194,"pt":"incl","h":3,"rel":"2026-08-21"},{"n":"ピュレサプリ アサイーベリーヨーグルト","r":"ぴゅれさぷり あさいーべりーよーぐると","m":"カンロ","p":237.6,"pt":"incl","s":2,"rel":"2026-07-21"},{"n":"カンデミーナグミ スーパーベスト","r":"かんでみーなぐみ すーぱーべすと","m":"カンロ","c":"rainbow","h":4},{"n":"カンデミーナグミ ジューシーウェーブ","r":"かんでみーなぐみ じゅーしーうぇーぶ","m":"カンロ","f":["シャインマスカットソーダ"],"h":4,"rel":"2026-09-15"},{"n":"カンデミーナグミ ストライクショット","r":"かんでみーなぐみ すとらいくしょっと","m":"カンロ","f":["モンストロベリー","わくわくメロン","ストライグレープ"],"h":4,"rel":"2026-04-21"},{"n":"カンデミーナグミ センタースプラッシュ","r":"かんでみーなぐみ せんたーすぷらっしゅ","m":"カンロ","f":["クールレモンソーダ"],"h":4,"rel":"2026-07-28"},{"n":"カンロ ザ・ストロンググミ","r":"かんろ ざ・すとろんぐぐみ","m":"カンロ","f":["ソーダ","グレープソーダ","メロンソーダ"],"h":4},{"n":"マロッシュ","r":"まろっしゅ","m":"カンロ","f":["グレープソーダ","ラムネ","フレッシュコーラ","オレンジスプラッシュ"],"h":2,"s":2},{"n":"ずとマロッシュ","r":"ずとまろっしゅ","m":"カンロ","f":["ライムジンジャーエール"],"p":214,"pt":"incl","h":2,"s":2,"rel":"2026-09-22"},{"n":"あの日夢見た雲グミ","r":"あのひゆめみたくもぐみ","m":"カンロ","f":["もくもくホワイトソーダ"],"h":1,"rel":"2026-05-26"},{"n":"空想果実 イトピスの実","r":"くうそうかじつ いとぴすのみ","m":"カンロ","p":248.4,"pt":"incl","s":3,"rel":"2026-04-28"},{"n":"とろみ~グミ","r":"とろみ～ぐみ","m":"カンロ","f":["レモン"],"p":198,"pt":"incl","h":3,"s":2,"rel":"2026-09-01"},{"n":"やさしい塩グミ","r":"やさしいしおぐみ","m":"カンロ","f":["塩グレープフルーツ"],"p":214,"pt":"incl","h":2,"rel":"2026-06-11"},{"n":"グミ学 ウマイパウダーの定理","r":"ぐみがく うまいぱうだーのていり","m":"カンロ","f":["ソーダ"],"p":198,"pt":"incl","h":4,"rel":"2026-06-02"},{"n":"カミキング","r":"かみきんぐ","m":"カンロ","h":4},{"n":"グミッツェル","r":"ぐみっつぇる","m":"カンロ","f":["グレープ","ソーダ","ラフランス","グレープフルーツ","オレンジ","ピーチ"],"p":190,"pt":"incl"},{"n":"グミッツェルプチ","r":"ぐみっつぇるぷち","m":"カンロ","f":["ソーダ","ピーチ","グレープフルーツ"],"p":170,"pt":"incl"},{"n":"ピュレショコラティエ","r":"ぴゅれしょこらてぃえ","m":"カンロ","f":["レモン&ビター","グレープ&ホワイト","ジュレin ピーチ&ビター"],"p":750,"pt":"incl"},{"n":"CYCLECUBE","r":"さいくるきゅーぶ","m":"カンロ","f":["apple","muscat"],"p":600,"pt":"incl","h":2},{"n":"コロロ","r":"ころろ","m":"UHA味覚糖","f":["巨峰","シャインマスカット","清水白桃","二十世紀梨","スイカ","沖縄パイン"]},{"n":"忍者めし","r":"にんじゃめし","m":"UHA味覚糖","f":["梅かつお","巨峰","ラムネ"],"h":4},{"n":"忍者めし鋼","r":"にんじゃめしはがね","m":"UHA味覚糖","f":["グレープ","マスカット"],"h":5},{"n":"忍者めし鋼 金剛石","r":"にんじゃめしはがね こんごうせき","m":"UHA味覚糖","f":["マスカット","ゴールデンパイン","ピーチ"],"h":5},{"n":"忍者めし 鉄の鎧","r":"にんじゃめし てつのよろい","m":"UHA味覚糖","f":["グレープ","マスカット"],"h":5},{"n":"狩人めし","r":"かりうどめし","m":"UHA味覚糖","f":["回復系エナジードリンク"]},{"n":"元太めし","r":"げんためし","m":"UHA味覚糖","f":["元太ソーダ"],"rel":"2026-08-24"},{"n":"シゲキックス","r":"しげきっくす","m":"UHA味覚糖","f":["グレープ","梅ソルト"],"h":4,"s":4},{"n":"激シゲキックス","r":"げきしげきっくす","m":"UHA味覚糖","f":["極刺激ソーダ"],"h":4,"s":5},{"n":"激Xシゲキックス","r":"げきえっくすしげきっくす","m":"UHA味覚糖","f":["Xピオーネ"],"h":4,"s":5},{"n":"コグミ","r":"こぐみ","m":"UHA味覚糖","f":["フルーツアソート","ドリンクアソート","ファミリーパック"],"h":2},{"n":"コグミ PREMIUM ドール","r":"こぐみ ぷれみあむ どーる","m":"UHA味覚糖","h":2},{"n":"コグミ トイ・ストーリー5","r":"こぐみ といすとーりーふぁいぶ","m":"UHA味覚糖","f":["スペースグレープソーダ","レンジャーメロンソーダ"]},{"n":"さけるグミ","r":"さけるぐみ","m":"UHA味覚糖","f":["巨峰","ハロウィンアップル"]},{"n":"すっぱいさけるグミ","r":"すっぱいさけるぐみ","m":"UHA味覚糖","f":["サワーレモン"],"s":4},{"n":"なが〜いさけるグミ","r":"なが〜いさけるぐみ","m":"UHA味覚糖","f":["巨峰"]},{"n":"ぷっちょグミ","r":"ぷっちょぐみ","m":"UHA味覚糖","f":["ぶどう","ソーダ"],"h":3},{"n":"グミだま","r":"ぐみだま","m":"UHA味覚糖","f":["シャインマスカット","いちご"]},{"n":"リセット","r":"りせっと","m":"UHA味覚糖","f":["レモン","グレープ"],"s":4},{"n":"ググッタ","r":"ぐぐった","m":"UHA味覚糖","f":["シャインマスカット","グレープ"],"h":5},{"n":"ぷにキャラグミ","r":"ぷにきゃらぐみ","m":"UHA味覚糖","f":["ちいかわ第2弾 マスカット","ドンキーコング","ディズニープリンセス"]},{"n":"モッチュ","r":"もっちゅ","m":"UHA味覚糖","f":["白桃","シャインマスカット","さくらんぼ"],"h":1},{"n":"お金グミ","r":"おかねぐみ","m":"UHA味覚糖","f":["ソーダ"],"s":2,"rel":"2026-06-29"},{"n":"至福の桃グミ","r":"しふくのももぐみ","m":"UHA味覚糖","h":1},{"n":"COMP完全グミ","r":"こんぷかんぜんぐみ","m":"UHA味覚糖","f":["エナジードリンク風味"]},{"n":"UHAグミサプリ","r":"ゆーえいちえーぐみさぷり","m":"UHA味覚糖","f":["マルチビタミン","ビタミンC","ビタミンD3","カルシウム","鉄","鉄&葉酸","亜鉛","亜鉛&マカ","マルチミネラル","CoQ10+DHA&EPA","VC+コラーゲン","食物繊維","ビオチン","NMN10000","美魔女 マルチビタミン","レチノール+VC","末梢血流ケア","ローズヒップ ポリフェノール","セラミド","ルテイン","還元型コエンザイムQ10","モノグルコシルヘスペリジン","鉄+ヒアルロン酸","鉄+メリロート","鉄+大豆イソフラボン"]},{"n":"UHAグミサプリKIDS","r":"ゆーえいちえーぐみさぷりきっず","m":"UHA味覚糖","f":["やさいにプラス","ルテイン","マルチビタミン","Ca・鉄","DHA"]},{"n":"フェットチーネグミ","r":"ふぇっとちーねぐみ","m":"ブルボン","f":["イタリアングレープ","イタリアンレモン","コーラ","ソーダ","レッドキウイ","アサイーボウル"],"rel":"2026-09-22"},{"n":"フェットチーネグミPREMIUM","r":"ふぇっとちーねぐみぷれみあむ","m":"ブルボン","f":["宮城県産ストロベリーブレンド","大分県産マリンレモン","ピーチパイン","長野県産ぶどう三姉妹®","愛媛県産紅まどんな®","青森県産世界一りんご"],"rel":"2026-05-26"},{"n":"しゃりもにグミ","r":"しゃりもにぐみ","m":"ブルボン","f":["ヨーグルト","グレープ","ピーチ","フルーティエナジードリンク","和梨","ソーダ"],"s":2,"rel":"2026-10-06"},{"n":"バウンシーグミ","r":"ばうんしーぐみ","m":"ブルボン","f":["シャインマスカット"],"h":4,"rel":"2026-09-29"},{"n":"ミネラル塩グミ","r":"みねらるしおぐみ","m":"ブルボン","f":["ソルティライチ"],"rel":"2026-06-09"},{"n":"つぶグミ","r":"つぶぐみ","m":"春日井製菓","c":"rainbow","h":4},{"n":"つぶグミソーダ","r":"つぶぐみそーだ","m":"春日井製菓","c":"rainbow","h":4},{"n":"つぶグミヨーグルト","r":"つぶぐみよーぐると","m":"春日井製菓","h":4},{"n":"つぶグミPREMIUM","r":"つぶぐみぷれみあむ","m":"春日井製菓","f":["濃厚ぶどう"]},{"n":"グミだよ。","r":"ぐみだよ","m":"春日井製菓","f":["乳酸菌ドリンク","レモネード","アソートパック"],"h":1},{"n":"タフグミ","r":"たふぐみ","m":"カバヤ食品","c":"rainbow","h":4},{"n":"タフグミ グレーピーパンチ","r":"たふぐみぐれーぴーぱんち","m":"カバヤ食品","c":"grape","h":4},{"n":"タフグミ アップルインパルス","r":"たふぐみあっぷるいんぱるす","m":"カバヤ食品","h":4,"rel":"2026-08-25"},{"n":"タフグミ MEGA","r":"たふぐみめが","m":"カバヤ食品","c":"rainbow","h":4},{"n":"タフグミ PRO カフェイン","r":"たふぐみぷろかふぇいん","m":"カバヤ食品","f":["ジンジャーレモン"],"h":4,"rel":"2025-04-08"},{"n":"タフグミ BAR","r":"たふぐみばー","m":"カバヤ食品","f":["コーラ&ソーダ","グレープ&マスカット"],"h":4,"s":3,"rel":"2025-10-20"},{"n":"タフグミ mini","r":"たふぐみみに","m":"カバヤ食品","f":["レモン&ソーダデュオ","グレープ&マスカットデュオ"],"h":4,"rel":"2026-02-03"},{"n":"タフグミ クールクランチ","r":"たふぐみくーるくらんち","m":"カバヤ食品","f":["パイン","ピーチ"],"h":4,"rel":"2026-06-09"},{"n":"タフグミ(100円ショップ限定)","r":"たふぐみ","m":"カバヤ食品","f":["ソーダ","グレープ"],"h":4,"rel":"2024-10-28"},{"n":"しゃりinグミ","r":"しゃりいんぐみ","m":"カバヤ食品","f":["ソーダ","グレープ"],"rel":"2026-02-24"},{"n":"おとうふくん","r":"おとうふくん","m":"カバヤ食品","f":["ソーダ"],"h":1,"rel":"2025-09-30"},{"n":"すぱグミ","r":"すぱぐみ","m":"カバヤ食品","f":["レモン"],"s":4,"rel":"2026-09-01"},{"n":"ナマロワ","r":"なまろわ","m":"カバヤ食品","f":["黒ぶどう×白ぶどう","白桃×黄桃"],"h":1,"rel":"2026-09-29"},{"n":"まんまる雪ぼうやグミ","r":"まんまるゆきぼうやぐみ","m":"カバヤ食品","h":2,"rel":"2026-09-29"},{"n":"雪ふるいちごグミ","r":"ゆきふるいちごぐみ","m":"カバヤ食品","f":["いちご","いちごミルク"],"h":2,"rel":"2026-09-29"},{"n":"ペタグーグミ","r":"ぺたぐーぐみ","m":"ノーベル製菓","f":["グレープ","ソーダ","ゴールデンパイン","いちご"],"h":4},{"n":"男梅グミ","r":"おとこうめぐみ","m":"ノーベル製菓","h":4},{"n":"シンサワーズグミ","r":"しんさわーずぐみ","m":"ノーベル製菓","f":["グレープ","ラムネ"],"h":4,"s":4},{"n":"ちびサワーズグミ","r":"ちびさわーずぐみ","m":"ノーベル製菓","f":["ドリンクアソート"],"h":4},{"n":"カチカチちびカメカメサワーズグミ","r":"かちかちちびかめかめさわーずぐみ","m":"ノーベル製菓","f":["フルーツアソート"],"h":5},{"n":"キラふわグミ","r":"きらふわぐみ","m":"ノーベル製菓","f":["ソーダ","グレープ","ゴールデンパイン","ホワイトソーダ"],"h":2},{"n":"ソルベットグミ","r":"そるべっとぐみ","m":"ノーベル製菓","f":["シャインマスカット","巨峰","白桃"],"h":2},{"n":"グミザウルス","r":"ぐみざうるす","m":"ノーベル製菓","f":["グレープ"]},{"n":"グミエッグ","r":"ぐみえっぐ","m":"ノーベル製菓","f":["フルーツソーダアソート"]},{"n":"スーパーマリオグミ","r":"すーぱーまりおぐみ","m":"ノーベル製菓","f":["グレープ&ソーダ"]},{"n":"ゴールドベア 80g","r":"ごーるどべあ はりぼー","m":"ハリボー","p":218,"pt":"excl","c":"rainbow"},{"n":"ゴールドベア 200g","r":"ごーるどべあ はりぼー","m":"ハリボー","p":448,"pt":"excl","c":"rainbow"},{"n":"ハッピーコーラ 80g","r":"はっぴーこーら はりぼー","m":"ハリボー","p":218,"pt":"excl","h":3},{"n":"ハッピーコーラ 200g","r":"はっぴーこーら はりぼー","m":"ハリボー","p":448,"pt":"excl","h":3},{"n":"スターミックス 80g","r":"すたーみっくす はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"ハッピーグレープ 80g","r":"はっぴーぐれーぷ はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"グレープフルーツ 80g","r":"ぐれーぷふるーつ はりぼー","m":"ハリボー","p":218,"pt":"excl","h":2},{"n":"ピーチ 80g","r":"ぴーち はりぼー","m":"ハリボー","p":218,"pt":"excl","h":2},{"n":"サワーハッピーコーラ 80g","r":"さわーはっぴーこーら はりぼー","m":"ハリボー","p":218,"pt":"excl","s":3},{"n":"ミックスサワー 80g","r":"みっくすさわー はりぼー","m":"ハリボー","p":218,"pt":"excl","s":3},{"n":"フロッグ 175g","r":"ふろっぐ はりぼー","m":"ハリボー","p":448,"pt":"excl"},{"n":"ハッピーチェリー 175g","r":"はっぴーちぇりー はりぼー","m":"ハリボー","p":448,"pt":"excl"},{"n":"フルーティーキス","r":"ふるーてぃーきす はりぼー","m":"ハリボー","p":218,"pt":"excl"},{"n":"ぷるぷるゴースト","r":"ぷるぷるごーすと はりぼー","m":"ハリボー","f":["ハーブ味","レモン味","ラズベリー味"],"p":218,"pt":"excl"},{"n":"サワーグローワームス","r":"さわーぐろーわーむす とろーり","m":"トローリ","s":4},{"n":"ネオンスクイーグルス","r":"ねおんすくいーぐるす とろーり","m":"トローリ"},{"n":"タランチュラ","r":"たらんちゅら とろーり","m":"トローリ"},{"n":"オクトパスブルー","r":"おくとぱすぶるー とろーり","m":"トローリ"},{"n":"サワーオクトパス","r":"さわーおくとぱす とろーり","m":"トローリ","s":4},{"n":"シャーク","r":"しゃーく とろーり","m":"トローリ"},{"n":"ストロベリーキス","r":"すとろべりーきす とろーり","m":"トローリ","h":1},{"n":"キャンディバナナ","r":"きゃんでぃばなな とろーり","m":"トローリ","h":1},{"n":"スパゲティサワー","r":"すぱげてぃさわー とろーり","m":"トローリ","f":["コーラ","アップル","ストロベリー"],"s":4},{"n":"プラネットグミ","r":"ぷらねっとぐみ とろーり","m":"トローリ"},{"n":"ポップアイ","r":"ぽっぷあい とろーり","m":"トローリ"},{"n":"フレーバーボム","r":"ふれーばーぼむ とろーり","m":"トローリ","f":["サワーグローワームス","キス"]},{"n":"パーティーバーガーグミ","r":"ぱーてぃーばーがーぐみ とろーり","m":"トローリ"},{"n":"ビッグバーガー","r":"びっぐばーがー とろーり","m":"トローリ"},{"n":"幸せにくきゅうグミ","r":"しあわせにくきゅうぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["グレープ味","レモン味"],"h":2},{"n":"70g ちっちゃな幸せにくきゅうグミ","r":"ななじゅうぐらむ ちっちゃなしあわせにくきゅうぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["グレープ味","アップル味"]},{"n":"34g贅沢なグミ","r":"さんじゅうよんぐらむぜいたくなぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗","f":["長野のシャインマスカット","山形のさくらんぼ"],"h":2},{"n":"幻の柑橘 直七グミ","r":"まぼろしのかんきつ なおしちぐみ せんじゃくあめほんぽ","m":"扇雀飴本舗"},{"n":"シャリっと食感たべっ子どうぶつグミ","r":"しゃりっとしょっかんたべっこどうぶつぐみ","m":"ギンビス","f":["ピーチ","マンゴー","ブルーベリー&ラズベリー"],"p":200,"pt":"excl","rel":"2026-09-14","added":"2026-10-07"},{"n":"たべっ子どうぶつグミ","r":"たべっこどうぶつぐみ","m":"ギンビス","f":["ぶどう"],"p":200,"pt":"excl","h":4,"added":"2026-10-07"},{"n":"つぶじゃりグミ","r":"つぶじゃりぐみ","m":"ブルボン","f":["いちご"],"p":173,"pt":"incl","added":"2026-10-09"},{"n":"即攻元気グミ","r":"そっこうげんきぐみ","m":"明治","f":["栄養ドリンク"],"h":4,"rel":"2026-08-11","added":"2026-10-09"},{"n":"果実食感グミ","r":"かじつしょっかんぐみ","m":"明治","f":["マンゴー"],"rel":"2026-09-29","added":"2026-10-09"},{"n":"肝油グミ","r":"かんゆぐみ","m":"クリート","f":["オレンジ"],"rel":"2024-03-04","added":"2026-10-09"},{"n":"ぐみとたび","r":"ぐみとたび","m":"カンロ","f":["マスカットソーダ"],"added":"2026-10-09"},{"n":"むっち実グミ","r":"むっちみぐみ","m":"クリート","f":["青りんご","ピーチ","グレープ","すいか","シャインマスカット"],"rel":"2026-09-08","added":"2026-10-09"},{"n":"凄GUMI","r":"すごぐみ","m":"宝仙堂","f":["ガラナ系コーラ"],"rel":"2025-10-27","added":"2026-10-11"},{"n":"ザクラメグミ ミニ","r":"ざくらめぐみ みに","m":"クローマライフ","f":["コーラ"],"p":216,"pt":"incl","rel":"2026-08-21","added":"2026-10-11"},{"n":"コロロSOUR","r":"ころろさわー","m":"UHA味覚糖","f":["グリーンアップル"],"p":192,"pt":"incl","s":4,"added":"2026-10-11"},{"n":"ぎゅぎゅっと特濃蒟蒻畑","r":"ぎゅぎゅっととくのうこんにゃくばたけ","m":"マンナンライフ","f":["ぶどう","温州みかん","上州どどめ"],"added":"2026-10-11"},{"n":"ヨーグレットグミ","r":"よーぐれっとぐみ","m":"アトリオン製菓","f":["ヨーグルト"],"added":"2026-10-11"},{"n":"もっちりヨーグレットグミ","r":"もっちりよーぐれっとぐみ","m":"アトリオン製菓","f":["ヨーグルト"],"h":2,"added":"2026-10-11"},{"n":"ヨーグレットグミフリュイ","r":"よーぐれっとぐみふりゅい","m":"アトリオン製菓","f":["ブルーベリーヨーグルト"],"added":"2026-10-11"},{"n":"すっパイレモングミ","r":"すっぱいれもんぐみ","m":"アトリオン製菓","f":["レモン"],"s":4,"added":"2026-10-11"},{"n":"朝グミ","r":"あさぐみ","m":"アトリオン製菓","f":["バナナ","いちご"],"added":"2026-10-11"},{"n":"ニッポンエールグミ","r":"にっぽんえーるぐみ","m":"JA全農","f":["茨城県産栗","茨城県産芋","京都府産宇治抹茶","北海道産夕張メロン","北海道産ハスカップ","北海道産和ハッカ","青森県産世界一りんご","青森県産王林","青森県産飛馬ふじ","岩手県産やまぶどう","岩手県産冬恋りんご","宮城県産仙台いちご","秋田県産北限の桃","山形県産さくらんぼ","山形県産高徳りんご","山形県産ラ・フランス","山形県産月山ぶどう","福島県産あかつき桃","茨城県産ブルーベリー","茨城県産いばらキッス","栃木県産とちあいか苺","栃木県産スカイベリー®","群馬県産やよいひめ苺","埼玉県産あまりん苺","埼玉県産彩玉梨","千葉県産豊水梨","東京都産東京ゴールドキウイ","東京都八丈島産八丈フルーツレモン","神奈川県産湘南ゴールド","山梨県産サンシャインレッド","山梨県産甲斐キング","長野県産シャインマスカット","長野県産りんご三兄弟®","新潟県産ル レクチエ","富山県産呉羽梨","富山県産入善ジャンボ西瓜","石川県産ルビーロマン","福井県産完熟福太夫うめ","福井県産越のルビートマト","岐阜県飛騨産飛騨りんご","静岡県産クラウンメロン","静岡県産ルビーグレープフルーツ","愛知県産サンベリー蒲郡","愛知県産蒲郡みかん","三重県産マイヤーレモン","滋賀県産みおしずく苺","京都府京丹後市産京たんごメロン","大阪府産デラウェア","兵庫県産豊岡ぶどう","奈良県産古都華いちご","和歌山県産有田みかん","和歌山県産じゃばら®","和歌山県産南高梅","鳥取県産二十世紀梨","島根県産神紅ぶどう","岡山県産マスカット・オブ・アレキサンドリア","岡山県産白桃","広島県産世羅なし","広島県産はっさく＆レモン","山口県産ゆめほっぺ®","徳島県産すだち","香川県産香緑キウイ","愛媛県産紅まどんな®","高知県産四万十ぶしゅかん","高知県産ゆず","福岡県産甘うぃキウイ","福岡県産あまおう苺","佐賀県産いちごさん","長崎県産びわ","長崎県産長崎恋みかん","熊本県産ゆうべに苺","熊本県産すいか","熊本県産ハニーローザ","大分県産完熟かぼす","宮崎県産日向夏","宮崎県産マンゴー","鹿児島県産辺塚だいだい","鹿児島県産パッションフルーツ","鹿児島県産大将季＆紅甘夏","沖縄県産シークワーサー","沖縄県産パイナップル","鹿児島県屋久島産たんかん","沖縄県西表島産ピーチパイン"],"added":"2026-10-11"},{"n":"ニッポンエール 雫グミ","r":"にっぽんえーる しずくぐみ","m":"JA全農","f":["山形県産さくらんぼ","岡山県産清水白桃","山梨県産すもも","愛媛県産紅まどんな®"],"added":"2026-10-11"},{"n":"ニッポンエール ジュレグミ","r":"にっぽんえーる じゅれぐみ","m":"JA全農","f":["北海道産夕張メロン","長野県産シャインマスカット","福岡県産あまおう苺"],"added":"2026-10-11"},{"n":"ニッポンエール ふる～じょんグミ","r":"にっぽんえーる ふるーじょんぐみ","m":"JA全農","f":["京たんごメロン×古都華いちご"],"added":"2026-10-11"},{"n":"ニッポンエール 蜜グミ","r":"にっぽんえーる みつぐみ","m":"JA全農","f":["すもも"],"added":"2026-10-11"},{"n":"ニッポンエール ミルグミ","r":"にっぽんえーる みるぐみ","m":"JA全農","added":"2026-10-11"},{"n":"ガチャピンのシャインマスカットグミ","r":"がちゃぴんのしゃいんますかっとぐみ","m":"JA全農","added":"2026-10-11"},{"n":"ムックのさくらんぼグミ","r":"むっくのさくらんぼぐみ","m":"JA全農","added":"2026-10-11"},{"n":"神セブングミ","r":"かみせぶんぐみ","m":"JA全農","added":"2026-10-11"},{"n":"みかんグミ同盟","r":"みかんぐみどうめい","m":"JA全農","added":"2026-10-11"},{"n":"ザクラメグミ","r":"ざくらめぐみ","m":"クローマライフ","f":["サイダー","グレープ","シャインマスカット"],"p":216,"pt":"incl","rel":"2026-07-07","added":"2026-10-11"}];
 const FLAVOR_COLOR = [
   [/ミックス|アソート|詰め合わせ|レインボー|虹|ミックスフルーツ/, 'rainbow'],
   [/ぶどう|グレープ(?!フルーツ)|巨峰|ブルーベリー|カシス|ブラックベリー/, 'grape'], [/マスカット|メロン|青りんご|キウイ|ライム|抹茶|洋梨|ラフランス|すだち|かぼす/, 'melon'],
@@ -1197,7 +1279,7 @@ function renderStats(){
     </div>
     <div class="panel"><h3>${+key.slice(5)}月のまとめ</h3>
       <dl class="facts"><dt>推しメーカー</dt><dd>${esc(ms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, key)}</dd></dl>
-      <div class="btn-row"><button class="btn primary sm" id="post-month">今月のまとめをポスト</button></div></div>
+      <div class="btn-row"><button class="btn primary sm" id="post-month">今月のまとめを共有</button><button class="btn sm photo-cta month-img" type="button" id="month-img">${SHARE_ICON}画像で保存・共有</button></div></div>
     <div class="panel chart"><h3>月ごとの袋数<span class="s">直近6か月</span></h3>${svg}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
       <div class="type-line">あなたは <b>${type}</b> 派</div>
@@ -1317,7 +1399,8 @@ function wireCrop(){
   $('#crop-rl').addEventListener('click', () => { CROP.rot = (CROP.rot + 270) % 360; CROP.ox = CROP.oy = 0; cropClamp(); cropDraw(); });
   $('#crop-rr').addEventListener('click', () => { CROP.rot = (CROP.rot + 90) % 360; CROP.ox = CROP.oy = 0; cropClamp(); cropDraw(); });
   $('#crop-reset').addEventListener('click', () => { CROP.rot = 0; CROP.ox = CROP.oy = 0; setZoom(1); });
-  $('#crop-ok').addEventListener('click', () => { const out = cropResult(); closeSheet('#sh-crop'); const d = CROP.done; CROP.done = null; d && d(out); });
+  const ok = () => { const out = cropResult(); closeSheet('#sh-crop'); const d = CROP.done; CROP.done = null; d && d(out); };
+  $('#crop-ok').addEventListener('click', ok);
   // closing the sheet any other way cancels
   new MutationObserver(() => { if ($('#sh-crop').hidden && CROP.done){ const d = CROP.done; CROP.done = null; d(null); } })
     .observe($('#sh-crop'), {attributes:true, attributeFilter:['hidden']});
@@ -1378,6 +1461,7 @@ function renderShelf(){
       ${gframe(g.last, 'shelf')}<span class="pn">${esc(g.name)}</span></button>`;
   $('#v-shelf').innerHTML = `
     <div class="shelf-sum">
+      ${mine.length ? `<button type="button" class="photo-cta shelf-img" id="shelf-img" aria-label="グミ棚を画像にして保存・共有">${SHARE_ICON}画像で保存・共有</button>` : ''}
       <div><b class="num">${got.size}</b> <span>種類</span></div>
       <div><b class="num">${makers}</b> <span>メーカー</span></div>
       ${cat.length ? `<div><span>カタログ ${inCat} / ${cat.length}</span></div>` : ''}
@@ -1386,6 +1470,188 @@ function renderShelf(){
     <p class="hint" style="margin:0">最近買ったグミほど上に並びます。写真はいちばん新しいものが出ます。</p>
     ${mine.length ? `<div class="shelf-box"><div class="shelf-grid">${mine.map(card).join('')}</div></div>`
       : '<div class="rows"><div class="empty">まだ棚は空っぽです。グミを記録すると、ここに並んでいきます</div></div>'}`;
+}
+
+/* ---------- shelf as an image (save, or share to LINE / X through the phone's share sheet) ---------- */
+const SHARE_ICON = '<svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+let SI = { n:12, blob:null, url:'', kind:'shelf' };
+// canvas can't read color-mix(); let the browser resolve a CSS color to rgb()
+function solidColor(css){
+  const el = document.createElement('i'); el.style.color = css; el.style.display = 'none'; document.body.appendChild(el);
+  const c = getComputedStyle(el).color; el.remove(); return c;
+}
+function shelfMine(){
+  const {got} = shelfData();
+  return [...got.values()].sort((a, b) => b.last.date.localeCompare(a.last.date) || (b.last.createdAt || 0) - (a.last.createdAt || 0));
+}
+function rrect(ctx, X, Y, W, H, r){ ctx.beginPath(); ctx.moveTo(X + r, Y); ctx.arcTo(X + W, Y, X + W, Y + H, r); ctx.arcTo(X + W, Y + H, X, Y + H, r); ctx.arcTo(X, Y + H, X, Y, r); ctx.arcTo(X, Y, X + W, Y, r); ctx.closePath(); }
+function wrap2(ctx, text, w){
+  const lines = []; let cur = '';
+  for (const ch of text){ if (ctx.measureText(cur + ch).width > w){ lines.push(cur); cur = ch; if (lines.length === 2) break; } else cur += ch; }
+  if (lines.length < 2 && cur) lines.push(cur);
+  if (lines.length === 2 && lines.join('').length < [...text].length){ let l = lines[1]; while (l && ctx.measureText(l + '…').width > w) l = l.slice(0, -1); lines[1] = l + '…'; }
+  return lines;
+}
+const loadImg = src => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+// colors of the current theme, resolved for canvas
+function imgPalette(){
+  const col = v => solidColor(`var(${v})`);
+  return {bg:col('--bg'), surface:col('--surface'), ink:col('--ink'), ink2:col('--ink-2'), line:col('--line'), accent:col('--accent'), acc:col('--accent-text'), soft:col('--accent-soft'), board:col('--shelf-board'), edge:col('--shelf-edge'), lemon:col('--g-lemon')};
+}
+async function imgFonts(){ try { await Promise.all([document.fonts.load('400 60px "Dela Gothic One"', 'ぐみろぐグミ棚0123456789月'), document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ')]); } catch(e){} }
+// one shelf card: tinted frame in the gummy's color, photo or bear, ★5 crown, ×count stamp, name below (g = {last, name, count, best})
+function drawGumCard(x, C, g, ph, X, Y, cw, fh, nameSize = 26){
+  const gc = solidColor(colorOf(g.last.color)), bw = Math.max(6, cw * 0.04);
+  rrect(x, X, Y, cw, fh, 22); x.fillStyle = C.surface; x.fill();
+  x.save(); x.globalAlpha = .16; x.fillStyle = gc; x.fill(); x.restore();
+  if (ph){
+    x.save(); rrect(x, X + bw / 2, Y + bw / 2, cw - bw, fh - bw, 18); x.clip();
+    const s = Math.max((cw - bw) / ph.width, (fh - bw) / ph.height), w = ph.width * s, h = ph.height * s;
+    x.drawImage(ph, X + (cw - w) / 2, Y + (fh - h) / 2, w, h); x.restore();
+  } else drawBear(x, {x:X + cw / 2, y:Y + fh / 2 + 4, rot:0, color:g.last.color}, cw * 0.24);
+  let stroke = gc;
+  if (isRb(g.last.color)){ stroke = x.createLinearGradient(X, Y, X + cw, Y + fh); RAINBOW.forEach((h, k) => stroke.addColorStop(k / (RAINBOW.length - 1), h)); }
+  rrect(x, X + bw / 2, Y + bw / 2, cw - bw, fh - bw, 18); x.lineWidth = bw; x.strokeStyle = stroke; x.stroke();
+  if (g.best === 5){ x.font = '400 46px sans-serif'; x.fillStyle = C.lemon; x.strokeStyle = 'rgba(0,0,0,.18)'; x.lineWidth = 2; x.strokeText('★', X + 2, Y + 30); x.fillText('★', X + 2, Y + 30); }
+  if (g.count > 1){
+    x.save(); x.translate(X + cw - 22, Y + 18); x.rotate(.21);
+    x.beginPath(); x.arc(0, 0, 27, 0, Math.PI * 2); x.fillStyle = C.surface; x.fill(); x.lineWidth = 4; x.strokeStyle = C.accent; x.stroke();
+    x.fillStyle = C.acc; x.font = '400 22px "Dela Gothic One"'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('×' + g.count, 0, 2);
+    x.restore(); x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+  }
+  if (nameSize){
+    x.font = `700 ${nameSize}px "Zen Maru Gothic"`; x.fillStyle = C.ink; x.textAlign = 'center';
+    wrap2(x, g.name, cw).forEach((ln, k) => x.fillText(ln, X + cw / 2, Y + fh + nameSize + 14 + k * (nameSize + 6)));
+    x.textAlign = 'left';
+  }
+}
+function drawLogo(x, C, X, Y){
+  x.textBaseline = 'alphabetic'; x.font = '400 40px "Dela Gothic One"';
+  x.fillStyle = C.acc; x.fillText('ぐみ', X, Y); const gw = x.measureText('ぐみ').width; x.fillStyle = C.ink; x.fillText('ろぐ', X + gw + 4, Y);
+}
+async function drawShelfImage(n){
+  await imgFonts();
+  const list = shelfMine().slice(0, n), C = imgPalette();
+  const W = 1080, pad = 56, cols = 4, gap = 24, cw = (W - pad * 2 - gap * (cols - 1)) / cols, fh = cw * 5 / 4;
+  const rowH = 22 + fh + 14 + 66 + 16 + 26, rows = Math.ceil(list.length / cols), head = 270, foot = 96;
+  const H = head + rows * rowH + foot;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
+  // header: logo, title, date
+  drawLogo(x, C, pad, 92);
+  x.font = '400 76px "Dela Gothic One"'; x.fillStyle = C.ink; x.fillText('グミ棚', pad, 190);
+  const d = new Date(), all = shelfMine().length;
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2;
+  x.fillText(`最近の${list.length}種類　${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, pad, 238);
+  x.textAlign = 'right'; x.fillText(`ぜんぶで ${all} 種類`, W - pad, 238); x.textAlign = 'left';
+  const photos = await Promise.all(list.map(g => { const p = photoFor(g.last); return p ? loadImg(p) : null; }));
+  list.forEach((g, i) => {
+    const r = Math.floor(i / cols), c = i % cols, X = pad + c * (cw + gap), Y = head + r * rowH + 22;
+    drawGumCard(x, C, g, photos[i], X, Y, cw, fh);
+    // the board under each row
+    if (c === 0){ const by = head + r * rowH + 22 + fh + 14 + 66 + 4; x.fillStyle = C.board; x.fillRect(pad - 14, by, W - (pad - 14) * 2, 10); x.fillStyle = C.edge; x.fillRect(pad - 14, by + 10, W - (pad - 14) * 2, 6); }
+  });
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.textAlign = 'center'; x.fillText('#ぐみろぐ  #グミ', W / 2, H - 42); x.textAlign = 'left';
+  return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
+}
+async function drawMonthImage(){
+  await imgFonts();
+  const C = imgPalette(), all = items(), key = ym(todayStr()), ms = monthStats(all, key), mon = +key.slice(5);
+  const W = 1080, pad = 56, gap = 24, cols = 4, cw = (W - pad * 2 - gap * (cols - 1)) / cols, fh = cw * 5 / 4;
+  // this month's gummies, newest first, one card per name
+  const byName = new Map();
+  [...ms.list].sort(byDateDesc).forEach(i => { const g = byName.get(i.name); if (g){ g.count++; g.best = Math.max(g.best, i.rating || 0); } else byName.set(i.name, {name:i.name, last:i, count:1, best:i.rating || 0}); });
+  const cards = [...byName.values()].slice(0, 12), rows = Math.ceil(cards.length / cols);
+  const bestName = monthBest(all, key).name, bestG = bestName ? byName.get(bestName) : null;
+  const yK = 282, kH = 150, yM = yK + kH + 74, yB = yM + 78, bW = 250, bH = bW * 5 / 4, yL = yB + (bestG ? bH : 60) + 96;
+  const rowH = fh + 14 + 66 + 26, H = yL + 30 + Math.max(rows, 1) * rowH + 96;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
+  drawLogo(x, C, pad, 92);
+  x.font = '400 76px "Dela Gothic One"'; x.fillStyle = C.ink; x.fillText(`${mon}月のぐみろぐ`, pad, 190);
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText(`${key.slice(0, 4)}年${mon}月のまとめ`, pad, 238);
+  // four numbers
+  const kw = (W - pad * 2 - 20 * 3) / 4;
+  [['袋数', ms.count, '袋'], ['出費', ms.spend.toLocaleString('ja-JP'), '円'], ['新商品', ms.news, '個'], ['連続記録', streakOf(all), '日']].forEach(([l, v, u], i) => {
+    const X = pad + i * (kw + 20);
+    rrect(x, X, yK, kw, kH, 24); x.fillStyle = C.surface; x.fill(); x.lineWidth = 2; x.strokeStyle = C.line; x.stroke();
+    x.font = '700 24px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText(l, X + 22, yK + 44);
+    x.font = '400 50px "Dela Gothic One"'; x.fillStyle = C.ink; const vs = String(v); x.fillText(vs, X + 22, yK + 112);
+    const vw = x.measureText(vs).width; x.font = '700 24px "Zen Maru Gothic"'; x.fillText(u, X + 22 + vw + 6, yK + 112);
+  });
+  // favorite maker
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText('推しメーカー', pad, yM);
+  const lw = x.measureText('推しメーカー').width; x.font = '400 40px "Dela Gothic One"'; x.fillStyle = C.acc; x.fillText(ms.topMaker || '—', pad + lw + 20, yM + 2);
+  // best gummy
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText('ベストグミ', pad, yB - 22);
+  const photoOfG = g => { const p = photoFor(g.last); return p ? loadImg(p) : null; };
+  if (bestG){
+    drawGumCard(x, C, {...bestG, count:1}, await photoOfG(bestG), pad, yB, bW, bH, 0);
+    const tx = pad + bW + 36, tw = W - pad - tx;
+    x.font = '700 44px "Zen Maru Gothic"'; x.fillStyle = C.ink;
+    wrap2(x, bestG.name, tw).forEach((ln, k) => x.fillText(ln, tx, yB + 80 + k * 56));
+    x.font = '400 40px sans-serif'; x.fillStyle = C.lemon; x.fillText('★★★★★', tx, yB + 210);
+    if (bestG.last.maker){ x.font = '700 26px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText(bestG.last.maker, tx, yB + 262); }
+  } else { x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText('—（★5をつけたグミから選べます）', pad, yB + 34); }
+  // this month's gummies
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.fillText(cards.length ? `今月買ったグミ（${byName.size}種類）` : '今月買ったグミ', pad, yL);
+  if (!cards.length){ x.fillText('まだありません', pad, yL + 60); }
+  const photos = await Promise.all(cards.map(photoOfG));
+  cards.forEach((g, i) => {
+    const r = Math.floor(i / cols), c = i % cols, X = pad + c * (cw + gap), Y = yL + 30 + r * rowH;
+    drawGumCard(x, C, g, photos[i], X, Y, cw, fh);
+  });
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.textAlign = 'center'; x.fillText('#ぐみろぐ  #グミ', W / 2, H - 42); x.textAlign = 'left';
+  return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
+}
+async function renderShelfImage(){
+  $('#si-wait').hidden = false; $('#si-img').removeAttribute('src');
+  $('#si-share').disabled = $('#si-save').disabled = true;
+  const blob = SI.kind === 'month' ? await drawMonthImage() : await drawShelfImage(SI.n);
+  if (SI.url) URL.revokeObjectURL(SI.url);
+  SI.blob = blob; SI.url = URL.createObjectURL(blob);
+  $('#si-img').src = SI.url; $('#si-wait').hidden = true;
+  $('#si-share').disabled = $('#si-save').disabled = false;
+}
+function openMonthImage(){
+  SI.kind = 'month';
+  $('#si-title').textContent = '月のまとめを画像に'; $('#si-count').hidden = $('#si-count-l').hidden = true;
+  siShareHint(); openSheet('#sh-shelfimg'); renderShelfImage();
+}
+function siShareHint(){
+  const share = canShareFiles();
+  $('#si-share').hidden = !share;
+  $('#si-hint').textContent = share ? '「共有する」を押すと、LINE や X などを選べる画面が開きます。' : 'この画面では共有ボタンが使えないので、画像を保存してから LINE や X に貼ってください。';
+}
+function openShelfImage(){
+  SI.kind = 'shelf';
+  $('#si-title').textContent = 'グミ棚を画像に'; $('#si-count').hidden = $('#si-count-l').hidden = false;
+  const total = shelfMine().length;
+  const opts = [...new Set([12, 16, 24].filter(k => k < total).concat([Math.min(total, 24)]))];
+  if (!opts.includes(SI.n)) SI.n = opts[0];
+  $('#si-count').style.gridTemplateColumns = `repeat(${opts.length},minmax(0,1fr))`;
+  $('#si-count').innerHTML = opts.map(k => `<button type="button" role="radio" data-n="${k}" aria-checked="${SI.n === k}">${k === total && k <= 24 ? `ぜんぶ（${k}）` : k + '種類'}</button>`).join('');
+  siShareHint(); openSheet('#sh-shelfimg'); renderShelfImage();
+}
+async function saveBlob(blob, name){
+  if (S.cap.downloads){
+    try { await S.cap.downloads.save({filename:name, data:blob}); toast('保存しました'); } catch(e){ if (e && e.code !== 'declined') toast('保存できませんでした'); }
+    return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+function wireShelfImage(){
+  $('#si-count').addEventListener('click', e => { const b = e.target.closest('[data-n]'); if (!b || +b.dataset.n === SI.n) return; SI.n = +b.dataset.n;
+    $('#si-count').querySelectorAll('[data-n]').forEach(x => x.setAttribute('aria-checked', x === b)); renderShelfImage(); });
+  const name = () => SI.kind === 'month' ? `gumilog-${ym(todayStr()).replace('-', '')}.jpg` : `gumilog-shelf-${todayStr().replace(/-/g, '')}.jpg`;
+  $('#si-save').addEventListener('click', () => SI.blob && saveBlob(SI.blob, name()));
+  $('#si-share').addEventListener('click', async () => {
+    if (!SI.blob) return;
+    const text = SI.kind === 'month' ? `${+ym(todayStr()).slice(5)}月のぐみろぐ #ぐみろぐ #グミ` : 'わたしのグミ棚 #ぐみろぐ #グミ';
+    try { await navigator.share({files:[new File([SI.blob], name(), {type:'image/jpeg'})], text}); }
+    catch(e){ if (e && e.name !== 'AbortError') toast('共有できませんでした。画像を保存してから貼ってください'); }
+  });
 }
 
 /* ---------- render all ---------- */
@@ -1428,7 +1694,8 @@ let lastFocus = null;
 function openSheet(id){ lastFocus = document.activeElement; const s = $(id); s.hidden = false; document.body.style.overflow = 'hidden'; setTimeout(() => { const f = s.querySelector('input,button,textarea'); f && f.focus({preventScroll:true}); }, 30); }
 function closeSheet(id){ $(id).hidden = true; if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) document.body.style.overflow = ''; lastFocus && lastFocus.focus && lastFocus.focus({preventScroll:true}); }
 document.querySelectorAll('.sheet').forEach(s => {
-  s.addEventListener('click', e => { if (e.target === s || e.target.closest('[data-close]')) closeSheet('#' + s.id); });
+  // a tap on the dark area closes a sheet, except the photo crop: right after the photo picker, thumbs go to the top
+  s.addEventListener('click', e => { if ((e.target === s && s.id !== 'sh-crop') || e.target.closest('[data-close]')) closeSheet('#' + s.id); });
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape'){ const open = [...document.querySelectorAll('.sheet')].reverse().find(s => !s.hidden); open && closeSheet('#' + open.id); } });
 
@@ -1520,11 +1787,19 @@ function renderTplEditor(){
   box.innerHTML = `<p class="hint" style="margin:0 0 8px">{おいしさ} などは記録の内容に置きかわります。記録していない項目がある行は、ポストするときにその行ごと消えます。</p>
     ${Object.keys(POST_TPL_DEFAULT).map(k => `<div class="tpl-row"><div class="tpl-h"><b>${POST_TPL_NAMES[k]}</b>
       <button type="button" class="btn sm ghost" data-tpl-reset="${k}" ${postTplOf(k) === POST_TPL_DEFAULT[k] ? 'disabled' : ''}>初期に戻す</button></div>
-      <textarea class="in tpl-in" data-tpl-edit="${k}" rows="7" aria-label="${POST_TPL_NAMES[k]}のテンプレート">${esc(postTplOf(k))}</textarea></div>`).join('')}
+      <div class="tpl-wrap"><div class="tpl-hl" aria-hidden="true"></div><textarea class="in tpl-in" data-tpl-edit="${k}" rows="7" aria-label="${POST_TPL_NAMES[k]}のテンプレート">${esc(postTplOf(k))}</textarea></div></div>`).join('')}
     <span class="fl-t" style="margin-top:6px">入れられる項目<span class="hint">（タップで、最後に触った欄のカーソル位置に入ります）</span></span>
     <div class="chips tpl-slots">${POST_SLOTS.map(x => `<button type="button" class="chip" data-slot="${x}">{${x}}</button>`).join('')}</div>`;
   const save = () => { lsSet(LS_POSTTPL, S.postTpls); clearTimeout(tplSaveT); tplSaveT = setTimeout(saveSettingsDoc, 600); };
+  // color {項目}: known slots blue, anything else in braces red; the box grows with its text so the two layers stay aligned
+  const paint = ta => {
+    const hl = ta.previousElementSibling;
+    hl.innerHTML = esc(ta.value).replace(/\{([^{}\n]{1,12})\}/g, (m, k) => `<span class="slot${POST_SLOTS.includes(k) ? '' : ' ng'}">${m}</span>`) + '\n';
+    ta.style.height = 'auto'; ta.style.height = Math.max(150, ta.scrollHeight + 2) + 'px';
+  };
   box.querySelectorAll('[data-tpl-edit]').forEach(ta => {
+    paint(ta);
+    ta.addEventListener('input', () => paint(ta));
     for (const ev of ['focus', 'pointerdown']) ta.addEventListener(ev, () => { tplFocus = ta.dataset.tplEdit; });
     ta.addEventListener('input', () => {
       const k = ta.dataset.tplEdit; S.postTpls[k] = ta.value === POST_TPL_DEFAULT[k] ? '' : ta.value; save();
@@ -1612,8 +1887,12 @@ function renderFormPhoto(){
   const rec = F.editing ? {...F.editing, name} : {id:'__new', name, date:$('#f-date').value || todayStr()};
   const k = name ? photoKeyFor(rec, F.photoDel) : '';
   const p = F.photo ? F.photo.small : photoOf(k), own = !F.photo && k === ownKey(rec);
-  $('#f-photo-thumb').innerHTML = `<span class="gframe gf-row${isRb(F.color) ? ' rb' : ''}" style="--gc:${colorOf(F.color)}">${p ? `<img src="${p}" alt="写真">` : bearSVG(F.color, 30)}</span>`;
-  $('#f-photo-lbl').textContent = F.photo || own ? '写真を変える' : p ? 'この記録の写真をつける' : '自分で撮った写真をつける';
+  // only a real photo is shown here; without one the button alone invites you to add it
+  $('#f-photo-thumb').hidden = !p;
+  $('#f-photo-thumb').innerHTML = p ? `<span class="gframe gf-row${isRb(F.color) ? ' rb' : ''}" style="--gc:${colorOf(F.color)}"><img src="${p}" alt="写真"></span><span class="cam-badge">${CAM}</span>` : '';
+  const set = F.photo || own;
+  $('#f-photo-lbl').className = set ? 'btn sm ghost' : 'photo-cta';
+  $('#f-photo-lbl').innerHTML = CAM + (set ? '写真を変える' : p ? 'この記録の写真をつける' : '自分で撮った写真をつける');
   $('#f-photo-del').hidden = !(F.photo || own);
 }
 function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
@@ -1872,7 +2151,7 @@ function wireForm(){
     }
     try {
       await putItem(it);
-      if (!base) showSnack(it, wasDemo); else toast('保存しました');
+      if (!base){ showSnack(it, wasDemo); offerSuggest(it); } else toast('保存しました');
       try {
         if (photo) await setPhoto(ownKey(it), photo.small, photo.big, name);
         else if (photoDel && photoOf(ownKey(it))) await setPhoto(ownKey(it), '');
@@ -1887,6 +2166,9 @@ function wireForm(){
 /* ---------- suggesting new gummies (Google Form; answers are checked by hand before they reach catalog.csv) ---------- */
 const SUGGEST_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdGzcsBv4JCY3JmN0GrGf9F9Lev5_NrOsamjaFlChoEgS6tMQ/viewform';
 const SUGGEST_FIELDS = {name:'entry.1072942396', maker:'entry.146467384', flavor:'entry.1551221881', price:'entry.303233871'};
+// attributes for a 「カタログに提案する」 link: the tap opens the in-app confirm sheet, the href is the plain form as a fallback
+const sgAttrs = d => `href="${esc(suggestUrl(d))}" target="_blank" rel="noopener" data-suggest="${esc(JSON.stringify(d || {}))}"`;
+const sgData = it => ({name:it.name || '', maker:it.maker || '', flavor:it.flavor || '', price:it.price ?? ''});
 function suggestUrl(it){
   if (!it) return SUGGEST_FORM;
   const q = new URLSearchParams({usp:'pp_url'});
@@ -1897,6 +2179,29 @@ function suggestUrl(it){
 function inCatalog(name){
   const n = norm(name);
   return catList().some(c => norm(c.n) === n || (c.f || []).some(f => norm(`${c.n} ${f}`) === n));
+}
+// a known series with a flavor the catalog doesn't list: 「アンパンマングミ」 + a new taste, or 「アンパンマングミ メロン」.
+// Returns {c, flavor} (flavor may be '' when none was written), or null when the record is fully in the catalog or no series fits.
+function newFlavorOf(it){
+  if (!it || it.demo) return null;
+  // compare loosely: 「味」, (65g) and spacing don't make a new flavor
+  const nn = looseName(it.name);
+  let best = null;
+  for (const c of catList()){ const cn = looseName(c.n); if (cn.length >= 2 && nn.startsWith(cn) && (!best || cn.length > looseName(best.n).length)) best = c; }
+  if (!best) return null;
+  const fl = best.f || [], rest = nn.slice(looseName(best.n).length);
+  if (rest){
+    if (fl.some(f => looseName(f) === rest)) return null;                  // 「シリーズ 既存の味」
+    const raw = it.name.normalize('NFKC').replace(best.n.normalize('NFKC'), '').trim() || it.flavor || '';
+    return {c:best, flavor:raw};
+  }
+  if (!fl.length) return null;                                            // a series without flavors is the product itself
+  if (it.flavor && fl.some(f => looseName(f) === looseName(it.flavor))) return null; // the flavor field names a listed taste
+  return {c:best, flavor:it.flavor || ''};
+}
+function newFlavorHTML(it, nf){
+  const d = {name:nf.c.n + (nf.flavor ? ' ' + nf.flavor : ''), maker:nf.c.m, flavor:nf.flavor, price:it.price ?? ''};
+  return `<p class="suggest hint">${nf.flavor ? `「${esc(nf.c.n)}」の${esc(nf.flavor)}はカタログにない味です。` : `「${esc(nf.c.n)}」のどの味かが入っていません。カタログにない味なら、`}<a ${sgAttrs(d)}>カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。${nf.flavor ? '' : '（味は「直す」から入れられます）'}</p>`;
 }
 
 /* ---------- lining a record up with the catalog ----------
@@ -1935,7 +2240,7 @@ function catMatches(it){
   out.sort((a, b) => b.score - a.score);
   return out.filter(m => m.score >= out[0].score - 0.2).slice(0, 3);   // only the ones nearly as good as the best
 }
-const needsMatch = it => it && !it.demo && !inCatalog(it.name) && !S.nameSkip.includes(it.name);
+const needsMatch = it => it && !it.demo && !inCatalog(it.name) && !S.nameSkip.includes(it.name) && !newFlavorOf(it);
 function matchHTML(it){
   const ms = catMatches(it); if (!ms.length) return '';
   return `<div class="cat-match" data-match-old="${esc(it.name)}"><p>カタログに近いグミがあります。名前を合わせますか？</p>
@@ -1973,6 +2278,71 @@ async function onMatchClick(e, after){
   return true;
 }
 
+const CAM = '<svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.6-2.2A1.5 1.5 0 0 1 9.8 5h4.4a1.5 1.5 0 0 1 1.2.8L17 8h3a1.5 1.5 0 0 1 1.5 1.5v8.5A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18V9.5A1.5 1.5 0 0 1 4 8z"/><circle cx="12" cy="13.3" r="3.6"/></svg>';
+
+/* ---------- after saving: invite a catalog suggestion for gummies the catalog doesn't know ---------- */
+// null when the catalog knows it, or when a close catalog name exists (likely a spelling: the detail sheet offers to rename instead)
+function suggestOffer(it){
+  if (!it || it.demo) return null;
+  const nf = newFlavorOf(it);
+  if (nf){
+    const d = {name:nf.c.n + (nf.flavor ? ' ' + nf.flavor : ''), maker:nf.c.m, flavor:nf.flavor, price:it.price ?? ''};
+    return {text: nf.flavor ? `「${nf.c.n}」の${nf.flavor}は、カタログにない味みたいです。` : `「${nf.c.n}」のどの味か、カタログにないものみたいです。`, d};
+  }
+  if (inCatalog(it.name) || catMatches(it).length) return null;
+  return {text:`「${it.name}」は、カタログにないグミみたいです。`, d:sgData(it)};
+}
+let suggestT = 0;
+function offerSuggest(it){
+  const o = suggestOffer(it); if (!o) return;
+  clearTimeout(suggestT);
+  // after the bear has dropped into the jar
+  suggestT = setTimeout(() => {
+    if ([...document.querySelectorAll('.sheet')].some(x => !x.hidden)) return;   // something else is open: the detail sheet still offers it
+    $('#sg-text').textContent = o.text; $('#sg-go').href = suggestUrl(o.d); $('#sg-go').dataset.suggest = JSON.stringify(o.d);
+    hideSnack(); openSheet('#sh-suggest');
+  }, 1500);
+}
+
+/* ---------- sending a suggestion from inside the app ----------
+   Google Forms takes a plain POST to …/formResponse. The reply is opaque (no-cors), so a resolved fetch is
+   the best we can know; a rejected one (offline, or blocked by the page's sandbox) offers the form instead. */
+function openSuggestForm(d){
+  d = d || {};
+  $('#sf-name').value = d.name || ''; $('#sf-maker').value = d.maker || ''; $('#sf-flavor').value = d.flavor || '';
+  $('#sf-price').value = d.price === '' || d.price == null ? '' : d.price;
+  $('#sf-err').hidden = true; $('#sf-fail').hidden = true; $('#sf-send').disabled = false; $('#sf-send').textContent = '送信する';
+  openSheet('#sh-sform');
+}
+function sfValues(){ return {name:$('#sf-name').value.trim(), maker:$('#sf-maker').value.trim(), flavor:$('#sf-flavor').value.trim(), price:$('#sf-price').value.trim()}; }
+async function sendSuggest(){
+  const v = sfValues();
+  if (!v.name){ $('#sf-err').hidden = false; $('#sf-name').focus(); return; }
+  const body = new URLSearchParams();
+  for (const [k, f] of Object.entries(SUGGEST_FIELDS)) if (v[k]) body.set(f, v[k]);
+  const btn = $('#sf-send'); btn.disabled = true; btn.textContent = '送信中…';
+  try {
+    await fetch(SUGGEST_FORM.replace(/viewform$/, 'formResponse'), {method:'POST', mode:'no-cors', body});
+    closeSheet('#sh-sform'); toast('送りました！確認してカタログに追加します');
+  } catch(e){
+    $('#sf-fallback').href = suggestUrl(v); $('#sf-fail').hidden = false;
+    btn.disabled = false; btn.textContent = 'もう一度送る';
+  }
+}
+function wireSuggestForm(){
+  // every 「カタログに提案する」 link opens the confirm sheet instead of the form page
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-suggest]'); if (!a) return;
+    e.preventDefault();
+    let d = {}; try { d = JSON.parse(a.dataset.suggest || '{}'); } catch(err){}
+    if (!$('#sh-suggest').hidden) closeSheet('#sh-suggest');
+    openSuggestForm(d);
+  });
+  $('#sf-send').addEventListener('click', sendSuggest);
+  $('#sf-fallback').addEventListener('click', () => setTimeout(() => closeSheet('#sh-sform'), 300));
+  $('#sf-form').addEventListener('submit', e => e.preventDefault());
+}
+
 /* ---------- detail ---------- */
 // the purchase of the same gummy just before this one, with how many days apart
 function prevBuy(all, it){
@@ -1993,7 +2363,7 @@ function openDetail(id){
   const meter = (kind, n) => n ? `<div class="meter">${shapesHTML(kind, n, 16)}<span class="hint" style="margin-left:6px">${LEVEL_LBL[kind][n-1]}</span></div>` : '<div class="v">—</div>';
   $('#dt-no').textContent = it.demo ? 'サンプルの記録' : `No.${nums.get(it.id)}`;
   $('#dt-body').innerHTML = `
-    <div class="dt-hero">${gframe(it, 'detail')}
+    <div class="dt-hero">${it.demo ? gframe(it, 'detail') : `<label class="gf-tap" for="dt-photo" aria-label="${pOwn ? '写真を変える' : '写真をつける'}">${gframe(it, 'detail')}<span class="cam-badge">${CAM}</span></label>`}
       <div style="min-width:0"><div>${(it.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('')}</div><h3>${esc(it.name)}${statusMark(it)}</h3><div class="sub">${esc([it.maker, it.flavor].filter(Boolean).join('・'))}</div>${starsHTML(it.rating||0)}</div></div>
     <div class="dt-grid">
       <div><span class="lbl">日付</span><div class="v num">${mdLabel(it.date)}</div></div>
@@ -2004,17 +2374,18 @@ function openDetail(id){
     </div>
     ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
     ${needsMatch(it) ? matchHTML(it) : ''}
-    ${!it.demo && !inCatalog(it.name) && !(needsMatch(it) && catMatches(it).length) ? `<p class="suggest hint">カタログにないグミです。<a href="${esc(suggestUrl(it))}" target="_blank" rel="noopener">カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。</p>` : ''}
+    ${newFlavorOf(it) ? newFlavorHTML(it, newFlavorOf(it)) : ''}
+    ${!it.demo && !inCatalog(it.name) && !newFlavorOf(it) && !(needsMatch(it) && catMatches(it).length) ? `<p class="suggest hint">カタログにないグミです。<a ${sgAttrs(sgData(it))}>カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。</p>` : ''}
     <div class="dt-status"><span class="lbl">食べた？</span><div class="seg" id="dt-status" role="radiogroup" aria-label="食べたかどうか">${STATUS.map(x => `<button type="button" role="radio" data-status="${x.k}" aria-checked="${statusOf(it) === x.k}" ${it.demo ? 'disabled' : ''}>${x.n}</button>`).join('')}</div>
       ${it.demo ? '' : `<p class="hint" id="dt-rate-hint" style="margin:0" ${statusOf(it) !== 'unopened' && !it.rating ? '' : 'hidden'}>食べたら「直す」からおいしさを記録しましょう</p>`}</div>
     ${it.demo ? '' : `<div class="photo-row">
-      <label class="btn sm ghost" for="dt-photo">${pOwn ? '写真を変える' : pKey ? 'この記録の写真をつける' : '自分で撮った写真をつける'}</label>
+      ${pOwn ? `<label class="btn sm ghost" for="dt-photo">${CAM}写真を変える</label>` : `<label class="photo-cta" for="dt-photo">${CAM}${pKey ? 'この記録の写真をつける' : '自分で撮った写真をつける'}</label>`}
       <input type="file" id="dt-photo" accept="image/*" hidden>
       ${pOwn || pKey === it.name ? '<button class="btn sm ghost" id="dt-photo-del" type="button">写真を外す</button>' : ''}
       <span class="hint">${pOwn ? 'この記録の写真です。' : pKey === it.name ? 'この写真は前のしくみでつけた「' + esc(it.name) + '」共通の写真です。' : pKey ? '前に買ったときの写真を表示しています。この記録だけの写真もつけられます。' : 'つけた写真はこの記録に使われます。'}グミ棚にはいちばん新しい写真が出ます。${bigNote(pKey)}</span>
     </div>`}
     <div class="sheet-actions">
-      <button class="btn primary" id="dt-post">Xにポスト</button>
+      <button class="btn primary" id="dt-post">共有</button>
       ${it.demo ? '' : `<button class="btn" id="dt-again">また買った</button><button class="btn ghost" id="dt-edit">直す</button><button class="btn danger" id="dt-del">削除</button>`}
     </div>`;
   $('#dt-post').onclick = () => { closeSheet('#sh-detail'); openPost(it); };
@@ -2095,7 +2466,7 @@ function updatePost(){
 }
 function openPost(it, kind){
   P.item = it; P.kind = kind || 'item';
-  $('#post-title').textContent = P.kind === 'month' ? '今月のまとめをポスト' : 'Xにポスト';
+  $('#post-title').textContent = P.kind === 'month' ? '今月のまとめを共有' : '共有';
   const tpls = P.kind === 'item' ? [{k:'detail',n:'くわしく'},{k:'simple',n:'シンプル'}] : [];
   $('#post-tpl').innerHTML = tpls.map(t => `<button class="chip" data-tpl="${t.k}" aria-pressed="${P.tpl===t.k}">${t.n}</button>`).join('');
   $('#post-tpl').hidden = !tpls.length;
@@ -2121,7 +2492,7 @@ const dataUrlToBlob = async d => {
 function bigNote(key){
   const b = bigOf(key); if (!b) return '';
   const d = new Date(b.at + BIG_KEEP);
-  return `Xにポストする用の大きい写真は${d.getMonth()+1}/${d.getDate()}まで残り、そのあとは小さい写真だけになります。`;
+  return `共有用の大きい写真は${d.getMonth()+1}/${d.getDate()}まで残り、そのあとは小さい写真だけになります。`;
 }
 function photoFile(){
   const d = P.item && postPhotoOf(P.item); if (!d) return null;
@@ -2266,14 +2637,14 @@ function renderSettings(){
     <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
     <div class="panel"><h3>グミカタログ</h3>
       <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
-      <div class="btn-row"><a class="btn sm" href="${esc(SUGGEST_FORM)}" target="_blank" rel="noopener">新しいグミを教える</a></div>
+      <div class="btn-row"><a class="btn sm" ${sgAttrs({})}>新しいグミを教える</a></div>
       <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
       ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
       <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
     ${matchListHTML()}
     <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
     <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
-    <div class="panel"><h3>Xにポストの文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
+    <div class="panel"><h3>共有の文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
     <div class="panel"><h3>書き出し</h3>
       <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
       <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
@@ -2355,6 +2726,8 @@ $('#app').addEventListener('click', async e => {
   const o = e.target.closest('[data-open]'); if (o){ openDetail(o.dataset.open); return; }
   const d = e.target.closest('[data-day]'); if (d){ S.ui.selDay = S.ui.selDay === d.dataset.day ? null : d.dataset.day; renderCal(); return; }
   if (e.target.closest('#post-month')){ openPost(null, 'month'); return; }
+  if (e.target.closest('#shelf-img')){ openShelfImage(); return; }
+  if (e.target.closest('#month-img')){ openMonthImage(); return; }
   if (e.target.closest('#migrate')){
     const btn = e.target.closest('#migrate'); btn.disabled = true; btn.textContent = '移しています…';
     try {
@@ -2400,7 +2773,8 @@ function checkUpdate(){
   }).catch(() => {});
 }
 $('#jar').addEventListener('pointerdown', e => { const r = e.currentTarget.getBoundingClientRect(); jarPoke(e.clientX - r.left, e.clientY - r.top); });
-wireForm(); wirePost(); wireShopEditor();
+wireForm(); wirePost(); wireShopEditor(); wireShelfImage();
+wireSuggestForm();
 $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT_ID)));
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 jarSetup();
