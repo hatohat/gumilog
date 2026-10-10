@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="880555ea47"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="10e6a6bf79"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -190,8 +190,8 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .shelf-sum .shelf-img{float:right;margin:2px 0 6px 6px;padding:7px 10px;font-size:12.5px;gap:5px}
 .shelf-sum .shelf-img svg{width:16px;height:16px}
 .si-seg{margin-bottom:12px}
-.btn-row .month-img{padding:6px 12px;font-size:12px;gap:5px}
-.btn-row .month-img svg{width:15px;height:15px}
+.btn.sm .cam{width:15px;height:15px}
+.btn-row .month-img{flex:1}
 .sg-text{margin:0 0 8px;font-weight:700;line-height:1.6}
 .sf-fail{margin:10px 0 0;font-size:13px;color:var(--ink-2);line-height:1.6}
 .sf-fail .btn{margin-top:6px}
@@ -206,6 +206,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .si-prev img:not([src]){display:none}
 .si-btns{margin-top:12px}
 .si-btns .btn{flex:1}
+.si-text{display:block;margin:12px auto 0;border:0;background:none;color:var(--ink-2);font:inherit;font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px}
 .shelf-sum b{font-family:var(--f-display);font-weight:400;font-size:28px;color:var(--accent-text)}
 .shelf-sum span{font-size:13px;color:var(--ink-2)}
 .shelf-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -236,11 +237,13 @@ h1,h2,h3{text-wrap:balance;margin:0}
 
 /* sheets */
 .sheet{position:fixed;left:0;right:0;top:var(--vv-top,0px);height:var(--vv-h,100%);z-index:50;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center;padding-top:calc(env(safe-area-inset-top,0px) + 48px)}
-.sheet-p{background:var(--bg);width:100%;max-width:600px;max-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;border-radius:24px 24px 0 0;padding:0 16px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+.sheet-p{background:var(--bg);width:100%;max-width:600px;max-height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:24px 24px 0 0;animation:up .22s ease-out}
+/* only the part under the title scrolls, so the scroll bar never reaches into the rounded top corners */
+.sheet-body{flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:0 16px calc(20px + env(safe-area-inset-bottom,0px))}
 @keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.sheet-p{animation:none}.fab{transition:none}}
 /* title + 閉じる stay pinned while a tall sheet scrolls */
-.sheet-h{display:flex;align-items:center;gap:10px;margin:0 -16px 12px;padding:18px 16px 8px;position:sticky;top:0;z-index:3;background:var(--bg)}
+.sheet-h{display:flex;align-items:center;gap:10px;flex:none;padding:18px 16px 12px;background:var(--bg)}
 .sheet-h h2{font-family:var(--f-display);font-weight:400;font-size:20px;flex:1}
 .form{display:flex;flex-direction:column;gap:14px}
 .f{display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -281,6 +284,8 @@ input[type=date].in::-webkit-date-and-time-value{text-align:left}
 input[type=range]{width:100%;accent-color:var(--accent-text)}
 .sheet-actions{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:-20px;background:var(--bg);padding-block:10px;margin-top:4px}
 .sheet-actions .btn.primary{flex:1}
+.sheet-actions .btn{white-space:nowrap}
+#sh-detail .sheet-actions .btn{padding-inline:13px}
 .check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);font-weight:500}
 .check input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
 .nospend{font-size:10px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:0 5px;margin-left:3px}
@@ -460,7 +465,7 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
   <!-- データ -->
   <section class="view" id="v-stats" hidden></section>
 
-  <!-- グミ棚 -->
+  <!-- ぐみ棚 -->
   <section class="view" id="v-shelf" hidden></section>
 </main>
 
@@ -470,7 +475,7 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
     <button class="tab" data-tab="cal"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>カレンダー</button>
     <button class="fab" id="fab" aria-label="グミを記録"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
     <button class="tab" data-tab="stats"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>データ</button>
-    <button class="tab" data-tab="shelf"><svg viewBox="0 0 24 24"><path d="M3.5 9.5h17M3.5 19.5h17M5 3.5v16M19 3.5v16"/><rect x="7" y="4.5" width="3.5" height="5" rx="1"/><rect x="12" y="5.5" width="4" height="4" rx="1.5"/><rect x="7.5" y="13.5" width="4" height="6" rx="1"/><circle cx="15.2" cy="17" r="2.5"/></svg>グミ棚</button>
+    <button class="tab" data-tab="shelf"><svg viewBox="0 0 24 24"><path d="M3.5 9.5h17M3.5 19.5h17M5 3.5v16M19 3.5v16"/><rect x="7" y="4.5" width="3.5" height="5" rx="1"/><rect x="12" y="5.5" width="4" height="4" rx="1.5"/><rect x="7.5" y="13.5" width="4" height="6" rx="1"/><circle cx="15.2" cy="17" r="2.5"/></svg>ぐみ棚</button>
   </div>
 </nav>
 
@@ -525,12 +530,13 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 <!-- ポスト -->
 <div class="sheet" id="sh-shelfimg" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="si-title">
-    <div class="sheet-h"><h2 id="si-title">グミ棚を画像に</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="sheet-h"><h2 id="si-title">ぐみ棚を画像に</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <span class="fl-t" id="si-count-l">並べる数（新しい順）</span>
     <div class="seg si-seg" id="si-count" role="radiogroup" aria-label="並べる数"></div>
-    <div class="si-prev"><img id="si-img" alt="グミ棚の画像"><p class="hint" id="si-wait">画像を作っています…</p></div>
+    <div class="si-prev"><img id="si-img" alt="ぐみ棚の画像"><p class="hint" id="si-wait">画像を作っています…</p></div>
     <p class="hint" id="si-hint"></p>
     <div class="btn-row si-btns"><button class="btn primary" type="button" id="si-share">共有する</button><button class="btn ghost" type="button" id="si-save">画像を保存</button></div>
+    <button class="si-text" type="button" id="si-text" hidden>画像なしで、文章だけ共有する</button>
   </div>
 </div>
 <div class="sheet" id="sh-suggest" hidden>
@@ -623,7 +629,7 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 </div>
 <div class="snack" id="snack" role="status" hidden>
   <span id="snack-t">記録しました！</span>
-  <button class="btn sm x" id="snack-post" type="button">共有</button>
+  <button class="btn sm x" id="snack-post" type="button"><svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>共有</button>
   <button class="snack-x" type="button" aria-label="閉じる" id="snack-x">×</button>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -631,6 +637,13 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
 <script>
 (() => {
 'use strict';
+// each sheet: the title stays put and everything below it goes into a scrolling body
+document.querySelectorAll('.sheet-p').forEach(p => {
+  const head = p.querySelector(':scope > .sheet-h'), body = document.createElement('div');
+  body.className = 'sheet-body';
+  [...p.children].filter(c => c !== head).forEach(c => body.appendChild(c));
+  p.appendChild(body);
+});
 /* ---------- constants ---------- */
 const COLORS = [
   {k:'straw',n:'いちご',v:'--g-straw'},{k:'orange',n:'オレンジ',v:'--g-orange'},{k:'lemon',n:'レモン',v:'--g-lemon'},
@@ -657,11 +670,15 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // app changes only, newest first; shown under お知らせ → アプリ (times in JST).
 // Catalog additions are not listed here: the お知らせ → カタログ tab reads them from the catalog's 追加日 column.
 const UPDATES = [
+  {v:117, at:'2026-10-11 03:37', t:'「今月のまとめを共有」と「画像で保存・共有」を、「今月のまとめを画像で共有」ひとつにまとめました。文章だけで共有したいときは、画像の画面の下から選べます。'},
+  {v:116, at:'2026-10-11 03:34', t:'「グミ棚」の名前を「ぐみ棚」に変えました。ぐみ棚の画像を共有するときは「#ぐみ棚」がつきます。'},
+  {v:115, at:'2026-10-11 03:29', t:'グミの詳細と、記録したあとに出る「共有」ボタンに、共有のマークをつけました。'},
+  {v:114, at:'2026-10-11 03:21', t:'下から出る画面をスクロールしたとき、右のスクロールバーが上の丸い角からはみ出さないようにしました。見出しは上に固定されます。'},
   {v:112, at:'2026-10-11 02:29', t:'データ画面の月のまとめも、画像にして保存したり LINE や X に共有したりできるようになりました。'},
   {v:111, at:'2026-10-11 02:26', t:'カタログへの提案を、アプリの中で内容を確かめてそのまま送れるようになりました（フォームのページを開かなくても送れます）。'},
   {v:110, at:'2026-10-11 02:21', t:'カタログにないグミや、カタログにない味を記録したときに、「カタログに提案してみませんか？」と案内が出るようになりました。'},
   {v:107, at:'2026-10-11 02:14', t:'写真の調整画面で、右上にあった「やめる」をなくし、下の「この写真にする」の横に移しました。画面の外側をタップしても閉じないようにしました（写真を選ぶ画面の右上で決定した流れで押しても大丈夫なように）。'},
-  {v:103, at:'2026-10-11 02:04', t:'グミ棚を画像にして、保存したり LINE や X に共有したりできるようになりました（グミ棚の右上の「画像で保存・共有」から）。'},
+  {v:103, at:'2026-10-11 02:04', t:'ぐみ棚を画像にして、保存したり LINE や X に共有したりできるようになりました（ぐみ棚の右上の「画像で保存・共有」から）。'},
   {v:102, at:'2026-10-11 01:58', t:'共有の文章の設定画面で、{おいしさ} などの差し込み項目を青く色分けしました。使えない書き方は赤で表示します。'},
   {v:101, at:'2026-10-11 01:51', t:'「Xにポスト」のボタンと画面の名前を「共有」に変えました。'},
   {v:100, at:'2026-10-11 01:44', t:'記録画面の並びを変えました。「食べた？」の下が、ひとこと・タグ・おいしさ・かたさ・すっぱさの順になります。'},
@@ -685,12 +702,12 @@ const UPDATES = [
   {v:77, at:'2026-10-07 22:30', t:'2回目以降に買ったグミの詳細に、前回買った日と何日ぶりかを表示するようにしました。'},
   {v:76, at:'2026-10-07 22:26', t:'「JSONで保存」に写真と設定も入るようになりました。別の端末やアドレスに引っ越すときも、写真ごと戻せます。'},
   {v:74, at:'2026-10-07 18:41', t:'アップデート情報の文章を、です・ます調にしました。'},
-  {v:73, at:'2026-10-07 18:36', t:'写真を記録ごとにつけられるようになりました。また買ったグミにも別の写真をつけられます。グミ棚にはいちばん新しい写真が出ます。'},
+  {v:73, at:'2026-10-07 18:36', t:'写真を記録ごとにつけられるようになりました。また買ったグミにも別の写真をつけられます。ぐみ棚にはいちばん新しい写真が出ます。'},
   {v:72, at:'2026-10-07 18:31', t:'グミの色に「虹色」を追加しました（アソート・ミックス用）。アップデート情報を15件まで表示するようにしました。'},
   {v:71, at:'2026-10-07 18:26', t:'設定から最近のアップデート情報を見られるようになりました。'},
   {v:70, at:'2026-10-07 18:22', t:'ホーム画面に追加したアプリも、自動で最新版に切り替わるようになりました。'},
   {v:69, at:'2026-10-07 18:10', t:'記録するときに写真をつけられるようになりました。'},
-  {v:68, at:'2026-10-07 18:05', t:'Xにポストする用の大きい写真を3日間だけ保存するようにしました。グミ棚とログには小さい写真を使います。'},
+  {v:68, at:'2026-10-07 18:05', t:'Xにポストする用の大きい写真を3日間だけ保存するようにしました。ぐみ棚とログには小さい写真を使います。'},
   {v:67, at:'2026-10-07 18:00', t:'写真の画質を少し上げました。'},
   {v:66, at:'2026-10-07 17:49', t:'写真つきでXにポストできるようになりました。'},
   {v:65, at:'2026-10-07 04:27', t:'月のまとめのベストグミを、その月に★5をつけたグミから選べるようになりました。'},
@@ -1279,7 +1296,7 @@ function renderStats(){
     </div>
     <div class="panel"><h3>${+key.slice(5)}月のまとめ</h3>
       <dl class="facts"><dt>推しメーカー</dt><dd>${esc(ms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, key)}</dd></dl>
-      <div class="btn-row"><button class="btn primary sm" id="post-month">今月のまとめを共有</button><button class="btn sm photo-cta month-img" type="button" id="month-img">${SHARE_ICON}画像で保存・共有</button></div></div>
+      <div class="btn-row"><button class="btn primary month-img" type="button" id="month-img">${IMG_ICON}今月のまとめを画像で共有</button></div></div>
     <div class="panel chart"><h3>月ごとの袋数<span class="s">直近6か月</span></h3>${svg}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
       <div class="type-line">あなたは <b>${type}</b> 派</div>
@@ -1461,7 +1478,7 @@ function renderShelf(){
       ${gframe(g.last, 'shelf')}<span class="pn">${esc(g.name)}</span></button>`;
   $('#v-shelf').innerHTML = `
     <div class="shelf-sum">
-      ${mine.length ? `<button type="button" class="photo-cta shelf-img" id="shelf-img" aria-label="グミ棚を画像にして保存・共有">${SHARE_ICON}画像で保存・共有</button>` : ''}
+      ${mine.length ? `<button type="button" class="photo-cta shelf-img" id="shelf-img" aria-label="ぐみ棚を画像にして保存・共有">${SHARE_ICON}画像で保存・共有</button>` : ''}
       <div><b class="num">${got.size}</b> <span>種類</span></div>
       <div><b class="num">${makers}</b> <span>メーカー</span></div>
       ${cat.length ? `<div><span>カタログ ${inCat} / ${cat.length}</span></div>` : ''}
@@ -1473,6 +1490,7 @@ function renderShelf(){
 }
 
 /* ---------- shelf as an image (save, or share to LINE / X through the phone's share sheet) ---------- */
+const IMG_ICON = '<svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="m21 15.5-4.8-4.8L6 20.5"/></svg>';
 const SHARE_ICON = '<svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
 let SI = { n:12, blob:null, url:'', kind:'shelf' };
 // canvas can't read color-mix(); let the browser resolve a CSS color to rgb()
@@ -1498,7 +1516,7 @@ function imgPalette(){
   const col = v => solidColor(`var(${v})`);
   return {bg:col('--bg'), surface:col('--surface'), ink:col('--ink'), ink2:col('--ink-2'), line:col('--line'), accent:col('--accent'), acc:col('--accent-text'), soft:col('--accent-soft'), board:col('--shelf-board'), edge:col('--shelf-edge'), lemon:col('--g-lemon')};
 }
-async function imgFonts(){ try { await Promise.all([document.fonts.load('400 60px "Dela Gothic One"', 'ぐみろぐグミ棚0123456789月'), document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ')]); } catch(e){} }
+async function imgFonts(){ try { await Promise.all([document.fonts.load('400 60px "Dela Gothic One"', 'ぐみろぐぐみ棚0123456789月'), document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ')]); } catch(e){} }
 // one shelf card: tinted frame in the gummy's color, photo or bear, ★5 crown, ×count stamp, name below (g = {last, name, count, best})
 function drawGumCard(x, C, g, ph, X, Y, cw, fh, nameSize = 26){
   const gc = solidColor(colorOf(g.last.color)), bw = Math.max(6, cw * 0.04);
@@ -1539,7 +1557,7 @@ async function drawShelfImage(n){
   x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
   // header: logo, title, date
   drawLogo(x, C, pad, 92);
-  x.font = '400 76px "Dela Gothic One"'; x.fillStyle = C.ink; x.fillText('グミ棚', pad, 190);
+  x.font = '400 76px "Dela Gothic One"'; x.fillStyle = C.ink; x.fillText('ぐみ棚', pad, 190);
   const d = new Date(), all = shelfMine().length;
   x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2;
   x.fillText(`最近の${list.length}種類　${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, pad, 238);
@@ -1551,7 +1569,7 @@ async function drawShelfImage(n){
     // the board under each row
     if (c === 0){ const by = head + r * rowH + 22 + fh + 14 + 66 + 4; x.fillStyle = C.board; x.fillRect(pad - 14, by, W - (pad - 14) * 2, 10); x.fillStyle = C.edge; x.fillRect(pad - 14, by + 10, W - (pad - 14) * 2, 6); }
   });
-  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.textAlign = 'center'; x.fillText('#ぐみろぐ  #グミ', W / 2, H - 42); x.textAlign = 'left';
+  x.font = '700 28px "Zen Maru Gothic"'; x.fillStyle = C.ink2; x.textAlign = 'center'; x.fillText('#ぐみ棚  #ぐみろぐ  #グミ', W / 2, H - 42); x.textAlign = 'left';
   return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
 }
 async function drawMonthImage(){
@@ -1615,7 +1633,7 @@ async function renderShelfImage(){
 }
 function openMonthImage(){
   SI.kind = 'month';
-  $('#si-title').textContent = '月のまとめを画像に'; $('#si-count').hidden = $('#si-count-l').hidden = true;
+  $('#si-title').textContent = '今月のまとめを画像に'; $('#si-count').hidden = $('#si-count-l').hidden = true; $('#si-text').hidden = false;
   siShareHint(); openSheet('#sh-shelfimg'); renderShelfImage();
 }
 function siShareHint(){
@@ -1625,7 +1643,7 @@ function siShareHint(){
 }
 function openShelfImage(){
   SI.kind = 'shelf';
-  $('#si-title').textContent = 'グミ棚を画像に'; $('#si-count').hidden = $('#si-count-l').hidden = false;
+  $('#si-title').textContent = 'ぐみ棚を画像に'; $('#si-count').hidden = $('#si-count-l').hidden = false; $('#si-text').hidden = true;
   const total = shelfMine().length;
   const opts = [...new Set([12, 16, 24].filter(k => k < total).concat([Math.min(total, 24)]))];
   if (!opts.includes(SI.n)) SI.n = opts[0];
@@ -1646,9 +1664,10 @@ function wireShelfImage(){
     $('#si-count').querySelectorAll('[data-n]').forEach(x => x.setAttribute('aria-checked', x === b)); renderShelfImage(); });
   const name = () => SI.kind === 'month' ? `gumilog-${ym(todayStr()).replace('-', '')}.jpg` : `gumilog-shelf-${todayStr().replace(/-/g, '')}.jpg`;
   $('#si-save').addEventListener('click', () => SI.blob && saveBlob(SI.blob, name()));
+  $('#si-text').addEventListener('click', () => { closeSheet('#sh-shelfimg'); openPost(null, 'month'); });
   $('#si-share').addEventListener('click', async () => {
     if (!SI.blob) return;
-    const text = SI.kind === 'month' ? `${+ym(todayStr()).slice(5)}月のぐみろぐ #ぐみろぐ #グミ` : 'わたしのグミ棚 #ぐみろぐ #グミ';
+    const text = SI.kind === 'month' ? `${+ym(todayStr()).slice(5)}月のぐみろぐ #ぐみろぐ #グミ` : 'わたしのぐみ棚 #ぐみ棚 #ぐみろぐ #グミ';
     try { await navigator.share({files:[new File([SI.blob], name(), {type:'image/jpeg'})], text}); }
     catch(e){ if (e && e.name !== 'AbortError') toast('共有できませんでした。画像を保存してから貼ってください'); }
   });
@@ -1675,7 +1694,7 @@ function renderAll(){
   // a gummy bought for the first time joins the shelf
   if (!demo){
     const names = new Set(realItems().map(i => i.name));
-    if (lastShelf){ const nw = [...names].filter(n => !lastShelf.has(n)); if (nw.length === 1) setTimeout(() => toast(`グミ棚に「${nw[0]}」が並びました`), 2600); }
+    if (lastShelf){ const nw = [...names].filter(n => !lastShelf.has(n)); if (nw.length === 1) setTimeout(() => toast(`ぐみ棚に「${nw[0]}」が並びました`), 2600); }
     lastShelf = names;
   }
 }
@@ -2382,10 +2401,10 @@ function openDetail(id){
       ${pOwn ? `<label class="btn sm ghost" for="dt-photo">${CAM}写真を変える</label>` : `<label class="photo-cta" for="dt-photo">${CAM}${pKey ? 'この記録の写真をつける' : '自分で撮った写真をつける'}</label>`}
       <input type="file" id="dt-photo" accept="image/*" hidden>
       ${pOwn || pKey === it.name ? '<button class="btn sm ghost" id="dt-photo-del" type="button">写真を外す</button>' : ''}
-      <span class="hint">${pOwn ? 'この記録の写真です。' : pKey === it.name ? 'この写真は前のしくみでつけた「' + esc(it.name) + '」共通の写真です。' : pKey ? '前に買ったときの写真を表示しています。この記録だけの写真もつけられます。' : 'つけた写真はこの記録に使われます。'}グミ棚にはいちばん新しい写真が出ます。${bigNote(pKey)}</span>
+      <span class="hint">${pOwn ? 'この記録の写真です。' : pKey === it.name ? 'この写真は前のしくみでつけた「' + esc(it.name) + '」共通の写真です。' : pKey ? '前に買ったときの写真を表示しています。この記録だけの写真もつけられます。' : 'つけた写真はこの記録に使われます。'}ぐみ棚にはいちばん新しい写真が出ます。${bigNote(pKey)}</span>
     </div>`}
     <div class="sheet-actions">
-      <button class="btn primary" id="dt-post">共有</button>
+      <button class="btn primary" id="dt-post">${SHARE_ICON}共有</button>
       ${it.demo ? '' : `<button class="btn" id="dt-again">また買った</button><button class="btn ghost" id="dt-edit">直す</button><button class="btn danger" id="dt-del">削除</button>`}
     </div>`;
   $('#dt-post').onclick = () => { closeSheet('#sh-detail'); openPost(it); };
@@ -2725,7 +2744,6 @@ $('#app').addEventListener('click', async e => {
     return; }
   const o = e.target.closest('[data-open]'); if (o){ openDetail(o.dataset.open); return; }
   const d = e.target.closest('[data-day]'); if (d){ S.ui.selDay = S.ui.selDay === d.dataset.day ? null : d.dataset.day; renderCal(); return; }
-  if (e.target.closest('#post-month')){ openPost(null, 'month'); return; }
   if (e.target.closest('#shelf-img')){ openShelfImage(); return; }
   if (e.target.closest('#month-img')){ openMonthImage(); return; }
   if (e.target.closest('#migrate')){
