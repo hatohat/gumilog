@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11",
+ "updated": "2026-10-12",
  "items": [
   {
    "n": "果汁グミ",
@@ -57,16 +57,11 @@
    "n": "ポイフルパウチ",
    "r": "ぽいふるぱうち",
    "m": "明治",
-   "f": [
-    "ラズベリー",
-    "レモン",
-    "青りんご",
-    "グレープ"
-   ],
    "h": 2,
    "rel": "2026-03-31",
    "url": "https://www.meiji.co.jp/corporate/pressrelease/2026/03_20/index.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "アップグミ",
@@ -163,27 +158,17 @@
    "n": "ポケぷに",
    "r": "ぽけぷに",
    "m": "ロッテ",
-   "f": [
-    "レモンソーダ",
-    "コーラ",
-    "ソーダ",
-    "グレープソーダ"
-   ],
    "url": "https://www.lotte.co.jp/products/catalogue/candy/22/detail06.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "ポケぷに<フルーツ>",
    "r": "ぽけぷにふるーつ",
    "m": "ロッテ",
-   "f": [
-    "みかん",
-    "りんご",
-    "マスカット",
-    "ライチ"
-   ],
    "url": "https://www.lotte.co.jp/products/catalogue/candy/22/detail11.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "グミチョコボール",
@@ -222,12 +207,9 @@
    "n": "ポップグミ",
    "r": "ぽっぷぐみ",
    "m": "不二家",
-   "f": [
-    "グレープ",
-    "マスカット"
-   ],
    "url": "https://www.fujiya-peko.co.jp/sweets/item/12735.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "ガツン、とみかんグミ",
@@ -422,7 +404,7 @@
    ],
    "s": 1,
    "url": "https://kanro.jp/products/14805288714608",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12"
   },
   {
    "n": "タネピュレ さくらんぼ",
@@ -471,15 +453,11 @@
    "n": "カンデミーナグミ ストライクショット",
    "r": "かんでみーなぐみ すとらいくしょっと",
    "m": "カンロ",
-   "f": [
-    "モンストロベリー",
-    "わくわくメロン",
-    "ストライグレープ"
-   ],
    "h": 4,
    "rel": "2026-04-21",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1525_ext_2_0.pdf",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "カンデミーナグミ センタースプラッシュ",
@@ -639,7 +617,7 @@
    "p": 170,
    "pt": "incl",
    "url": "https://kanro.jp/products/fun-choice-gumitutueruputi-soda",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12"
   },
   {
    "n": "ピュレショコラティエ",
@@ -653,7 +631,7 @@
    "p": 750,
    "pt": "incl",
    "url": "https://kanro.jp/products/14980845666672",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12"
   },
   {
    "n": "CYCLECUBE",
@@ -804,7 +782,7 @@
    ],
    "h": 2,
    "url": "https://www.uha-mikakuto.co.jp/catalog/gummy/gu288.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12"
   },
   {
    "n": "コグミ PREMIUM ドール",
@@ -818,12 +796,9 @@
    "n": "コグミ トイ・ストーリー5",
    "r": "こぐみ といすとーりーふぁいぶ",
    "m": "UHA味覚糖",
-   "f": [
-    "スペースグレープソーダ",
-    "レンジャーメロンソーダ"
-   ],
    "url": "https://www.uha-mikakuto.co.jp/catalog/gummy/gu318.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "さけるグミ",
@@ -914,7 +889,7 @@
     "ディズニープリンセス"
    ],
    "url": "https://www.uha-mikakuto.co.jp/catalog/gummy/gu323.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12"
   },
   {
    "n": "モッチュ",
@@ -1103,7 +1078,8 @@
    "m": "春日井製菓",
    "h": 4,
    "url": "https://www.kasugai.co.jp/product/gummy_tsubugumi_04374/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "つぶグミPREMIUM",
@@ -1126,7 +1102,7 @@
    ],
    "h": 1,
    "url": "https://www.kasugai.co.jp/product/gumidayo-1/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12"
   },
   {
    "n": "タフグミ",
@@ -1207,14 +1183,11 @@
    "n": "タフグミ クールクランチ",
    "r": "たふぐみくーるくらんち",
    "m": "カバヤ食品",
-   "f": [
-    "パイン",
-    "ピーチ"
-   ],
    "h": 4,
    "rel": "2026-06-09",
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3178.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "タフグミ(100円ショップ限定)",
@@ -1291,14 +1264,11 @@
    "n": "雪ふるいちごグミ",
    "r": "ゆきふるいちごぐみ",
    "m": "カバヤ食品",
-   "f": [
-    "いちご",
-    "いちごミルク"
-   ],
    "h": 2,
    "rel": "2026-09-29",
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3186.html",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "ペタグーグミ",
@@ -1339,23 +1309,19 @@
    "n": "ちびサワーズグミ",
    "r": "ちびさわーずぐみ",
    "m": "ノーベル製菓",
-   "f": [
-    "ドリンクアソート"
-   ],
    "h": 4,
    "url": "https://www.nobel.co.jp/products/784/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "カチカチちびカメカメサワーズグミ",
    "r": "かちかちちびかめかめさわーずぐみ",
    "m": "ノーベル製菓",
-   "f": [
-    "フルーツアソート"
-   ],
    "h": 5,
    "url": "https://www.nobel.co.jp/products/809/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "キラふわグミ",
@@ -1398,11 +1364,9 @@
    "n": "グミエッグ",
    "r": "ぐみえっぐ",
    "m": "ノーベル製菓",
-   "f": [
-    "フルーツソーダアソート"
-   ],
    "url": "https://www.nobel.co.jp/products/7801/",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "スーパーマリオグミ",
@@ -1681,12 +1645,9 @@
    "n": "70g ちっちゃな幸せにくきゅうグミ",
    "r": "ななじゅうぐらむ ちっちゃなしあわせにくきゅうぐみ せんじゃくあめほんぽ",
    "m": "扇雀飴本舗",
-   "f": [
-    "グレープ味",
-    "アップル味"
-   ],
    "url": "https://www.senjakuame.co.jp/20240904131212",
-   "updated": "2026-10-06"
+   "updated": "2026-10-12",
+   "c": "rainbow"
   },
   {
    "n": "34g贅沢なグミ",
