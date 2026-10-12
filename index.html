@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="5a43521f46"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="65bd7ff5fe"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -670,6 +670,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // app changes only, newest first; shown under お知らせ → アプリ (times in JST).
 // Catalog additions are not listed here: the お知らせ → カタログ tab reads them from the catalog's 追加日 column.
 const UPDATES = [
+  {v:123, at:'2026-10-12 20:03', t:'Android で、変換の途中に名前の候補を選ぶと、打っていた文字が名前の後ろに残ってしまう問題を直しました。'},
   {v:117, at:'2026-10-11 03:37', t:'「今月のまとめを共有」と「画像で保存・共有」を、「今月のまとめを画像で共有」ひとつにまとめました。文章だけで共有したいときは、画像の画面の下から選べます。'},
   {v:116, at:'2026-10-11 03:34', t:'「グミ棚」の名前を「ぐみ棚」に変えました。ぐみ棚の画像を共有するときは「#ぐみ棚」がつきます。'},
   {v:115, at:'2026-10-11 03:29', t:'グミの詳細と、記録したあとに出る「共有」ボタンに、共有のマークをつけました。'},
@@ -2081,7 +2082,24 @@ async function predictAI(){
 }
 function wireAutocomplete(){
   const inp = $('#f-name');
-  inp.addEventListener('input', () => { AC.active = -1; AC.applied = ''; setHint(''); renderAC(); });
+  // Android keyboards keep the word being typed "in composition" while the list is tapped (the list keeps focus on the
+  // field); setting the value then gets that word committed again behind the picked name. So: end the composition first,
+  // and for a moment after a pick, undo anything the keyboard tacks on.
+  let composing = false, lock = null;
+  inp.addEventListener('compositionstart', () => { composing = true; });
+  inp.addEventListener('compositionend', () => { composing = false; });
+  const pick = c => {
+    const go = () => { applyCand(c, noteFor(c)); lock = {name:inp.value, until:Date.now() + 800}; };
+    if (!composing){ go(); return; }
+    let done = false; const once = () => { if (done) return; done = true; inp.removeEventListener('compositionend', once); go(); };
+    inp.addEventListener('compositionend', once);
+    inp.blur(); setTimeout(once, 60);
+  };
+  inp.addEventListener('input', () => {
+    if (lock && Date.now() < lock.until && inp.value !== lock.name && inp.value.startsWith(lock.name)){ inp.value = lock.name; return; }
+    lock = null;
+    AC.active = -1; AC.applied = ''; setHint(''); renderAC();
+  });
   inp.addEventListener('focus', () => { if (!inp.value.trim() || !AC.applied) renderAC(); });
   inp.addEventListener('blur', () => setTimeout(() => {
     if (document.activeElement && document.activeElement.closest && document.activeElement.closest('#ac-list')) return;
@@ -2101,11 +2119,11 @@ function wireAutocomplete(){
       AC.active = e.key === 'ArrowDown' ? (AC.active + 1) % n : (AC.active - 1 + n) % n; renderAC();
       const el = $('#ac-' + AC.active); el && el.scrollIntoView({block:'nearest'});
     } else if (e.key === 'Enter' && AC.active >= 0){
-      e.preventDefault(); const c = AC.list[AC.active]; applyCand(c, noteFor(c));
+      e.preventDefault(); pick(AC.list[AC.active]);
     } else if (e.key === 'Escape'){ e.stopPropagation(); closeAC(); }
   });
   $('#ac-list').addEventListener('mousedown', e => e.preventDefault());
-  $('#ac-list').addEventListener('click', e => { const b = e.target.closest('[data-ac]'); if (!b) return; const c = AC.list[+b.dataset.ac]; applyCand(c, noteFor(c)); });
+  $('#ac-list').addEventListener('click', e => { const b = e.target.closest('[data-ac]'); if (!b) return; pick(AC.list[+b.dataset.ac]); });
   $('#ac-hint').addEventListener('click', e => { if (e.target.closest('#ac-ai')) predictAI(); });
   [['#f-maker','maker'],['#f-flavor','flavor'],['#f-price','price']].forEach(([id, key]) => $(id).addEventListener('input', () => { F.touched.add(key); $(id).classList.remove('guessed'); }));
   $('#f-flavor').addEventListener('input', () => {
