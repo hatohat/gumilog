@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="75c0420590"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="5e53a28218"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -631,6 +631,13 @@ body.has-snack .toast{bottom:calc(144px + env(safe-area-inset-bottom,0px))}
     <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="sf-send">送信する</button></div>
   </div>
 </div>
+<div class="sheet" id="sh-discard" hidden>
+  <div class="sheet-p" role="alertdialog" aria-modal="true" aria-labelledby="dc-title" aria-describedby="dc-text">
+    <div class="sheet-h"><h2 id="dc-title">記録を破棄しますか？</h2></div>
+    <p class="hint" id="dc-text" style="margin:0">入力した内容は保存されません。</p>
+    <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>記録を続ける</button><button class="btn danger" type="button" id="dc-ok">破棄する</button></div>
+  </div>
+</div>
 <div class="snack" id="snack" role="status" hidden>
   <span id="snack-t">記録しました！</span>
   <button class="btn sm x" id="snack-post" type="button"><svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>共有</button>
@@ -674,6 +681,8 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // app changes only, newest first; shown under お知らせ → アプリ (times in JST).
 // Catalog additions are not listed here: the お知らせ → カタログ tab reads them from the catalog's 追加日 column.
 const UPDATES = [
+  {v:128, at:'2026-10-21 22:40', t:'記録の途中で「閉じる」を押したときに、「記録を破棄しますか？」と確かめるようになりました。'},
+  {v:127, at:'2026-10-21 22:38', t:'「まるでレモングミ レモン」のように、商品名に入っている味が名前の候補で重ねて付いてしまう問題を直しました。'},
   {v:124, at:'2026-10-14 17:27', t:'グミの詳細で「まだ食べてない」から「食べた」に変えると、その下でおいしさ・かたさ・すっぱさをそのままつけられるようになりました。'},
   {v:123, at:'2026-10-12 20:03', t:'Android で、変換の途中に名前の候補を選ぶと、打っていた文字が名前の後ろに残ってしまう問題を直しました。'},
   {v:117, at:'2026-10-11 03:37', t:'「今月のまとめを共有」と「画像で保存・共有」を、「今月のまとめを画像で共有」ひとつにまとめました。文章だけで共有したいときは、画像の画面の下から選べます。'},
@@ -1720,9 +1729,9 @@ function openSheet(id){ lastFocus = document.activeElement; const s = $(id); s.h
 function closeSheet(id){ $(id).hidden = true; if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) document.body.style.overflow = ''; lastFocus && lastFocus.focus && lastFocus.focus({preventScroll:true}); }
 document.querySelectorAll('.sheet').forEach(s => {
   // a tap on the dark area closes a sheet, except the photo crop: right after the photo picker, thumbs go to the top
-  s.addEventListener('click', e => { if ((e.target === s && s.id !== 'sh-crop') || e.target.closest('[data-close]')) closeSheet('#' + s.id); });
+  s.addEventListener('click', e => { if ((e.target === s && s.id !== 'sh-crop') || e.target.closest('[data-close]')) askClose('#' + s.id); });
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape'){ const open = [...document.querySelectorAll('.sheet')].reverse().find(s => !s.hidden); open && closeSheet('#' + open.id); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ const open = [...document.querySelectorAll('.sheet')].reverse().find(s => !s.hidden); open && askClose('#' + open.id); } });
 
 /* ---------- hardness / sourness shapes ---------- */
 // eating status of a bag; records made before this field existed count as 食べた
@@ -1941,6 +1950,24 @@ function openForm(base, mode){ // mode: 'new' | 'edit' | 'again'
   F.touched = new Set(mode === 'edit' ? ['maker','flavor','price','color','hard','sour'] : mode === 'again' ? ['color','hard','sour'] : []);
   AC.applied = b.name || ''; closeAC(); setHint(''); clearGuessed();
   syncFormUI(); openSheet('#sh-form');
+  F.snap = formSnap();
+}
+// everything the viewer can change in the form; closing with anything different asks first
+function formSnap(){
+  return JSON.stringify([...['name','maker','flavor','shop','price','date','hard','sour','note'].map(k => $('#f-' + k).value), $('#f-nospend').checked,
+    F.color, F.rating, F.status, F.tags, !!F.photo, F.photoDel]);
+}
+const formDirty = () => !$('#sh-form').hidden && F.snap != null && formSnap() !== F.snap;
+// every way of closing a sheet goes through here: the form asks before throwing away what was typed
+function askClose(id){
+  if (id === '#sh-form' && formDirty()){
+    const edit = !!F.editing;
+    $('#dc-title').textContent = edit ? '変更を破棄しますか？' : '記録を破棄しますか？';
+    $('#dc-text').textContent = edit ? '直した内容は保存されません。' : '入力した内容は保存されません。';
+    $('#sh-discard').querySelector('[data-close]').textContent = edit ? '直すのを続ける' : '記録を続ける';
+    openSheet('#sh-discard'); return;
+  }
+  closeSheet(id);
 }
 /* ---------- name autocomplete + autofill ---------- */
 const norm = s => String(s || '').normalize('NFKC').toLowerCase()
@@ -1958,7 +1985,8 @@ function candidates(){
   for (const c of catList()){
     const vs = c.f && c.f.length ? c.f : [''];
     for (const f of vs){
-      const name = f ? `${c.n} ${f}` : c.n;
+      // a flavor the product name already says (「まるでレモングミ」+ レモン) isn't repeated after it
+      const name = f && !norm(c.n).includes(norm(f)) ? `${c.n} ${f}` : c.n;
       if (mine.has(name)) continue;
       out.push({src:'cat', name, maker:c.m, flavor:f, color:colorFromText(f) || c.c || colorFromText(c.n) || 'straw', price:c.p, hard:c.h, sour:c.s, reading:(c.r || '') + ' ' + f, rel:c.rel || null});
     }
@@ -2238,6 +2266,7 @@ function newFlavorOf(it){
     return {c:best, flavor:raw};
   }
   if (!fl.length) return null;                                            // a series without flavors is the product itself
+  if (fl.some(f => nn.includes(looseName(f)))) return null;                // the name itself says the flavor (「まるでレモングミ」)
   if (it.flavor && fl.some(f => looseName(f) === looseName(it.flavor))) return null; // the flavor field names a listed taste
   return {c:best, flavor:it.flavor || ''};
 }
@@ -2850,6 +2879,7 @@ function checkUpdate(){
 }
 $('#jar').addEventListener('pointerdown', e => { const r = e.currentTarget.getBoundingClientRect(); jarPoke(e.clientX - r.left, e.clientY - r.top); });
 wireForm(); wirePost(); wireShopEditor(); wireShelfImage();
+$('#dc-ok').addEventListener('click', () => { closeSheet('#sh-discard'); F.snap = null; closeSheet('#sh-form'); });
 wireSuggestForm();
 $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT_ID)));
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
