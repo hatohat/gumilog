@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8e4d68c0a6"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="b457d041d0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -1961,6 +1961,12 @@ body.has-snack .toast {
   align-items:center;
   gap:4px
 }
+/* バーの下の「ランク ○ / ○」 */
+.ach-rank {
+  font-size:12px;
+  color:var(--ink-2);
+  text-align:right
+}
 /* 称号カードを 2 列に並べます */
 .ach-grid {
   display:grid;
@@ -2586,6 +2592,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:151, at:'2026-10-30 13:46', t:'称号タブの「集めた称号」の数を、とった称号の個数にそろえました（「集めた称号のまとめ」と同じ数え方です）。段階の合計は「ランク」として出しています。'},
   {v:150, at:'2026-10-30 13:41', t:'iPhone で称号の画像を作ると、メダルの真ん中の絵文字が消えてしまうことがあったのを直しました。'},
   {v:137, at:'2026-10-30 10:18', t:'「称号」タブができました。記録の数や食べ方に応じて、ブロンズ・シルバー・ゴールド・ダイヤモンドの称号が集まります。シークレット称号もあります。とった称号は、1つずつでも、集めた称号のまとめでも、画像やXで共有できます。カレンダーとデータは「データ」タブにまとめ、上の切り替えで選べるようにしました。'},
   {v:135, at:'2026-10-30 09:44', t:'びんのグミが、止まっているのにゆっくり回り続けてしまうことがあったのを直しました。'},
@@ -4929,25 +4936,30 @@ function renderAch(){
   const v = $('#v-ach');
   if (!v) return;
   const st = achStatus(), demo = isDemo();
+  // 集めた称号の数（シルバーまで上がった称号も 1 個と数えます。「集めた称号のまとめ」と同じ数え方です）
+  const titles = st.filter(s => s.got).length;
+  // ランク（段階）の合計：シルバーまで上がった称号はブロンズとシルバーで 2 と数えます。バーの進み具合に使います
   const total = st.reduce((n, s) => n + s.a.tiers.length, 0), got = st.reduce((n, s) => n + s.got, 0);
-  // 段階ごとに、いくつとったか
-  const per = TIERS.map((t, i) => st.filter(s => !s.a.secret && s.got > i).length);
+  // いまの段階ごとに、いくつあるか（シルバーの称号はブロンズには数えません）
+  const per = TIERS.map((t, i) => st.filter(s => !s.a.secret && s.got === i + 1).length);
   const secGot = st.filter(s => s.a.secret && s.got).length, secAll = st.filter(s => s.a.secret).length;
   // もうすぐとれる称号：次の段階までの進み具合が大きい順に 3 つ
   const near = st.filter(s => !s.a.secret && s.got < s.a.tiers.length && s.cur > 0)
     .sort((x, y) => y.cur / y.a.tiers[y.got] - x.cur / x.a.tiers[x.got]).slice(0, 3);
   v.innerHTML = `
     <div class="panel ach-top">
-      <div class="ach-score"><span class="lbl">集めた称号</span><span class="big num">${got}<small> / ${total}</small></span></div>
+      <div class="ach-score"><span class="lbl">集めた称号</span><span class="big num">${titles}<small>個 / ${st.length}</small></span></div>
       <div class="ach-bar big"><span style="width:${Math.round(got / total * 100)}%"></span></div>
-      <div class="ach-sum">${TIERS.map((t, i) => `<span>${medalSVG(t.k, '', 22)}<b class="num">${per[i]}</b></span>`).join('')}<span>${medalSVG('secret', '', 22)}<b class="num">${secGot}/${secAll}</b></span></div>
+      <div class="ach-rank">ランク <b class="num">${got}</b> / ${total}</div>
+      <div class="ach-sum">${TIERS.map((t, i) => `<span>${medalSVG(t.k, '', 22)}<b class="num">${per[i]}</b></span>`).reverse().join('')}<span>${medalSVG('secret', '', 22)}<b class="num">${secGot}/${secAll}</b></span></div>
       ${demo ? '<p class="hint" style="margin:0">グミを記録すると、称号が集まっていきます。</p>' : ''}
       ${got ? `<button class="btn sm photo-cta ach-all-btn" type="button" id="ach-all">${IMG_ICON}集めた称号をまとめて見る・共有</button>` : ''}
     </div>
     ${near.length ? `<div class="panel"><h3>もうすぐとれる称号</h3><div class="ach-grid">${near.map(achCard).join('')}</div></div>` : ''}
     ${ACH_CATS.map(([k, n]) => {
       const list = st.filter(s => s.a.cat === k);
-      const g = list.reduce((m, s) => m + s.got, 0), all = list.reduce((m, s) => m + s.a.tiers.length, 0);
+      // グループの見出しには、集めた称号の数 / グループの称号の数 を出します
+      const g = list.filter(s => s.got).length, all = list.length;
       return `<div class="panel"><h3>${n}<span class="s">${g} / ${all}</span></h3><div class="ach-grid">${list.map(achCard).join('')}</div></div>`;
     }).join('')}`;
 }
