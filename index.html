@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="0a17fa4303"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8e4d68c0a6"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -2586,6 +2586,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:150, at:'2026-10-30 13:41', t:'iPhone で称号の画像を作ると、メダルの真ん中の絵文字が消えてしまうことがあったのを直しました。'},
   {v:137, at:'2026-10-30 10:18', t:'「称号」タブができました。記録の数や食べ方に応じて、ブロンズ・シルバー・ゴールド・ダイヤモンドの称号が集まります。シークレット称号もあります。とった称号は、1つずつでも、集めた称号のまとめでも、画像やXで共有できます。カレンダーとデータは「データ」タブにまとめ、上の切り替えで選べるようにしました。'},
   {v:135, at:'2026-10-30 09:44', t:'びんのグミが、止まっているのにゆっくり回り続けてしまうことがあったのを直しました。'},
   {v:129, at:'2026-10-26 23:35', t:'ヨーグルト色（白）のグミの線がおかしかったのを直しました。また、「もはやマンゴスチングミ マンゴスチン」のように味が重なった名前で記録したグミを、商品名だけに直しました。'},
@@ -5009,6 +5010,10 @@ function drawMedal(x, tier, icon, mx, my, r){
   x.textAlign = 'center';
   x.textBaseline = 'middle';
   x.font = `${Math.round(170 * k)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  // 塗りの色を単色に戻してから絵文字を描きます。
+  // iPhone の Safari では、塗りの色がグラデーションのままだと絵文字がその色で塗られ、メダルに溶けて見えなくなるためです。
+  x.fillStyle = '#000';
+  x.globalAlpha = 1;
   x.fillText(icon, mx, my + 10 * k);
 }
 
