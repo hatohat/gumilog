@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="65191de5bd"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="accbf756f2"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -2124,7 +2124,7 @@ body.has-snack .toast {
       </div>
       <p class="hint" id="post-hint">「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。</p>
       <div class="btn-row">
-        <a class="btn x" id="post-open" href="https://x.com/intent/post" target="_blank" rel="noopener">Xで開く</a>
+        <a class="btn x" id="post-open" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">Xで開く</a>
         <button class="btn ghost" id="post-copy">コピー</button>
         <button class="btn ghost" id="post-ai" hidden>AIに書いてもらう</button>
       </div>
@@ -2263,7 +2263,6 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
   {v:135, at:'2026-10-30 09:44', t:'びんのグミが、止まっているのにゆっくり回り続けてしまうことがあったのを直しました。'},
-  {v:133, at:'2026-10-30 09:30', t:'「Xで開く」で開く投稿画面のリンクを、X の新しい形式に変えました（Android でアカウントが切り替えられないことがある件の対策です）。'},
   {v:129, at:'2026-10-26 23:35', t:'ヨーグルト色（白）のグミの線がおかしかったのを直しました。また、「もはやマンゴスチングミ マンゴスチン」のように味が重なった名前で記録したグミを、商品名だけに直しました。'},
   {v:128, at:'2026-10-21 22:40', t:'記録の途中で「閉じる」を押したときに、「記録を破棄しますか？」と確かめるようになりました。'},
   {v:127, at:'2026-10-21 22:38', t:'「まるでレモングミ レモン」のように、商品名に入っている味が名前の候補で重ねて付いてしまう問題を直しました。'},
@@ -5835,8 +5834,10 @@ function setPostText(t){
 function updatePost(){
   const t = $('#post-text').value, n = xLen(t);
   $('#post-count').innerHTML = `<span class="${n>280?'over':''}">${n}</span> / 280`;
-  // いまのXの投稿用リンクを使います（以前の twitter.com のリンクでは、Androidアプリでアカウントの切り替え欄が空になることがありました）
-  $('#post-open').href = 'https://x.com/intent/post?text=' + encodeURIComponent(t);
+  // X の投稿画面を開くリンクです。
+  // スマホでは X アプリがこのリンクを受け取って投稿画面を開きます。
+  // （新しい x.com/intent/post の形式は X アプリで開けなかったため、この形式を使っています）
+  $('#post-open').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(t);
 }
 // 共有シートを開きます。kind が 'month' なら今月のまとめ、それ以外は記録 it の共有です
 function openPost(it, kind){
