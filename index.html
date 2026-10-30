@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="accbf756f2"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="0a17fa4303"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -1932,6 +1932,286 @@ body.has-snack .toast {
   white-space:normal
 }
 .shop-add .in{flex:1;min-width:0}
+
+/* ===== 称号（メダルとカード） ===== */
+/* 称号タブのいちばん上：集めた数と、段階ごとの数 */
+.ach-top {
+  gap:8px
+}
+.ach-score {
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between
+}
+.ach-score .big {
+  font-size:30px
+}
+.ach-score small {
+  font-size:14px;
+  color:var(--ink-2)
+}
+.ach-sum {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 14px;
+  font-size:13px
+}
+.ach-sum span {
+  display:inline-flex;
+  align-items:center;
+  gap:4px
+}
+/* 称号カードを 2 列に並べます */
+.ach-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px
+}
+.ach {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  text-align:center;
+  padding:12px 8px 10px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--surface);
+  color:var(--ink);
+  font:inherit;
+  min-width:0
+}
+.ach:active {
+  transform:scale(.98)
+}
+/* とった称号は、ふちを少し色づけます */
+.ach.got {
+  border-color:var(--accent-soft);
+  background:linear-gradient(180deg,var(--surface),var(--surface-2))
+}
+.ach-n {
+  font-weight:700;
+  font-size:13px;
+  line-height:1.3
+}
+.ach-t {
+  font-size:11px;
+  font-weight:700;
+  color:var(--ink-2)
+}
+.ach-t.bronze { color:#B5672E }
+.ach-t.silver { color:#7B8AA0 }
+.ach-t.gold { color:#C98A00 }
+.ach-t.diamond { color:#8C6BFF }
+.ach-t.secret { color:#6A55C2 }
+.ach.hid .ach-t {
+  font-weight:400
+}
+/* 4 つの段階を小さな丸で表します（とった段階は色がつきます） */
+.ach-pips {
+  display:flex;
+  gap:4px
+}
+.ach-pips i {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--line)
+}
+.ach-pips i.bronze { background:#C9774A }
+.ach-pips i.silver { background:#A3B0C2 }
+.ach-pips i.gold { background:#F0B21C }
+.ach-pips i.diamond { background:linear-gradient(135deg,#7FDBFF,#B9A4FF,#FF9FD2) }
+.ach-next {
+  font-size:11px;
+  color:var(--ink-2)
+}
+/* 次の段階までの進み具合のバー */
+.ach-bar {
+  display:block;
+  width:100%;
+  height:5px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden
+}
+.ach-bar.big {
+  height:8px
+}
+.ach-bar > span {
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:var(--accent)
+}
+/* まだとっていない称号のメダルは、絵文字をうすい白黒にします */
+.medal.off text {
+  filter:grayscale(1);
+  opacity:.4
+}
+.medal.diamond circle:first-of-type {
+  filter:drop-shadow(0 0 3px rgba(185,164,255,.6))
+}
+/* 称号のくわしい画面 */
+.ach-hero {
+  display:flex;
+  justify-content:center;
+  padding:4px 0
+}
+.ach-desc {
+  text-align:center;
+  margin:0 0 10px
+}
+.ach-steps {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px
+}
+.ach-steps li {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:var(--surface-2);
+  font-size:13px;
+  color:var(--ink-2)
+}
+.ach-steps li.ok {
+  color:var(--ink)
+}
+.ach-steps li span {
+  flex:1;
+  display:flex;
+  flex-direction:column
+}
+.ach-steps li em {
+  font-style:normal;
+  font-weight:700;
+  font-size:11px;
+  color:var(--accent-text)
+}
+/* 称号タブの「集めた称号をまとめて見る・共有」ボタン */
+.ach-all-btn {
+  align-self:stretch;
+  justify-content:center
+}
+/* 集めた称号のまとめ：集めた数、段階ごとの数、メダルを 3 列で並べます */
+.aa-head {
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:6px;
+  font-weight:700
+}
+.aa-head .big {
+  font-size:34px
+}
+.aa-sum {
+  justify-content:center;
+  margin:6px 0 12px
+}
+.aa-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px 6px
+}
+.aa-item {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  text-align:center;
+  min-width:0
+}
+.aa-n {
+  font-size:12px;
+  font-weight:700;
+  line-height:1.3
+}
+/* ===== 称号をとったときのお祝い ===== */
+.ach-win {
+  text-align:center
+}
+.aw-stage {
+  position:relative;
+  height:150px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden
+}
+/* メダルがぽんっと飛び出して、少しゆれて止まります */
+.aw-medal {
+  animation:aw-pop .9s cubic-bezier(.2,1.6,.4,1) both
+}
+@keyframes aw-pop {
+  0% { transform:scale(.2) rotate(-25deg); opacity:0 }
+  60% { transform:scale(1.12) rotate(6deg); opacity:1 }
+  100% { transform:scale(1) rotate(0) }
+}
+/* 紙吹雪：上から回りながら落ちてきます */
+.aw-confetti {
+  position:absolute;
+  inset:0;
+  pointer-events:none
+}
+.aw-confetti i {
+  position:absolute;
+  top:-12px;
+  width:8px;
+  height:12px;
+  border-radius:2px;
+  animation:aw-fall 2s ease-in forwards
+}
+@keyframes aw-fall {
+  0% { translate:0 0; rotate:0deg; opacity:1 }
+  100% { translate:0 170px; rotate:540deg; opacity:0 }
+}
+.aw-name {
+  margin:4px 0 0;
+  font-weight:700;
+  font-size:20px
+}
+.aw-tier {
+  margin:2px 0 6px;
+  font-weight:700;
+  font-size:15px
+}
+.aw-tier.bronze { color:#B5672E }
+.aw-tier.silver { color:#7B8AA0 }
+.aw-tier.gold { color:#C98A00 }
+.aw-tier.diamond { color:#8C6BFF }
+.aw-tier.secret { color:#6A55C2 }
+.aw-desc {
+  margin:0 0 6px
+}
+.aw-more {
+  margin:0;
+  font-size:13px;
+  color:var(--ink-2)
+}
+/* お祝いのボタン 3 つ（閉じる・画像で共有・Xで共有）を 1 行に並べます */
+.aw-actions .btn {
+  padding-inline:12px
+}
+.aw-actions .btn:not(.ghost) {
+  flex:1
+}
+/* 「動きを減らす」設定のときは、メダルのアニメーションを止めます */
+@media (prefers-reduced-motion: reduce) {
+  .aw-medal { animation:none }
+}
+/* データタブの「データ／カレンダー」の切り替え */
+.data-seg {
+  margin-bottom:12px
+}
+.data-seg[hidden] {
+  display:none
+}
 </style></head><body>
 
 <!-- ===== ヘッダー（画面上部に常に表示されるロゴ・保存状態・ボタン） ===== -->
@@ -1976,7 +2256,13 @@ body.has-snack .toast {
     <div id="list"></div>
   </section>
 
-  <!-- ===== カレンダー画面（「カレンダー」タブで表示） ===== -->
+  <!-- ===== データタブの切り替え（データ／カレンダー）。お知らせの「アプリ／カタログ」と同じ形です ===== -->
+  <div class="seg upd-seg data-seg" id="data-seg" role="tablist" aria-label="データの種類" hidden>
+    <button type="button" role="tab" data-dview="stats">データ</button>
+    <button type="button" role="tab" data-dview="cal">カレンダー</button>
+  </div>
+
+  <!-- ===== カレンダー画面（「データ」タブの「カレンダー」で表示） ===== -->
   <section class="view" id="v-cal" hidden>
     <div class="cal">
       <!-- 月の切り替え（前の月・次の月） -->
@@ -1992,8 +2278,11 @@ body.has-snack .toast {
     <div id="cal-day"></div>
   </section>
 
-  <!-- ===== データ画面（「データ」タブで表示。中身はJavaScriptで作ります） ===== -->
+  <!-- ===== データ画面（「データ」タブで、カレンダーの下に表示。中身はJavaScriptで作ります） ===== -->
   <section class="view" id="v-stats" hidden></section>
+
+  <!-- ===== 称号画面（「称号」タブで表示。中身はJavaScriptで作ります） ===== -->
+  <section class="view" id="v-ach" hidden></section>
 
   <!-- ===== ぐみ棚画面（「ぐみ棚」タブで表示。中身はJavaScriptで作ります） ===== -->
   <section class="view" id="v-shelf" hidden></section>
@@ -2003,10 +2292,11 @@ body.has-snack .toast {
 <nav class="tabbar" aria-label="メニュー">
   <div class="tabbar-in">
     <button class="tab" data-tab="log" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>ログ</button>
-    <button class="tab" data-tab="cal"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>カレンダー</button>
+    <button class="tab" data-tab="cal"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>データ</button>
     <!-- 真ん中の「＋」ボタンです。押すと記録画面が開きます -->
     <button class="fab" id="fab" aria-label="グミを記録"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-    <button class="tab" data-tab="stats"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>データ</button>
+    <!-- 称号タブ（記録に応じて集まる称号の一覧） -->
+    <button class="tab" data-tab="ach"><svg viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="6"/><path d="M8.6 3.5l2.2 5.3M15.4 3.5l-2.2 5.3"/><path d="M12 11.8l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2-1.45-1.4 2-.3z"/></svg>称号</button>
     <button class="tab" data-tab="shelf"><svg viewBox="0 0 24 24"><path d="M3.5 9.5h17M3.5 19.5h17M5 3.5v16M19 3.5v16"/><rect x="7" y="4.5" width="3.5" height="5" rx="1"/><rect x="12" y="5.5" width="4" height="4" rx="1.5"/><rect x="7.5" y="13.5" width="4" height="6" rx="1"/><circle cx="15.2" cy="17" r="2.5"/></svg>ぐみ棚</button>
   </div>
 </nav>
@@ -2200,6 +2490,40 @@ body.has-snack .toast {
 </div>
 
 <!-- ===== スナックバー（記録した直後に画面下に出る「記録しました！」と共有ボタン） ===== -->
+<!-- ===== 称号のくわしい画面（称号タブでカードを押すと開きます） ===== -->
+<div class="sheet" id="sh-ach" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ach-title">
+    <div class="sheet-h"><h2 id="ach-title">称号</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div id="ach-body"></div>
+    <div class="sheet-actions"><button class="btn" type="button" id="ach-img" hidden>画像で共有</button><a class="btn primary x" id="ach-share" href="#" target="_blank" rel="noopener" hidden>Xで共有</a></div>
+  </div>
+</div>
+
+<!-- ===== 集めた称号のまとめ（称号タブの「集めた称号をまとめて見る」で開きます） ===== -->
+<div class="sheet" id="sh-achall" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="aa-title">
+    <div class="sheet-h"><h2 id="aa-title">集めた称号</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div id="aa-body"></div>
+    <div class="sheet-actions"><button class="btn" type="button" id="aa-img">画像で共有</button><a class="btn primary x" id="aa-share" href="#" target="_blank" rel="noopener">Xで共有</a></div>
+  </div>
+</div>
+
+<!-- ===== 称号をとったときのお祝い（紙吹雪とメダルが出ます） ===== -->
+<div class="sheet" id="sh-achwin" hidden>
+  <div class="sheet-p ach-win" role="dialog" aria-modal="true" aria-labelledby="aw-title">
+    <div class="sheet-h"><h2 id="aw-title">称号をとりました！</h2></div>
+    <div class="aw-stage">
+      <div class="aw-confetti" id="aw-confetti" aria-hidden="true"></div>
+      <div class="aw-medal" id="aw-medal"></div>
+    </div>
+    <p class="aw-name" id="aw-name"></p>
+    <p class="aw-tier" id="aw-tier"></p>
+    <p class="hint aw-desc" id="aw-desc"></p>
+    <p class="aw-more"><span id="aw-more" hidden></span> <button class="btn sm ghost" type="button" id="aw-go">称号を見る</button></p>
+    <div class="sheet-actions sg-actions aw-actions"><button class="btn ghost" type="button" data-close>閉じる</button><button class="btn" type="button" id="aw-img">画像で共有</button><a class="btn primary x" id="aw-share" href="#" target="_blank" rel="noopener">Xで共有</a></div>
+  </div>
+</div>
+
 <div class="snack" id="snack" role="status" hidden>
   <span id="snack-t">記録しました！</span>
   <button class="btn sm x" id="snack-post" type="button"><svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>共有</button>
@@ -2262,6 +2586,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:137, at:'2026-10-30 10:18', t:'「称号」タブができました。記録の数や食べ方に応じて、ブロンズ・シルバー・ゴールド・ダイヤモンドの称号が集まります。シークレット称号もあります。とった称号は、1つずつでも、集めた称号のまとめでも、画像やXで共有できます。カレンダーとデータは「データ」タブにまとめ、上の切り替えで選べるようにしました。'},
   {v:135, at:'2026-10-30 09:44', t:'びんのグミが、止まっているのにゆっくり回り続けてしまうことがあったのを直しました。'},
   {v:129, at:'2026-10-26 23:35', t:'ヨーグルト色（白）のグミの線がおかしかったのを直しました。また、「もはやマンゴスチングミ マンゴスチン」のように味が重なった名前で記録したグミを、商品名だけに直しました。'},
   {v:128, at:'2026-10-21 22:40', t:'記録の途中で「閉じる」を押したときに、「記録を破棄しますか？」と確かめるようになりました。'},
@@ -2657,7 +2982,7 @@ const S = {
   mode: 'local',            // 保存先です。'local'（この端末）か 'cloud'（アカウント）
   local: lsGet(LS_KEY, []),
   cloud: null,
-  ui: Object.assign({tab:'log', filter:'all', calMonth:null, selDay:null}, lsGet(LS_UI, {})),
+  ui: Object.assign({tab:'log', filter:'all', dataView:'stats', calMonth:null, selDay:null}, lsGet(LS_UI, {})),
   q: '',
   cap: {db:null, col:null, downloads:null, sample:null},
   unsubs: [], readOnly: false,
@@ -2819,6 +3144,19 @@ async function connect(){
     if (d && Array.isArray(d.nameSkip) && d.nameSkip.join('|') !== S.nameSkip.join('|')){
       S.nameSkip = d.nameSkip.map(String);
       lsSet(LS_NAMESKIP, S.nameSkip);
+    }
+    // ほかの端末でとった称号も合わせます（段階の大きいほうを残します）
+    if (d && d.ach && typeof d.ach === 'object'){
+      const cur = lsGet(LS_ACH, null) || {};
+      let ch = false;
+      for (const [k, v] of Object.entries(d.ach)) if ((+v || 0) > (+cur[k] || 0)){
+        cur[k] = +v;
+        ch = true;
+      }
+      if (ch){
+        lsSet(LS_ACH, cur);
+        renderAch();
+      }
     }
     if (d && d.postTpls && typeof d.postTpls === 'object' && JSON.stringify(d.postTpls) !== JSON.stringify(S.postTpls)){
       S.postTpls = d.postTpls;
@@ -4310,12 +4648,690 @@ function wireShelfImage(){
   });
 }
 
+/* ========== 称号（グミの実績） ==========
+   記録の数や食べ方に応じて、称号（ブロンズ → シルバー → ゴールド → ダイヤモンド）が集まります。
+   シークレット称号は、とるまで名前がかくれていて、ヒントだけが見えます。
+   一度とった称号は、記録を消しても下がりません（とった段階をこの端末とクラウドに保存します）。 */
+
+// とった称号の段階を保存する場所です。{ 称号のid: とった段階の数（0〜4） } の形で保存します。
+const LS_ACH = 'gumilog.ach.v1';
+// アプリから「カタログに提案」を送った回数です（「グミ情報屋」で使います）。
+const LS_SUGG = 'gumilog.suggests.v1';
+// 称号の段階です。tiers の数字を順にこえるごとに、1 段ずつ上がります。
+const TIERS = [{k:'bronze', n:'ブロンズ'}, {k:'silver', n:'シルバー'}, {k:'gold', n:'ゴールド'}, {k:'diamond', n:'ダイヤモンド'}];
+// 称号のグループです（称号タブでは、この順に並べます）。
+const ACH_CATS = [
+  ['collect', 'グミあつめ'], ['habit', 'グミのある毎日'], ['money', 'おさいふ'], ['taste', '食べっぷり・こだわり'],
+  ['explore', '探検・発見'], ['flavor', '味マニア'], ['maker', 'メーカー通'], ['secret', 'シークレット'],
+];
+// ニッポンエールの都道府県を見分けるための書き方です（「東京都」と「京都府」を取りちがえないよう、都道府県まで含めて探します）。
+const PREF_RE = /北海道|東京都|京都府|大阪府|(?:青森|岩手|宮城|秋田|山形|福島|茨城|栃木|群馬|埼玉|千葉|神奈川|新潟|富山|石川|福井|山梨|長野|岐阜|静岡|愛知|三重|滋賀|兵庫|奈良|和歌山|鳥取|島根|岡山|広島|山口|徳島|香川|愛媛|高知|福岡|佐賀|長崎|熊本|大分|宮崎|鹿児島|沖縄)県/g;
+// 都道府県の名前（県・府・都がついていなくても見つけます）。「東京」を「京都」より先に探すので、東京都が京都と読まれることはありません。
+const PREF_BASE_RE = /北海道|青森|岩手|宮城|秋田|山形|福島|茨城|栃木|群馬|埼玉|千葉|東京|神奈川|新潟|富山|石川|福井|山梨|長野|岐阜|静岡|愛知|三重|滋賀|京都|大阪|兵庫|奈良|和歌山|鳥取|島根|岡山|広島|山口|徳島|香川|愛媛|高知|福岡|佐賀|長崎|熊本|大分|宮崎|鹿児島|沖縄/g;
+// 「〇〇マニア」の味です。[id, 絵文字, 呼び名, 見分けるための書き方]
+const ACH_FLAVORS = [
+  ['grape', '🍇', 'ぶどう', /ぶどう|ブドウ|葡萄|グレープ(?!フルーツ)|巨峰|ピオーネ|デラウェア/],
+  ['muscat', '🟢', 'マスカット', /マスカット/],
+  ['lemon', '🍋', 'レモン', /レモン|れもん|檸檬/],
+  ['soda', '🫧', 'ソーダ', /ソーダ|サイダー|ラムネ/],
+  ['cola', '🥤', 'コーラ', /コーラ/],
+  ['peach', '🍑', 'もも', /もも|モモ|桃|ピーチ/],
+  ['apple', '🍎', 'りんご', /りんご|リンゴ|林檎|アップル/],
+  ['strawberry', '🍓', 'いちご', /いちご|イチゴ|苺|ストロベリー/],
+  ['orange', '🍊', 'みかん・オレンジ', /みかん|ミカン|蜜柑|オレンジ/],
+  ['mango', '🥭', 'マンゴー', /マンゴー/],
+  ['tropical', '🍍', 'トロピカル', /パイン|パイナップル|ライチ|トロピカル|パッション/],
+  ['ume', '🌸', '梅', /梅|うめ|ウメ/],
+  ['milk', '🥛', '乳酸菌・ヨーグルト', /ヨーグルト|乳酸菌|ミルク|カルピス/],
+  ['energy', '⚡', 'エナジードリンク', /エナジー|エナドリ/],
+];
+// 「〇〇通」のメーカーです。[id, 呼び名, 見分けるための書き方]
+const ACH_MAKERS = [
+  ['meiji', '明治', /明治|meiji/i], ['kanro', 'カンロ', /カンロ/], ['uha', 'UHA味覚糖', /UHA|味覚糖/i], ['fujiya', '不二家', /不二家/],
+  ['haribo', 'ハリボー', /ハリボー|haribo/i], ['bandai', 'バンダイ', /バンダイ|bandai/i], ['kabaya', 'カバヤ', /カバヤ/],
+  ['nobel', 'ノーベル', /ノーベル/], ['bourbon', 'ブルボン', /ブルボン/], ['kasugai', '春日井', /春日井/],
+  ['lotte', 'ロッテ', /ロッテ|lotte/i], ['trolli', 'トローリ', /トローリ|trolli/i],
+];
+
+// 称号の計算に使う、記録から集めた材料です。称号ごとに何度も同じ計算をしないよう、まとめて 1 回だけ作ります。
+function achCtx(){
+  const L = realItems();
+  const text = i => String((i.name || '') + ' ' + (i.flavor || '')).normalize('NFKC');
+  const maxOf = m => Math.max(0, ...m.values());
+  // 日ごと・月ごとの袋数と出費
+  const perDay = new Map(), perMonth = new Map(), spendMonth = new Map(), perName = new Map();
+  L.forEach(i => {
+    perDay.set(i.date, (perDay.get(i.date) || 0) + 1);
+    perMonth.set(ym(i.date), (perMonth.get(ym(i.date)) || 0) + 1);
+    spendMonth.set(ym(i.date), (spendMonth.get(ym(i.date)) || 0) + spendOf(i));
+    perName.set(i.name, (perName.get(i.name) || 0) + 1);
+  });
+  // カタログに載った日（追加日）を、候補の名前ごとに引けるようにします（「グミの開拓者」で使います）。
+  const addedAt = new Map();
+  for (const c of catList()){
+    if (!c.added) continue;
+    [c.n, ...(c.f || []).map(f => catName(c, f))].forEach(n => addedAt.set(norm(n), c.added));
+  }
+  // カタログの発売日を、候補の名前ごとに引けるようにします（「発売日ハンター」で使います）。
+  const relAt = new Map(), catMakers = new Set();
+  for (const c of catList()){
+    catMakers.add(norm(c.m));
+    if (!c.rel) continue;
+    [c.n, ...(c.f || []).map(f => catName(c, f))].forEach(n => relAt.set(norm(n), c.rel));
+  }
+  // ニッポンエールで記録した都道府県
+  const prefs = new Set();
+  L.filter(i => /ニッポンエール|JA全農/.test(String(i.name) + String(i.maker))).forEach(i => (text(i).match(PREF_RE) || []).forEach(p => prefs.add(p)));
+  return {
+    L, text, prefs,
+    names: new Set(L.map(i => i.name)),
+    maxDay: maxOf(perDay), maxMonth: maxOf(perMonth), maxSpendMonth: maxOf(spendMonth), maxRepeat: maxOf(perName),
+    months: new Set(L.map(i => i.date.slice(5, 7))).size,
+    // カタログにないグミ：いまカタログにないグミと、記録した日より後にカタログに載ったグミの種類の数
+    pioneer: new Set(L.filter(i => !inCatalog(i.name) || (addedAt.has(norm(i.name)) && i.date < addedAt.get(norm(i.name)))).map(i => i.name)).size,
+    // カタログに載っているグミの種類（カタログ図鑑）
+    zukan: [...new Set(L.map(i => i.name))].filter(n => inCatalog(n)).length,
+    // 発売日から 7 日以内に記録した袋（発売日ハンター）
+    release: L.filter(i => {
+      const r = relAt.get(norm(i.name));
+      if (!r) return false;
+      const days = (parseYmd(i.date) - parseYmd(r)) / 86400000;
+      return days >= 0 && days <= 7;
+    }).length,
+    // 知っているシリーズの、カタログにない味（新しい味の発見者）
+    newFlavors: new Set(L.filter(i => {
+      const nf = newFlavorOf(i);
+      return nf && nf.flavor;
+    }).map(i => i.name)).size,
+    // 名前に都道府県が入ったグミの、都道府県の数（ご当地グミめぐり）
+    gotouchi: new Set(L.flatMap(i => text(i).match(PREF_BASE_RE) || [])).size,
+    // カタログにないメーカーの数（知る人ぞ知るメーカー）
+    minorMakers: new Set(L.map(i => (i.maker || '').trim()).filter(m => m && !catMakers.has(norm(m)))).size,
+    // アプリから提案を送った回数（グミ情報屋）
+    suggests: +lsGet(LS_SUGG, 0) || 0,
+    // 同じ日にした記録（シークレット称号で使います）
+    byDay: L.reduce((m, i) => m.set(i.date, [...(m.get(i.date) || []), i]), new Map()),
+  };
+}
+// コンビニの名前（「コンビニの民」で使います）
+const CONVENI_RE = /セブン|ファミ|ローソン|ミニストップ|デイリー|NewDays|ニューデイズ|セイコーマート/i;
+// 作った時刻（何時か）を返します。古い記録で時刻がなければ -1 です。
+const hourOf = i => i.createdAt ? new Date(i.createdAt).getHours() : -1;
+
+// 称号の一覧です。
+// id: 保存に使う名前、cat: グループ、icon: メダルの絵文字、name: 称号の名前、unit: 数の単位、
+// tiers: 段階ごとに必要な数、what: n をこえたときの説明、v: いまの数を ctx から計算する関数
+// secret: true のものはシークレット称号で、1 段だけです（hint はとる前に見えるヒント）
+const ACH = [
+  // グミあつめ
+  {id:'kinds', cat:'collect', icon:'🧸', name:'グミコレクター', unit:'種類', tiers:[10, 50, 100, 1000], what:n => `${n}種類のグミを記録`, v:c => c.names.size},
+  {id:'bags', cat:'collect', icon:'🛍️', name:'グミ袋の山', unit:'袋', tiers:[10, 50, 200, 500], what:n => `グミを${n}袋記録`, v:c => c.L.length},
+  {id:'colors', cat:'collect', icon:'🎨', name:'色あつめ', unit:'色', tiers:[3, 5, 7, COLORS.length - 1], what:n => `${n}色のグミを記録`, v:c => new Set(c.L.map(i => i.color).filter(k => k && !isRb(k))).size},
+  {id:'assort', cat:'collect', icon:'🌈', name:'アソート好き', unit:'袋', tiers:[3, 10, 30, 100], what:n => `アソート（虹色）のグミを${n}袋記録`, v:c => c.L.filter(i => isRb(i.color)).length},
+  {id:'repeat', cat:'collect', icon:'🔁', name:'リピーター', unit:'回', tiers:[3, 5, 10, 20], what:n => `同じグミを${n}回買う`, v:c => c.maxRepeat},
+  {id:'makers', cat:'collect', icon:'🏭', name:'メーカーめぐり', unit:'社', tiers:[5, 10, 20, 30], what:n => `${n}社のグミを記録`, v:c => new Set(c.L.map(i => i.maker).filter(Boolean)).size},
+  {id:'news', cat:'collect', icon:'🆕', name:'新商品ハンター', unit:'袋', tiers:[5, 20, 50, 100], what:n => `新商品を${n}袋記録`, v:c => c.L.filter(i => (i.tags || []).includes('新商品')).length},
+  // グミのある毎日
+  {id:'streak', cat:'habit', icon:'🔥', name:'毎日グミ', unit:'日', tiers:[3, 7, 30, 100], what:n => `${n}日つづけて記録`, v:c => bestStreak(c.L)},
+  {id:'days', cat:'habit', icon:'📅', name:'グミ記念日', unit:'日', tiers:[10, 30, 100, 365], what:n => `${n}日ぶん記録`, v:c => c.byDay.size},
+  {id:'months', cat:'habit', icon:'🗓️', name:'12か月のグミ', unit:'か月', tiers:[3, 6, 9, 12], what:n => `${n}つの月（1月〜12月）で記録`, v:c => c.months},
+  {id:'monthly', cat:'habit', icon:'📦', name:'月間グミ王', unit:'袋', tiers:[10, 20, 40, 80], what:n => `1か月に${n}袋記録`, v:c => c.maxMonth},
+  {id:'bigday', cat:'habit', icon:'🛒', name:'まとめ買い', unit:'袋', tiers:[3, 5, 8, 12], what:n => `1日に${n}袋記録`, v:c => c.maxDay},
+  {id:'finish', cat:'habit', icon:'✅', name:'完食マスター', unit:'袋', tiers:[10, 50, 100, 300], what:n => `${n}袋を完食`, v:c => c.L.filter(i => statusOf(i) === 'finished').length},
+  {id:'stock', cat:'habit', icon:'📚', name:'積みグミ', unit:'袋', tiers:[3, 5, 10, 20], what:n => `まだ食べてないグミを${n}袋ためる`, v:c => c.L.filter(i => statusOf(i) === 'unopened').length},
+  {id:'notes', cat:'habit', icon:'✍️', name:'ひとこと日記', unit:'件', tiers:[10, 50, 100, 300], what:n => `ひとことを${n}件書く`, v:c => c.L.filter(i => (i.note || '').trim()).length},
+  {id:'photos', cat:'habit', icon:'📷', name:'グミカメラマン', unit:'枚', tiers:[5, 20, 50, 100], what:n => `自分で撮った写真を${n}枚つける`, v:c => c.L.filter(i => photoOf(ownKey(i))).length},
+  // おさいふ
+  {id:'wallet', cat:'money', icon:'👛', name:'お財布が心配…', unit:'円', tiers:[1000, 3000, 5000, 10000], what:n => `1か月の出費が${yen(n)}をこえる`, v:c => c.maxSpendMonth},
+  {id:'spent', cat:'money', icon:'💴', name:'グミに捧げた', unit:'円', tiers:[5000, 20000, 50000, 100000], what:n => `これまでの出費が${yen(n)}をこえる`, v:c => c.L.reduce((s, i) => s + spendOf(i), 0)},
+  {id:'conveni', cat:'money', icon:'🏪', name:'コンビニの民', unit:'袋', tiers:[10, 50, 100, 300], what:n => `コンビニで${n}袋買う`, v:c => c.L.filter(i => CONVENI_RE.test(i.shop || '')).length},
+  {id:'shops', cat:'money', icon:'🗺️', name:'お店めぐり', unit:'か所', tiers:[3, 5, 10, 20], what:n => `${n}か所のお店で買う`, v:c => new Set(c.L.map(i => (i.shop || '').trim()).filter(Boolean)).size},
+  // 食べっぷり・こだわり
+  {id:'rated', cat:'taste', icon:'⭐', name:'グミ評論家', unit:'袋', tiers:[10, 50, 100, 300], what:n => `${n}袋においしさをつける`, v:c => c.L.filter(i => i.rating).length},
+  {id:'love', cat:'taste', icon:'💖', name:'推しがいっぱい', unit:'袋', tiers:[3, 10, 30, 100], what:n => `★5を${n}袋につける`, v:c => c.L.filter(i => i.rating === 5).length},
+  {id:'hard', cat:'taste', icon:'💪', name:'ハード派', unit:'袋', tiers:[5, 20, 50, 100], what:n => `かたさ4以上のグミを${n}袋記録`, v:c => c.L.filter(i => i.hard >= 4).length},
+  {id:'soft', cat:'taste', icon:'☁️', name:'やわらか派', unit:'袋', tiers:[5, 20, 50, 100], what:n => `かたさ2以下のグミを${n}袋記録`, v:c => c.L.filter(i => i.hard && i.hard <= 2).length},
+  {id:'sour', cat:'taste', icon:'😖', name:'すっぱい派', unit:'袋', tiers:[5, 20, 50, 100], what:n => `すっぱさ4以上のグミを${n}袋記録`, v:c => c.L.filter(i => i.sour >= 4).length},
+  {id:'sweet', cat:'taste', icon:'🍯', name:'甘々派', unit:'袋', tiers:[5, 20, 50, 100], what:n => `すっぱさ2以下のグミを${n}袋記録`, v:c => c.L.filter(i => i.sour && i.sour <= 2).length},
+  // 探検・発見
+  {id:'nippon', cat:'explore', icon:'🗾', name:'ニッポンエール全国制覇', unit:'都道府県', tiers:[5, 15, 30, 47], what:n => `ニッポンエールで${n}都道府県のグミを記録`, v:c => c.prefs.size},
+  // カタログにないグミ（記録したあとでカタログに載ったグミも含みます）の種類の数です
+  {id:'explorer', cat:'explore', icon:'🧭', name:'グミの開拓者', unit:'種類', tiers:[1, 5, 15, 30], what:n => `カタログにないグミを${n}種類記録`, v:c => c.pioneer},
+  {id:'zukan', cat:'explore', icon:'📖', name:'カタログ図鑑', unit:'種類', tiers:[10, 30, 100, 200], what:n => `カタログに載っているグミを${n}種類記録`, v:c => c.zukan},
+  {id:'release', cat:'explore', icon:'🏃', name:'発売日ハンター', unit:'袋', tiers:[1, 5, 15, 30], what:n => `発売日から7日以内に新作を${n}袋記録`, v:c => c.release},
+  {id:'newflavor', cat:'explore', icon:'🧪', name:'新しい味の発見者', unit:'種類', tiers:[1, 3, 10, 30], what:n => `知っているシリーズの、カタログにない味を${n}種類記録`, v:c => c.newFlavors},
+  {id:'suggest', cat:'explore', icon:'💌', name:'グミ情報屋', unit:'回', tiers:[1, 3, 10, 30], what:n => `アプリから「カタログに提案」を${n}回送る`, v:c => c.suggests},
+  {id:'gotouchi', cat:'explore', icon:'🗺️', name:'ご当地グミめぐり', unit:'都道府県', tiers:[3, 10, 20, 47], what:n => `名前に都道府県が入ったグミを、${n}都道府県ぶん記録`, v:c => c.gotouchi},
+  {id:'minor', cat:'explore', icon:'🏭', name:'知る人ぞ知るメーカー', unit:'社', tiers:[1, 3, 5, 10], what:n => `カタログにないメーカーのグミを${n}社ぶん記録`, v:c => c.minorMakers},
+  // 味マニア・メーカー通（表から作ります）
+  ...ACH_FLAVORS.map(([id, icon, label, re]) => ({id:'fl-' + id, cat:'flavor', icon, name:`${label}マニア`, unit:'袋', tiers:[3, 10, 30, 100],
+    what:n => `${label}味のグミを${n}袋記録`, v:c => c.L.filter(i => re.test(c.text(i))).length})),
+  ...ACH_MAKERS.map(([id, label, re]) => ({id:'mk-' + id, cat:'maker', icon:'🏭', name:`${label}通`, unit:'袋', tiers:[3, 10, 30, 100],
+    what:n => `${label}のグミを${n}袋記録`, v:c => c.L.filter(i => re.test(i.maker || '')).length})),
+  // シークレット（とるまで名前はかくれています）
+  {id:'s-night', secret:true, icon:'🌙', name:'夜ふかしグミ', hint:'みんなが寝ている時間に…', what:() => '夜中（0時〜3時台）にグミを記録', v:c => c.L.some(i => hourOf(i) >= 0 && hourOf(i) < 4)},
+  {id:'s-early', secret:true, icon:'🐓', name:'早起きグミ', hint:'朝いちばんのお楽しみ', what:() => '朝（5時〜6時台）にグミを記録', v:c => c.L.some(i => hourOf(i) === 5 || hourOf(i) === 6)},
+  {id:'s-gumiday', secret:true, icon:'🎉', name:'グミの日', hint:'グミにとって特別な日', what:() => '9月3日（グミの日）にグミを記録', v:c => c.L.some(i => i.date.endsWith('-09-03'))},
+  {id:'s-uragumiday', secret:true, icon:'🙃', name:'裏グミの日', hint:'特別な日を、ひっくり返すと…', what:() => '3月9日（裏グミの日）にグミを記録', v:c => c.L.some(i => i.date.endsWith('-03-09'))},
+  {id:'s-xmas', secret:true, icon:'🎄', name:'聖夜のグミ', hint:'プレゼントはもちろんグミ', what:() => 'クリスマス（12月24日・25日）にグミを記録', v:c => c.L.some(i => /-12-2[45]$/.test(i.date))},
+  {id:'s-newyear', secret:true, icon:'🎍', name:'初グミ', hint:'1年のはじまり', what:() => '1月1日にグミを記録', v:c => c.L.some(i => i.date.endsWith('-01-01'))},
+  {id:'s-halloween', secret:true, icon:'🎃', name:'トリック・オア・グミ', hint:'グミをくれなきゃイタズラするぞ！', what:() => 'ハロウィン（10月31日）にグミを記録', v:c => c.L.some(i => i.date.endsWith('-10-31'))},
+  {id:'s-valentine', secret:true, icon:'💝', name:'チョコよりグミ', hint:'チョコよりも…', what:() => '2月14日（バレンタイン）にグミを記録', v:c => c.L.some(i => i.date.endsWith('-02-14'))},
+  {id:'s-tanabata', secret:true, icon:'🎋', name:'七夕グミ', hint:'星に願いを', what:() => '7月7日（七夕）にグミを記録', v:c => c.L.some(i => i.date.endsWith('-07-07'))},
+  {id:'s-aprilfool', secret:true, icon:'🤥', name:'うそみたいなグミ', hint:'グミは嘘をつかない', what:() => '4月1日（エイプリルフール）にグミを記録', v:c => c.L.some(i => i.date.endsWith('-04-01'))},
+  {id:'s-fri13', secret:true, icon:'🦇', name:'13日の金曜日', hint:'ちょっとこわい日', what:() => '13日の金曜日にグミを記録', v:c => c.L.some(i => i.date.endsWith('-13') && parseYmd(i.date).getDay() === 5)},
+  // 最初に記録した日の、ちょうど 1 年後の日にも記録していれば取れます
+  {id:'s-anniv', secret:true, icon:'🎂', name:'ぐみろぐ1周年', hint:'最初の記録から、ちょうど…', what:() => '最初の記録のちょうど1年後にグミを記録', v:c => {
+    const first = [...c.byDay.keys()].sort()[0];
+    return !!first && c.byDay.has((+first.slice(0, 4) + 1) + first.slice(4));
+  }},
+  {id:'s-zorome', secret:true, icon:'🎰', name:'ゾロ目の値段', hint:'値段に注目', what:() => '111円・222円…のようなゾロ目の値段のグミを記録', v:c => c.L.some(i => [111, 222, 333, 444, 555, 666, 777, 888, 999].includes(+i.price))},
+  {id:'s-free', secret:true, icon:'🎁', name:'もらいグミ', hint:'お金を払わずに…', what:() => '出費に入れないグミ（もらったグミなど）を記録', v:c => c.L.some(i => i.noSpend)},
+  {id:'s-twice', secret:true, icon:'✌️', name:'もう一袋！', hint:'気に入ったら、すぐに…', what:() => '同じ日に同じグミを2袋記録', v:c => [...c.byDay.values()].some(l => l.length !== new Set(l.map(i => i.name)).size)},
+  {id:'s-signal', secret:true, icon:'🚦', name:'信号機', hint:'赤・黄・緑', what:() => '同じ日に、いちご色・レモン色・メロン色のグミを記録', v:c => [...c.byDay.values()].some(l => ['straw', 'lemon', 'melon'].every(k => l.some(i => i.color === k)))},
+  {id:'s-luxury', secret:true, icon:'👑', name:'高級グミ', hint:'ちょっといいグミ', what:() => '1,000円以上のグミを記録', v:c => c.L.some(i => +i.price >= 1000)},
+  {id:'s-rainbowday', secret:true, icon:'🌟', name:'虹の1か月', hint:'色とりどりの月', what:() => '1か月に7色以上のグミを記録', v:c => [...c.L.reduce((m, i) => m.set(ym(i.date), (m.get(ym(i.date)) || new Set()).add(i.color)), new Map()).values()].some(s => [...s].filter(k => k && !isRb(k)).length >= 7)},
+  {id:'s-midnight', secret:true, icon:'🕛', name:'日付が変わる瞬間', hint:'時計の針がそろうとき', what:() => '0時0分台にグミを記録', v:c => c.L.some(i => i.createdAt && new Date(i.createdAt).getHours() === 0 && new Date(i.createdAt).getMinutes() === 0)},
+  // 記録した日を古い順に並べ、となりの日との間が 7 日以上あいていれば取れます
+  {id:'s-okaeri', secret:true, icon:'👋', name:'おかえりグミ', hint:'しばらく会えなかったね', what:() => '前の記録から7日以上あけてグミを記録', v:c => {
+    const days = [...c.byDay.keys()].sort();
+    return days.some((d, k) => k > 0 && (parseYmd(d) - parseYmd(days[k - 1])) / 86400000 >= 7);
+  }},
+  // 同じグミを、3 日続けて記録していれば取れます
+  {id:'s-matasore', secret:true, icon:'🔂', name:'またそれ？', hint:'よっぽど好きなんだね', what:() => '同じグミを3日続けて記録', v:c => {
+    const has = new Set(c.L.map(i => i.name + '|' + i.date));
+    const next = (s, k) => {
+      const d = parseYmd(s);
+      d.setDate(d.getDate() + k);
+      return ymd(d);
+    };
+    return c.L.some(i => has.has(i.name + '|' + next(i.date, 1)) && has.has(i.name + '|' + next(i.date, 2)));
+  }},
+  {id:'s-kiriban', secret:true, icon:'🎯', name:'キリ番', hint:'ちょうどいい数', what:() => 'ちょうど100袋目のグミを記録', v:c => c.L.length >= 100},
+  {id:'s-dagashi', secret:true, icon:'🪙', name:'駄菓子グミ', hint:'コスパ◎', what:() => '100円以下のグミを記録', v:c => c.L.some(i => +i.price > 0 && +i.price <= 100)},
+  {id:'s-honest', secret:true, icon:'😑', name:'正直者', hint:'好みは人それぞれ', what:() => '★1をつける', v:c => c.L.some(i => i.rating === 1)},
+  {id:'s-review', secret:true, icon:'📜', name:'グミ評論文', hint:'思いがあふれて…', what:() => 'ひとことを100文字以上書く', v:c => c.L.some(i => [...(i.note || '')].length >= 100)},
+  {id:'s-overseas', secret:true, icon:'🌍', name:'海外グミ', hint:'海の向こうから', what:() => 'ハリボーかトローリのグミを記録', v:c => c.L.some(i => /ハリボー|トローリ|haribo|trolli/i.test(i.maker || ''))},
+];
+// シークレット称号は、1 段（とったか、とっていないか）だけです。
+ACH.forEach(a => {
+  if (a.secret){
+    a.cat = 'secret';
+    a.tiers = [1];
+  }
+});
+
+// 数を単位つきの文字にします（お金は「1,000円」の形）。
+const achFmt = (a, n) => a.unit === '円' ? yen(n) : `${n}${a.unit || ''}`;
+// とった段階の保存（端末）を読み出します。
+const achSaved = () => {
+  const v = lsGet(LS_ACH, null);
+  return v && typeof v === 'object' ? v : null;
+};
+
+// すべての称号の、いまの状態を返します。
+// cur: いまの数、got: とった段階の数（保存してある段階と、いまの数で届く段階の大きいほう）、reached: いまの数で届く段階の数
+function achStatus(){
+  const c = achCtx(), saved = achSaved() || {};
+  return ACH.map(a => {
+    const raw = a.v(c), cur = typeof raw === 'boolean' ? +raw : raw;
+    const reached = a.tiers.filter(t => cur >= t).length;
+    return {a, cur, reached, got: Math.max(reached, +saved[a.id] || 0)};
+  });
+}
+// とった段階の見た目の種類（メダルの色）を返します。とっていなければ null です。
+const achTier = s => !s.got ? null : s.a.secret ? 'secret' : TIERS[s.got - 1].k;
+
+// メダルの色です（左上から右下へのグラデーション）。MEDAL_RIB はリボンの色です。
+const MEDAL_G = {
+  bronze: ['#F6C9A0', '#B5672E'], silver: ['#FFFFFF', '#93A2B6'], gold: ['#FFEB94', '#D99206'],
+  diamond: ['#A8EEFF', '#B9A4FF', '#FF9FD2'], secret: ['#8E7BD8', '#3E2F78'], none: ['#EEE6E4', '#CDC2BF'],
+};
+const MEDAL_RIB = {bronze:'#C9774A', silver:'#7F8FA6', gold:'#E3A20E', diamond:'#8C7BFF', secret:'#5A47A8', none:'#D8CFCC'};
+// 段階の名前の文字色です（お祝いの画像で使います）
+const TIER_INK = {bronze:'#B5672E', silver:'#7B8AA0', gold:'#C98A00', diamond:'#8C6BFF', secret:'#6A55C2'};
+
+// メダルの絵（SVG）を作ります。tier はメダルの色、icon は真ん中の絵文字、size は幅です。
+let medalSeq = 0;
+function medalSVG(tier, icon, size = 56){
+  const id = 'md' + (++medalSeq);
+  const G = MEDAL_G[tier || 'none'];
+  const stops = G.map((h, i) => `<stop offset="${i / (G.length - 1)}" stop-color="${h}"/>`).join('');
+  const rib = MEDAL_RIB[tier || 'none'];
+  return `<svg class="medal${tier ? ' ' + tier : ' off'}" width="${size}" height="${Math.round(size * 1.15)}" viewBox="0 0 60 69" aria-hidden="true">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs>
+    <path d="M18 44 11 67l8-4 5 6 7-21z" fill="${rib}"/><path d="M42 44l7 23-8-4-5 6-7-21z" fill="${rib}" opacity=".85"/>
+    <circle cx="30" cy="30" r="26" fill="url(#${id})"/><circle cx="30" cy="30" r="21" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2"/>
+    <text x="30" y="31.5" text-anchor="middle" dominant-baseline="middle" font-size="22">${icon}</text></svg>`;
+}
+
+// 称号 1 つ分のカード（称号タブに並べるボタン）を作ります。
+function achCard(s){
+  const a = s.a, hide = a.secret && !s.got, tier = achTier(s);
+  const done = s.got >= a.tiers.length;
+  const next = a.tiers[Math.min(s.got, a.tiers.length - 1)];
+  const pct = done ? 100 : Math.max(0, Math.min(100, Math.round(s.cur / next * 100)));
+  return `<button type="button" class="ach${s.got ? ' got' : ''}${hide ? ' hid' : ''}" data-ach="${a.id}">
+    ${medalSVG(tier, hide ? '？' : a.icon, 50)}
+    <span class="ach-n">${hide ? '？？？' : esc(a.name)}</span>
+    ${a.secret
+      ? `<span class="ach-t ${tier || ''}">${s.got ? 'シークレット' : esc(a.hint)}</span>`
+      : `<span class="ach-t ${tier || ''}">${s.got ? TIERS[s.got - 1].n : '未獲得'}</span>
+    <span class="ach-pips">${a.tiers.map((t, i) => `<i class="${i < s.got ? TIERS[i].k : ''}"></i>`).join('')}</span>
+    <span class="ach-next">${done ? 'コンプリート！' : `あと${achFmt(a, Math.max(0, next - s.cur))}で${TIERS[s.got].n}`}</span>
+    <span class="ach-bar"><span style="width:${pct}%"></span></span>`}
+  </button>`;
+}
+
+// 称号タブを描きます。いちばん上にとった数のまとめ、つぎに「もうすぐとれる称号」、そのあとグループごとの一覧です。
+function renderAch(){
+  const v = $('#v-ach');
+  if (!v) return;
+  const st = achStatus(), demo = isDemo();
+  const total = st.reduce((n, s) => n + s.a.tiers.length, 0), got = st.reduce((n, s) => n + s.got, 0);
+  // 段階ごとに、いくつとったか
+  const per = TIERS.map((t, i) => st.filter(s => !s.a.secret && s.got > i).length);
+  const secGot = st.filter(s => s.a.secret && s.got).length, secAll = st.filter(s => s.a.secret).length;
+  // もうすぐとれる称号：次の段階までの進み具合が大きい順に 3 つ
+  const near = st.filter(s => !s.a.secret && s.got < s.a.tiers.length && s.cur > 0)
+    .sort((x, y) => y.cur / y.a.tiers[y.got] - x.cur / x.a.tiers[x.got]).slice(0, 3);
+  v.innerHTML = `
+    <div class="panel ach-top">
+      <div class="ach-score"><span class="lbl">集めた称号</span><span class="big num">${got}<small> / ${total}</small></span></div>
+      <div class="ach-bar big"><span style="width:${Math.round(got / total * 100)}%"></span></div>
+      <div class="ach-sum">${TIERS.map((t, i) => `<span>${medalSVG(t.k, '', 22)}<b class="num">${per[i]}</b></span>`).join('')}<span>${medalSVG('secret', '', 22)}<b class="num">${secGot}/${secAll}</b></span></div>
+      ${demo ? '<p class="hint" style="margin:0">グミを記録すると、称号が集まっていきます。</p>' : ''}
+      ${got ? `<button class="btn sm photo-cta ach-all-btn" type="button" id="ach-all">${IMG_ICON}集めた称号をまとめて見る・共有</button>` : ''}
+    </div>
+    ${near.length ? `<div class="panel"><h3>もうすぐとれる称号</h3><div class="ach-grid">${near.map(achCard).join('')}</div></div>` : ''}
+    ${ACH_CATS.map(([k, n]) => {
+      const list = st.filter(s => s.a.cat === k);
+      const g = list.reduce((m, s) => m + s.got, 0), all = list.reduce((m, s) => m + s.a.tiers.length, 0);
+      return `<div class="panel"><h3>${n}<span class="s">${g} / ${all}</span></h3><div class="ach-grid">${list.map(achCard).join('')}</div></div>`;
+    }).join('')}`;
+}
+
+// X に投稿する文章を作ります。
+function achShareText(a, got){
+  return a.secret
+    ? `シークレット称号「${a.name}」を見つけました🤫\n${a.what()}\n#ぐみろぐ #グミ`
+    : `称号「${a.name}」${TIERS[got - 1].n}をとりました🏅\n${a.what(a.tiers[got - 1])}\n#ぐみろぐ #グミ`;
+}
+// X の投稿画面を開くリンクです（「Xで開く」と同じ形式）。
+const achXUrl = t => 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(t);
+
+// 称号のくわしい画面（段階ごとの条件と、とったかどうか）を開きます。
+function openAch(id){
+  const s = achStatus().find(x => x.a.id === id);
+  if (!s) return;
+  const a = s.a, hide = a.secret && !s.got;
+  $('#ach-title').textContent = hide ? '？？？' : a.name;
+  $('#ach-body').innerHTML = `
+    <div class="ach-hero">${medalSVG(achTier(s), hide ? '？' : a.icon, 96)}</div>
+    ${a.secret
+      ? `<p class="ach-desc">${hide ? `ヒント：${esc(a.hint)}` : esc(a.what())}</p>`
+      : `<p class="ach-desc">いま：<b class="num">${achFmt(a, s.cur)}</b></p>
+    <ol class="ach-steps">${a.tiers.map((t, i) => `<li class="${i < s.got ? 'ok' : ''}">${medalSVG(i < s.got ? TIERS[i].k : null, '', 26)}<span><b>${TIERS[i].n}</b>${esc(a.what(t))}</span>${i < s.got ? '<em>獲得</em>' : ''}</li>`).join('')}</ol>`}`;
+  const sh = $('#ach-share');
+  sh.hidden = !s.got;
+  $('#ach-img').hidden = !s.got;
+  achShown = s.got ? {a, got:s.got} : null;
+  if (s.got) sh.href = achXUrl(achShareText(a, s.got));
+  openSheet('#sh-ach');
+}
+
+// キャンバスにメダルを 1 つ描きます。(mx, my) が円の中心、r が半径です。
+// リボン 2 本、グラデーションの円、内側の白い輪、真ん中の絵文字の順に重ねます。
+function drawMedal(x, tier, icon, mx, my, r){
+  const k = r / 200;   // 半径 200 のときの寸法を基準に、大きさに合わせて縮めます
+  const rib = (dir, alpha) => {
+    x.globalAlpha = alpha;
+    x.beginPath();
+    x.moveTo(mx + dir * 120 * k, my + 130 * k);
+    x.lineTo(mx + dir * 190 * k, my + 330 * k);
+    x.lineTo(mx + dir * 110 * k, my + 290 * k);
+    x.lineTo(mx + dir * 60 * k, my + 345 * k);
+    x.lineTo(mx + dir * 10 * k, my + 170 * k);
+    x.closePath();
+    x.fill();
+  };
+  x.fillStyle = MEDAL_RIB[tier];
+  rib(-1, 1);
+  rib(1, .85);
+  x.globalAlpha = 1;
+  const g = x.createLinearGradient(mx - r, my - r, mx + r, my + r);
+  MEDAL_G[tier].forEach((h, i, arr) => g.addColorStop(i / (arr.length - 1), h));
+  x.fillStyle = g;
+  x.beginPath(); x.arc(mx, my, r, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = 'rgba(255,255,255,.6)';
+  x.lineWidth = 14 * k;
+  x.beginPath(); x.arc(mx, my, r * .8, 0, Math.PI * 2); x.stroke();
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+  x.font = `${Math.round(170 * k)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  x.fillText(icon, mx, my + 10 * k);
+}
+
+// これまでに集めた称号を、強い段階から順に並べて返します（ダイヤモンド → … → ブロンズ → シークレット）。
+function achGotList(){
+  const rank = s => s.a.secret ? 0.5 : s.got;
+  return achStatus().filter(s => s.got).sort((x, y) => rank(y) - rank(x) || ACH.indexOf(x.a) - ACH.indexOf(y.a));
+}
+// 集めた称号のまとめを、X 用の文章にします。
+function achAllText(list){
+  const per = TIERS.map((t, i) => [t.n, list.filter(s => !s.a.secret && s.got === i + 1).length]).filter(x => x[1]).reverse();
+  const sec = list.filter(s => s.a.secret).length;
+  return `ぐみろぐで称号を${list.length}個集めました🏅\n${per.map(([n, c]) => `${n}${c}`).join('・')}${sec ? `・シークレット${sec}` : ''}\n#ぐみろぐ #グミ`;
+}
+// 集めた称号の一覧の画面を開きます。
+function openAchAll(){
+  const list = achGotList();
+  const per = TIERS.map((t, i) => list.filter(s => !s.a.secret && s.got === i + 1).length);
+  const sec = list.filter(s => s.a.secret).length;
+  $('#aa-body').innerHTML = `
+    <div class="aa-head"><span class="big num">${list.length}</span><span>個の称号を集めました</span></div>
+    <div class="ach-sum aa-sum">${TIERS.map((t, i) => `<span>${medalSVG(t.k, '', 22)}<b class="num">${per[i]}</b></span>`).reverse().join('')}<span>${medalSVG('secret', '', 22)}<b class="num">${sec}</b></span></div>
+    <div class="aa-grid">${list.map(s => `<div class="aa-item">${medalSVG(achTier(s), s.a.icon, 46)}<span class="aa-n">${esc(s.a.name)}</span><span class="ach-t ${achTier(s)}">${s.a.secret ? 'シークレット' : TIERS[s.got - 1].n}</span></div>`).join('')}</div>`;
+  $('#aa-share').href = achXUrl(achAllText(list));
+  openSheet('#sh-achall');
+}
+// 集めた称号のまとめ画像（横 1080px、高さは数に合わせます）を描き、Blob を返します。
+// 上にロゴ・集めた数・段階ごとの数、下にメダルと名前を 5 列で並べます。多すぎるときは 50 個までにして「ほか◯個」と書きます。
+async function drawAchAllImage(){
+  const all = achGotList(), list = all.slice(0, 50), rest = all.length - list.length;
+  const per = TIERS.map((t, i) => all.filter(s => !s.a.secret && s.got === i + 1).length);
+  const sec = all.filter(s => s.a.secret).length;
+  await imgFonts();
+  try {
+    await Promise.all([document.fonts.load('400 80px "Dela Gothic One"', '集めた称号個0123456789' + TIERS.map(t => t.n).join('') + 'シークレット'),
+      document.fonts.load('700 26px "Zen Maru Gothic"', list.map(s => s.a.name).join('') + 'ほか個#ぐみろぐグミ.0123456789')]);
+  } catch(e){}
+  const C = imgPalette(), W = 1080, cols = 5, cw = 196, ch = 250, gx = (W - cols * cw) / 2;
+  const rows = Math.max(1, Math.ceil(list.length / cols)), head = 330, H = head + rows * ch + (rest ? 60 : 0) + 160;
+  const cv = document.createElement('canvas');
+  cv.width = W;
+  cv.height = H;
+  const x = cv.getContext('2d');
+  x.fillStyle = C.bg;
+  x.fillRect(0, 0, W, H);
+  x.fillStyle = C.surface;
+  rrect(x, 40, 150, W - 80, H - 230, 44);
+  x.fill();
+  drawLogo(x, C, 72, 110);
+  // 見出し：集めた数と、段階ごとの数
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+  x.fillStyle = C.ink;
+  x.font = '400 64px "Dela Gothic One"';
+  x.fillText(`集めた称号 ${all.length}個`, W / 2, 225);
+  const chips = [...TIERS.map((t, i) => [t.k, `${t.n} ${per[i]}`]).reverse(), ['secret', `シークレット ${sec}`]].filter(c => !/ 0$/.test(c[1]));
+  x.font = '700 26px "Zen Maru Gothic"';
+  const widths = chips.map(c => 34 + x.measureText(c[1]).width), gap = 22;
+  let cx = W / 2 - (widths.reduce((a, b) => a + b, 0) + gap * (chips.length - 1)) / 2;
+  chips.forEach((c, i) => {
+    drawMedal(x, c[0], '', cx + 12, 290, 12);
+    x.textAlign = 'left';
+    x.textBaseline = 'middle';
+    x.fillStyle = TIER_INK[c[0]];
+    x.font = '700 26px "Zen Maru Gothic"';
+    x.fillText(c[1], cx + 32, 292);
+    cx += widths[i] + gap;
+  });
+  // メダルの一覧
+  list.forEach((s, i) => {
+    const r = Math.floor(i / cols), c = i % cols, X = gx + c * cw + cw / 2, Y = head + r * ch;
+    drawMedal(x, achTier(s), s.a.icon, X, Y + 70, 60);
+    x.textAlign = 'center';
+    x.textBaseline = 'middle';
+    x.fillStyle = C.ink;
+    // 名前は長いと小さくして、カードの幅に収めます
+    let fs = 24;
+    do {
+      x.font = `700 ${fs}px "Zen Maru Gothic"`;
+      fs -= 2;
+    } while (x.measureText(s.a.name).width > cw - 14 && fs > 14);
+    x.fillText(s.a.name, X, Y + 196);
+    x.font = '700 19px "Zen Maru Gothic"';
+    x.fillStyle = TIER_INK[achTier(s)];
+    x.fillText(s.a.secret ? 'シークレット' : TIERS[s.got - 1].n, X, Y + 224);
+  });
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+  x.font = '700 28px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  if (rest) x.fillText(`ほか${rest}個`, W / 2, head + rows * ch + 24);
+  const d = new Date();
+  x.fillText(`${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`, W / 2, H - 118);
+  x.fillText('#ぐみろぐ  #グミ', W / 2, H - 40);
+  x.textAlign = 'left';
+  x.textBaseline = 'alphabetic';
+  return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
+}
+// 集めた称号のまとめ画像を作って、スマホの共有画面で送ります（共有できないときは保存します）。
+async function shareAchAll(btn){
+  btn.disabled = true;
+  btn.dataset.label = btn.dataset.label || btn.innerHTML;
+  btn.textContent = '画像を作っています…';
+  try {
+    const blob = await drawAchAllImage(), name = 'gumilog-titles.jpg';
+    if (canShareFiles()){
+      try {
+        await navigator.share({files:[new File([blob], name, {type:'image/jpeg'})], text:achAllText(achGotList())});
+      } catch(e){
+        if (e && e.name !== 'AbortError') toast('共有できませんでした。保存してから貼ってください');
+      }
+    } else await saveBlob(blob, name);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = btn.dataset.label;
+  }
+}
+
+// 称号の画像（1080×1350 の JPEG）を描き、Blob を返します。
+// 上からロゴ、見出し、紙吹雪とメダル、段階、称号の名前、条件、日付、ハッシュタグの順です。
+async function drawAchImage(a, got){
+  const tier = a.secret ? 'secret' : TIERS[got - 1].k;
+  const head = a.secret ? 'シークレット称号を見つけました！' : '称号をとりました！';
+  const tierName = a.secret ? 'シークレット' : TIERS[got - 1].n;
+  const desc = a.secret ? a.what() : a.what(a.tiers[got - 1]);
+  const d = new Date(), date = `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
+  // 画像に使う文字をすべて読み込んでから描きます（読み込む前に描くと、別のフォントになってしまうため）
+  await imgFonts();
+  try {
+    await Promise.all([document.fonts.load('400 80px "Dela Gothic One"', a.name + tierName + head),
+      document.fonts.load('700 36px "Zen Maru Gothic"', desc + date + '#ぐみろぐグミ')]);
+  } catch(e){}
+  const C = imgPalette(), W = 1080, H = 1350;
+  const cv = document.createElement('canvas');
+  cv.width = W;
+  cv.height = H;
+  const x = cv.getContext('2d');
+  x.fillStyle = C.bg;
+  x.fillRect(0, 0, W, H);
+  // 白いカード
+  x.fillStyle = C.surface;
+  rrect(x, 48, 150, W - 96, H - 250, 48);
+  x.fill();
+  drawLogo(x, C, 72, 110);
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+  x.font = '700 40px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  x.fillText(head, W / 2, 240);
+  // 紙吹雪（毎回同じ並びになるよう、決まった数式で位置を決めます）
+  const cols = ['#FF5C8D', '#FFC83D', '#3CC48A', '#2FA4E7', '#8D5BD6', '#FF8A3D'];
+  for (let i = 0; i < 44; i++){
+    const cx = 110 + ((i * 197) % 860), cy = 300 + ((i * 113) % 470);
+    if (Math.hypot(cx - W / 2, cy - 540) < 250) continue;   // メダルの上には置きません
+    x.save();
+    x.translate(cx, cy);
+    x.rotate((i * 47) % 360 * Math.PI / 180);
+    x.fillStyle = cols[i % cols.length];
+    x.globalAlpha = .85;
+    x.fillRect(-9, -14, 18, 28);
+    x.restore();
+  }
+  drawMedal(x, tier, a.icon, W / 2, 540, 200);
+  // 段階・名前・条件
+  x.font = '400 46px "Dela Gothic One"';
+  x.fillStyle = TIER_INK[tier];
+  x.fillText(tierName, W / 2, 935);
+  // 名前は長いと文字を小さくして、横幅に収めます
+  let fs = 84;
+  do {
+    x.font = `400 ${fs}px "Dela Gothic One"`;
+    fs -= 4;
+  } while (x.measureText(a.name).width > W - 180 && fs > 40);
+  x.fillStyle = C.ink;
+  x.fillText(a.name, W / 2, 1030);
+  x.font = '700 36px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  wrap2(x, desc, W - 220).forEach((l, i) => x.fillText(l, W / 2, 1105 + i * 46));
+  x.font = '700 28px "Zen Maru Gothic"';
+  x.fillText(date, W / 2, H - 128);
+  x.fillText('#ぐみろぐ  #グミ', W / 2, H - 50);
+  x.textAlign = 'left';
+  x.textBaseline = 'alphabetic';
+  return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
+}
+// 称号の画像を作って、スマホの共有画面で送ります（共有できないときは保存します）。
+async function shareAchImage(a, got, btn){
+  if (btn){
+    btn.disabled = true;
+    btn.dataset.label = btn.dataset.label || btn.innerHTML;
+    btn.textContent = '画像を作っています…';
+  }
+  try {
+    const blob = await drawAchImage(a, got), name = `gumilog-${a.id}.jpg`;
+    if (canShareFiles()){
+      try {
+        await navigator.share({files:[new File([blob], name, {type:'image/jpeg'})], text:achShareText(a, got)});
+      } catch(e){
+        if (e && e.name !== 'AbortError') toast('共有できませんでした。保存してから貼ってください');
+      }
+    } else await saveBlob(blob, name);
+  } finally {
+    if (btn){
+      btn.disabled = false;
+      btn.innerHTML = btn.dataset.label;
+    }
+  }
+}
+// いまお祝い・くわしい画面に出している称号です（画像のボタンで使います）。
+let achShown = null;
+
+// 称号をとったときのお祝いを順番に出すための待ち行列です。
+let achQueue = null, achT = 0;
+// 記録が変わるたびに、新しくとった称号がないかを調べます。
+// はじめてこの機能を使うときは、これまでの記録でとれた称号をまとめて 1 回だけお知らせします。
+function checkAch(){
+  if (isDemo() || S.readOnly) return;
+  const st = achStatus(), saved = achSaved();
+  const now = Object.fromEntries(st.map(s => [s.a.id, s.reached]));
+  if (!saved){
+    lsSet(LS_ACH, now);
+    saveSettingsDoc();
+    const n = st.reduce((m, s) => m + s.reached, 0);
+    if (n) queueAchWin({intro:n});
+    return;
+  }
+  const gained = st.filter(s => s.reached > (+saved[s.a.id] || 0));
+  if (!gained.length) return;
+  const merged = {...saved};
+  gained.forEach(s => merged[s.a.id] = s.reached);
+  lsSet(LS_ACH, merged);
+  saveSettingsDoc();
+  renderAch();
+  // いちばん上の段階をとった称号を大きく出し、ほかは「ほかに◯個」として出します。
+  gained.sort((x, y) => (y.a.secret ? 2.5 : y.reached) - (x.a.secret ? 2.5 : x.reached));
+  queueAchWin({main:gained[0], more:gained.length - 1});
+}
+// お祝いを少し待ってから出します（記録した直後のお知らせや、ほかの画面が開いている間は待ちます）。
+function queueAchWin(q){
+  achQueue = q;
+  clearTimeout(achT);
+  achT = setTimeout(showAchWin, 2400);
+}
+// お祝いのポップアップを出します。紙吹雪とメダルのアニメーションつきです。
+function showAchWin(){
+  const q = achQueue;
+  if (!q) return;
+  if ([...document.querySelectorAll('.sheet')].some(s => !s.hidden)){
+    achT = setTimeout(showAchWin, 1500);
+    return;
+  }
+  achQueue = null;
+  const sh = $('#aw-share'), more = $('#aw-more');
+  if (q.intro){
+    $('#aw-title').textContent = '称号が登場しました！';
+    $('#aw-medal').innerHTML = medalSVG('gold', '🏅', 110);
+    $('#aw-name').textContent = `これまでの記録で、${q.intro}個の称号をとっています`;
+    $('#aw-tier').textContent = '';
+    $('#aw-desc').textContent = 'グミを記録するほど、ブロンズ → シルバー → ゴールド → ダイヤモンドと上がっていきます。シークレット称号もあります。';
+    sh.hidden = true;
+    $('#aw-img').hidden = true;
+    more.hidden = true;
+  } else {
+    const s = q.main, a = s.a;
+    $('#aw-title').textContent = a.secret ? 'シークレット称号を見つけました！' : '称号をとりました！';
+    $('#aw-medal').innerHTML = medalSVG(achTier({a, got:s.reached}), a.icon, 110);
+    $('#aw-name').textContent = a.name;
+    $('#aw-tier').textContent = a.secret ? 'シークレット' : TIERS[s.reached - 1].n;
+    $('#aw-tier').className = 'aw-tier ' + (a.secret ? 'secret' : TIERS[s.reached - 1].k);
+    $('#aw-desc').textContent = a.secret ? a.what() : a.what(a.tiers[s.reached - 1]);
+    sh.hidden = false;
+    $('#aw-img').hidden = false;
+    achShown = {a, got:s.reached};
+    sh.href = achXUrl(achShareText(a, s.reached));
+    more.hidden = !q.more;
+    more.textContent = `ほかにも${q.more}個の称号をとりました`;
+  }
+  // 紙吹雪：色と位置と速さをばらばらにした小さな四角を降らせます（「動きを減らす」設定では出しません）。
+  const cf = $('#aw-confetti');
+  cf.innerHTML = reduceMotion() ? '' : Array.from({length:36}, (_, i) => {
+    const c = ['#FF5C8D', '#FFC83D', '#3CC48A', '#2FA4E7', '#8D5BD6', '#FF8A3D'][i % 6];
+    return `<i style="left:${Math.random() * 100}%;background:${c};animation-delay:${(Math.random() * .5).toFixed(2)}s;animation-duration:${(1.6 + Math.random() * 1.2).toFixed(2)}s;transform:rotate(${Math.round(Math.random() * 360)}deg)"></i>`;
+  }).join('');
+  openSheet('#sh-achwin');
+}
+
+// 称号タブのカード、くわしい画面、お祝いのボタンの動きを登録します。
+function wireAch(){
+  $('#v-ach').addEventListener('click', e => {
+    if (e.target.closest('#ach-all')) return openAchAll();
+    const b = e.target.closest('[data-ach]');
+    if (b) openAch(b.dataset.ach);
+  });
+  // 集めた称号のまとめ：画像で共有・X で共有
+  $('#aa-img').innerHTML = IMG_ICON + '画像で共有';
+  $('#aa-img').addEventListener('click', () => shareAchAll($('#aa-img')));
+  $('#aa-share').innerHTML = SHARE_ICON + 'Xで共有';
+  $('#aa-share').addEventListener('click', () => setTimeout(() => closeSheet('#sh-achall'), 300));
+  $('#aw-go').addEventListener('click', () => {
+    closeSheet('#sh-achwin');
+    setTab('ach');
+  });
+  // 「画像で共有」：いま出している称号の画像を作って共有します
+  [$('#aw-img'), $('#ach-img')].forEach(b => {
+    b.innerHTML = IMG_ICON + '画像で共有';
+    b.addEventListener('click', () => achShown && shareAchImage(achShown.a, achShown.got, b));
+  });
+  // 「Xで共有」には、ほかの共有ボタンと同じマークをつけます。押したら少し待ってシートを閉じます。
+  [$('#aw-share'), $('#ach-share')].forEach(a => {
+    a.innerHTML = SHARE_ICON + 'Xで共有';
+    a.addEventListener('click', () => setTimeout(() => closeSheet('#' + a.closest('.sheet').id), 300));
+  });
+}
+
+
 /* ========== 画面全体の描き直し ========== */
 /* データが変わったときに呼ばれ、ログ・カレンダー・統計・ぐみ棚などをまとめて描き直します。 */
 
 // 前回描いたときのぐみ棚に並んでいた名前の集合です（新しく並んだグミを見つけるのに使います）。
 let lastShelf = null;
 // 画面のすべての部分を最新のデータで描き直します。
+// 称号を調べるのを待つタイマーです
+let achCheckT = 0;
 function renderAll(){
   renderNewsBadge();
   setTimeout(fixDupNames, 0);
@@ -4334,8 +5350,12 @@ function renderAll(){
   renderLog();
   renderCal();
   renderStats();
+  renderAch();
   renderShelf();
   jarSync(false);
+  // 新しくとった称号がないか調べます（描き直しが続いても 1 回で済むよう、少し待ちます）
+  clearTimeout(achCheckT);
+  achCheckT = setTimeout(checkAch, 400);
   // メーカー名の入力候補（記録に出てくるメーカー＋最初から用意したメーカー）
   const makers = [...new Set([...realItems().map(i => i.maker).filter(Boolean), ...MAKERS])];
   $('#dl-makers').innerHTML = makers.map(n => `<option value="${esc(n)}"></option>`).join('');
@@ -4351,14 +5371,22 @@ function renderAll(){
 }
 
 /* ========== 下のタブの切り替え ========== */
-/* ログ・カレンダー・統計・ぐみ棚の4つの画面を切り替えます。 */
+/* ログ・データ（カレンダーと統計）・称号・ぐみ棚の4つの画面を切り替えます。 */
 
-// タブ t（'log' / 'cal' / 'stats' / 'shelf'）の画面を表示し、選んだタブを保存します。
+// タブ t（'log' / 'cal' / 'ach' / 'shelf'）の画面を表示し、選んだタブを保存します。
+// 「データ」タブ（'cal'）では、上の切り替えで選んだほう（データ＝統計 v-stats／カレンダー v-cal）を表示します。
 function setTab(t){
   S.ui.tab = t;
-  lsSet(LS_UI, {tab:t, filter:S.ui.filter});
-  ['log','cal','stats','shelf'].forEach(k => {
-    $('#v-' + k).hidden = k !== t;
+  lsSet(LS_UI, {tab:t, filter:S.ui.filter, dataView:S.ui.dataView});
+  const dv = S.ui.dataView === 'cal' ? 'cal' : 'stats';
+  ['log','cal','stats','ach','shelf'].forEach(k => {
+    $('#v-' + k).hidden = t === 'cal' ? k !== dv : k !== t;
+  });
+  // データタブの切り替えボタン
+  $('#data-seg').hidden = t !== 'cal';
+  $('#data-seg').querySelectorAll('[data-dview]').forEach(b => {
+    b.setAttribute('aria-checked', b.dataset.dview === dv);
+    b.setAttribute('aria-selected', b.dataset.dview === dv);
   });
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === t ? 'page' : 'false'));
   // ログ画面ではグミのびんを準備して動かします。
@@ -4522,7 +5550,8 @@ function saveSettingsDoc(){
     showStock:S.showStock,
     bestPicks:S.bestPicks,
     postTpls:S.postTpls,
-    nameSkip:S.nameSkip}).catch(() => toast('設定を保存できませんでした'));
+    nameSkip:S.nameSkip,
+    ach:lsGet(LS_ACH, {}) || {}}).catch(() => toast('設定を保存できませんでした'));
 }
 // tplSaveT：テンプレート保存を待つタイマー、tplFocus：最後に触ったテンプレート欄の種類
 let tplSaveT = 0, tplFocus = 'detail';
@@ -5531,6 +6560,11 @@ async function sendSuggest(){
     await fetch(SUGGEST_FORM.replace(/viewform$/, 'formResponse'), {method:'POST', mode:'no-cors', body});
     closeSheet('#sh-sform');
     toast('送りました！確認してカタログに追加します');
+    // 送った回数を数えて、称号（グミ情報屋）を調べ直します
+    lsSet(LS_SUGG, (+lsGet(LS_SUGG, 0) || 0) + 1);
+    renderAch();
+    clearTimeout(achCheckT);
+    achCheckT = setTimeout(checkAch, 400);
   } catch(e){
     // 送れなかったら、フォームのページへのリンクを出します
     $('#sf-fallback').href = suggestUrl(v);
@@ -6301,6 +7335,13 @@ function renderSettings(){
    タブ・ボタン・検索欄などのクリックや入力に、それぞれの動きを結びつけます。 */
 // 下のタブの切り替え
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+// データタブの「データ／カレンダー」の切り替え
+$('#data-seg').addEventListener('click', e => {
+  const b = e.target.closest('[data-dview]');
+  if (!b) return;
+  S.ui.dataView = b.dataset.dview;
+  setTab('cal');
+});
 // 「＋」ボタン：新しい記録の入力画面を開きます
 $('#fab').addEventListener('click', () => openForm(null, 'new'));
 // 設定ボタン
@@ -6328,7 +7369,7 @@ $('#app').addEventListener('click', async e => {
   const f = e.target.closest('[data-filter]');
   if (f){
     S.ui.filter = f.dataset.filter;
-    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter});
+    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView});
     renderLog();
     if (f.classList.contains('stock')) $('#filters').scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
     return;
@@ -6478,6 +7519,7 @@ wireForm();
 wirePost();
 wireShopEditor();
 wireShelfImage();
+wireAch();
 // 「入力を破棄しますか？」の確認でOKを押したら、フォームを閉じます
 $('#dc-ok').addEventListener('click', () => {
   closeSheet('#sh-discard');
@@ -6489,8 +7531,8 @@ wireSuggestForm();
 $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT_ID)));
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 jarSetup();
-// 前回開いていたタブで始めます（なくなった 'badge' タブは「ぐみ棚」に読みかえます）
-setTab(['log','cal','stats','shelf'].includes(S.ui.tab) ? S.ui.tab : (S.ui.tab === 'badge' ? 'shelf' : 'log'));
+// 前回開いていたタブで始めます（なくなった 'badge' タブは「ぐみ棚」に、'stats' タブは「データ」に読みかえます）
+setTab(['log','cal','ach','shelf'].includes(S.ui.tab) ? S.ui.tab : ({badge:'shelf', stats:'cal'})[S.ui.tab] || 'log');
 renderAll();
 connect().catch(() => {});
 // ここから下は、Claude の外（公開サイト）で開いたときだけ行います
