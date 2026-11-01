@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="3be4adb6d6"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="70bc0a6910"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -290,6 +290,13 @@ h1,h2,h3{text-wrap:balance;margin:0}
   gap:0
 }
 .kv .v{font-weight:700;font-size:17px}
+.kv .v .fin {
+  margin-left:3px;
+  font-size:11px;
+  font-weight:700;
+  color:var(--ink-2);
+  white-space:nowrap
+}
 .kv.stock {
   background:none;
   border:0;
@@ -680,6 +687,57 @@ h1,h2,h3{text-wrap:balance;margin:0}
   width:100%;
   height:auto;
   display:block
+}
+/* 月ごとの棒グラフ：横にスクロールして前の月へさかのぼれます（画面には 6 か月分）。今月の棒は濃い色です */
+.mchart {
+  overflow-x:auto;
+  scrollbar-width:none;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch
+}
+.mchart::-webkit-scrollbar{display:none}
+.mc-track {
+  display:flex;
+  height:150px;
+  background:repeating-linear-gradient(to top,var(--line) 0 1px,transparent 1px 25%) 0 0 / 100% calc(100% - 30px) no-repeat
+}
+.mc-col {
+  flex:1 1 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  scroll-snap-align:end;
+  min-width:0
+}
+.mc-v {
+  font-size:10px;
+  font-weight:700;
+  color:var(--ink);
+  height:14px;
+  white-space:nowrap
+}
+.mc-bar {
+  width:58%;
+  min-height:0;
+  border-radius:6px 6px 2px 2px;
+  background:var(--accent-soft)
+}
+.mc-col.now .mc-bar {
+  background:var(--accent)
+}
+.mc-m {
+  height:30px;
+  font-size:10px;
+  color:var(--ink-2);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.15
+}
+.mc-m small {
+  font-size:9px
 }
 /* マップ表示（たて・よこの軸で数を丸の大きさで表します） */
 .map {
@@ -2611,6 +2669,16 @@ body.has-snack .toast {
   </div>
 </div>
 
+<!-- ===== 容量がいっぱいのとき「元の画質の写真をすべて圧縮しますか？」 ===== -->
+<div class="sheet" id="sh-bigfull" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="bf-title">
+    <div class="sheet-h"><h2 id="bf-title">この端末の容量がいっぱいです</h2></div>
+    <p class="hint" style="margin:0 0 8px">いま残している元の画質の写真を、すべて圧縮しますか？</p>
+    <p class="hint" id="bf-text" style="margin:0"></p>
+    <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="bf-go">すべて圧縮する</button></div>
+  </div>
+</div>
+
 <div class="snack" id="snack" role="status" hidden>
   <span id="snack-t">記録しました！</span>
   <button class="btn sm x" id="snack-post" type="button"><svg class="cam" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>共有</button>
@@ -2673,6 +2741,10 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:173, at:'2026-11-02 02:50', t:'設定の「保存先」に、写真の枚数と、この端末の保存容量をどれくらい使っているかを表示するようにしました。'},
+  {v:172, at:'2026-11-02 02:30', t:'元の画質の写真（Xに投稿する用の大きい写真）を残す期間を、3日間から「登録した翌日いっぱい」に変えました。また、端末の容量がいっぱいになったとき、元の画質の写真が原因なら、まとめて圧縮して空きを作れるようにしました。'},
+  {v:170, at:'2026-11-02 02:00', t:'ログの「手持ちのグミ」の横に、完食率を表示するようにしました。'},
+  {v:168, at:'2026-11-02 01:11', t:'データタブに「月ごとの出費」のグラフを追加しました。袋数と出費のグラフは、横にスクロールすると前の月までさかのぼれます。また、称号の獲得条件を一部変更しました。'},
   {v:167, at:'2026-11-02 01:00', t:'まとめの画像で、出費の数字が枠からはみ出してしまうことがあったのを直しました。'},
   {v:166, at:'2026-11-02 00:55', t:'「○月のまとめ」に、カタログに提案した数を出しました。まとめを共有するときの文章に入れる項目を、設定の「まとめの文章」でオン・オフできるようになりました。'},
   {v:164, at:'2026-11-02 00:36', t:'グミの詳細で「食べた」に変えたとき、評価と一緒にひとことも書けるようになりました。また、名前の候補からグミを選んだときに、かたさ・すっぱさが最初から入らないようにしました。'},
@@ -3108,7 +3180,7 @@ const S = {
   showStock: lsGet(LS_STOCK, true) !== false,   // ログ画面に「手持ちのグミ」を出すかどうか
   localPhotos: lsGet(LS_PHOTOS, {}),   // 名前 → 写真のデータURL（このブラウザ）
   cloudPhotos: {},                     // 名前 → 写真のデータURL（アカウント）
-  localBig: lsGet(LS_BIG, {}),         // 名前 → {data, at}: 共有用の大きい写真。3日間だけ残します
+  localBig: lsGet(LS_BIG, {}),         // 名前 → {data, at}: 共有用の大きい写真。登録した翌日いっぱいまで残します
   cloudBig: {},
 };
 // 使う人の本物の記録の一覧を返します（保存先に合わせて、アカウントかこの端末のどちらか）
@@ -3161,7 +3233,7 @@ async function putItem(it){
   {
     const i = S.local.findIndex(x => x.id === it.id);
     if (i >= 0) S.local[i] = it; else S.local.push(it);
-    if (!lsSet(LS_KEY, S.local)) toast('この端末の保存容量がいっぱいです。書き出してから古い記録を消してください');
+    if (!lsSet(LS_KEY, S.local) && !((await askShrinkBig(JSON.stringify(it).length)) && lsSet(LS_KEY, S.local))) toast('この端末の保存容量がいっぱいです。書き出してから古い記録を消してください');
     renderAll();
   }
 }
@@ -3298,7 +3370,7 @@ async function connect(){
     S.cloudPhotos = m;
     renderAll();
   }, () => {}));
-  // 共有用の大きい写真を見張ります。期限（3日）を過ぎたものはここで消します
+  // 共有用の大きい写真を見張ります。期限（登録した翌日いっぱい）を過ぎたものはここで消します
   S.unsubs.push(S.cap.col.where('kind','==','photoBig').onSnapshot(snap => {
     const m = {};
     snap.docs.forEach(d => { const v = d.data();
@@ -3747,7 +3819,9 @@ function renderLog(){
   $('#jar-spend').textContent = yen(ms.spend);
   $('#jar-streak').textContent = streakOf(all) + '日';
   // 手持ちの袋の数：まだ開けていない袋と、開けたけれど食べ終わっていない袋を数えます。
-  $('#jar-stock').textContent = all.filter(i => statusOf(i) !== 'finished').length + '袋';
+  // 横には完食率（「食べた」にした袋の割合）を小さく添えます。
+  const left = all.filter(i => statusOf(i) !== 'finished').length;
+  $('#jar-stock').innerHTML = left + '袋' + (all.length ? `<small class="fin">・完食${Math.round((all.length - left) / all.length * 100)}%</small>` : '');
   document.querySelector('.kv.stock').hidden = !S.showStock;
   // 手持ち表示をオフにしたときは、「手持ち」の絞り込みも解除します。
   if (!S.showStock && S.ui.filter === 'stock') S.ui.filter = 'all';
@@ -3861,6 +3935,36 @@ function bestCell(all, key){
   return `<select class="in best-pick" id="best-pick" aria-label="${+key.slice(5)}月のベストグミ">${b.options.map(n => `<option value="${esc(n)}" ${n === b.name ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
 }
 
+// 月ごとの棒グラフ（スクリーンタイムのように、横にスクロールして前の月へさかのぼれます）の HTML を返します。
+// id: グラフの名前、val: その月の記録から値を出す関数、fmt: 棒の上に出す数字の書き方。
+// 最初に記録した月から今月まで（少なくとも 12 か月）並べ、画面には 6 か月分が入る幅にします。
+function monthBars(id, all, val, fmt){
+  const now = parseYmd(todayStr()), key = ym(todayStr());
+  const first = all.length ? all.map(i => i.date).sort()[0] : todayStr();
+  const f = parseYmd(first);
+  const back = Math.max(11, (now.getFullYear() - f.getFullYear()) * 12 + now.getMonth() - f.getMonth());
+  const months = [];
+  for (let k = back; k >= 0; k--){
+    const d = new Date(now.getFullYear(), now.getMonth() - k, 1);
+    const kk = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+    months.push({k:kk, y:d.getFullYear(), m:d.getMonth() + 1, v:val(all.filter(i => ym(i.date) === kk))});
+  }
+  const max = Math.max(1, ...months.map(x => x.v));
+  return `<div class="mchart" data-mchart="${id}"><div class="mc-track" style="width:${months.length / 6 * 100}%">${months.map((x, i) => `
+    <div class="mc-col${x.k === key ? ' now' : ''}"><span class="mc-v num">${x.v ? fmt(x.v) : ''}</span><span class="mc-bar" style="height:calc((100% - 44px) * ${(x.v / max).toFixed(3)})"></span>
+      <span class="mc-m">${x.m}月${x.m === 1 || i === 0 ? `<small>${x.y}</small>` : ''}</span></div>`).join('')}</div></div>`;
+}
+// 棒グラフのスクロール位置を、描き直す前に覚えておきます（さかのぼって見ている途中で、右端へ戻ってしまわないように）
+function keepChartScroll(box, render){
+  const prev = {};
+  box.querySelectorAll('[data-mchart]').forEach(el => prev[el.dataset.mchart] = {left:el.scrollLeft, end:el.scrollLeft + el.clientWidth >= el.scrollWidth - 4});
+  render();
+  box.querySelectorAll('[data-mchart]').forEach(el => {
+    const p = prev[el.dataset.mchart];
+    // はじめて描くときや、右端（今月）を見ていたときは右端へ。さかのぼっていたときは同じ位置へ。
+    el.scrollLeft = !p || p.end ? el.scrollWidth : p.left;
+  });
+}
 // 統計の画面を描き直します。
 function renderStats(){
   const all = items(), now = todayStr(), key = ym(now);
@@ -3870,34 +3974,6 @@ function renderStats(){
   const unique = new Set(all.map(i => i.name)).size;
   // 評価のついた記録だけで、おいしさの平均を出します。
   const rated = all.filter(i => i.rating), avg = rated.length ? rated.reduce((s,i) => s + i.rating, 0) / rated.length : 0;
-  // 直近 6 か月の袋数を集めます。
-  const months = [];
-  const d0 = parseYmd(now);
-  d0.setDate(1);
-  for (let k = 5; k >= 0; k--){
-    const d = new Date(d0.getFullYear(), d0.getMonth()-k, 1);
-    const kk = `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
-    months.push({k:kk, m:d.getMonth()+1, n:all.filter(i => ym(i.date) === kk).length});
-  }
-  // グラフの目盛りの上限は 4 の倍数にします（最低 4）。
-  const maxN = Math.max(4, ...months.map(x => x.n));
-  const top = Math.ceil(maxN/4)*4;
-  // SVG の大きさと余白（pl: 左、pb: 下、pt: 上）、cw: 1 か月分の幅
-  const W = 320, H = 150, pl = 26, pb = 22, pt = 14, cw = (W-pl-6)/6;
-  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="月ごとの袋数">`;
-  // 横の目盛り線と数字を 5 本描きます。
-  for (let t = 0; t <= 4; t++){
-    const v = top*t/4, y = H-pb - (H-pb-pt)*t/4;
-    svg += `<line x1="${pl}" x2="${W-4}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${y+3.5}" text-anchor="end" font-size="10" fill="var(--ink-2)">${v}</text>`;
-  }
-  // 月ごとの棒と、上の数字・下の月名を描きます。今月の棒だけ濃い色にします。
-  months.forEach((x, i) => {
-    const h = (H-pb-pt) * x.n / top, bx = pl + i*cw + cw*0.2, bw = cw*0.6, by = H-pb-h;
-    svg += `<rect x="${bx}" y="${by}" width="${bw}" height="${Math.max(h,0)}" rx="6" fill="${x.k===key?'var(--accent)':'var(--accent-soft)'}"/>`;
-    if (x.n) svg += `<text x="${bx+bw/2}" y="${by-4}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--ink)">${x.n}</text>`;
-    svg += `<text x="${bx+bw/2}" y="${H-6}" text-anchor="middle" font-size="10" fill="var(--ink-2)">${x.m}月</text>`;
-  });
-  svg += `</svg>`;
   // [名前, 回数] の配列から、上位 6 件の横棒グラフの HTML を返します。
   const bars = (arr) => {
     const mx = Math.max(1, ...arr.map(a => a[1]));
@@ -3930,7 +4006,8 @@ function renderStats(){
   // 殿堂入り：★5 のグミを、名前が重ならないように 5 件まで選びます。
   const best = [...all].filter(i => (i.rating||0) === 5);
   const bestUnique = [...new Map(best.map(i => [i.name, i])).values()].slice(0, 5);
-  $('#v-stats').innerHTML = `
+  const statsBox = $('#v-stats');
+  keepChartScroll(statsBox, () => statsBox.innerHTML = `
     <div class="kpis">
       <div class="kpi"><div class="lbl">${+key.slice(5)}月の袋数</div><div class="v num">${ms.count}<small>袋</small></div></div>
       <div class="kpi"><div class="lbl">${+key.slice(5)}月の出費</div><div class="v num">${(ms.spend).toLocaleString('ja-JP')}<small>円</small></div></div>
@@ -3941,14 +4018,15 @@ function renderStats(){
         <div class="seg upd-seg sum-seg" role="tablist" aria-label="まとめる月">${[['this','今月'],['last','先月']].map(([k, n]) => `<button type="button" role="tab" data-sum="${k}" aria-checked="${(S.ui.sumMonth === 'last' ? 'last' : 'this') === k}">${n}</button>`).join('')}</div></div>
       <dl class="facts"><dt>袋数</dt><dd>${sms.count}袋（${new Set(sms.list.map(i => i.name)).size}種類）・${yen(sms.spend)}</dd><dt>カタログに提案</dt><dd>${suggestLog().filter(d => ym(d) === sk).length}件</dd><dt>推しメーカー</dt><dd>${esc(sms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, sk)}</dd></dl>
       <div class="btn-row"><button class="btn primary month-img" type="button" id="month-img">${IMG_ICON}${+sk.slice(5)}月のまとめを画像で共有</button></div></div>
-    <div class="panel chart"><h3>月ごとの袋数<span class="s">直近6か月</span></h3>${svg}</div>
+    <div class="panel chart"><h3>月ごとの袋数<span class="s">横にスクロールで前の月へ</span></h3>${monthBars('bags', all, l => l.length, n => n)}</div>
+    <div class="panel chart"><h3>月ごとの出費<span class="s">横にスクロールで前の月へ</span></h3>${monthBars('spend', all, l => l.reduce((t, i) => t + spendOf(i), 0), n => n >= 10000 ? (n / 10000).toFixed(n >= 100000 ? 0 : 1) + '万' : n.toLocaleString('ja-JP'))}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
       <div class="type-line">あなたは <b>${type}</b> 派</div>
       <div class="hint">平均おいしさ ${avg ? avg.toFixed(1) : '—'}</div>
       <div class="map">${map}</div><div class="map-x"><span>ふにゃ</span><span>かたさ →</span><span>かちかち</span></div></div>
     <div class="panel"><h3>メーカーランキング</h3>${bars(countBy(all, i => i.maker))}</div>
     <div class="panel"><h3>よく買うお店</h3>${bars(countBy(all, i => i.shop))}</div>
-    <div class="panel"><h3>殿堂入り<span class="s">★5をつけたグミ</span></h3>${bestUnique.length ? `<div class="rows" style="border:0">${bestUnique.map(i => rowHTML(i, repeatCount(all), numbering(all))).join('')}</div>` : '<p class="hint" style="margin:0">★5のグミはまだありません</p>'}</div>`;
+    <div class="panel"><h3>殿堂入り<span class="s">★5をつけたグミ</span></h3>${bestUnique.length ? `<div class="rows" style="border:0">${bestUnique.map(i => rowHTML(i, repeatCount(all), numbering(all))).join('')}</div>` : '<p class="hint" style="margin:0">★5のグミはまだありません</p>'}</div>`);
 }
 
 /* ========== 自分で撮った写真（描いた袋の絵の代わりに表示） ==========
@@ -3978,10 +4056,14 @@ function photoKeyFor(it, skipOwn){
 const photoFor = it => photoOf(photoKeyFor(it));
 // クラウドに保存するときの、写真のドキュメント ID をキーから作ります。
 const photoDocId = name => 'p' + hash('photo|' + name).toString(36) + hash(name + '|photo').toString(36);
-// 大きいサイズの写真は X への投稿用だけなので、追加してから 3 日たったら消します。小さい写真は残ります。
-const BIG_KEEP = 3 * 86400000;
+// 大きいサイズの写真（元の画質）は X への投稿用だけなので、追加した翌日いっぱいで消します。小さい写真は残ります。
+// 保存時刻 at から、消える時刻（翌々日の 0 時）を返します。
+const bigUntil = at => {
+  const d = new Date(at);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 2).getTime();
+};
 // 大きい写真の保存時刻 at から、期限切れかどうかを返します（時刻がおかしいときも期限切れ扱い）。
-const bigExpired = at => !(at > 0) || Date.now() - at > BIG_KEEP;
+const bigExpired = at => !(at > 0) || Date.now() >= bigUntil(at);
 // 大きい写真のドキュメント ID です（小さい写真の ID の先頭を "b" にしたもの）。
 const bigDocId = name => 'b' + photoDocId(name).slice(1);
 // キーに対応する大きい写真（{data, at}）を返します。ないか期限切れなら null です。
@@ -4005,6 +4087,17 @@ function pruneLocalBig(){
 }
 // 起動時に一度、期限切れの大きい写真を片づけます。
 pruneLocalBig();
+// この端末の容量がいっぱいで保存できなかったときに呼びます。need は保存したかったデータのおよその大きさです。
+// 元の画質の写真を消せば入りそうなとき（＝元の画質の写真が原因のとき）だけ、すべて圧縮するか聞きます。
+// 小さい写真や記録が多いのが原因のときは聞きません。圧縮したら true を返します。
+let bigFullDone = null;
+function askShrinkBig(need){
+  const n = Object.keys(S.localBig).length;
+  if (S.mode === 'cloud' || !n || JSON.stringify(S.localBig).length < need) return Promise.resolve(false);
+  $('#bf-text').textContent = `元の画質の写真が${n}枚残っていて、容量を多く使っています。圧縮しても、ぐみ棚やログの写真はそのまま残ります（Xに投稿するときの写真が小さくなります）。`;
+  openSheet('#sh-bigfull');
+  return new Promise(res => { bigFullDone = res; });
+}
 
 /* ========== 写真の切り抜き画面 ==========
    写真を指で動かす・ピンチで拡大する・90° ずつ回転させて、4:5 の枠に合わせて切り抜きます。 */
@@ -4237,7 +4330,7 @@ async function setPhoto(key, data, big, gname){
   }
   // この端末（localStorage）に保存します。容量がいっぱいなら元に戻してエラーにします。
   if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
-  if (!lsSet(LS_PHOTOS, S.localPhotos)){
+  if (!lsSet(LS_PHOTOS, S.localPhotos) && !((await askShrinkBig((data || '').length)) && lsSet(LS_PHOTOS, S.localPhotos))){
     delete S.localPhotos[name];
     throw {code:'local_full'};
   }
@@ -4941,7 +5034,7 @@ const ACH = [
   {id:'streak', cat:'habit', icon:'🔥', name:'毎日グミ', unit:'日', tiers:[3, 5, 7, 10], what:n => `${n}日つづけて記録`, v:c => bestStreak(c.L)},
   {id:'days', cat:'habit', icon:'📅', name:'グミ記念日', unit:'日', tiers:[10, 30, 100, 365], what:n => `${n}日ぶん記録`, v:c => c.byDay.size},
   {id:'months', cat:'habit', icon:'🗓️', name:'12か月のグミ', unit:'か月', tiers:[3, 6, 9, 12], what:n => `${n}つの月（1月〜12月）で記録`, v:c => c.months},
-  {id:'monthly', cat:'habit', icon:'📦', name:'月間グミ王', unit:'袋', tiers:[5, 10, 15, 20], what:n => `1か月に${n}袋記録`, v:c => c.maxMonth},
+  {id:'monthly', cat:'habit', icon:'📦', name:'月間グミ王', unit:'袋', tiers:[5, 10, 20, 30], what:n => `1か月に${n}袋記録`, v:c => c.maxMonth},
   {id:'bigday', cat:'habit', icon:'🛒', name:'まとめ買い', unit:'袋', tiers:[3, 5, 7, 10], what:n => `1日に${n}袋記録`, v:c => c.maxDay},
   {id:'finish', cat:'habit', icon:'✅', name:'完食マスター', unit:'袋', tiers:[10, 50, 100, 300], what:n => `${n}袋を完食`, v:c => c.L.filter(i => statusOf(i) === 'finished').length},
   // 完食した袋の割合（%）。10 袋以上記録してから数えます
@@ -5529,6 +5622,24 @@ function wireAch(){
     if (b) openAch(b.dataset.ach);
   });
   // 「先月のまとめを共有してみませんか？」の「共有する」：先月に切り替えて、まとめの画像の画面を開きます
+  // 「すべて圧縮する」：元の画質の写真を消して（小さい写真は残ります）、待っている保存に知らせます
+  $('#bf-go').addEventListener('click', () => {
+    S.localBig = {};
+    lsSet(LS_BIG, {});
+    const d = bigFullDone;
+    bigFullDone = null;
+    closeSheet('#sh-bigfull');
+    d && d(true);
+    toast('元の画質の写真を圧縮しました');
+  });
+  // それ以外の方法で閉じられたら「やめる」として扱います
+  new MutationObserver(() => {
+    if ($('#sh-bigfull').hidden && bigFullDone){
+      const d = bigFullDone;
+      bigFullDone = null;
+      d(false);
+    }
+  }).observe($('#sh-bigfull'), {attributes:true, attributeFilter:['hidden']});
   $('#ma-go').addEventListener('click', () => {
     closeSheet('#sh-monthask');
     S.ui.sumMonth = 'last';
@@ -7222,7 +7333,7 @@ const dataUrlToBlob = async d => {
 function bigNote(key){
   const b = bigOf(key);
   if (!b) return '';
-  const d = new Date(b.at + BIG_KEEP);
+  const d = new Date(bigUntil(b.at) - 1);
   return `共有用の大きい写真は${d.getMonth()+1}/${d.getDate()}まで残り、そのあとは小さい写真だけになります。`;
 }
 // 投稿する写真を File にして返します（Promise）。写真がなければ null を返します
@@ -7266,7 +7377,7 @@ function setupPhotoShare(){
   $('#post-photo-hint').textContent = share ? ''
     : copy ? '写真をコピーしてから「Xで開く」を押し、Xの投稿画面で長押しして「ペースト」すると写真が付きます。'
     : '写真を保存してから「Xで開く」を押し、Xの投稿画面で写真を選んでください。';
-  if (!bigOf(photoKeyFor(P.item))) $('#post-photo-hint').textContent += '大きい写真は登録から3日で消えるので、小さい写真で送られます。';
+  if (!bigOf(photoKeyFor(P.item))) $('#post-photo-hint').textContent += '大きい写真は登録した翌日いっぱいで消えるので、小さい写真で送られます。';
 }
 // data: URL の画像を PNG の Blob に変換して返します（クリップボード用）
 async function pngFromDataUrl(d){
@@ -7490,6 +7601,22 @@ function updListHTML(){
       <span class="u-t">新たに<b class="num">${list.length}</b>件のグミを追加しました</span></summary>
       <ul class="u-items">${list.map(c => `<li><b>${esc(c.n)}</b><span class="u-mk">${esc(c.m)}</span>${c.f && c.f.length ? `<br><span class="u-f">${c.f.map(esc).join('・')}</span>` : ''}</li>`).join('')}</ul></details></li>`; }).join('')}</ul>`;
 }
+// この端末（localStorage）に保存できる量のめやすです。多くのスマホのブラウザは 1 つのサイトにつき約 500 万文字です。
+const LS_QUOTA = 5000000;
+// 設定の「保存先」に出す、写真の枚数と、この端末の使用量です。アカウントに保存しているときは枚数だけ出します。
+function storageHTML(){
+  if (S.mode === 'cloud') return `<p>写真：<b class="num">${Object.keys(S.cloudPhotos).length}</b>枚</p>`;
+  let used = 0;
+  try {
+    for (let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i);
+      used += k.length + (localStorage.getItem(k) || '').length;
+    }
+  } catch(e){}
+  const big = Object.keys(S.localBig).length;
+  return `<p>写真：<b class="num">${Object.keys(S.localPhotos).length}</b>枚${big ? `（元の画質 ${big}枚）` : ''}・使用量 約<b class="num">${Math.min(99, Math.ceil(used / LS_QUOTA * 100))}</b>%</p>
+      <p class="hint" style="margin:0">使用量は、この端末に保存できる量のめやすに対する割合です。元の画質の写真は登録した翌日いっぱいで圧縮されます。</p>`;
+}
 // 設定シートの中身を描き、書き出し・読み込みのボタンに動きをつけます
 function renderSettings(){
   // お店の候補などの部品は、本体のHTMLを入れたあとで描きます
@@ -7505,7 +7632,7 @@ function renderSettings(){
   $('#settings-body').innerHTML = `
     <div class="panel"><h3>保存先</h3>
       <p>${S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
-      <p>記録数：<b class="num">${real.length}</b>件</p></div>
+      <p>記録数：<b class="num">${real.length}</b>件</p>${storageHTML()}</div>
     <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
     <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
     <div class="panel"><h3>グミカタログ</h3>
