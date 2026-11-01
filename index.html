@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="9ad8803b3d"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="c9ec84ea83"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -2741,6 +2741,8 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:176, at:'2026-11-02 03:45', t:'記録の画面などを開いたとき、前のスクロール位置に関係なく、いつもいちばん上から表示されるようにしました。'},
+  {v:175, at:'2026-11-02 03:30', t:'この端末に保存している写真のしまい方を変えて、今までよりずっとたくさん保存できるようにしました。今ある写真は自動で移ります。'},
   {v:173, at:'2026-11-02 02:50', t:'設定の「保存先」に、写真の枚数と、この端末の保存容量をどれくらい使っているかを表示するようにしました。元の画質の写真を今すぐ圧縮するボタンもあります。'},
   {v:172, at:'2026-11-02 02:30', t:'元の画質の写真（Xに投稿する用の大きい写真）を残す期間を、3日間から「登録した翌日いっぱい」に変えました。また、端末の容量がいっぱいになったとき、元の画質の写真が原因なら、まとめて圧縮して空きを作れるようにしました。'},
   {v:170, at:'2026-11-02 02:00', t:'ログの「手持ちのグミ」の横に、完食率を表示するようにしました。'},
@@ -4078,13 +4080,96 @@ const postPhotoOf = it => {
 };
 // この端末に保存した大きい写真のうち、期限切れのものを消します。
 function pruneLocalBig(){
-  let changed = false;
-  for (const [k, v] of Object.entries(S.localBig)) if (!v || bigExpired(v.at)){
-    delete S.localBig[k];
-    changed = true;
-  }
-  if (changed) lsSet(LS_BIG, S.localBig);
+  const gone = Object.keys(S.localBig).filter(k => !S.localBig[k] || bigExpired(S.localBig[k].at));
+  gone.forEach(k => delete S.localBig[k]);
+  if (!gone.length) return;
+  if (PDB.db) pdbWrite('big', gone.map(k => [k, null])).catch(() => {});
+  else lsSet(LS_BIG, S.localBig);
 }
+
+/* ========== 写真の置き場所（IndexedDB） ==========
+   この端末に保存するとき、写真は IndexedDB に入れます。localStorage（約 5MB）よりずっとたくさん入り、
+   画像を文字にせずそのまま（Blob で）しまえるので 1 枚も小さくなります。
+   画面では今までどおり S.localPhotos / S.localBig（名前 → data URL）を使い、保存・削除のときだけ IndexedDB に書きます。
+   IndexedDB が使えないブラウザ（プライベートブラウズなど）では、今までどおり localStorage に保存します。 */
+const PDB = {db:null};
+// 写真用のデータベースを開きます。使えなければ null を返します。
+// photos：名前 → 小さい写真の Blob、big：名前 → {blob: 大きい写真, at: 保存時刻}
+function pdbOpen(){
+  return new Promise(res => {
+    try {
+      const r = indexedDB.open('gumilog-photos', 1);
+      r.onupgradeneeded = () => {
+        r.result.createObjectStore('photos');
+        r.result.createObjectStore('big');
+      };
+      r.onsuccess = () => res(r.result);
+      r.onerror = r.onblocked = () => res(null);
+    } catch(e){
+      res(null);
+    }
+  });
+}
+// store にまとめて書きこみます。ops は [キー, 値] の配列で、値が null なら削除、ops が 'clear' なら全部消します。
+function pdbWrite(store, ops){
+  return new Promise((res, rej) => {
+    const tx = PDB.db.transaction(store, 'readwrite'), os = tx.objectStore(store);
+    if (ops === 'clear') os.clear();
+    else ops.forEach(([k, v]) => v == null ? os.delete(k) : os.put(v, k));
+    tx.oncomplete = () => res();
+    tx.onerror = tx.onabort = () => rej(tx.error || new Error('idb'));
+  });
+}
+// store の中身をすべて [キー, 値] の配列で返します。
+function pdbAll(store){
+  return new Promise((res, rej) => {
+    const out = [], r = PDB.db.transaction(store).objectStore(store).openCursor();
+    r.onsuccess = () => {
+      const c = r.result;
+      if (!c) return res(out);
+      out.push([c.key, c.value]);
+      c.continue();
+    };
+    r.onerror = () => rej(r.error);
+  });
+}
+// Blob を data URL に変えます。
+const blobToDataUrl = b => new Promise((res, rej) => {
+  const f = new FileReader();
+  f.onload = () => res(f.result);
+  f.onerror = () => rej(f.error);
+  f.readAsDataURL(b);
+});
+// 起動時に写真を IndexedDB から読みこみます。localStorage に前の版の写真が残っていれば、IndexedDB へ移します。
+// 移した写真は、IndexedDB に入ったのを確かめてから localStorage から消します。失敗したら localStorage のまま使います。
+const photoDBReady = (async () => {
+  PDB.db = await pdbOpen();
+  if (!PDB.db) return;
+  try {
+    const photos = {}, big = {}, expired = [];
+    for (const [k, b] of await pdbAll('photos')) if (b instanceof Blob) photos[k] = await blobToDataUrl(b);
+    for (const [k, v] of await pdbAll('big')){
+      if (v && v.blob instanceof Blob && !bigExpired(v.at)) big[k] = {data:await blobToDataUrl(v.blob), at:v.at};
+      else expired.push([k, null]);
+    }
+    if (expired.length) await pdbWrite('big', expired);
+    const oldP = Object.entries(lsGet(LS_PHOTOS, {})).filter(([k, d]) => typeof d === 'string' && d.startsWith('data:image/') && !photos[k]);
+    const oldB = Object.entries(lsGet(LS_BIG, {})).filter(([k, v]) => v && typeof v.data === 'string' && !bigExpired(v.at) && !big[k]);
+    if (oldP.length) await pdbWrite('photos', await Promise.all(oldP.map(async ([k, d]) => [k, await dataUrlToBlob(d)])));
+    if (oldB.length) await pdbWrite('big', await Promise.all(oldB.map(async ([k, v]) => [k, {blob:await dataUrlToBlob(v.data), at:v.at}]))).catch(() => {});
+    oldP.forEach(([k, d]) => photos[k] = d);
+    oldB.forEach(([k, v]) => big[k] = v);
+    localStorage.removeItem(LS_PHOTOS);
+    localStorage.removeItem(LS_BIG);
+    S.localPhotos = photos;
+    S.localBig = big;
+    // 写真があれば、ブラウザに「容量が足りなくなっても消さないで」とお願いしておきます
+    if (Object.keys(photos).length && navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+    renderAll();
+  } catch(e){
+    PDB.db = null;
+  }
+})();
 // 起動時に一度、期限切れの大きい写真を片づけます。
 pruneLocalBig();
 // この端末の容量がいっぱいで保存できなかったときに呼びます。need は保存したかったデータのおよその大きさです。
@@ -4117,7 +4202,8 @@ function shrinkAllBig(){
     S.cloudBig = {};
   }
   S.localBig = {};
-  lsSet(LS_BIG, {});
+  if (PDB.db) pdbWrite('big', 'clear').catch(() => {});
+  else lsSet(LS_BIG, {});
 }
 
 /* ========== 写真の切り抜き画面 ==========
@@ -4349,7 +4435,34 @@ async function setPhoto(key, data, big, gname){
       toast('この共有のしかたではアカウントに保存できないため、この端末に保存しました');
     }
   }
-  // この端末（localStorage）に保存します。容量がいっぱいなら元に戻してエラーにします。
+  // この端末に保存します。IndexedDB が使えればそちらに入れます。
+  await photoDBReady;
+  if (PDB.db){
+    const put = async () => pdbWrite('photos', [[name, data ? await dataUrlToBlob(data) : null]]);
+    // 入らなかったときは、元の画質の写真が原因なら圧縮するか聞いて、もう一度だけ試します
+    try {
+      await put();
+    } catch(err){
+      if (!data || !(await askShrinkBig(data.length)) || !(await put().then(() => true, () => false))) throw {code:'local_full'};
+    }
+    if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
+    pruneLocalBig();
+    // 大きい写真は保存できなければ、あきらめて外します。
+    if (data && big){
+      try {
+        await pdbWrite('big', [[name, {blob:await dataUrlToBlob(big), at}]]);
+        S.localBig[name] = {data:big, at};
+      } catch(e){
+        delete S.localBig[name];
+      }
+    } else if (S.localBig[name]){
+      delete S.localBig[name];
+      pdbWrite('big', [[name, null]]).catch(() => {});
+    }
+    renderAll();
+    return;
+  }
+  // IndexedDB が使えないときは localStorage に保存します。容量がいっぱいなら元に戻してエラーにします。
   if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
   if (!lsSet(LS_PHOTOS, S.localPhotos) && !((await askShrinkBig((data || '').length)) && lsSet(LS_PHOTOS, S.localPhotos))){
     delete S.localPhotos[name];
@@ -5799,6 +5912,8 @@ function openSheet(id){
   lastFocus = document.activeElement;
   const s = $(id);
   s.hidden = false;
+  // 前に開いたときのスクロール位置は残さず、いつもいちばん上から見せます
+  s.querySelectorAll('.sheet-body').forEach(b => b.scrollTop = 0);
   document.body.style.overflow = 'hidden';
   setTimeout(() => {
     const f = s.querySelector('input,button,textarea');
@@ -7629,6 +7744,12 @@ function storageHTML(){
   const nb = Object.keys(S.mode === 'cloud' ? S.cloudBig : S.localBig).length;
   const btn = nb ? `<div class="btn-row"><button class="btn sm" type="button" id="shrink-big">元の画質の写真を今すぐ圧縮する</button></div>` : '';
   if (S.mode === 'cloud') return `<p>写真：<b class="num">${Object.keys(S.cloudPhotos).length}</b>枚${nb ? `（元の画質 ${nb}枚）` : ''}</p>${btn}`;
+  // IndexedDB に入れているときは、上限がとても大きいので、写真が使っている量を MB で出します
+  if (PDB.db){
+    const mb = [...Object.values(S.localPhotos), ...Object.values(S.localBig).map(b => b.data)].reduce((t, d) => t + d.length * .75, 0) / 1048576;
+    return `<p>写真：<b class="num">${Object.keys(S.localPhotos).length}</b>枚${nb ? `（元の画質 ${nb}枚）` : ''}・約<b class="num">${mb < 1 ? Math.max(1, Math.round(mb * 1024)) + '</b>KB' : (mb < 10 ? mb.toFixed(1) : Math.round(mb)) + '</b>MB'}</p>
+      <p class="hint" style="margin:0">写真は、この端末の空き容量に合わせてたくさん保存できます。元の画質の写真は登録した翌日いっぱいで圧縮されます。</p>${btn}`;
+  }
   let used = 0;
   try {
     for (let i = 0; i < localStorage.length; i++){
@@ -7907,6 +8028,10 @@ $('#app').addEventListener('click', async e => {
       lsSet(LS_PHOTOS, {});
       S.localBig = {};
       lsSet(LS_BIG, {});
+      if (PDB.db){
+        await pdbWrite('photos', 'clear').catch(() => {});
+        await pdbWrite('big', 'clear').catch(() => {});
+      }
       toast('クラウドに移しました');
       renderAll();
     } catch(err){
