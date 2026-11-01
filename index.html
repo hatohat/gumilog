@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="7d71b782af"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="15a94faefa"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
@@ -2277,6 +2277,12 @@ body.has-snack .toast {
   font-size:12px
 }
 /* データタブの「データ／カレンダー」の切り替え */
+/* 設定の「まとめの文章」：スイッチを縦に並べます */
+.month-items {
+  display:flex;
+  flex-direction:column;
+  gap:10px
+}
 .data-seg {
   margin-bottom:12px
 }
@@ -2667,6 +2673,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:166, at:'2026-11-02 00:55', t:'「○月のまとめ」に、カタログに提案した数を出しました。まとめを共有するときの文章に入れる項目を、設定の「まとめの文章」でオン・オフできるようになりました。'},
   {v:164, at:'2026-11-02 00:36', t:'グミの詳細で「食べた」に変えたとき、評価と一緒にひとことも書けるようになりました。また、名前の候補からグミを選んだときに、かたさ・すっぱさが最初から入らないようにしました。'},
   {v:163, at:'2026-11-02 00:34', t:'共有の画面を見直しました。写真があるときは「写真つきで共有」を大きく出し、となりに「写真なしでポスト」を置きました。今月のまとめは「画像つきで共有」できます。'},
   {v:161, at:'2026-11-02 00:20', t:'新しい称号を追加しました。'},
@@ -2742,6 +2749,8 @@ const LS_STOCK = 'gumilog.showStock.v1';
 const LS_BEST = 'gumilog.bestPicks.v1';
 const LS_POSTTPL = 'gumilog.postTpls.v1';
 const LS_NAMESKIP = 'gumilog.nameSkip.v1';
+// 「○月のまとめ」の共有の文章に入れる項目のオン・オフです（{項目: false} で、その項目を入れません。書いていない項目はオンです）
+const LS_MONTHITEMS = 'gumilog.monthItems.v1';
 
 /* ========== 色のテーマ ==========
    グミの色ごとに1つずつテーマがあり、それぞれ [ライト用, ダーク用] の色の組を持っています。 */
@@ -3092,6 +3101,7 @@ const S = {
     return THEMES[v] ? v : 'straw';
   })(),
   postTpls: lsGet(LS_POSTTPL, {}) || {},
+  monthItems: lsGet(LS_MONTHITEMS, {}) || {},
   nameSkip: (v => Array.isArray(v) ? v : [])(lsGet(LS_NAMESKIP, [])),   // 「カタログに合う名前はない」と使う人が答えた記録の名前です。（上の postTpls は {detail, simple} の形で、使う人が自分で作った共有の文章のテンプレートです。空なら初期のものを使います）
   bestPicks: lsGet(LS_BEST, {}) || {},          // 'YYYY-MM' → その月に選んだベストグミの名前
   showStock: lsGet(LS_STOCK, true) !== false,   // ログ画面に「手持ちのグミ」を出すかどうか
@@ -3247,6 +3257,11 @@ async function connect(){
         lsSet(LS_ACH, cur);
         renderAch();
       }
+    }
+    if (d && d.monthItems && typeof d.monthItems === 'object' && JSON.stringify(d.monthItems) !== JSON.stringify(S.monthItems)){
+      S.monthItems = d.monthItems;
+      lsSet(LS_MONTHITEMS, S.monthItems);
+      if (!$('#sh-settings').hidden) renderMonthItems();
     }
     if (d && d.postTpls && typeof d.postTpls === 'object' && JSON.stringify(d.postTpls) !== JSON.stringify(S.postTpls)){
       S.postTpls = d.postTpls;
@@ -3923,7 +3938,7 @@ function renderStats(){
     </div>
     <div class="panel"><div class="sum-h"><h3>${+sk.slice(5)}月のまとめ</h3>
         <div class="seg upd-seg sum-seg" role="tablist" aria-label="まとめる月">${[['this','今月'],['last','先月']].map(([k, n]) => `<button type="button" role="tab" data-sum="${k}" aria-checked="${(S.ui.sumMonth === 'last' ? 'last' : 'this') === k}">${n}</button>`).join('')}</div></div>
-      <dl class="facts"><dt>袋数</dt><dd>${sms.count}袋（${new Set(sms.list.map(i => i.name)).size}種類）・${yen(sms.spend)}</dd><dt>推しメーカー</dt><dd>${esc(sms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, sk)}</dd></dl>
+      <dl class="facts"><dt>袋数</dt><dd>${sms.count}袋（${new Set(sms.list.map(i => i.name)).size}種類）・${yen(sms.spend)}</dd><dt>カタログに提案</dt><dd>${suggestLog().filter(d => ym(d) === sk).length}件</dd><dt>推しメーカー</dt><dd>${esc(sms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, sk)}</dd></dl>
       <div class="btn-row"><button class="btn primary month-img" type="button" id="month-img">${IMG_ICON}${+sk.slice(5)}月のまとめを画像で共有</button></div></div>
     <div class="panel chart"><h3>月ごとの袋数<span class="s">直近6か月</span></h3>${svg}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
@@ -5787,6 +5802,7 @@ function saveSettingsDoc(){
     showStock:S.showStock,
     bestPicks:S.bestPicks,
     postTpls:S.postTpls,
+    monthItems:S.monthItems,
     nameSkip:S.nameSkip,
     ach:lsGet(LS_ACH, {}) || {}}).catch(() => toast('設定を保存できませんでした'));
 }
@@ -5857,6 +5873,19 @@ function renderStockToggle(){
   box.innerHTML = `<label class="switch-row" for="opt-stock"><span><b>手持ちのグミを表示</b><span class="hint">ログ画面に、まだ食べてない・食べた袋の数を出します</span></span>
     <input type="checkbox" id="opt-stock" role="switch" ${S.showStock ? 'checked' : ''}></label>`;
 }
+// 「○月のまとめ」の共有の文章に入れる項目（オン・オフのスイッチ）です
+const MONTH_ITEMS = [
+  ['gumi', '集めたグミ', '袋数・種類・金額'], ['news', '新商品', '新商品の数（0 個の月は入りません）'],
+  ['maker', '推しメーカー', ''], ['best', '月間ベスト', ''], ['days', '記録した日', 'その月に記録した日数'],
+  ['suggest', 'カタログに提案', '提案した数（0 件の月は入りません）'], ['ach', '獲得した称号', 'その月にとった称号'], ['tags', 'ハッシュタグ', '#ぐみろぐ #グミ'],
+];
+// 設定画面の「まとめの文章」のスイッチを描きます
+function renderMonthItems(){
+  const box = $('#month-items');
+  if (!box) return;
+  box.innerHTML = MONTH_ITEMS.map(([k, n, h]) => `<label class="switch-row" for="mi-${k}"><span><b>${n}</b>${h ? `<span class="hint">${h}</span>` : ''}</span>
+    <input type="checkbox" id="mi-${k}" data-mitem="${k}" role="switch" ${S.monthItems[k] !== false ? 'checked' : ''}></label>`).join('');
+}
 // 設定画面のテーマ（色）を選ぶボタンを描きます。
 function renderThemePicker(){
   const box = $('#theme-picker');
@@ -5889,6 +5918,15 @@ function renderShopEditor(){
 function wireShopEditor(){
   // 「手持ちのグミを表示」スイッチ
   $('#settings-body').addEventListener('change', e => {
+    // 「まとめの文章」のスイッチ
+    const mi = e.target.dataset && e.target.dataset.mitem;
+    if (mi){
+      S.monthItems = {...S.monthItems, [mi]: e.target.checked};
+      lsSet(LS_MONTHITEMS, S.monthItems);
+      clearTimeout(listSaveT);
+      listSaveT = setTimeout(saveSettingsDoc, 600);
+      return;
+    }
     if (e.target.id !== 'opt-stock') return;
     S.showStock = e.target.checked;
     lsSet(LS_STOCK, S.showStock);
@@ -7114,15 +7152,17 @@ function monthPost(){
   const sug = suggestLog().filter(d => ym(d) === key).length;
   const gains = isDemo() ? [] : achGainsIn(key);
   const gl = gains.length ? `獲得した称号 ${gains.length}個：${gains.slice(0, 2).map(g => g.a.name + (g.a.secret ? '' : ' ' + TIERS[g.got - 1].n)).join('、')}${gains.length > 2 ? ' ほか' : ''}` : '';
+  // 設定でオフにした項目は入れません（見出しはいつも入れます）
+  const on = k => S.monthItems[k] !== false;
   return [`【${+key.slice(5)}月のぐみろぐ】`,
-    `集めたグミ ${ms.count}袋（${kinds}種類）/ ${yen(ms.spend)}`,
-    ms.news ? `新商品 ${ms.news}個` : '',
-    `推しメーカー：${ms.topMaker || '—'}`,
-    `月間ベスト：${monthBest(all, key).name || '—'}`,
-    `記録した日 ${days}日`,
-    sug ? `カタログに提案 ${sug}件` : '',
-    gl,
-    POST_TAGS].filter(Boolean).join('\n');
+    on('gumi') ? `集めたグミ ${ms.count}袋（${kinds}種類）/ ${yen(ms.spend)}` : '',
+    on('news') && ms.news ? `新商品 ${ms.news}個` : '',
+    on('maker') ? `推しメーカー：${ms.topMaker || '—'}` : '',
+    on('best') ? `月間ベスト：${monthBest(all, key).name || '—'}` : '',
+    on('days') ? `記録した日 ${days}日` : '',
+    on('suggest') && sug ? `カタログに提案 ${sug}件` : '',
+    on('ach') ? gl : '',
+    on('tags') ? POST_TAGS : ''].filter(Boolean).join('\n');
 }
 // 投稿文の入力欄に文章を入れて、文字数などの表示を更新します
 function setPostText(t){
@@ -7448,6 +7488,7 @@ function renderSettings(){
     renderShopEditor();
     renderThemePicker();
     renderStockToggle();
+    renderMonthItems();
     renderTplEditor();
   }, 0);
   const real = realItems();
@@ -7468,6 +7509,7 @@ function renderSettings(){
     <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
     <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
     <div class="panel"><h3>共有の文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
+    <div class="panel"><h3>まとめの文章<span class="s">「○月のまとめ」の共有に入れる項目</span></h3><div id="month-items" class="month-items"></div></div>
     <div class="panel"><h3>書き出し</h3>
       <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
       <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
