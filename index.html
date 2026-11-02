@@ -1,7 +1,8 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="b3b6bd7caa"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="7211034feb"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+<!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
+<link rel="stylesheet" id="webfont" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
 <style>
 /*
  * レイアウトの全体像:
@@ -2741,6 +2742,8 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:179, at:'2026-11-02 22:40', t:'アプリを開いたときの表示を速くしました。'},
+  {v:177, at:'2026-11-02 20:40', t:'iPhone で、下のメニューのバーが画面の真ん中に浮いてしまうことがあるのを直しました。'},
   {v:176, at:'2026-11-02 03:45', t:'記録の画面などを開いたとき、前のスクロール位置に関係なく、いつもいちばん上から表示されるようにしました。'},
   {v:175, at:'2026-11-02 03:30', t:'この端末に保存している写真のしまい方を変えて、今までよりずっとたくさん保存できるようにしました。今ある写真は自動で移ります。'},
   {v:173, at:'2026-11-02 02:50', t:'設定の「保存先」に、写真の枚数と、この端末の保存容量をどれくらい使っているかを表示するようにしました。元の画質の写真を今すぐ圧縮するボタンもあります。'},
@@ -3000,7 +3003,11 @@ function parseCatCsv(text){
 const taxed = c => c.p == null || c.p === '' ? null : (c.pt === 'excl' ? Math.round(+c.p * 1.08) : +c.p);
 // 実際に使うカタログの一覧を返します。
 // 共有カタログがあればそれを使い、無ければ組み込みのカタログを使います。重複は取り除き、値段は税込みにそろえます
+// 毎回作り直すと重いので、もとのカタログ（REMOTE_CAT）が変わるまでは前に作った一覧を使い回します。
+// 呼び出し側で並べかえても困らないよう、配列はコピーを返します。
+let catCache = null;
 function catList(){
+  if (catCache && catCache.src === REMOTE_CAT) return catCache.list.slice();
   const seen = new Set(), out = [];
   // 重複を見分けるためのキー（メーカー名 + 空白を除いた商品名）を作ります
   const key = c => c.m + '|' + String(c.n).normalize('NFKC').replace(/\s/g, '');
@@ -3016,8 +3023,11 @@ function catList(){
     seen.add(k);
     out.push({...c, p: taxed(c)});
   }
-  return out;
+  catCache = {src:REMOTE_CAT, list:out};
+  return out.slice();
 }
+// カタログの名前（シリーズ名と「シリーズ 味」）を norm した集合です。inCatalog で使います
+let catNameSet = null;
 // かたさ・すっぱさの値を 1〜5 の整数にそろえて返します（1 より小さい・数でないときは null）
 const clampLvl = v => Number.isFinite(+v) && +v >= 1 ? Math.min(5, Math.round(+v)) : null;
 // Claude のアーティファクトの中で動いているかどうかです（window.claude.use があれば中です）
@@ -4014,7 +4024,7 @@ function renderStats(){
       <div class="kpi"><div class="lbl">${+key.slice(5)}月の袋数</div><div class="v num">${ms.count}<small>袋</small></div></div>
       <div class="kpi"><div class="lbl">${+key.slice(5)}月の出費</div><div class="v num">${(ms.spend).toLocaleString('ja-JP')}<small>円</small></div></div>
       <div class="kpi"><div class="lbl">ぜんぶで</div><div class="v num">${all.length}<small>袋</small></div></div>
-      <div class="kpi"><div class="lbl">買った種類</div><div class="v num">${unique}<small>種</small></div></div>
+      <div class="kpi"><div class="lbl">記録した種類</div><div class="v num">${unique}<small>種</small></div></div>
     </div>
     <div class="panel"><div class="sum-h"><h3>${+sk.slice(5)}月のまとめ</h3>
         <div class="seg upd-seg sum-seg" role="tablist" aria-label="まとめる月">${[['this','今月'],['last','先月']].map(([k, n]) => `<button type="button" role="tab" data-sum="${k}" aria-checked="${(S.ui.sumMonth === 'last' ? 'last' : 'this') === k}">${n}</button>`).join('')}</div></div>
@@ -6335,8 +6345,19 @@ function askClose(id){
    候補を選ぶと、メーカー・味・値段などの欄を自動で埋めます。 */
 
 // 比べやすいように文字列をそろえます（全角半角の統一・小文字化・カタカナをひらがなに・記号や空白を削除）
-const norm = s => String(s || '').normalize('NFKC').toLowerCase()
-  .replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)).replace(/[\s・ーｰ\-_.。、,!！?？~〜]/g, '');
+// 同じ文字を何度も変換すると重いので、結果を覚えておきます（覚えすぎないよう、5000 件で空にします）
+const normMemo = new Map();
+const norm = s => {
+  const k = String(s || '');
+  let v = normMemo.get(k);
+  if (v === undefined){
+    v = k.normalize('NFKC').toLowerCase()
+      .replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)).replace(/[\s・ーｰ\-_.。、,!！?？~〜]/g, '');
+    if (normMemo.size > 5000) normMemo.clear();
+    normMemo.set(k, v);
+  }
+  return v;
+};
 // 候補リストの状態です（list：表示中の候補、active：選択中の番号、open：開いているか、applied：自動入力済みの名前）
 const AC = { list:[], active:-1, open:false, applied:'' };
 
@@ -6835,8 +6856,16 @@ function suggestUrl(it){
 }
 // 名前がカタログのどれか（味つき・味なしのどちらでも）と一致すれば true を返します
 function inCatalog(name){
-  const n = norm(name);
-  return catList().some(c => norm(c.n) === n || (c.f || []).some(f => norm(`${c.n} ${f}`) === n));
+  catList();
+  if (!catNameSet || catNameSet.src !== catCache.list){
+    const set = new Set();
+    for (const c of catCache.list){
+      set.add(norm(c.n));
+      for (const f of c.f || []) set.add(norm(`${c.n} ${f}`));
+    }
+    catNameSet = {src:catCache.list, set};
+  }
+  return catNameSet.set.has(norm(name));
 }
 // カタログにあるシリーズだけれど、カタログにない味の記録かどうかを調べます
 // （「アンパンマングミ」＋新しい味、や「アンパンマングミ メロン」など）。
@@ -6847,10 +6876,12 @@ function newFlavorOf(it){
   // ゆるく比べます：「味」、(65g)、空白の違いは新しい味とはみなしません
   const nn = looseName(it.name);
   // 名前の先頭に一致するシリーズのうち、いちばん長い名前のものを選びます
-  let best = null;
-  for (const c of catList()){
-    const cn = looseName(c.n);
-    if (cn.length >= 2 && nn.startsWith(cn) && (!best || cn.length > looseName(best.n).length)) best = c;
+  let best = null, bestLen = 0;
+  for (const [c, cn] of catLoose()){
+    if (cn.length >= 2 && nn.startsWith(cn) && (!best || cn.length > bestLen)){
+      best = c;
+      bestLen = cn.length;
+    }
   }
   if (!best) return null;
   // rest：名前からシリーズ名を除いた残り
@@ -6877,6 +6908,13 @@ function newFlavorHTML(it, nf){
    1回タップすると、その名前の記録をすべて変更します。記録ごとの写真はそのまま残り、
    古い「名前ごとの写真」は新しい名前に移します。 */
 // 名前をゆるく比べるための形にそろえます（(65g) などの量、「味」の字を取り除きます）
+// カタログの各シリーズと、その名前の looseName の組です（カタログが変わるまで使い回します）
+let catLooseCache = null;
+function catLoose(){
+  catList();
+  if (!catLooseCache || catLooseCache.src !== catCache.list) catLooseCache = {src:catCache.list, pairs:catCache.list.map(c => [c, looseName(c.n)])};
+  return catLooseCache.pairs;
+}
 const looseName = s => norm(String(s || '').normalize('NFKC')
   .replace(/[（(][^（）()]*\d+\s*(g|ｇ|グラム|個|袋|粒|本)[^（）()]*[）)]/gi, '')   // (65g)、（1袋）など
   .replace(/\d+(\.\d+)?\s*(g|グラム)(?![a-z])/gi, '')
@@ -8100,12 +8138,23 @@ wireCrop();
 // 画面のキーボードで隠れていない部分に、シートの大きさを合わせます
 if (window.visualViewport){
   const vv = window.visualViewport, st = document.documentElement.style;
+  const bar = document.querySelector('.tabbar');
   const fit = () => {
     st.setProperty('--vv-h', vv.height + 'px');
     st.setProperty('--vv-top', vv.offsetTop + 'px');
+    // iPhone では、キーボードを閉じたあとも下のバーがキーボードの高さだけ上に残り、画面の真ん中に浮くことがあります。
+    // 見えている範囲の下端がバーの位置より下にあるときは、その分だけバーを下へずらして画面の下に戻します。
+    const gap = Math.round(vv.offsetTop + vv.height - window.innerHeight);
+    bar.style.transform = gap > 1 ? `translateY(${gap}px)` : '';
   };
   vv.addEventListener('resize', fit);
   vv.addEventListener('scroll', fit);
+  window.addEventListener('scroll', fit, {passive:true});
+  // 入力欄からフォーカスが外れたら（キーボードが閉じたら）、少し待ってから位置を直します
+  document.addEventListener('focusout', () => setTimeout(() => {
+    if (!document.activeElement || !document.activeElement.matches('input,textarea,select')) window.scrollTo(window.scrollX, window.scrollY);
+    fit();
+  }, 300));
   fit();
 }
 // 公開サイトに新しい版が出ていないかを調べ、あればその版を読み込み直します
@@ -8124,6 +8173,8 @@ function checkUpdate(){
     location.replace(location.pathname + '?v=' + m[1]);   // 新しいアドレスにすると、古いキャッシュのページを飛ばせます
   }).catch(() => {});
 }
+// フォントの読み込みが onload で切りかわらなかったときのために、ここでも効かせます
+{ const wf = document.getElementById('webfont'); if (wf) wf.media = 'all'; }
 // びんをタッチしたら、その位置のグミをつつきます
 $('#jar').addEventListener('pointerdown', e => {
   const r = e.currentTarget.getBoundingClientRect();
