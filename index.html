@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="be036660ec"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="e7cd1d941b"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2744,6 +2744,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // アプリの変更点だけを、新しい順に並べています。お知らせ → アプリ に表示されます（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:182, at:'2026-11-04 09:00', t:'称号の画像で、一部の称号のメダルの絵が真ん中からずれて描かれるのを直しました。'},
   {v:180, at:'2026-11-02 23:00', t:'iPhone で、くわしい画面の「ひとこと」を入力するときに画面が拡大されて戻らなくなるのと、入力欄がボタンに隠れてしまうのを直しました。'},
   {v:179, at:'2026-11-02 22:40', t:'アプリを開いたときの表示を速くしました。'},
   {v:177, at:'2026-11-02 20:40', t:'iPhone で、下のメニューのバーが画面の真ん中に浮いてしまうことがあるのを直しました。'},
@@ -5448,7 +5449,17 @@ function drawMedal(x, tier, icon, mx, my, r){
   // iPhone の Safari では、塗りの色がグラデーションのままだと絵文字がその色で塗られ、メダルに溶けて見えなくなるためです。
   x.fillStyle = '#000';
   x.globalAlpha = 1;
-  x.fillText(icon, mx, my + 10 * k);
+  // 横の位置は、絵文字の実際の形の幅で真ん中にそろえます。
+  // 🍽️ や ✍️ のように後ろに見えない記号（U+FE0F）がつく絵文字は、iPhone ではその分だけ幅が広く測られ、
+  // 「中央そろえ」にすると左右にずれてしまうためです。
+  // 念のため、見えない記号は外してから描きます（絵文字のフォントを指定しているので、外してもカラーの絵文字で出ます）。
+  const em = String(icon).replace(/\uFE0F/g, '');
+  const m = x.measureText(em), L = m.actualBoundingBoxLeft, R = m.actualBoundingBoxRight;
+  if (Number.isFinite(L) && Number.isFinite(R) && R + L > 0){
+    x.textAlign = 'left';
+    x.fillText(em, mx - (R - L) / 2, my + 10 * k);
+    x.textAlign = 'center';
+  } else x.fillText(em, mx, my + 10 * k);
 }
 
 // これまでに集めた称号を、強い段階から順に並べて返します（ダイヤモンド → … → ブロンズ → シークレット）。
