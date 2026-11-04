@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="778da79be3"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ試"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="5a52a9c5b4"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2368,10 +2368,10 @@ body.has-snack .toast {
 .data-seg[hidden] {
   display:none
 }
-</style></head><body><script>/* お試し版（preview/）だけに入る起動用のスクリプトです。tools/build_web.py --preview が本体の前に差しこみます。
-   お試し版は本番と同じサイトにあるので、ブラウザの保存場所（localStorage・IndexedDB）を本番と共有しています。
-   そのため、お試し版のキーは 'gumilog-pv.'、写真のデータベースは 'gumilog-pv-photos' に名前を変えてあります。
-   初めて開いたときは、本番の記録と写真をお試し版の保存場所に写します。本番の保存場所は読むだけで、書きかえません。 */
+</style></head><body><script>/* プレビュー版（preview/）だけに入る起動用のスクリプトです。tools/build_web.py --preview が本体の前に差しこみます。
+   プレビュー版は本番と同じサイトにあるので、ブラウザの保存場所（localStorage・IndexedDB）を本番と共有しています。
+   そのため、プレビュー版のキーは 'gumilog-pv.'、写真のデータベースは 'gumilog-pv-photos' に名前を変えてあります。
+   初めて開いたときは、本番の記録と写真をプレビュー版の保存場所に写します。本番の保存場所は読むだけで、書きかえません。 */
 (function(){
   var FLAG = 'gumilog-pv.copied';
   var SRC_DB = 'gumilog-photos', DST_DB = 'gumilog-pv-photos';
@@ -2446,9 +2446,9 @@ body.has-snack .toast {
   // 本体は写真を読む前にこれを待ちます（build_web.py が photoDBReady に差しこみます）
   window.__pvReady = copied ? Promise.resolve() : copyPhotos().catch(function(){});
 
-  // お試し版のデータを消して、本番のデータを写し直します
+  // プレビュー版のデータを消して、本番のデータを写し直します
   window.__pvReset = function(){
-    if (!confirm('お試し版のデータを消して、本番のデータを写し直しますか？\n（本番のデータは変わりません）')) return;
+    if (!confirm('プレビュー版のデータを消して、本番のデータを写し直しますか？\n（本番のデータは変わりません）')) return;
     try {
       var del = [];
       for (var i = 0; i < localStorage.length; i++){
@@ -2464,11 +2464,11 @@ body.has-snack .toast {
     } catch(e){ done(); }
   };
 
-  // 「お試し版」の印を出します。タップすると本番のデータを写し直せます
+  // 「プレビュー」の印を出します。タップすると本番のデータを写し直せます
   function badge(){
     var b = document.createElement('button');
     b.type = 'button';
-    b.textContent = 'お試し版';
+    b.textContent = 'プレビュー';
     b.title = 'タップで本番のデータを写し直します';
     // 画面の右端のまん中あたりに、縦書きの小さなつまみとして出します（ヘッダーやボタンと重ならないように）
     b.style.cssText = 'position:fixed;z-index:2147483000;right:0;top:38%;writing-mode:vertical-rl;'
@@ -2476,6 +2476,11 @@ body.has-snack .toast {
       + 'font:700 10px/1 system-ui,sans-serif;letter-spacing:.15em;box-shadow:0 1px 4px rgba(0,0,0,.2);opacity:.9;cursor:pointer';
     b.addEventListener('click', window.__pvReset);
     document.body.appendChild(b);
+    // 画面のふちをオレンジの枠で囲みます。上に重ねるだけで、タップは下の画面にそのまま届きます（レイアウトは本番と同じ）
+    var f = document.createElement('div');
+    f.setAttribute('aria-hidden', 'true');
+    f.style.cssText = 'position:fixed;inset:0;z-index:2147482999;pointer-events:none;box-shadow:inset 0 0 0 3px #E8590C';
+    document.body.appendChild(f);
   }
   if (document.body) badge(); else document.addEventListener('DOMContentLoaded', badge);
 })();
@@ -7290,7 +7295,7 @@ async function sendSuggest(){
   btn.disabled = true;
   btn.textContent = '送信中…';
   try {
-    await new Promise(r => setTimeout(r, 400));   // お試し版では送信しません
+    await new Promise(r => setTimeout(r, 400));   // プレビュー版では送信しません
     closeSheet('#sh-sform');
     toast('送りました！確認してカタログに追加します');
     // 送った回数を数えて、称号（グミ情報屋）を調べ直します
