@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="01a59032b9"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="1e7e2c8399"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2678,7 +2678,7 @@ body.has-snack .toast {
 <div class="sheet" id="sh-matchall" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ma-title">
     <div class="sheet-h"><h2 id="ma-title">カタログと名前をそろえますか？</h2></div>
-    <p class="hint" style="margin:0">カタログに近いグミが入った記録があります。チェックした記録の名前をカタログに合わせます（写真や評価はそのまま）。</p>
+    <p class="hint" style="margin:0">カタログに近いグミが入った記録があります。チェックした記録の名前をカタログに合わせます（写真や評価はそのまま）。違うときは「どれでもない」を選ぶと、もう候補に出ません。</p>
     <div class="sheet-body ma-list" id="ma-list"></div>
     <div class="sheet-actions"><button class="btn ghost" type="button" data-close>あとで</button><button class="btn primary" type="button" id="ma-go">合わせる</button></div>
   </div>
@@ -7924,13 +7924,16 @@ function matchCands(){
 }
 // シートに出している候補です（「合わせる」を押したときに使います）
 let MA_LIST = [];
+// 行の「→ 新しい名前」の部分です。j が 'skip' なら、候補を出さなくする旨を出します
+const maNewHTML = (x, j) => j === 'skip' ? '→ このままにして、もう候補を出さない'
+  : `→ ${esc(x.ms[j].name)}<span class="cm-m">（${esc(x.ms[j].c.m)}）</span>`;
 // まとめて確認するシートを開きます。候補がなければ何もしません
 function openMatchAll(){
   MA_LIST = matchCands();
   if (!MA_LIST.length) return false;
   $('#ma-list').innerHTML = MA_LIST.map((x, i) => `<label class="ma-row"><input type="checkbox" data-ma="${i}" checked>
-    <span><div class="ma-old">${esc(x.old)}</div><div class="ma-new">→ ${esc(x.ms[0].name)}<span class="cm-m">（${esc(x.ms[0].c.m)}）</span></div>
-    ${x.ms.length > 1 ? `<select data-ma-sel="${i}" aria-label="合わせる名前">${x.ms.map((m, j) => `<option value="${j}">${esc(m.name)}（${esc(m.c.m)}）</option>`).join('')}</select>` : ''}</span></label>`).join('');
+    <span><div class="ma-old">${esc(x.old)}</div><div class="ma-new" data-ma-new="${i}">${maNewHTML(x, 0)}</div>
+    <select data-ma-sel="${i}" aria-label="合わせる名前">${x.ms.map((m, j) => `<option value="${j}">${esc(m.name)}（${esc(m.c.m)}）</option>`).join('')}<option value="skip">どれでもない（もう候補を出さない）</option></select></span></label>`).join('');
   $('#ma-go').disabled = false;
   openSheet('#sh-matchall');
   return true;
@@ -7952,23 +7955,39 @@ function offerMatchAll(){
     if (openMatchAll()) lsSet(LS_MATCHASK, top);
   }, 1500);
 }
+// 選択欄を変えたら「→ 新しい名前」の表示も変え、チェックを入れます
+$('#ma-list').addEventListener('change', e => {
+  const sel = e.target.closest('[data-ma-sel]');
+  if (!sel) return;
+  const i = sel.dataset.maSel, x = MA_LIST[+i];
+  $('#ma-list').querySelector(`[data-ma-new="${i}"]`).innerHTML = maNewHTML(x, sel.value === 'skip' ? 'skip' : +sel.value);
+  $('#ma-list').querySelector(`[data-ma="${i}"]`).checked = true;
+});
 // 「合わせる」：チェックの入った記録を、選んだカタログの名前に変えます
 $('#ma-go').addEventListener('click', async () => {
   const btn = $('#ma-go');
   if (btn.disabled) return;
   btn.disabled = true;
-  let n = 0, names = 0;
+  let n = 0, names = 0, skips = 0;
   try {
     for (const cb of $('#ma-list').querySelectorAll('input[data-ma]')){
       if (!cb.checked) continue;
       const x = MA_LIST[+cb.dataset.ma], sel = $('#ma-list').querySelector(`[data-ma-sel="${cb.dataset.ma}"]`);
+      // 「どれでもない」は名前を変えず、このグミにはもう候補を出さないようにします
+      if (sel && sel.value === 'skip'){
+        skipMatch(x.old);
+        skips++;
+        continue;
+      }
       const m = x.ms[sel ? +sel.value : 0];
       const r = await renameToCatalog(x.old, m.c, m.f);
       n += r.n;
       names++;
     }
     closeSheet('#sh-matchall');
-    toast(names ? `${names}種類（${n}件）の記録をカタログの名前にしました` : '何も変えませんでした');
+    if (skips) renderAll();
+    toast(names ? `${names}種類（${n}件）の記録をカタログの名前にしました${skips ? `（${skips}種類は候補を出さないようにしました）` : ''}`
+      : skips ? `${skips}種類のグミに候補を出さないようにしました` : '何も変えませんでした');
     if (!$('#sh-settings') || !$('#sh-settings').hidden) renderSettings();
   }
   catch(e){
