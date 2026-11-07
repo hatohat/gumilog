@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="3d8f26dd71"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="a14f83a69a"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -1889,6 +1889,37 @@ body.has-snack .toast {
   flex-direction:column;
   gap:12px
 }
+/* 設定のグループ。メニューで選んだグループだけを見せます */
+.set-grp{display:flex;flex-direction:column;gap:12px}
+.set-grp[hidden]{display:none}
+.set-back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.set-menu {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-panel);
+  overflow:hidden
+}
+.set-item {
+  display:grid;
+  grid-template-columns:34px 1fr auto 14px;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:13px 14px;
+  border:0;
+  border-top:1px solid var(--line);
+  background:none;
+  color:var(--ink);
+  font:inherit;
+  text-align:left;
+  cursor:pointer
+}
+.set-item:first-child{border-top:0}
+.set-item .ic{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:17px}
+.set-item b{display:block;font-size:14px}
+.set-item small{display:block;font-size:12px;color:var(--ink-2);margin-top:1px;line-height:1.4}
+.set-item .badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:2px 7px}
+.set-item .chev{width:8px;height:8px;border-right:2px solid var(--ink-2);border-top:2px solid var(--ink-2);transform:rotate(45deg)}
 /* 更新履歴の一覧 */
 .updates {
   list-style:none;
@@ -2732,7 +2763,7 @@ body.has-snack .toast {
 <!-- ===== 設定とデータ（ヘッダーの歯車ボタンで開くシート。中身はJavaScriptで作ります） ===== -->
 <div class="sheet" id="sh-settings" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-label="設定とデータ">
-    <div class="sheet-h"><h2>設定とデータ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="sheet-h"><button class="icon-btn sm set-back" id="set-back" aria-label="設定にもどる" hidden><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><h2 id="set-title">設定とデータ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div class="settings-list" id="settings-body"></div>
   </div>
 </div>
@@ -2922,6 +2953,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:186, k:'p', at:'2026-11-08 06:19', t:'設定画面を「データ」「見た目」「グミカタログ」「記録の候補」「共有の文章」に分け、見やすく変更しました。'},
   {v:185, k:'f', at:'2026-11-08 06:19', t:'設定から、カタログに載っていない記録の一覧を確認できるようにしました。近いグミがあれば名前をそろえ、なければカタログに提案できます。'},
   {v:184, k:'f', at:'2026-11-08 06:19', t:'カタログの更新後、カタログに近いグミが入った記録をまとめて確認し、名前をそろえられるようにしました。'},
   {v:183, k:'p', at:'2026-11-08 06:19', t:'商品名を省略したり「〇〇アソート」などを付けたりして記録した場合に、名前をそろえる候補が表示されず、カタログにない味と表示される不具合を修正しました。'},
@@ -8167,6 +8199,9 @@ function storageHTML(){
       <p class="hint" style="margin:0">使用量は、この端末に保存できる量のめやすに対する割合です。元の画質の写真は登録した翌日いっぱいで圧縮されます。</p>${btn}`;
 }
 // 設定シートの中身を描き、書き出し・読み込みのボタンに動きをつけます
+// 設定で開いているグループ（'' ならメニュー）と、グループの見出しです
+let SET_GRP = '';
+const SET_GRPS = {data:'データ', look:'見た目', catalog:'グミカタログ', input:'記録の候補', share:'共有の文章'};
 function renderSettings(){
   // お店の候補などの部品は、本体のHTMLを入れたあとで描きます
   setTimeout(() => {
@@ -8178,28 +8213,53 @@ function renderSettings(){
   }, 0);
   const real = realItems();
   const dl = !!S.cap.downloads || !IN_CLAUDE;   // Claude の外では、ふつうのブラウザのダウンロードが使えます
+  // カタログにない名前・そろえられる名前の数（メニューに出します）
+  const ncN = notCatNames().length, mlH = matchListHTML();
+  const g = SET_GRP;
+  // メニューの1行です（key：グループ、ic：絵文字、t：見出し、d：説明、badge：数のしるし）
+  const item = (key, ic, t, d, badge) => `<button type="button" class="set-item" data-grp="${key}"><span class="ic" aria-hidden="true">${ic}</span>
+    <span><b>${t}</b><small>${d}</small></span>${badge ? `<span class="badge">${badge}</span>` : '<span></span>'}<span class="chev" aria-hidden="true"></span></button>`;
+  $('#set-title').textContent = SET_GRPS[g] || '設定とデータ';
+  $('#set-back').hidden = !g;
   $('#settings-body').innerHTML = `
+    <div class="set-menu" ${g ? 'hidden' : ''}>
+      ${item('data', '💾', 'データ', `${S.mode === 'cloud' ? 'クラウドに保存' : 'この端末に保存'}・${real.length}件・書き出し／読み込み`)}
+      ${item('look', '🎨', '見た目', 'カラーテーマ・表示')}
+      ${item('catalog', '📖', 'グミカタログ', `${catList().length}シリーズ・カタログにないグミ`, ncN || '')}
+      ${item('input', '🏷️', '記録の候補', 'お店・タグ')}
+      ${item('share', '💬', '共有の文章', '共有テンプレート・まとめの文章')}
+    </div>
+    <div class="set-grp" ${g === 'data' ? '' : 'hidden'}>
     <div class="panel"><h3>保存先</h3>
       <p>${S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
       <p>記録数：<b class="num">${real.length}</b>件</p>${storageHTML()}</div>
-    <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
-    <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
-    <div class="panel"><h3>グミカタログ</h3>
-      <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
-      <div class="btn-row"><a class="btn sm" ${sgAttrs({})}>新しいグミを教える</a>${notCatNames().length ? `<button type="button" class="btn sm" id="nc-open">カタログにないグミ（${notCatNames().length}）</button>` : ''}</div>
-      <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
-      ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
-      <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
-    ${matchListHTML()}
-    <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
-    <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
-    <div class="panel"><h3>共有の文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
-    <div class="panel"><h3>まとめの文章<span class="s">「○月のまとめ」の共有に入れる項目</span></h3><div id="month-items" class="month-items"></div></div>
     <div class="panel"><h3>書き出し</h3>
       <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
       <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
     <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録と写真を戻せます。同じ記録は重複せず、すでにある写真はそのままです。</p>
       <div class="btn-row"><label class="btn sm" for="im-file">JSONを読み込む</label><input type="file" id="im-file" accept="application/json,.json" hidden></div></div>
+    </div>
+    <div class="set-grp" ${g === 'look' ? '' : 'hidden'}>
+    <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
+    <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
+    </div>
+    <div class="set-grp" ${g === 'catalog' ? '' : 'hidden'}>
+    <div class="panel"><h3>グミカタログ</h3>
+      <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
+      <div class="btn-row"><a class="btn sm" ${sgAttrs({})}>新しいグミを教える</a>${ncN ? `<button type="button" class="btn sm" id="nc-open">カタログにないグミ（${ncN}）</button>` : ''}</div>
+      <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
+      ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
+      <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
+    ${mlH}
+    </div>
+    <div class="set-grp" ${g === 'input' ? '' : 'hidden'}>
+    <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
+    <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
+    </div>
+    <div class="set-grp" ${g === 'share' ? '' : 'hidden'}>
+    <div class="panel"><h3>共有の文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
+    <div class="panel"><h3>まとめの文章<span class="s">「○月のまとめ」の共有に入れる項目</span></h3><div id="month-items" class="month-items"></div></div>
+    </div>
 `;
   // ファイルを保存する関数です。Claude のダウンロード機能がなければ、ふつうのブラウザのダウンロードを使います
   const save = async (filename, data) => {
@@ -8354,6 +8414,7 @@ $('#data-seg').addEventListener('click', e => {
 $('#fab').addEventListener('click', () => openForm(null, 'new'));
 // 設定ボタン
 $('#btn-settings').addEventListener('click', () => {
+  SET_GRP = '';
   renderSettings();
   openSheet('#sh-settings');
 });
@@ -8584,6 +8645,18 @@ $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 $('#settings-body').addEventListener('click', e => e.target.closest('#ma-open') && openMatchAll());
 $('#settings-body').addEventListener('click', e => e.target.closest('#nc-open') && openNotCat());
+// 設定のメニューからグループを開く／もどるボタンでメニューに戻ります
+$('#settings-body').addEventListener('click', e => {
+  const b = e.target.closest('.set-item[data-grp]');
+  if (!b) return;
+  SET_GRP = b.dataset.grp;
+  renderSettings();
+  $('#sh-settings').querySelectorAll('.sheet-p, #settings-body').forEach(x => { x.scrollTop = 0; });
+});
+$('#set-back').addEventListener('click', () => {
+  SET_GRP = '';
+  renderSettings();
+});
 $('#settings-body').addEventListener('click', e => e.target.closest('#shrink-big') && askShrinkBigNow());
 jarSetup();
 // 前回開いていたタブで始めます（なくなった 'badge' タブは「ぐみ棚」に、'stats' タブは「データ」に読みかえます）
