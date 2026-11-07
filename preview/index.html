@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="1e7e2c8399"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="225dbaa44b"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2906,7 +2906,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
   {v:184, k:'f', at:'2026-11-08 06:19', t:'カタログの更新後、カタログに近いグミが入った記録をまとめて確認し、名前をそろえられるようにしました。'},
-  {v:183, k:'p', at:'2026-11-08 06:19', t:'詰め合わせの商品名に「〇〇アソート」などを付けて記録した場合に、名前をそろえる候補が表示されない不具合を修正しました。'},
+  {v:183, k:'p', at:'2026-11-08 06:19', t:'商品名を省略したり「〇〇アソート」などを付けたりして記録した場合に、名前をそろえる候補が表示されず、カタログにない味と表示される不具合を修正しました。'},
   {v:182, k:'p', at:'2026-11-04 04:20', t:'称号画像で、一部のメダルの絵文字が中央からずれる不具合を修正しました。'},
   {v:180, k:'p', at:'2026-11-02 22:43', t:'iPhone で「ひとこと」の入力時に画面が拡大される不具合と、入力欄がボタンに隠れる不具合を修正しました。'},
   {v:179, k:'p', at:'2026-11-02 22:22', t:'起動時の表示速度を改善しました。'},
@@ -7086,6 +7086,10 @@ function newFlavorOf(it){
     // 味の欄がない詰め合わせ（虹色）の商品や、残りが「〇〇アソート」のときは、新しい味ではなく同じ商品の書き方の違いとみなします
     // （「コグミ ゼルダの伝説 ルピーアソート」→ カタログの「コグミ ゼルダの伝説」）。名前合わせの候補に回ります
     if (!fl.length && (isRb(best.c) || /アソート|ミックス|詰め?合わ?せ/.test(rest))) return null;
+    // 同じシリーズの別の商品の名前に、残りの部分が含まれているときも新しい味ではありません
+    // （「コグミ ゼルダ」→ カタログの「コグミ ゼルダの伝説」）。名前合わせの候補に回ります
+    const bl = looseName(best.n);
+    if (rest.length >= 2 && catLoose().some(([c, cn]) => c !== best && cn.startsWith(bl) && cn.slice(bl.length).includes(rest))) return null;
     const raw = it.name.normalize('NFKC').replace(best.n.normalize('NFKC'), '').trim() || it.flavor || '';
     return {c:best, flavor:raw};
   }
