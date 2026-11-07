@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="fd3b568f2e"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="b7d838836a"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -1889,10 +1889,8 @@ body.has-snack .toast {
   flex-direction:column;
   gap:12px
 }
-/* 設定は画面全体に広げます（メニューとグループを行き来するので、下半分だけだと窮屈です） */
-#sh-settings{padding-top:0}
-#sh-settings .sheet-p{height:100%;border-radius:0;padding-top:env(safe-area-inset-top,0px)}
-@media (min-width:640px){#sh-settings .sheet-p{border-radius:0;box-shadow:0 0 0 1px var(--line)}}
+/* 設定は、お知らせと同じ高さまで広げます（メニューとグループを行き来しても大きさが変わらないように） */
+#sh-settings .sheet-p{height:100%}
 /* 設定のグループ。メニューで選んだグループだけを見せます */
 .set-grp{display:flex;flex-direction:column;gap:12px}
 .set-grp[hidden]{display:none}
@@ -2957,6 +2955,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:187, k:'p', at:'2026-11-08 06:19', t:'お知らせや設定などを開いている間に、後ろの画面がスクロールしてしまう不具合を修正しました。'},
   {v:186, k:'p', at:'2026-11-08 06:19', t:'設定画面を「データ」「見た目」「グミカタログ」「記録の候補」「共有の文章」に分け、見やすく変更しました。'},
   {v:185, k:'f', at:'2026-11-08 06:19', t:'設定から、カタログに載っていない記録の一覧を確認できるようにしました。近いグミがあれば名前をそろえ、なければカタログに提案できます。'},
   {v:184, k:'f', at:'2026-11-08 06:19', t:'カタログの更新後、カタログに近いグミが入った記録をまとめて確認し、名前をそろえられるようにしました。'},
@@ -6158,12 +6157,29 @@ function setTab(t){
     jarSetup();
     jarSync(true);
   }
-  window.scrollTo(0,0);
+  // シートを開いていて後ろの画面を止めているときは、閉じたときに一番上へ戻るようにします
+  if (lockY !== null) lockY = 0;
+  else window.scrollTo(0,0);
 }
 
 /* ========== 下から出てくるシート ========== */
 /* 入力フォームなどのシートを開いたり閉じたりします。 */
 
+// 後ろの画面を止めます。overflow:hidden だけでは iPhone で後ろがスクロールしてしまうので、
+// 画面全体をいまの位置で固定し、閉じたら同じ位置に戻します。
+let lockY = null;
+function lockScroll(){
+  if (lockY !== null) return;
+  lockY = window.scrollY;
+  Object.assign(document.body.style, {overflow:'hidden', position:'fixed', top:`-${lockY}px`, left:'0', right:'0'});
+}
+function unlockScroll(){
+  if (lockY === null) return;
+  const y = lockY;
+  lockY = null;
+  Object.assign(document.body.style, {overflow:'', position:'', top:'', left:'', right:''});
+  window.scrollTo(0, y);
+}
 // シートを開く前にフォーカスがあった場所です（閉じたら戻します）。
 let lastFocus = null;
 // シートを開きます。後ろの画面はスクロールしないようにし、最初の入力欄やボタンにフォーカスを移します。
@@ -6173,7 +6189,7 @@ function openSheet(id){
   s.hidden = false;
   // 前に開いたときのスクロール位置は残さず、いつもいちばん上から見せます
   s.querySelectorAll('.sheet-body').forEach(b => b.scrollTop = 0);
-  document.body.style.overflow = 'hidden';
+  lockScroll();
   setTimeout(() => {
     const f = s.querySelector('input,button,textarea');
     f && f.focus({preventScroll:true});
@@ -6182,7 +6198,7 @@ function openSheet(id){
 // シートを閉じます。開いているシートがもうなければスクロールを戻し、元の場所にフォーカスを返します。
 function closeSheet(id){
   $(id).hidden = true;
-  if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) document.body.style.overflow = '';
+  if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) unlockScroll();
   lastFocus && lastFocus.focus && lastFocus.focus({preventScroll:true});
 }
 document.querySelectorAll('.sheet').forEach(s => {
