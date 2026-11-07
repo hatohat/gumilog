@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="88bfbaabc7"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="9002de61cd"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -124,6 +124,22 @@ h1,h2,h3{text-wrap:balance;margin:0}
   height:10px;
   border-radius:50%;
   background:#E5322D;
+  border:2px solid var(--surface)
+}
+
+/* 設定ボタンの数のしるし（カタログと名前をそろえられる記録の数） */
+.set-badge {
+  position:absolute;
+  top:1px;
+  right:0;
+  min-width:18px;
+  height:18px;
+  padding:0 4px;
+  border-radius:9px;
+  background:#E5322D;
+  color:#fff;
+  font:700 11px/14px var(--f-body,inherit);
+  text-align:center;
   border:2px solid var(--surface)
 }
 
@@ -1670,6 +1686,30 @@ input[type=range] {
   margin-top:10px
 }
 .cm-row .cat-match{margin-top:6px}
+/* カタログにないグミの一覧 */
+.nc-h{font-size:13px;font-weight:700;color:var(--ink-2);margin:14px 0 2px}
+.nc-h:first-child{margin-top:4px}
+.nc-row{padding:10px 0;border-top:1px solid var(--line)}
+.nc-row:first-of-type{border-top:0}
+.nc-name{font-weight:700;font-size:14px}
+.nc-sub{font-size:12px;color:var(--ink-2);margin-top:1px}
+.nc-row .cat-match{margin-top:8px}
+.nc-row .suggest{margin:6px 0 0}
+/* まとめてそろえるシートの1行（チェック・今の名前 → カタログの名前） */
+.ma-list{max-height:52vh;overflow:auto;margin:10px 0 4px}
+.ma-row {
+  display:grid;
+  grid-template-columns:22px 1fr;
+  gap:10px;
+  align-items:start;
+  padding:10px 2px;
+  border-top:1px solid var(--line)
+}
+.ma-row:first-child{border-top:0}
+.ma-row input[type=checkbox]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent)}
+.ma-old{font-size:13px;color:var(--ink-2);text-decoration:line-through;text-decoration-color:var(--line)}
+.ma-new{font-size:14px;font-weight:700;margin-top:2px}
+.ma-row select{margin-top:6px;width:100%;font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
 /* 前回買ったときの情報と、かたさなどのメーター */
 .prev-buy {
   font-size:12px;
@@ -1865,6 +1905,42 @@ body.has-snack .toast {
   flex-direction:column;
   gap:12px
 }
+/* 設定は、お知らせと同じ高さまで広げます（メニューとグループを行き来しても大きさが変わらないように） */
+#sh-settings .sheet-p{height:100%}
+/* 設定のグループ。メニューで選んだグループだけを見せます */
+.set-grp{display:flex;flex-direction:column;gap:12px}
+.set-grp[hidden]{display:none}
+.set-back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.set-menu {
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-panel);
+  overflow:hidden
+}
+.set-item {
+  display:grid;
+  grid-template-columns:34px 1fr auto 14px;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:13px 14px;
+  border:0;
+  border-top:1px solid var(--line);
+  background:none;
+  color:var(--ink);
+  font:inherit;
+  text-align:left;
+  cursor:pointer
+}
+.set-item:first-child{border-top:0}
+a.set-item{text-decoration:none}
+.set-sec{font-size:12px;font-weight:700;color:var(--ink-2);margin:4px 4px -6px;letter-spacing:.04em}
+.set-sec[hidden],.set-menu[hidden]{display:none}
+.set-item .ic{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:17px}
+.set-item b{display:block;font-size:14px}
+.set-item small{display:block;font-size:12px;color:var(--ink-2);margin-top:1px;line-height:1.4}
+.set-item .badge{font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:2px 7px}
+.set-item .chev{width:8px;height:8px;border-right:2px solid var(--ink-2);border-top:2px solid var(--ink-2);transform:rotate(45deg)}
 /* 更新履歴の一覧 */
 .updates {
   list-style:none;
@@ -2381,7 +2457,7 @@ body.has-snack .toast {
     <!-- お知らせボタン（未読があると小さな点が付きます） -->
     <button class="icon-btn news-btn" id="btn-news" aria-label="お知らせ"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="news-dot" id="news-dot" hidden></span></button>
     <!-- 設定ボタン（歯車アイコン） -->
-    <button class="icon-btn" id="btn-settings" aria-label="設定とデータ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <button class="icon-btn news-btn" id="btn-settings" aria-label="設定とデータ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="set-badge" id="set-badge" hidden></span></button>
   </div>
 </header>
 
@@ -2592,8 +2668,26 @@ body.has-snack .toast {
 <!-- ===== 設定とデータ（ヘッダーの歯車ボタンで開くシート。中身はJavaScriptで作ります） ===== -->
 <div class="sheet" id="sh-settings" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-label="設定とデータ">
-    <div class="sheet-h"><h2>設定とデータ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="sheet-h"><button class="icon-btn sm set-back" id="set-back" aria-label="設定にもどる" hidden><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><h2 id="set-title">設定とデータ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div class="settings-list" id="settings-body"></div>
+  </div>
+</div>
+
+<!-- ===== カタログと名前をまとめてそろえるシート（カタログ更新後に出ます） ===== -->
+<div class="sheet" id="sh-matchall" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ma-title">
+    <div class="sheet-h"><h2 id="ma-title">カタログと名前をそろえますか？</h2></div>
+    <p class="hint" style="margin:0">カタログに近いグミが入った記録があります。チェックした記録の名前をカタログに合わせます（写真や評価はそのまま）。違うときは「どれでもない」を選ぶと、もう候補に出ません。</p>
+    <div class="sheet-body ma-list" id="ma-list"></div>
+    <div class="sheet-actions"><button class="btn ghost" type="button" data-close>あとで</button><button class="btn primary" type="button" id="ma-go">合わせる</button></div>
+  </div>
+</div>
+
+<!-- ===== カタログにないグミの一覧シート（設定から開きます） ===== -->
+<div class="sheet" id="sh-notcat" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="nc-title">
+    <div class="sheet-h"><h2 id="nc-title">カタログにないグミ</h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="sheet-body" id="nc-list"></div>
   </div>
 </div>
 
@@ -2764,6 +2858,12 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:188, k:'f', at:'2026-11-08 06:19', t:'設定の最初の画面から、カタログにないグミの確認と新しいグミの提案ができるようにしました。名前をそろえられるグミがあるときは、設定ボタンに数を表示します。'},
+  {v:187, k:'p', at:'2026-11-08 06:19', t:'お知らせや設定などを開いている間に、後ろの画面がスクロールしたり、画面全体が上下に動いたりする不具合を修正しました。'},
+  {v:186, k:'p', at:'2026-11-08 06:19', t:'設定画面を「データ」「見た目」「グミカタログ」「記録の候補」「共有の文章」に分け、見やすく変更しました。'},
+  {v:185, k:'f', at:'2026-11-08 06:19', t:'設定から、カタログに載っていない記録の一覧を確認できるようにしました。近いグミがあれば名前をそろえ、なければカタログに提案できます。'},
+  {v:184, k:'f', at:'2026-11-08 06:19', t:'カタログの更新後、カタログに近いグミが入った記録をまとめて確認し、名前をそろえられるようにしました。'},
+  {v:183, k:'p', at:'2026-11-08 06:19', t:'商品名を省略したり「〇〇アソート」などを付けたりして記録した場合に、名前をそろえる候補が表示されず、カタログにない味と表示される不具合を修正しました。'},
   {v:182, k:'p', at:'2026-11-04 04:20', t:'称号画像で、一部のメダルの絵文字が中央からずれる不具合を修正しました。'},
   {v:180, k:'p', at:'2026-11-02 22:43', t:'iPhone で「ひとこと」の入力時に画面が拡大される不具合と、入力欄がボタンに隠れる不具合を修正しました。'},
   {v:179, k:'p', at:'2026-11-02 22:22', t:'起動時の表示速度を改善しました。'},
@@ -5896,7 +5996,9 @@ function checkMonthAsk(){
 let achCheckT = 0;
 function renderAll(){
   renderNewsBadge();
+  renderSetBadge();
   setTimeout(fixDupNames, 0);
+  offerMatchAll();
   const demo = isDemo();
   $('#demo-banner').hidden = !demo;
   // 保存先（クラウド / この端末）の表示
@@ -5959,12 +6061,47 @@ function setTab(t){
     jarSetup();
     jarSync(true);
   }
-  window.scrollTo(0,0);
+  // シートを開いていて後ろの画面を止めているときは、閉じたときに一番上へ戻るようにします
+  if (lockY !== null) lockY = 0;
+  else window.scrollTo(0,0);
 }
 
 /* ========== 下から出てくるシート ========== */
 /* 入力フォームなどのシートを開いたり閉じたりします。 */
 
+// 後ろの画面を止めます。overflow:hidden だけでは iPhone で後ろがスクロールしてしまうので、
+// 画面全体をいまの位置で固定し、閉じたら同じ位置に戻します。
+let lockY = null;
+function lockScroll(){
+  if (lockY !== null) return;
+  lockY = window.scrollY;
+  Object.assign(document.body.style, {overflow:'hidden', position:'fixed', top:`-${lockY}px`, left:'0', right:'0'});
+}
+function unlockScroll(){
+  if (lockY === null) return;
+  const y = lockY;
+  lockY = null;
+  Object.assign(document.body.style, {overflow:'', position:'', top:'', left:'', right:''});
+  window.scrollTo(0, y);
+}
+// シートを開いている間は、スクロールできる場所の上でだけ指で動かせるようにします。
+// 中身が短くてスクロールしないシートを指でなぞると、iPhone では画面全体が上下にびよんと動いてしまうためです。
+const scrollsHere = (el, stop) => {
+  for (let x = el; x && x !== stop; x = x.parentElement){
+    const cs = getComputedStyle(x);
+    if (/(auto|scroll)/.test(cs.overflowY) && x.scrollHeight > x.clientHeight + 1) return true;
+    if (/(auto|scroll)/.test(cs.overflowX) && x.scrollWidth > x.clientWidth + 1) return true;
+  }
+  return false;
+};
+document.addEventListener('touchmove', e => {
+  if (lockY === null || e.touches.length > 1) return;
+  const sh = e.target.closest && e.target.closest('.sheet');
+  // 写真の切り抜きや拡大表示は、指で動かす操作そのものなので止めません
+  if (sh && (sh.id === 'sh-crop' || sh.id === 'sh-bigfull')) return;
+  if (e.target.closest && e.target.closest('input[type=range],textarea')) return;
+  if (!sh || !scrollsHere(e.target, sh)) e.preventDefault();
+}, {passive:false});
 // シートを開く前にフォーカスがあった場所です（閉じたら戻します）。
 let lastFocus = null;
 // シートを開きます。後ろの画面はスクロールしないようにし、最初の入力欄やボタンにフォーカスを移します。
@@ -5974,7 +6111,7 @@ function openSheet(id){
   s.hidden = false;
   // 前に開いたときのスクロール位置は残さず、いつもいちばん上から見せます
   s.querySelectorAll('.sheet-body').forEach(b => b.scrollTop = 0);
-  document.body.style.overflow = 'hidden';
+  lockScroll();
   setTimeout(() => {
     const f = s.querySelector('input,button,textarea');
     f && f.focus({preventScroll:true});
@@ -5983,7 +6120,7 @@ function openSheet(id){
 // シートを閉じます。開いているシートがもうなければスクロールを戻し、元の場所にフォーカスを返します。
 function closeSheet(id){
   $(id).hidden = true;
-  if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) document.body.style.overflow = '';
+  if (![...document.querySelectorAll('.sheet')].some(s => !s.hidden)) unlockScroll();
   lastFocus && lastFocus.focus && lastFocus.focus({preventScroll:true});
 }
 document.querySelectorAll('.sheet').forEach(s => {
@@ -6938,6 +7075,13 @@ function newFlavorOf(it){
   const fl = best.f || [], rest = nn.slice(looseName(best.n).length);
   if (rest){
     if (fl.some(f => looseName(f) === rest)) return null;                  // 「シリーズ 既存の味」です
+    // 味の欄がない詰め合わせ（虹色）の商品や、残りが「〇〇アソート」のときは、新しい味ではなく同じ商品の書き方の違いとみなします
+    // （「コグミ ゼルダの伝説 ルピーアソート」→ カタログの「コグミ ゼルダの伝説」）。名前合わせの候補に回ります
+    if (!fl.length && (isRb(best.c) || /アソート|ミックス|詰め?合わ?せ/.test(rest))) return null;
+    // 同じシリーズの別の商品の名前に、残りの部分が含まれているときも新しい味ではありません
+    // （「コグミ ゼルダ」→ カタログの「コグミ ゼルダの伝説」）。名前合わせの候補に回ります
+    const bl = looseName(best.n);
+    if (rest.length >= 2 && catLoose().some(([c, cn]) => c !== best && cn.startsWith(bl) && cn.slice(bl.length).includes(rest))) return null;
     const raw = it.name.normalize('NFKC').replace(best.n.normalize('NFKC'), '').trim() || it.flavor || '';
     return {c:best, flavor:raw};
   }
@@ -7754,8 +7898,141 @@ function matchListHTML(){
     }
   }
   return rows.length ? `<div class="panel" id="match-panel"><h3>カタログと名前をそろえる<span class="s">${rows.length}件</span></h3>
-    <p class="hint" style="margin:0">カタログに入っていない名前で記録したグミのうち、近いグミがカタログに入ったものです。合わせると、同じ名前の記録がまとめて変わります（写真や評価はそのまま）。</p>${rows.join('')}</div>` : '';
+    <p class="hint" style="margin:0">カタログに入っていない名前で記録したグミのうち、近いグミがカタログに入ったものです。合わせると、同じ名前の記録がまとめて変わります（写真や評価はそのまま）。</p>
+    ${rows.length > 1 ? '<div class="btn-row"><button type="button" class="btn sm" id="ma-open">まとめて確認する</button></div>' : ''}${rows.join('')}</div>` : '';
 }
+/* ========== カタログにないグミの一覧 ==========
+   記録の中で、カタログに載っていない名前をすべて並べます。近いグミがカタログにあれば名前を合わせる候補を、
+   なければ（または「ちがう」を押したものは）カタログへの提案リンクを出します。 */
+// カタログにない名前の記録を、名前ごとに1件（いちばん新しい記録）ずつ返します
+function notCatNames(){
+  const seen = new Set(), out = [];
+  for (const it of [...realItems()].sort(byDateDesc)){
+    if (seen.has(it.name) || !it.name) continue;
+    seen.add(it.name);
+    if (!inCatalog(it.name)) out.push(it);
+  }
+  return out;
+}
+// 一覧シートの中身を描き直します
+function renderNotCat(){
+  const all = realItems(), match = [], other = [];
+  for (const it of notCatNames()){
+    const cnt = all.filter(x => x.name === it.name).length;
+    const head = `<div class="nc-name">${esc(it.name)}</div><div class="nc-sub">${esc(it.maker || 'メーカー未入力')}・${cnt}件</div>`;
+    const mh = needsMatch(it) ? matchHTML(it) : '';
+    if (mh){
+      match.push(`<div class="nc-row">${head}${mh}</div>`);
+      continue;
+    }
+    const nf = newFlavorOf(it);
+    other.push(`<div class="nc-row">${head}${nf ? newFlavorHTML(it, nf)
+      : `<p class="suggest hint">${S.nameSkip.includes(it.name) ? '近いグミは「ちがう」にしたグミです。' : 'カタログに近いグミがありません。'}<a ${sgAttrs(sgData(it))}>カタログに提案する</a></p>`}</div>`);
+  }
+  $('#nc-list').innerHTML = (match.length || other.length)
+    ? (match.length ? `<p class="nc-h">近いグミがカタログにあるもの（${match.length}）</p>${match.join('')}` : '')
+      + (other.length ? `<p class="nc-h">カタログにないもの（${other.length}）</p><p class="hint" style="margin:0">提案してもらえると、確認してカタログに追加します。</p>${other.join('')}` : '')
+    : '<p class="hint">記録したグミは、すべてカタログに載っています。</p>';
+}
+function openNotCat(){
+  renderNotCat();
+  openSheet('#sh-notcat');
+}
+$('#nc-list').addEventListener('click', e => onMatchClick(e, () => {
+  renderNotCat();
+  if (!$('#sh-settings').hidden) renderSettings();
+}));
+
+/* ========== カタログと名前をまとめてそろえる ==========
+   カタログが更新されたあと、近いグミが入った記録をまとめてチェックボックスで確認できるようにします。
+   最初は全部にチェックが入っていて、外したものはそのまま（設定の一覧に残ります）。 */
+// 最後にまとめて確認した時点の、カタログのいちばん新しい追加日です
+const LS_MATCHASK = 'gumilog.matchAsked.v1';
+// そろえる候補の一覧 [{old: 今の名前, ms: catMatches の結果}] を、新しい記録の順に返します
+function matchCands(){
+  const seen = new Set(), out = [];
+  for (const it of [...realItems()].sort(byDateDesc)){
+    if (seen.has(it.name)) continue;
+    seen.add(it.name);
+    if (!needsMatch(it)) continue;
+    const ms = catMatches(it);
+    if (ms.length) out.push({old:it.name, ms});
+  }
+  return out;
+}
+// シートに出している候補です（「合わせる」を押したときに使います）
+let MA_LIST = [];
+// 行の「→ 新しい名前」の部分です。j が 'skip' なら、候補を出さなくする旨を出します
+const maNewHTML = (x, j) => j === 'skip' ? '→ このままにして、もう候補を出さない'
+  : `→ ${esc(x.ms[j].name)}<span class="cm-m">（${esc(x.ms[j].c.m)}）</span>`;
+// まとめて確認するシートを開きます。候補がなければ何もしません
+function openMatchAll(){
+  MA_LIST = matchCands();
+  if (!MA_LIST.length) return false;
+  $('#ma-list').innerHTML = MA_LIST.map((x, i) => `<label class="ma-row"><input type="checkbox" data-ma="${i}" checked>
+    <span><div class="ma-old">${esc(x.old)}</div><div class="ma-new" data-ma-new="${i}">${maNewHTML(x, 0)}</div>
+    <select data-ma-sel="${i}" aria-label="合わせる名前">${x.ms.map((m, j) => `<option value="${j}">${esc(m.name)}（${esc(m.c.m)}）</option>`).join('')}<option value="skip">どれでもない（もう候補を出さない）</option></select></span></label>`).join('');
+  $('#ma-go').disabled = false;
+  openSheet('#sh-matchall');
+  return true;
+}
+// カタログに新しいグミが入っていて、そろえる候補があれば、まとめて確認するシートを出します
+let matchAskT = 0;
+function offerMatchAll(){
+  if (S.readOnly || isDemo()) return;
+  const top = newestCat();
+  if (!top || top <= (lsGet(LS_MATCHASK, '') || '')) return;
+  clearTimeout(matchAskT);
+  matchAskT = setTimeout(() => {
+    // ほかのシートが開いている間は待ちます
+    if ([...document.querySelectorAll('.sheet')].some(x => !x.hidden)){
+      matchAskT = setTimeout(offerMatchAll, 2000);
+      return;
+    }
+    // 出したら、このカタログの分は確認済みにします（候補がないときは、記録の読み込み後にまた調べます）
+    if (openMatchAll()) lsSet(LS_MATCHASK, top);
+  }, 1500);
+}
+// 選択欄を変えたら「→ 新しい名前」の表示も変え、チェックを入れます
+$('#ma-list').addEventListener('change', e => {
+  const sel = e.target.closest('[data-ma-sel]');
+  if (!sel) return;
+  const i = sel.dataset.maSel, x = MA_LIST[+i];
+  $('#ma-list').querySelector(`[data-ma-new="${i}"]`).innerHTML = maNewHTML(x, sel.value === 'skip' ? 'skip' : +sel.value);
+  $('#ma-list').querySelector(`[data-ma="${i}"]`).checked = true;
+});
+// 「合わせる」：チェックの入った記録を、選んだカタログの名前に変えます
+$('#ma-go').addEventListener('click', async () => {
+  const btn = $('#ma-go');
+  if (btn.disabled) return;
+  btn.disabled = true;
+  let n = 0, names = 0, skips = 0;
+  try {
+    for (const cb of $('#ma-list').querySelectorAll('input[data-ma]')){
+      if (!cb.checked) continue;
+      const x = MA_LIST[+cb.dataset.ma], sel = $('#ma-list').querySelector(`[data-ma-sel="${cb.dataset.ma}"]`);
+      // 「どれでもない」は名前を変えず、このグミにはもう候補を出さないようにします
+      if (sel && sel.value === 'skip'){
+        skipMatch(x.old);
+        skips++;
+        continue;
+      }
+      const m = x.ms[sel ? +sel.value : 0];
+      const r = await renameToCatalog(x.old, m.c, m.f);
+      n += r.n;
+      names++;
+    }
+    closeSheet('#sh-matchall');
+    if (skips) renderAll();
+    toast(names ? `${names}種類（${n}件）の記録をカタログの名前にしました${skips ? `（${skips}種類は候補を出さないようにしました）` : ''}`
+      : skips ? `${skips}種類のグミに候補を出さないようにしました` : '何も変えませんでした');
+    if (!$('#sh-settings') || !$('#sh-settings').hidden) renderSettings();
+  }
+  catch(e){
+    toast('名前を変えられませんでした');
+    btn.disabled = false;
+  }
+});
 // お知らせシートでいま選んでいるタブです（'app' か 'cat'）
 let UPD_TAB = 'app';
 // お知らせを最初に何件まで出すかです。「もっと見る」を押すと全部出します（タブを切りかえたり開き直したりすると戻ります）
@@ -7795,6 +8072,25 @@ function markSeen(k){
   lsSet(LS_NEWS, v);
 }
 // お知らせボタンの未読のしるしを、出すか隠すか更新します
+// 設定ボタンに、カタログと名前をそろえられる記録（グミの種類）の数を出します
+let setBadgeKey = '';
+function renderSetBadge(){
+  const b = $('#set-badge');
+  if (!b) return;
+  if (S.readOnly || isDemo()){
+    b.hidden = true;
+    return;
+  }
+  // 記録の名前・カタログ・「ちがう」が変わったときだけ数え直します
+  catList();
+  const key = [...new Set(realItems().map(i => i.name))].join('\n') + '|' + catCache.list.length + '|' + S.nameSkip.length;
+  if (key === setBadgeKey) return;
+  setBadgeKey = key;
+  const n = matchCands().length;
+  b.hidden = !n;
+  b.textContent = n > 99 ? '99+' : n;
+  $('#btn-settings').setAttribute('aria-label', n ? `設定とデータ（カタログと名前をそろえられるグミ ${n}件）` : '設定とデータ');
+}
 function renderNewsBadge(){
   const dot = $('#news-dot');
   if (!dot) return;
@@ -7864,6 +8160,9 @@ function storageHTML(){
       <p class="hint" style="margin:0">使用量は、この端末に保存できる量のめやすに対する割合です。元の画質の写真は登録した翌日いっぱいで圧縮されます。</p>${btn}`;
 }
 // 設定シートの中身を描き、書き出し・読み込みのボタンに動きをつけます
+// 設定で開いているグループ（'' ならメニュー）と、グループの見出しです
+let SET_GRP = '';
+const SET_GRPS = {data:'データ', look:'見た目', catalog:'カタログについて', input:'記録の候補', share:'共有の文章'};
 function renderSettings(){
   // お店の候補などの部品は、本体のHTMLを入れたあとで描きます
   setTimeout(() => {
@@ -7875,28 +8174,60 @@ function renderSettings(){
   }, 0);
   const real = realItems();
   const dl = !!S.cap.downloads || !IN_CLAUDE;   // Claude の外では、ふつうのブラウザのダウンロードが使えます
+  // カタログにない名前・そろえられる名前の数（メニューに出します）
+  const ncN = notCatNames().length, mlH = matchListHTML(), mcN = matchCands().length;
+  const g = SET_GRP;
+  // メニューの1行です（key：グループ、ic：絵文字、t：見出し、d：説明、badge：数のしるし）
+  const inner = (ic, t, d, badge) => `<span class="ic" aria-hidden="true">${ic}</span>
+    <span><b>${t}</b><small>${d}</small></span>${badge ? `<span class="badge">${badge}</span>` : '<span></span>'}<span class="chev" aria-hidden="true"></span>`;
+  const item = (key, ic, t, d, badge) => `<button type="button" class="set-item" data-grp="${key}">${inner(ic, t, d, badge)}</button>`;
+  $('#set-title').textContent = SET_GRPS[g] || '設定とデータ';
+  $('#set-back').hidden = !g;
   $('#settings-body').innerHTML = `
+    <p class="set-sec" ${g ? 'hidden' : ''}>グミカタログ</p>
+    <div class="set-menu" ${g ? 'hidden' : ''}>
+      <button type="button" class="set-item" id="nc-open">${inner('🔍', 'カタログにないグミ', ncN ? `${ncN}種類・${mcN ? '名前をそろえる／' : ''}提案する` : '記録したグミは、すべてカタログに載っています', mcN || '')}</button>
+      <a class="set-item" ${sgAttrs({})}>${inner('📮', '新しいグミを提案する', 'カタログにないグミを見つけたら教えてください')}</a>
+      ${item('catalog', '📖', 'カタログについて', `${catList().length}シリーズ・最終更新 ${esc(REMOTE_CAT_AT || CATALOG_AT)}`)}
+    </div>
+    <p class="set-sec" ${g ? 'hidden' : ''}>設定</p>
+    <div class="set-menu" ${g ? 'hidden' : ''}>
+      ${item('data', '💾', 'データ', `${S.mode === 'cloud' ? 'クラウドに保存' : 'この端末に保存'}・${real.length}件・書き出し／読み込み`)}
+      ${item('look', '🎨', '見た目', 'カラーテーマ・表示')}
+      ${item('input', '🏷️', '記録の候補', 'お店・タグ')}
+      ${item('share', '💬', '共有の文章', '共有テンプレート・まとめの文章')}
+    </div>
+    <div class="set-grp" ${g === 'data' ? '' : 'hidden'}>
     <div class="panel"><h3>保存先</h3>
       <p>${S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
       <p>記録数：<b class="num">${real.length}</b>件</p>${storageHTML()}</div>
+    <div class="panel"><h3>書き出し</h3>
+      <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
+      <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
+    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録と写真を戻せます。同じ記録は重複せず、すでにある写真はそのままです。</p>
+      <div class="btn-row"><label class="btn sm" for="im-file">JSONを読み込む</label><input type="file" id="im-file" accept="application/json,.json" hidden></div></div>
+    </div>
+    <div class="set-grp" ${g === 'look' ? '' : 'hidden'}>
     <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
     <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
+    </div>
+    <div class="set-grp" ${g === 'catalog' ? '' : 'hidden'}>
     <div class="panel"><h3>グミカタログ</h3>
       <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
       <div class="btn-row"><a class="btn sm" ${sgAttrs({})}>新しいグミを教える</a></div>
       <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
       ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
       <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
-    ${matchListHTML()}
+    ${mlH}
+    </div>
+    <div class="set-grp" ${g === 'input' ? '' : 'hidden'}>
     <div class="panel"><h3>お店の候補<span class="s">記録するときに選べるお店</span></h3><div id="shops-editor" class="settings-list"></div></div>
     <div class="panel"><h3>タグの候補<span class="s">記録につけられるタグ</span></h3><div id="tags-editor" class="settings-list"></div></div>
+    </div>
+    <div class="set-grp" ${g === 'share' ? '' : 'hidden'}>
     <div class="panel"><h3>共有の文章<span class="s">テンプレート</span></h3><div id="tpl-editor"></div></div>
     <div class="panel"><h3>まとめの文章<span class="s">「○月のまとめ」の共有に入れる項目</span></h3><div id="month-items" class="month-items"></div></div>
-    <div class="panel"><h3>書き出し</h3>
-      <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
-      <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
-    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録と写真を戻せます。同じ記録は重複せず、すでにある写真はそのままです。</p>
-      <div class="btn-row"><label class="btn sm" for="im-file">JSONを読み込む</label><input type="file" id="im-file" accept="application/json,.json" hidden></div></div>
+    </div>
 `;
   // ファイルを保存する関数です。Claude のダウンロード機能がなければ、ふつうのブラウザのダウンロードを使います
   const save = async (filename, data) => {
@@ -8051,6 +8382,7 @@ $('#data-seg').addEventListener('click', e => {
 $('#fab').addEventListener('click', () => openForm(null, 'new'));
 // 設定ボタン
 $('#btn-settings').addEventListener('click', () => {
+  SET_GRP = '';
   renderSettings();
   openSheet('#sh-settings');
 });
@@ -8279,6 +8611,20 @@ wireSuggestForm();
 // 詳細シート・設定シートの「カタログと名前をそろえる」ボタン。処理のあと、それぞれのシートを描き直します
 $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT_ID)));
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
+$('#settings-body').addEventListener('click', e => e.target.closest('#ma-open') && openMatchAll());
+$('#settings-body').addEventListener('click', e => e.target.closest('#nc-open') && openNotCat());
+// 設定のメニューからグループを開く／もどるボタンでメニューに戻ります
+$('#settings-body').addEventListener('click', e => {
+  const b = e.target.closest('.set-item[data-grp]');
+  if (!b) return;
+  SET_GRP = b.dataset.grp;
+  renderSettings();
+  $('#sh-settings').querySelectorAll('.sheet-p, #settings-body').forEach(x => { x.scrollTop = 0; });
+});
+$('#set-back').addEventListener('click', () => {
+  SET_GRP = '';
+  renderSettings();
+});
 $('#settings-body').addEventListener('click', e => e.target.closest('#shrink-big') && askShrinkBigNow());
 jarSetup();
 // 前回開いていたタブで始めます（なくなった 'badge' タブは「ぐみ棚」に、'stats' タブは「データ」に読みかえます）
