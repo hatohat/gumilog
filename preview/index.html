@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="74b9475562"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="9d32ebeefe"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2256,7 +2256,27 @@ a.set-item{text-decoration:none}
   background:var(--accent)
 }
 /* まだとっていない称号のメダルは、絵文字をうすい白黒にします */
-.medal.off text {
+.medal-w {
+  position:relative;
+  display:inline-block;
+  flex:none;
+  line-height:0;
+  vertical-align:middle
+}
+.medal-w > svg{display:block}
+.medal-ic {
+  position:absolute;
+  left:0;
+  top:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  pointer-events:none;
+  color:#3A1830;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
+}
+.medal-w.off .medal-ic {
   filter:grayscale(1);
   opacity:.4
 }
@@ -2974,6 +2994,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:195, k:'p', at:'2026-11-10 23:57', t:'称号の画面で、一部のメダルの絵文字が中央からずれて表示される不具合を修正しました。'},
   {v:194, k:'f', at:'2026-11-08 06:19', t:'設定の最初の画面から、カタログにないグミの確認と新しいグミの提案ができるようにしました。名前をそろえられるグミがあるときは、設定ボタンに数を表示します。'},
   {v:193, k:'p', at:'2026-11-08 06:19', t:'お知らせや設定などを開いている間に、後ろの画面がスクロールしたり、画面全体が上下に動いたりする不具合を修正しました。'},
   {v:192, k:'p', at:'2026-11-08 06:19', t:'設定画面を「データ」「見た目」「グミカタログ」「記録の候補」「共有の文章」に分け、見やすく変更しました。'},
@@ -5578,11 +5599,15 @@ function medalSVG(tier, icon, size = 56){
   const G = MEDAL_G[tier || 'none'];
   const stops = G.map((h, i) => `<stop offset="${i / (G.length - 1)}" stop-color="${h}"/>`).join('');
   const rib = MEDAL_RIB[tier || 'none'];
-  return `<svg class="medal${tier ? ' ' + tier : ' off'}" width="${size}" height="${Math.round(size * 1.15)}" viewBox="0 0 60 69" aria-hidden="true">
+  // 絵文字は SVG の文字ではなく、上に重ねた HTML の箱のまん中に置きます。
+  // SVG の文字の中央そろえは、iPhone の絵文字だと左上にずれることがあるためです。
+  const em = String(icon || '').replace(/\uFE0F/g, '');
+  const ic = em ? `<span class="medal-ic" style="width:${size}px;height:${size}px;font-size:${(size * 22 / 60).toFixed(1)}px">${em}</span>` : '';
+  return `<span class="medal-w${tier ? '' : ' off'}" style="width:${size}px;height:${Math.round(size * 1.15)}px"><svg class="medal${tier ? ' ' + tier : ' off'}" width="${size}" height="${Math.round(size * 1.15)}" viewBox="0 0 60 69" aria-hidden="true">
     <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs>
     <path d="M18 44 11 67l8-4 5 6 7-21z" fill="${rib}"/><path d="M42 44l7 23-8-4-5 6-7-21z" fill="${rib}" opacity=".85"/>
     <circle cx="30" cy="30" r="26" fill="url(#${id})"/><circle cx="30" cy="30" r="21" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2"/>
-    <text x="30" y="31.5" text-anchor="middle" dominant-baseline="middle" font-size="22">${icon}</text></svg>`;
+    </svg>${ic}</span>`;
 }
 
 // 称号 1 つ分のカード（称号タブに並べるボタン）を作ります。
