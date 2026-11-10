@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="5a9ad87b5a"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="3d244f026a"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2971,9 +2971,12 @@ const paintOf = k => isRb(k) ? 'var(--rainbow)' : colorOf(k);   // CSS の背景
 // メーカー名の候補です
 const MAKERS = ['明治','UHA味覚糖','カンロ','ブルボン','ハリボー','春日井製菓','ロッテ','森永製菓','ノーベル製菓','カバヤ食品','不二家','トローリ','セブンプレミアム','ファミマル','ローソン'];
 // お店の初期候補です
-const SHOPS = ['セブン','ファミマ','ローソン','ミニストップ','デイリー','スーパー','ドラッグストア','駅ナカ'];
+const SHOPS = ['セブンイレブン','ファミリーマート','ローソン','ミニストップ','NewDays','デイリー','スーパー','ドラッグストア'];
+// 昔の初期候補のまま一度も変えずに保存されたお店の一覧は、新しい初期候補に置きかえます
+const OLD_SHOPS = [['セブン','ファミマ','ローソン','ミニストップ','デイリー','スーパー','ドラッグストア','駅ナカ']];
+const upgradeShops = v => Array.isArray(v) && OLD_SHOPS.some(o => o.join('|') === v.join('|')) ? [...SHOPS] : v;
 // コンビニとして扱うお店です
-const CONBINI = ['セブン','ファミマ','ローソン'];
+const CONBINI = ['セブンイレブン','ファミリーマート','ローソン','セブン','ファミマ'];
 // タグの初期候補です
 const TAGS = ['新商品','期間限定','店舗限定','リピ確定','推し'];
 // 昔の初期候補のまま一度も変えずに保存されたタグの一覧は、新しい初期候補に置きかえます
@@ -2994,6 +2997,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:197, k:'p', at:'2026-11-11 00:14', t:'共有の文章の初期テンプレートを、商品名・ひとこと・評価の間に空行が入る形に変更しました。お店の初期候補を、セブンイレブン・ファミリーマート・NewDays などの表記に変更しました。'},
   {v:196, k:'p', at:'2026-11-11 00:03', t:'詳細画面で評価やひとことを入力した直後に共有すると、その内容が共有の文章に入らない不具合を修正しました。'},
   {v:195, k:'p', at:'2026-11-10 23:57', t:'称号の画面で、一部のメダルの絵文字が中央からずれて表示される不具合を修正しました。'},
   {v:194, k:'f', at:'2026-11-08 06:19', t:'設定の最初の画面から、カタログにないグミの確認と新しいグミの提案ができるようにしました。名前をそろえられるグミがあるときは、設定ボタンに数を表示します。'},
@@ -3418,20 +3422,20 @@ function bearSVG(colorKey, size=34){
 /* ========== お試し用のデータ（記録がまだ1件も無いときだけ表示します） ==========
    d は「何日前に買ったか」です。下の map で、日付や ID などを付け足して記録の形にします。 */
 const DEMO = [
-  {name:'果汁グミ ぶどう',maker:'明治',flavor:'ぶどう',color:'grape',shop:'セブン',price:140,d:1,rating:4,hard:2,sour:2,tags:['リピ確定'],note:'安定のおいしさ。迷ったらこれ'},
+  {name:'果汁グミ ぶどう',maker:'明治',flavor:'ぶどう',color:'grape',shop:'セブンイレブン',price:140,d:1,rating:4,hard:2,sour:2,tags:['リピ確定'],note:'安定のおいしさ。迷ったらこれ'},
   {name:'シゲキックス スーパーハード',maker:'UHA味覚糖',flavor:'レモン',color:'lemon',shop:'ローソン',price:150,d:1,rating:5,hard:5,sour:5,tags:['推し'],note:'すっぱさで目が覚める'},
-  {name:'ピュレグミ レモン',maker:'カンロ',flavor:'レモン',color:'lemon',shop:'ファミマ',price:162,d:3,rating:4,hard:2,sour:4,tags:[],note:'粉の酸っぱさがクセになる'},
-  {name:'コロロ マスカット',maker:'UHA味覚糖',flavor:'マスカット',color:'melon',shop:'セブン',price:140,d:4,rating:5,hard:1,sour:2,tags:['推し'],note:'ほぼ果実。ぷるぷる'},
+  {name:'ピュレグミ レモン',maker:'カンロ',flavor:'レモン',color:'lemon',shop:'ファミリーマート',price:162,d:3,rating:4,hard:2,sour:4,tags:[],note:'粉の酸っぱさがクセになる'},
+  {name:'コロロ マスカット',maker:'UHA味覚糖',flavor:'マスカット',color:'melon',shop:'セブンイレブン',price:140,d:4,rating:5,hard:1,sour:2,tags:['推し'],note:'ほぼ果実。ぷるぷる'},
   {name:'フェットチーネグミ イタリアングレープ',maker:'ブルボン',flavor:'グレープ',color:'grape',shop:'ドラッグストア',price:98,d:6,rating:4,hard:3,sour:3,tags:[],note:''},
   {name:'ゴールドベア',maker:'ハリボー',flavor:'ミックス',color:'orange',shop:'スーパー',price:258,d:8,rating:3,hard:5,sour:1,tags:[],note:'あごが鍛えられる'},
   {name:'つぶグミ',maker:'春日井製菓',flavor:'フルーツミックス',color:'straw',shop:'スーパー',price:178,d:9,rating:4,hard:3,sour:2,tags:[],note:''},
-  {name:'忍者めし 鋼',maker:'UHA味覚糖',flavor:'グレープ',color:'grape',shop:'ファミマ',price:150,d:12,rating:4,hard:5,sour:2,tags:['新商品'],note:'噛みごたえ最強クラス'},
+  {name:'忍者めし 鋼',maker:'UHA味覚糖',flavor:'グレープ',color:'grape',shop:'ファミリーマート',price:150,d:12,rating:4,hard:5,sour:2,tags:['新商品'],note:'噛みごたえ最強クラス'},
   {name:'タフグミ',maker:'カバヤ食品',flavor:'ソーダ',color:'soda',shop:'ローソン',price:120,d:14,rating:3,hard:4,sour:3,tags:[],note:''},
   {name:'果汁グミ ぶどう',maker:'明治',flavor:'ぶどう',color:'grape',shop:'ミニストップ',price:140,d:17,rating:4,hard:2,sour:2,tags:['リピ確定'],note:''},
-  {name:'ピュレグミ コーラ',maker:'カンロ',flavor:'コーラ',color:'cola',shop:'セブン',price:162,d:21,rating:5,hard:2,sour:3,tags:['期間限定'],note:'コーラ×すっぱ粉が天才'},
-  {name:'さけるグミ',maker:'UHA味覚糖',flavor:'',color:'straw',shop:'駅ナカ',price:150,d:26,rating:3,hard:3,sour:2,tags:[],note:'さいて食べるのが楽しい'},
-  {name:'コロロ グレープ',maker:'UHA味覚糖',flavor:'グレープ',color:'grape',shop:'セブン',price:140,d:33,rating:5,hard:1,sour:2,tags:[],note:''},
-  {name:'シゲキックス ソーダ',maker:'UHA味覚糖',flavor:'ソーダ',color:'soda',shop:'ファミマ',price:150,d:38,rating:4,hard:4,sour:5,tags:['新商品'],note:''}
+  {name:'ピュレグミ コーラ',maker:'カンロ',flavor:'コーラ',color:'cola',shop:'セブンイレブン',price:162,d:21,rating:5,hard:2,sour:3,tags:['期間限定'],note:'コーラ×すっぱ粉が天才'},
+  {name:'さけるグミ',maker:'UHA味覚糖',flavor:'',color:'straw',shop:'NewDays',price:150,d:26,rating:3,hard:3,sour:2,tags:[],note:'さいて食べるのが楽しい'},
+  {name:'コロロ グレープ',maker:'UHA味覚糖',flavor:'グレープ',color:'grape',shop:'セブンイレブン',price:140,d:33,rating:5,hard:1,sour:2,tags:[],note:''},
+  {name:'シゲキックス ソーダ',maker:'UHA味覚糖',flavor:'ソーダ',color:'soda',shop:'ファミリーマート',price:150,d:38,rating:4,hard:4,sour:5,tags:['新商品'],note:''}
 ].map((g,i) => ({id:'demo'+i, kind:'gummy', ...g, date:shift(g.d), createdAt:Date.now()-g.d*86400000-i, demo:true}));
 
 /* ========== アプリの状態 ==========
@@ -3447,7 +3451,7 @@ const S = {
   unsubs: [], readOnly: false,
   // お店の候補です（保存が無い・空なら初期候補）
   shops: (() => {
-    const v = lsGet(LS_SHOPS, null);
+    const v = upgradeShops(lsGet(LS_SHOPS, null));
     return Array.isArray(v) && v.length ? v : [...SHOPS];
   })(),
   // タグの候補です（昔の初期候補のままなら新しい初期候補に置きかえます）
@@ -3589,7 +3593,7 @@ async function connect(){
   S.unsubs.push(S.cap.col.doc('settings').onSnapshot(snap => {
     const d = snap.exists ? snap.data() : null;
     if (d && Array.isArray(d.shops) && d.shops.length){
-      S.shops = d.shops.map(String);
+      S.shops = upgradeShops(d.shops.map(String));
       lsSet(LS_SHOPS, S.shops);
     }
     if (d && Array.isArray(d.tags)){
@@ -7753,8 +7757,8 @@ const POST_TAGS = '#ぐみろぐ #グミ';
 const dotsTxt = n => '●'.repeat(n) + '○'.repeat(5 - n);
 // テンプレートは {項目} の差し込み口がある普通の文章です。その記録で空になる差し込み口を含む行は、行ごと消します
 const POST_TPL_DEFAULT = {
-  detail: `【{商品名}】\n{ひとこと}\nおいしさ：{おいしさ}\nかたさ：{かたさ}\nすっぱさ：{すっぱさ}\n購入場所：{お店}\n\n${POST_TAGS}`,
-  simple: `【{商品名}】\n{ひとこと}\n${POST_TAGS}`,
+  detail: `【{商品名}】\n\n{ひとこと}\n\nおいしさ：{おいしさ}\nかたさ：{かたさ}\nすっぱさ：{すっぱさ}\n購入場所：{お店}\n\n${POST_TAGS}`,
+  simple: `【{商品名}】\n\n{ひとこと}\n\n${POST_TAGS}`,
 };
 const POST_TPL_NAMES = {detail:'くわしく', simple:'シンプル'};
 // テンプレートで使える差し込み口の名前の一覧です
