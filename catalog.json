@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08",
+ "updated": "2026-11-11",
  "items": [
   {
    "n": "果汁グミ",
@@ -3623,9 +3623,11 @@
    "n": "コグミ ゼルダの伝説",
    "r": "こぐみ ぜるだのでんせつ",
    "m": "UHA味覚糖",
+   "p": 181,
+   "pt": "incl",
    "rel": "2026-11-03",
    "url": "https://www.instagram.com/p/DfTYrajz7jT/",
-   "updated": "2026-11-08",
+   "updated": "2026-11-11",
    "c": "rainbow",
    "added": "2026-11-08"
   },
@@ -3675,6 +3677,34 @@
    "url": "https://animeanime.jp/article/2026/08/05/101755.html",
    "updated": "2026-11-08",
    "added": "2026-11-08"
+  },
+  {
+   "n": "mofusand ぷよむにグミ",
+   "r": "もふさんど ぷよむにぐみ",
+   "m": "栄光堂ファクトリー",
+   "f": [
+    "キウイ",
+    "ピーチ",
+    "オレンジ"
+   ],
+   "p": 100,
+   "pt": "excl",
+   "rel": "2025-09-01",
+   "url": "https://news.nissyoku.co.jp/foodsnews/250820-28",
+   "updated": "2026-11-11",
+   "added": "2026-11-11"
+  },
+  {
+   "n": "mofusand ぷよむにグミ 3種のフルーツミックス",
+   "r": "もふさんど ぷよむにぐみ さんしゅのふるーつみっくす",
+   "m": "栄光堂ファクトリー",
+   "p": 300,
+   "pt": "excl",
+   "rel": "2026-04-06",
+   "url": "https://report.iko-yo.net/articles/30911",
+   "updated": "2026-11-11",
+   "c": "rainbow",
+   "added": "2026-11-11"
   }
  ]
 }
