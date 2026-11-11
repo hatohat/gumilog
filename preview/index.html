@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="baa21ce5ad"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="25e392a647"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2750,6 +2750,16 @@ a.set-item{text-decoration:none}
 </div>
 
 <!-- ===== カタログへの提案のおさそい（カタログにないグミを記録したときに表示） ===== -->
+<!-- ===== クラウドへの保存のおさそい（公開サイトで、まだログインしていない人に一度だけ出します） ===== -->
+<div class="sheet" id="sh-cloudask" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ca-title">
+    <div class="sheet-h"><h2 id="ca-title">クラウドに保存してみませんか？</h2></div>
+    <p class="sg-text">Googleでログインすると、記録と写真がクラウドにも保存されます。スマホを替えたりブラウザのデータを消したりしても、記録が消えずに戻せます。</p>
+    <p class="hint" style="margin:0">ログインしなくても、今までどおりこの端末だけで使えます。設定の「データ」からいつでもログインできます。</p>
+    <div class="sheet-actions"><button class="btn ghost" type="button" data-close>あとで</button><button class="btn primary" type="button" id="ca-go">設定を開く</button></div>
+  </div>
+</div>
+
 <div class="sheet" id="sh-suggest" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="sg-title">
     <div class="sheet-h"><h2 id="sg-title">カタログに提案してみませんか？</h2></div>
@@ -3001,6 +3011,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:199, k:'f', at:'2026-11-12 03:57', t:'設定に「お問い合わせ」と「プライバシーポリシー」を追加しました。'},
   {v:198, k:'M', at:'2026-11-12 02:50', t:'Googleでログインして、記録・写真・設定をクラウドに保存できるようにしました。機種変更やブラウザのデータ削除でも記録が消えず、ほかの端末でも同じ記録を見られます。'},
   {v:197, k:'p', at:'2026-11-11 00:14', t:'共有の文章の初期テンプレートを、商品名・ひとこと・評価の間に空行が入る形に変更しました。お店の初期候補を、セブンイレブン・ファミリーマート・NewDays などの表記に変更しました。'},
   {v:196, k:'p', at:'2026-11-11 00:03', t:'詳細画面で評価やひとことを入力した直後に共有すると、その内容が共有の文章に入らない不具合を修正しました。'},
@@ -6624,6 +6635,7 @@ function renderAll(){
   renderSetBadge();
   setTimeout(fixDupNames, 0);
   offerMatchAll();
+  offerCloud();
   const demo = isDemo();
   $('#demo-banner').hidden = !demo;
   // 保存先（クラウド / この端末）の表示
@@ -8614,6 +8626,31 @@ function openMatchAll(){
 }
 // カタログに新しいグミが入っていて、そろえる候補があれば、まとめて確認するシートを出します
 let matchAskT = 0;
+// クラウドへの保存のおさそいを、まだログインしていない人に一度だけ出します。
+// 記録が 1 件以上あるとき（はじめての人は、最初の記録を保存したあと）に出します。
+const LS_CLOUDASK = 'gumilog-pv.cloudAsk.v1';
+let cloudAskT = 0;
+function offerCloud(){
+  if (IN_CLAUDE || CS.user || syncState().uid || lsGet(LS_CLOUDASK, 0) || isDemo() || S.mode === 'cloud') return;
+  clearTimeout(cloudAskT);
+  cloudAskT = setTimeout(() => {
+    if (CS.user || lsGet(LS_CLOUDASK, 0) || isDemo()) return;
+    // ほかのシート（記録・称号のお祝い・名前合わせなど）が開いている間や、記録したあとのお知らせが出ている間は待ちます
+    if ([...document.querySelectorAll('.sheet')].some(x => !x.hidden) || !$('#snack').hidden){
+      cloudAskT = setTimeout(offerCloud, 3000);
+      return;
+    }
+    lsSet(LS_CLOUDASK, Date.now());
+    openSheet('#sh-cloudask');
+  }, 4000);
+}
+$('#ca-go').addEventListener('click', () => {
+  closeSheet('#sh-cloudask');
+  SET_GRP = 'data';
+  renderSettings();
+  openSheet('#sh-settings');
+});
+
 function offerMatchAll(){
   if (S.readOnly || isDemo()) return;
   const top = newestCat();
