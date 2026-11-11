@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="48c7e631e8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="6bf5e07bc6"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3820,13 +3820,28 @@ async function cloudLogout(){
   renderCloud();
   toast('ログアウトしました');
 }
+// プレビュー版（テスト用のサーバーにつないでいる版）かどうかです
+const CLOUD_TEST = CLOUD_API.includes('-preview.');
 // アカウントの削除：サーバーの記録と設定をすべて消し、ログインのアカウントも消します（この端末の記録は残ります）
+// プレビュー版では、テスト用のサーバーのデータだけを消します。ログインのアカウントは本番と共通なので消しません
+// （消すと、もう一度ログインしたときに別の人として扱われ、本番に預けた記録が見えなくなるためです）
 async function cloudDeleteAccount(){
   if (!CS.user) return;
-  if (!confirm('クラウドに保存した記録と設定をすべて消して、アカウントを削除しますか？\nこの操作は取り消せません。この端末の記録は残ります。')) return;
+  if (!confirm(CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定をすべて消しますか？\n本番のデータとログインのアカウントはそのままです。'
+    : 'クラウドに保存した記録・写真・設定をすべて消して、アカウントを削除しますか？\nこの操作は取り消せません。この端末の記録は残ります。')) return;
   try {
     const r = await fetch(CLOUD_API + '/v1/account', {method:'DELETE', headers:{Authorization:'Bearer ' + await CS.user.getIdToken()}});
     if (!r.ok) throw new Error('http ' + r.status);
+    if (CLOUD_TEST){
+      // 同期の記録を最初からにして、ログアウトします（この端末の記録は残ります）
+      localStorage.removeItem(LS_SYNC);
+      await CS.fb.signOut(CS.auth).catch(() => {});
+      CS.user = null;
+      CS.st = 'off';
+      renderCloud();
+      toast('テスト用のサーバーのデータを消しました');
+      return;
+    }
     try {
       await CS.fb.deleteUser(CS.user);
     } catch(e){
@@ -4122,9 +4137,10 @@ function cloudPanelInner(){
     <p>${esc(CS.user.email || 'Googleアカウント')} でログインしています。記録・写真・設定は、この端末とクラウドの両方に保存されます。</p>
     <p class="hint" style="margin:0">${esc(state)}</p>
     <div class="btn-row"><button type="button" class="btn sm" id="cl-sync" ${CS.st === 'busy' ? 'disabled' : ''}>今すぐ保存</button><button type="button" class="btn sm ghost" id="cl-logout">ログアウト</button></div>
-    <details class="cl-danger"><summary>アカウントを削除する</summary>
-      <p class="hint">クラウドに保存した記録と設定をすべて消して、ぐみろぐのアカウントを削除します。この端末の記録は残ります。</p>
-      <button type="button" class="btn sm danger" id="cl-delete">アカウントを削除</button></details>`;
+    <details class="cl-danger"><summary>${CLOUD_TEST ? 'テスト用のデータを消す' : 'アカウントを削除する'}</summary>
+      <p class="hint">${CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定をすべて消して、ログアウトします。本番のデータとログインのアカウントはそのままです。'
+        : 'クラウドに保存した記録・写真・設定をすべて消して、ぐみろぐのアカウントを削除します。この端末の記録は残ります。'}</p>
+      <button type="button" class="btn sm danger" id="cl-delete">${CLOUD_TEST ? 'テスト用のデータを消す' : 'アカウントを削除'}</button></details>`;
 }
 // 公開サイトでは、前にログインしていた人だけ、起動したときにログインの部品を読み込みます
 function cloudBoot(){
