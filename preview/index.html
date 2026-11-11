@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="50bd57e609"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="a9f86eecfd"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3707,13 +3707,17 @@ async function connect(){
 const CLOUD_API = 'https://gumilog-api-preview.gumilog.workers.dev';
 const FIREBASE_CONFIG = {
   apiKey:'AIzaSyDcIzR09UD7lLgL2MWnQ4jQHKit3lvaVtY',
-  authDomain:'gumilog-app.firebaseapp.com',
+  // ログインの受け取り役は、ぐみろぐと同じドメインに置いています（リポジトリ hatohat/hatohat.github.io の __/auth/）。
+  // Firebase のドメインのままだと、iPhone の追跡防止に止められて、ホーム画面のアプリでログインが戻ってこないためです
+  authDomain:'hatohat.github.io',
   projectId:'gumilog-app',
   appId:'1:942399529594:web:980d99865c5319befb11c3',
 };
 const FIREBASE_V = '13.1.0';
 // 同期の状態を覚えておくキーです。{uid, email, cursor, synced:{記録ID: 指紋}, setHash, lastAt}
 const LS_SYNC = 'gumilog-pv.sync.v1';
+// Googleの画面に移ってログインしている途中かどうかの印です（戻ってきたときに、ログインの部品を読み込むため）
+const LS_LOGINWAIT = 'gumilog-pv.loginWait.v1';
 // CS：クラウドの状態（user：ログインしている人、st：'off' | 'wait' | 'busy' | 'ok' | 'error'、fb：Firebase の部品）
 const CS = {user:null, st:'off', fb:null, auth:null, t:0, again:false, err:''};
 const syncState = () => {
@@ -3757,7 +3761,11 @@ async function loadFirebase(){
   CS.auth = auth.getAuth(fa);
   CS.auth.languageCode = 'ja';
   // リダイレクトでログインして戻ってきたときの結果を受け取ります
-  auth.getRedirectResult(CS.auth).catch(e => loginError(e));
+  const waiting = !!lsGet(LS_LOGINWAIT, 0);
+  localStorage.removeItem(LS_LOGINWAIT);
+  auth.getRedirectResult(CS.auth).then(r => {
+    if (r && r.user) toast('ログインしました。記録をクラウドに保存します');
+  }).catch(e => waiting && loginError(e));
   auth.onAuthStateChanged(CS.auth, u => {
     const prev = syncState();
     CS.user = u || null;
@@ -3782,7 +3790,8 @@ function loginError(e){
   toast(code === 'auth/network-request-failed' ? 'ネットにつながらないため、ログインできませんでした' : `ログインできませんでした（${code || 'エラー'}）`);
   renderCloud();
 }
-// 「Googleでログイン」：ふつうは小さな画面（ポップアップ）で、開けないときはページごと移ってログインします
+// 「Googleでログイン」：ページごとGoogleの画面に移ってログインし、終わったらぐみろぐに戻ってきます。
+// （小さな画面（ポップアップ）は、iPhone のホーム画面のアプリだと結果が戻ってこないため使いません）
 async function cloudLogin(){
   let auth;
   try {
@@ -3793,14 +3802,11 @@ async function cloudLogin(){
   }
   const provider = new CS.fb.GoogleAuthProvider();
   provider.setCustomParameters({prompt:'select_account'});
+  lsSet(LS_LOGINWAIT, Date.now());
   try {
-    await CS.fb.signInWithPopup(auth, provider);
-    toast('ログインしました。記録をクラウドに保存します');
+    await CS.fb.signInWithRedirect(auth, provider);
   } catch(e){
-    if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) {
-      try { await CS.fb.signInWithRedirect(auth, provider); } catch(e2){ loginError(e2); }
-      return;
-    }
+    localStorage.removeItem(LS_LOGINWAIT);
     loginError(e);
   }
 }
@@ -3827,8 +3833,10 @@ async function cloudDeleteAccount(){
       // しばらくログインし直していないと消せないので、もう一度ログインしてから消します
       if (e && e.code === 'auth/requires-recent-login'){
         const provider = new CS.fb.GoogleAuthProvider();
-        await CS.fb.reauthenticateWithPopup(CS.user, provider);
-        await CS.fb.deleteUser(CS.user);
+        toast('確認のため、もう一度ログインしてから「アカウントを削除」を押してください');
+        lsSet(LS_LOGINWAIT, Date.now());
+        await CS.fb.reauthenticateWithRedirect(CS.user, provider);
+        return;
       } else throw e;
     }
     localStorage.removeItem(LS_SYNC);
@@ -3990,7 +3998,7 @@ function cloudPanelInner(){
 // 公開サイトでは、前にログインしていた人だけ、起動したときにログインの部品を読み込みます
 function cloudBoot(){
   if (IN_CLAUDE) return;
-  if (syncState().uid) loadFirebase().catch(() => {});
+  if (syncState().uid || lsGet(LS_LOGINWAIT, 0)) loadFirebase().catch(() => {});
   // 画面に戻ってきたときや、ネットにつながったときにもそろえます
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && CS.user) cloudSoon(800);
