@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="6c9680b30c"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="50bd57e609"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3768,8 +3768,9 @@ async function loadFirebase(){
       cloudSync();
     } else {
       CS.st = 'off';
-      renderCloud();
     }
+    renderAll();
+    if (!$('#sh-settings').hidden) renderSettings();
   });
   return CS.auth;
 }
@@ -3777,7 +3778,9 @@ function loginError(e){
   const code = e && e.code || '';
   if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
   console.warn(e);
-  toast(code === 'auth/network-request-failed' ? 'ネットにつながらないため、ログインできませんでした' : 'ログインできませんでした');
+  CS.err = 'login:' + (code || String(e && e.message || e)).slice(0, 80);
+  toast(code === 'auth/network-request-failed' ? 'ネットにつながらないため、ログインできませんでした' : `ログインできませんでした（${code || 'エラー'}）`);
+  renderCloud();
 }
 // 「Googleでログイン」：ふつうは小さな画面（ポップアップ）で、開けないときはページごと移ってログインします
 async function cloudLogin(){
@@ -3876,7 +3879,11 @@ async function cloudSync(){
       const r = await fetch(CLOUD_API + '/v1/sync', {method:'POST',
         headers:{'Content-Type':'application/json', Authorization:'Bearer ' + await CS.user.getIdToken()},
         body:JSON.stringify({cursor, items:chunk, settings:sendSet})});
-      if (!r.ok) throw new Error('http ' + r.status);
+      if (!r.ok){
+        let d = '';
+        try { d = (await r.json()).detail || ''; } catch(e2){}
+        throw new Error('http ' + r.status + (d ? ' ' + d : ''));
+      }
       const j = await r.json();
       // 送れた記録は「そろえた」ことにします
       for (const x of chunk){
@@ -3932,7 +3939,7 @@ async function cloudSync(){
   } catch(e){
     console.warn(e);
     CS.st = 'error';
-    CS.err = navigator.onLine === false ? 'offline' : 'server';
+    CS.err = navigator.onLine === false ? 'offline' : 'server:' + String(e && e.message || e).slice(0, 80);
     // つながらなかったときは、少し待ってからもう一度ためします
     CS.t = setTimeout(cloudSync, 60000);
   }
@@ -3965,11 +3972,12 @@ function cloudPanelInner(){
     return `<h3>クラウドに保存<span class="s">Googleでログイン</span></h3>
       <p>ログインすると、記録と設定がクラウドにも保存されます。スマホを替えたりブラウザのデータを消したりしても、ログインし直せば戻せます。ほかの端末でも同じ記録が見られます。</p>
       <p class="hint" style="margin:0">写真はまだクラウドに保存されず、この端末にだけ残ります。ログインしなくても、今までどおりこの端末だけで使えます。</p>
+      ${CS.err && CS.err.startsWith('login:') ? `<p class="hint" style="margin:0;color:var(--accent)">前回のログインでエラーが出ました（${esc(CS.err.slice(6))}）</p>` : ''}
       <div class="btn-row"><button type="button" class="btn sm primary" id="cl-login" ${was && !CS.auth ? 'disabled' : ''}>${was && !CS.auth ? 'ログインを確認中…' : 'Googleでログイン'}</button></div>`;
   }
   const ss = syncState();
   const state = CS.st === 'busy' ? '保存しています…'
-    : CS.st === 'error' ? (CS.err === 'offline' ? 'ネットにつながっていません。つながったら保存します' : 'クラウドに保存できませんでした。あとでもう一度ためします')
+    : CS.st === 'error' ? (CS.err === 'offline' ? 'ネットにつながっていません。つながったら保存します' : `クラウドに保存できませんでした。あとでもう一度ためします（${CS.err}）`)
     : ss.lastAt ? `最後に保存：${cloudWhen(ss.lastAt)}` : '';
   return `<h3>クラウドに保存<span class="s">ログイン中</span></h3>
     <p>${esc(CS.user.email || 'Googleアカウント')} でログインしています。記録と設定は、この端末とクラウドの両方に保存されます。</p>
