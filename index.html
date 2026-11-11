@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="d718dd904f"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="82b76f58a8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -1934,6 +1934,9 @@ body.has-snack .toast {
 }
 .set-item:first-child{border-top:0}
 a.set-item{text-decoration:none}
+.cl-danger{font-size:13px;color:var(--ink-2)}
+.cl-danger summary{cursor:pointer;padding:4px 0}
+.cl-danger .btn{margin-top:6px}
 .set-sec{font-size:12px;font-weight:700;color:var(--ink-2);margin:4px 4px -6px;letter-spacing:.04em}
 .set-sec[hidden],.set-menu[hidden]{display:none}
 .set-item .ic{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:17px}
@@ -2630,6 +2633,16 @@ a.set-item{text-decoration:none}
 </div>
 
 <!-- ===== カタログへの提案のおさそい（カタログにないグミを記録したときに表示） ===== -->
+<!-- ===== クラウドへの保存のおさそい（公開サイトで、まだログインしていない人に一度だけ出します） ===== -->
+<div class="sheet" id="sh-cloudask" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ca-title">
+    <div class="sheet-h"><h2 id="ca-title">クラウドに保存してみませんか？</h2></div>
+    <p class="sg-text">Googleでログインすると、記録と写真がクラウドにも保存されます。スマホを替えたりブラウザのデータを消したりしても、記録が消えずに戻せます。</p>
+    <p class="hint" style="margin:0">ログインしなくても、今までどおりこの端末だけで使えます。設定の「データ」からいつでもログインできます。</p>
+    <div class="sheet-actions"><button class="btn ghost" type="button" data-close>あとで</button><button class="btn primary" type="button" id="ca-go">設定を開く</button></div>
+  </div>
+</div>
+
 <div class="sheet" id="sh-suggest" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="sg-title">
     <div class="sheet-h"><h2 id="sg-title">カタログに提案してみませんか？</h2></div>
@@ -2881,6 +2894,8 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:199, k:'f', at:'2026-11-12 03:57', t:'設定に「お問い合わせ」と「プライバシーポリシー」を追加しました。'},
+  {v:198, k:'M', at:'2026-11-12 02:50', t:'Googleでログインして、記録・写真・設定をクラウドに保存できるようにしました。機種変更やブラウザのデータ削除でも記録が消えず、ほかの端末でも同じ記録を見られます。'},
   {v:197, k:'p', at:'2026-11-11 00:14', t:'共有の文章の初期テンプレートを、商品名・ひとこと・評価の間に空行が入る形に変更しました。お店の初期候補を、セブンイレブン・ファミリーマート・NewDays などの表記に変更しました。'},
   {v:196, k:'p', at:'2026-11-11 00:03', t:'詳細画面で評価やひとことを入力した直後に共有すると、その内容が共有の文章に入らない不具合を修正しました。'},
   {v:195, k:'p', at:'2026-11-10 23:57', t:'称号の画面で、一部のメダルの絵文字が中央からずれて表示される不具合を修正しました。'},
@@ -3406,10 +3421,13 @@ async function putItem(it){
   }
   // ここからはこの端末に保存する処理です
   {
+    // クラウドと合わせるときに、どちらが新しいかを比べるための「最後に変えた時刻」です
+    it = {...it, updatedAt:Date.now()};
     const i = S.local.findIndex(x => x.id === it.id);
     if (i >= 0) S.local[i] = it; else S.local.push(it);
     if (!lsSet(LS_KEY, S.local) && !((await askShrinkBig(JSON.stringify(it).length)) && lsSet(LS_KEY, S.local))) toast('この端末の保存容量がいっぱいです。書き出してから古い記録を消してください');
     renderAll();
+    cloudSoon();
   }
 }
 // 記録を1件削除します（その記録だけの写真があれば、それも消します）
@@ -3421,6 +3439,7 @@ async function removeItem(it){
     S.local = S.local.filter(x => x.id !== it.id);
     lsSet(LS_KEY, S.local);
     renderAll();
+    cloudSoon();
   }
 }
 // クラウドとのつながりをやめて、この端末に保存するモードに切りかえます。
@@ -3440,6 +3459,67 @@ function goLocal(readOnly){
   renderAll();
 }
 
+// アカウントに保存してある設定 d を、この端末の設定に写して画面を直します（Claude版のストアと、Googleでログインしたときのクラウドの両方で使います）
+function applySettingsDoc(d){
+  if (d && Array.isArray(d.shops) && d.shops.length){
+    S.shops = upgradeShops(d.shops.map(String));
+    lsSet(LS_SHOPS, S.shops);
+  }
+  if (d && Array.isArray(d.tags)){
+    S.tags = upgradeTags(d.tags.map(String));
+    lsSet(LS_TAGS, S.tags);
+  }
+  if (d && d.bestPicks && typeof d.bestPicks === 'object' && JSON.stringify(d.bestPicks) !== JSON.stringify(S.bestPicks)){
+    S.bestPicks = d.bestPicks;
+    lsSet(LS_BEST, S.bestPicks);
+    renderStats();
+  }
+  if (d && Array.isArray(d.nameSkip) && d.nameSkip.join('|') !== S.nameSkip.join('|')){
+    S.nameSkip = d.nameSkip.map(String);
+    lsSet(LS_NAMESKIP, S.nameSkip);
+  }
+  // ほかの端末でとった称号も合わせます（段階の大きいほうを残します）
+  if (d && d.ach && typeof d.ach === 'object'){
+    const cur = lsGet(LS_ACH, null) || {};
+    let ch = false;
+    for (const [k, v] of Object.entries(d.ach)) if ((+v || 0) > (+cur[k] || 0)){
+      cur[k] = +v;
+      ch = true;
+    }
+    if (ch){
+      lsSet(LS_ACH, cur);
+      renderAch();
+    }
+  }
+  if (d && d.monthItems && typeof d.monthItems === 'object' && JSON.stringify(d.monthItems) !== JSON.stringify(S.monthItems)){
+    S.monthItems = d.monthItems;
+    lsSet(LS_MONTHITEMS, S.monthItems);
+    if (!$('#sh-settings').hidden) renderMonthItems();
+  }
+  if (d && d.postTpls && typeof d.postTpls === 'object' && JSON.stringify(d.postTpls) !== JSON.stringify(S.postTpls)){
+    S.postTpls = d.postTpls;
+    lsSet(LS_POSTTPL, S.postTpls);
+    if (!$('#sh-settings').hidden) renderTplEditor();
+  }
+  if (d && typeof d.showStock === 'boolean' && d.showStock !== S.showStock){
+    S.showStock = d.showStock;
+    lsSet(LS_STOCK, S.showStock);
+    renderLog();
+    if (!$('#sh-settings').hidden) renderStockToggle();
+  }
+  if (d && THEMES[d.theme] && d.theme !== S.theme){
+    S.theme = d.theme;
+    lsSet(LS_THEME, S.theme);
+    applyTheme();
+    renderAll();
+    jarDraw();
+  }
+  if (d){
+    renderShopChips();
+    renderTagChips();
+    if (!$('#sh-settings').hidden) renderShopEditor();
+  }
+}
 // Claude のアーティファクトの機能（ストア・使う人の情報・ダウンロード・AI）につなぎます。
 // つながったら、設定・写真・記録の変更を見張り、変わるたびに画面を描き直します
 async function connect(){
@@ -3474,67 +3554,7 @@ async function connect(){
   // この人専用の保存場所です
   S.cap.col = db.collection('data/users/' + uid);
   // 設定を見張ります。アカウントの設定が変わったら、この端末の設定にも写して画面を直します
-  S.unsubs.push(S.cap.col.doc('settings').onSnapshot(snap => {
-    const d = snap.exists ? snap.data() : null;
-    if (d && Array.isArray(d.shops) && d.shops.length){
-      S.shops = upgradeShops(d.shops.map(String));
-      lsSet(LS_SHOPS, S.shops);
-    }
-    if (d && Array.isArray(d.tags)){
-      S.tags = upgradeTags(d.tags.map(String));
-      lsSet(LS_TAGS, S.tags);
-    }
-    if (d && d.bestPicks && typeof d.bestPicks === 'object' && JSON.stringify(d.bestPicks) !== JSON.stringify(S.bestPicks)){
-      S.bestPicks = d.bestPicks;
-      lsSet(LS_BEST, S.bestPicks);
-      renderStats();
-    }
-    if (d && Array.isArray(d.nameSkip) && d.nameSkip.join('|') !== S.nameSkip.join('|')){
-      S.nameSkip = d.nameSkip.map(String);
-      lsSet(LS_NAMESKIP, S.nameSkip);
-    }
-    // ほかの端末でとった称号も合わせます（段階の大きいほうを残します）
-    if (d && d.ach && typeof d.ach === 'object'){
-      const cur = lsGet(LS_ACH, null) || {};
-      let ch = false;
-      for (const [k, v] of Object.entries(d.ach)) if ((+v || 0) > (+cur[k] || 0)){
-        cur[k] = +v;
-        ch = true;
-      }
-      if (ch){
-        lsSet(LS_ACH, cur);
-        renderAch();
-      }
-    }
-    if (d && d.monthItems && typeof d.monthItems === 'object' && JSON.stringify(d.monthItems) !== JSON.stringify(S.monthItems)){
-      S.monthItems = d.monthItems;
-      lsSet(LS_MONTHITEMS, S.monthItems);
-      if (!$('#sh-settings').hidden) renderMonthItems();
-    }
-    if (d && d.postTpls && typeof d.postTpls === 'object' && JSON.stringify(d.postTpls) !== JSON.stringify(S.postTpls)){
-      S.postTpls = d.postTpls;
-      lsSet(LS_POSTTPL, S.postTpls);
-      if (!$('#sh-settings').hidden) renderTplEditor();
-    }
-    if (d && typeof d.showStock === 'boolean' && d.showStock !== S.showStock){
-      S.showStock = d.showStock;
-      lsSet(LS_STOCK, S.showStock);
-      renderLog();
-      if (!$('#sh-settings').hidden) renderStockToggle();
-    }
-    if (d && THEMES[d.theme] && d.theme !== S.theme){
-      S.theme = d.theme;
-      lsSet(LS_THEME, S.theme);
-      applyTheme();
-      renderAll();
-      jarDraw();
-    }
-    if (d){
-      renderShopChips();
-      renderTagChips();
-      if (!$('#sh-settings').hidden) renderShopEditor();
-    }
-  }, () => {}));
+  S.unsubs.push(S.cap.col.doc('settings').onSnapshot(snap => applySettingsDoc(snap.exists ? snap.data() : null), () => {}));
   // 小さい写真を見張ります（「キー（無ければ名前） → データURL」の形にまとめます）
   S.unsubs.push(S.cap.col.where('kind','==','photo').onSnapshot(snap => {
     const m = {};
@@ -3567,6 +3587,472 @@ async function connect(){
     goLocal(false);
     toast('クラウドに接続できませんでした。この端末に保存します');
   }));
+}
+
+/* ========== Googleでログインして、クラウドに保存する（公開サイト用） ==========
+   ログインは任意です。ログインしなくても、今までどおりこの端末だけで使えます。
+   ログインすると、記録と設定をぐみろぐのサーバー（Cloudflare）にも保存し、ほかの端末と同じ内容にそろえます。
+   - 記録はまずこの端末に保存し、少しあとでサーバーに送ります（電波が悪くても記録できます）。
+   - 前回サーバーとそろえたときの中身の「指紋」（ハッシュ）を覚えておき、変わった記録と消した記録だけを送ります。
+   - サーバーからは、前回受け取ったところ（cursor）より新しい記録だけを受け取ります。
+   - 同じ記録を別々の端末で変えたときは、あとから変えたほう（updatedAt が新しいほう）を残します。
+   - 写真は小さいほう（ぐみ棚やログの写真）だけ送ります。投稿用の元の画質の写真は、この端末にだけ残ります。
+   ログインの仕組みは Firebase Authentication（Google）で、使うときだけ読み込みます。 */
+const CLOUD_API = 'https://gumilog-api.gumilog.workers.dev';
+// お問い合わせのフォームと、プライバシーポリシーのページです
+const CONTACT_FORM = 'https://forms.gle/rX6Gjo7sPxJNkn5A6';
+const PRIVACY_URL = 'privacy.html';
+const FIREBASE_CONFIG = {
+  apiKey:'AIzaSyDcIzR09UD7lLgL2MWnQ4jQHKit3lvaVtY',
+  // ログインの受け取り役は、ぐみろぐと同じドメインに置いています（リポジトリ hatohat/hatohat.github.io の __/auth/）。
+  // Firebase のドメインのままだと、iPhone の追跡防止に止められて、ホーム画面のアプリでログインが戻ってこないためです
+  authDomain:'hatohat.github.io',
+  projectId:'gumilog-app',
+  appId:'1:942399529594:web:980d99865c5319befb11c3',
+};
+const FIREBASE_V = '13.1.0';
+// 同期の状態を覚えておくキーです。{uid, email, cursor, synced:{記録ID: 指紋}, setHash, lastAt}
+const LS_SYNC = 'gumilog.sync.v1';
+// Googleの画面に移ってログインしている途中かどうかの印です（戻ってきたときに、ログインの部品を読み込むため）
+const LS_LOGINWAIT = 'gumilog.loginWait.v1';
+// CS：クラウドの状態（user：ログインしている人、st：'off' | 'wait' | 'busy' | 'ok' | 'error'、fb：Firebase の部品）
+const CS = {user:null, st:'off', fb:null, auth:null, t:0, again:false, err:''};
+const syncState = () => {
+  const v = lsGet(LS_SYNC, null);
+  return v && typeof v === 'object' ? v : {};
+};
+// 文字列の指紋（短いハッシュ）を作ります。中身が変わったかどうかを見るだけなので、簡単な計算で十分です
+function fp(str){
+  let h1 = 0x811c9dc5, h2 = 0x01000193;
+  for (let i = 0; i < str.length; i++){
+    const c = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 16777619);
+    h2 = Math.imul(h2 + c, 2246822519) ^ (h2 >>> 13);
+  }
+  return (h1 >>> 0).toString(36) + (h2 >>> 0).toString(36);
+}
+// サーバーに送る形の記録です（写真のデータ・ID・お試しの印は入れません）
+function cloudItem(it){
+  const o = {...it};
+  delete o.id;
+  delete o.demo;
+  delete o.photoData;
+  delete o.photo;
+  return o;
+}
+const itemFp = it => fp(JSON.stringify(cloudItem(it)));
+// 同期する設定の形です（アカウントの設定と同じ）
+const cloudSettings = () => {
+  const d = settingsDoc();
+  delete d.kind;
+  return d;
+};
+
+// Firebase のログインの部品を読み込みます（はじめて使うときだけ）
+async function loadFirebase(){
+  if (CS.auth) return CS.auth;
+  const base = `https://www.gstatic.com/firebasejs/${FIREBASE_V}/`;
+  const [app, auth] = await Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js')]);
+  const fa = app.initializeApp(FIREBASE_CONFIG);
+  CS.fb = auth;
+  CS.auth = auth.getAuth(fa);
+  CS.auth.languageCode = 'ja';
+  // リダイレクトでログインして戻ってきたときの結果を受け取ります
+  const waiting = !!lsGet(LS_LOGINWAIT, 0);
+  localStorage.removeItem(LS_LOGINWAIT);
+  auth.getRedirectResult(CS.auth).then(r => {
+    if (r && r.user) toast('ログインしました。記録をクラウドに保存します');
+  }).catch(e => waiting && loginError(e));
+  auth.onAuthStateChanged(CS.auth, u => {
+    const prev = syncState();
+    CS.user = u || null;
+    if (u){
+      // 別のアカウントに切りかわったら、同期の記録を最初からにします（この端末の記録は、そのアカウントにも送られます）
+      if (prev.uid !== u.uid) lsSet(LS_SYNC, {uid:u.uid, email:u.email || '', cursor:0, synced:{}, setHash:''});
+      else if (prev.email !== (u.email || '')) lsSet(LS_SYNC, {...prev, email:u.email || ''});
+      cloudSync();
+    } else {
+      CS.st = 'off';
+    }
+    renderAll();
+    if (!$('#sh-settings').hidden) renderSettings();
+  });
+  return CS.auth;
+}
+function loginError(e){
+  const code = e && e.code || '';
+  if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+  console.warn(e);
+  CS.err = 'login:' + (code || String(e && e.message || e)).slice(0, 80);
+  toast(code === 'auth/network-request-failed' ? 'ネットにつながらないため、ログインできませんでした' : `ログインできませんでした（${code || 'エラー'}）`);
+  renderCloud();
+}
+// 「Googleでログイン」：ページごとGoogleの画面に移ってログインし、終わったらぐみろぐに戻ってきます。
+// （小さな画面（ポップアップ）は、iPhone のホーム画面のアプリだと結果が戻ってこないため使いません）
+async function cloudLogin(){
+  let auth;
+  try {
+    auth = await loadFirebase();
+  } catch(e){
+    toast('ログインの準備ができませんでした。ネットにつながっているか確かめてください');
+    return;
+  }
+  const provider = new CS.fb.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:'select_account'});
+  lsSet(LS_LOGINWAIT, Date.now());
+  try {
+    await CS.fb.signInWithRedirect(auth, provider);
+  } catch(e){
+    localStorage.removeItem(LS_LOGINWAIT);
+    loginError(e);
+  }
+}
+async function cloudLogout(){
+  if (!CS.auth) return;
+  if (!confirm('ログアウトしますか？\nこの端末の記録はそのまま残ります。クラウドに保存した記録も消えません。')) return;
+  await CS.fb.signOut(CS.auth).catch(() => {});
+  localStorage.removeItem(LS_SYNC);
+  CS.user = null;
+  CS.st = 'off';
+  renderCloud();
+  toast('ログアウトしました');
+}
+// プレビュー版（テスト用のサーバーにつないでいる版）かどうかです
+const CLOUD_TEST = CLOUD_API.includes('-preview.');
+// アカウントの削除：サーバーの記録と設定をすべて消し、ログインのアカウントも消します（この端末の記録は残ります）
+// プレビュー版では、テスト用のサーバーのデータだけを消します。ログインのアカウントは本番と共通なので消しません
+// （消すと、もう一度ログインしたときに別の人として扱われ、本番に預けた記録が見えなくなるためです）
+async function cloudDeleteAccount(){
+  if (!CS.user) return;
+  if (!confirm(CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定をすべて消しますか？\n本番のデータとログインのアカウントはそのままです。'
+    : 'クラウドに保存した記録・写真・設定をすべて消して、アカウントを削除しますか？\nこの操作は取り消せません。この端末の記録は残ります。')) return;
+  try {
+    const r = await fetch(CLOUD_API + '/v1/account', {method:'DELETE', headers:{Authorization:'Bearer ' + await CS.user.getIdToken()}});
+    if (!r.ok) throw new Error('http ' + r.status);
+    if (CLOUD_TEST){
+      // 同期の記録を最初からにして、ログアウトします（この端末の記録は残ります）
+      localStorage.removeItem(LS_SYNC);
+      await CS.fb.signOut(CS.auth).catch(() => {});
+      CS.user = null;
+      CS.st = 'off';
+      renderCloud();
+      toast('テスト用のサーバーのデータを消しました');
+      return;
+    }
+    try {
+      await CS.fb.deleteUser(CS.user);
+    } catch(e){
+      // しばらくログインし直していないと消せないので、もう一度ログインしてから消します
+      if (e && e.code === 'auth/requires-recent-login'){
+        const provider = new CS.fb.GoogleAuthProvider();
+        toast('確認のため、もう一度ログインしてから「アカウントを削除」を押してください');
+        lsSet(LS_LOGINWAIT, Date.now());
+        await CS.fb.reauthenticateWithRedirect(CS.user, provider);
+        return;
+      } else throw e;
+    }
+    localStorage.removeItem(LS_SYNC);
+    CS.user = null;
+    CS.st = 'off';
+    renderCloud();
+    toast('アカウントを削除しました');
+  } catch(e){
+    console.warn(e);
+    toast('削除できませんでした。時間をおいてもう一度お試しください');
+  }
+}
+
+// 少し待ってから同期します（続けて変更したときは、まとめて 1 回にします）
+function cloudSoon(ms = 2500){
+  if (IN_CLAUDE || !CS.user) return;
+  clearTimeout(CS.t);
+  CS.t = setTimeout(cloudSync, ms);
+}
+// サーバーと記録・設定をそろえます
+async function cloudSync(){
+  if (!CS.user || IN_CLAUDE) return;
+  if (CS.st === 'busy'){
+    CS.again = true;
+    return;
+  }
+  clearTimeout(CS.t);
+  CS.st = 'busy';
+  renderCloud();
+  try {
+    let ss = syncState();
+    if (ss.uid !== CS.user.uid) ss = {uid:CS.user.uid, email:CS.user.email || '', cursor:0, synced:{}, setHash:''};
+    const synced = {...(ss.synced || {})};
+    // 送るもの：前回から中身が変わった記録と、消した記録
+    const now = Date.now(), byId = new Map(S.local.map(it => [it.id, it]));
+    const push = [];
+    for (const it of S.local){
+      if (!it.id || it.demo) continue;
+      if (synced[it.id] !== itemFp(it)) push.push({id:it.id, data:cloudItem(it), updatedAt:it.updatedAt || it.createdAt || now});
+    }
+    for (const id of Object.keys(synced)) if (!byId.has(id)) push.push({id, data:null, updatedAt:now});
+    const setNow = cloudSettings(), setFp = fp(JSON.stringify(setNow));
+    let sendSet = setFp !== ss.setHash ? {data:setNow, updatedAt:now} : null;
+    let cursor = ss.cursor || 0, changed = false, guard = 0;
+    // 200件ずつ送り、受け取るものがなくなるまでくり返します
+    do {
+      const chunk = push.splice(0, 200);
+      const r = await fetch(CLOUD_API + '/v1/sync', {method:'POST',
+        headers:{'Content-Type':'application/json', Authorization:'Bearer ' + await CS.user.getIdToken()},
+        body:JSON.stringify({cursor, items:chunk, settings:sendSet})});
+      if (!r.ok){
+        let d = '';
+        try { d = (await r.json()).detail || ''; } catch(e2){}
+        throw new Error('http ' + r.status + (d ? ' ' + d : ''));
+      }
+      const j = await r.json();
+      // 送れた記録は「そろえた」ことにします
+      for (const x of chunk){
+        if (x.data == null) delete synced[x.id];
+        else synced[x.id] = fp(JSON.stringify(x.data));
+      }
+      if (sendSet) ss.setHash = setFp;
+      sendSet = null;
+      // 受け取った記録を、この端末の記録に入れます
+      for (const x of j.items || []){
+        const i = S.local.findIndex(it => it.id === x.id);
+        const mine = i >= 0 ? S.local[i] : null;
+        // この端末で、まだ送っていない新しい変更があれば、こちらを残します（次の同期で送ります）
+        if (mine && synced[x.id] !== itemFp(mine) && (mine.updatedAt || 0) > (x.updatedAt || 0)) continue;
+        if (x.data == null){
+          if (i >= 0){
+            S.local.splice(i, 1);
+            changed = true;
+          }
+          delete synced[x.id];
+          continue;
+        }
+        const next = {...x.data, id:x.id, updatedAt:x.updatedAt};
+        // 昔の形で記録に入っていた写真は、この端末のものを残します
+        if (mine && mine.photoData) next.photoData = mine.photoData;
+        if (mine && mine.photo) next.photo = mine.photo;
+        if (!mine || itemFp(mine) !== itemFp(next)){
+          if (i >= 0) S.local[i] = next; else S.local.push(next);
+          changed = true;
+        }
+        synced[x.id] = itemFp(next);
+      }
+      // 設定：ほかの端末で変えた設定が届いたら、この端末にも入れます
+      if (j.settings && j.settings.data){
+        const sf = fp(JSON.stringify(j.settings.data));
+        if (sf !== ss.setHash && sf !== fp(JSON.stringify(cloudSettings()))){
+          applySettingsDoc(j.settings.data);
+          lsSet(LS_SHOPS, S.shops);
+          lsSet(LS_TAGS, S.tags);
+        }
+        ss.setHash = fp(JSON.stringify(cloudSettings()));
+      }
+      cursor = j.cursor;
+      if (!j.hasMore && !push.length) break;
+    } while (++guard < 100);
+    if (changed){
+      lsSet(LS_KEY, S.local);
+      renderAll();
+    }
+    ss = {...ss, cursor, synced};
+    lsSet(LS_SYNC, ss);
+    // 写真もそろえます（記録のあとで行います。写真で失敗しても、記録はそろったままにします）
+    ss = await cloudPhotos(ss);
+    lsSet(LS_SYNC, {...ss, lastAt:Date.now()});
+    CS.st = 'ok';
+    CS.err = '';
+  } catch(e){
+    console.warn(e);
+    CS.st = 'error';
+    CS.err = navigator.onLine === false ? 'offline' : 'server:' + String(e && e.message || e).slice(0, 80);
+    // つながらなかったときは、少し待ってからもう一度ためします
+    CS.t = setTimeout(cloudSync, 60000);
+  }
+  renderCloud();
+  if (CS.again){
+    CS.again = false;
+    cloudSoon(500);
+  }
+}
+/* ----- 写真のクラウド保存 -----
+   小さい写真（ぐみ棚やログの写真）だけを送ります。大きい写真（投稿用の元の画質）は翌日には消えるので、この端末にだけ置きます。
+   送るときは、見た目を保ったまま軽い形式（WebP）にできればして、容量を節約します。
+   ss.psynced に「前回そろえたときの写真の指紋」、ss.pcursor に「どこまで受け取ったか」を覚えておきます。 */
+const dataUrlParts = d => {
+  const m = /^data:([^;,]+);base64,(.*)$/.exec(d || '');
+  return m ? {type:m[1], b64:m[2]} : null;
+};
+// 写真を WebP にして軽くします。WebP にできない（iPhone の Safari など）か、軽くならなければ元のまま返します
+function lighterPhoto(dataUrl){
+  return new Promise(res => {
+    const orig = dataUrlParts(dataUrl);
+    if (!orig) return res(null);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        c.getContext('2d').drawImage(img, 0, 0);
+        const w = c.toDataURL('image/webp', 0.8), p = dataUrlParts(w);
+        res(p && p.type === 'image/webp' && p.b64.length < orig.b64.length * 0.9 ? p : orig);
+      } catch(e){ res(orig); }
+    };
+    img.onerror = () => res(orig);
+    img.src = dataUrl;
+  });
+}
+// 受け取った写真を、この端末の写真の置き場所に入れます（data が null なら消します）
+async function putLocalPhoto(key, data){
+  if (data) S.localPhotos[key] = data; else delete S.localPhotos[key];
+  if (PDB.db){
+    await pdbWrite('photos', [[key, data ? await dataUrlToBlob(data) : null]]);
+  } else lsSet(LS_PHOTOS, S.localPhotos);
+}
+async function cloudPost(path, body){
+  const r = await fetch(CLOUD_API + path, {method:'POST',
+    headers:{'Content-Type':'application/json', Authorization:'Bearer ' + await CS.user.getIdToken()},
+    body:JSON.stringify(body)});
+  if (!r.ok){
+    let d = '';
+    try { d = (await r.json()).detail || ''; } catch(e){}
+    throw new Error('photo http ' + r.status + (d ? ' ' + d : ''));
+  }
+  return r.json();
+}
+// 写真の指紋は計算に時間がかかるので、同じ写真なら前に計算したものを使います
+const photoFpCache = new Map();
+function photoFp(key){
+  const d = S.localPhotos[key], c = photoFpCache.get(key);
+  if (c && c[0] === d) return c[1];
+  const f = fp(d);
+  photoFpCache.set(key, [d, f]);
+  return f;
+}
+async function cloudPhotos(ss){
+  // 写真を読みこみ終わる前に比べると「全部消した」と勘違いするので、読みこみを待ちます
+  await photoDBReady;
+  if (S.mode === 'cloud') return ss;
+  const psynced = {...(ss.psynced || {})};
+  let pcursor = ss.pcursor || 0, changed = false;
+  const save = () => lsSet(LS_SYNC, {...ss, psynced, pcursor});
+  // 1. 送る：前回から変わった写真と、消した写真
+  const now = Date.now();
+  const ups = Object.keys(S.localPhotos).filter(k => S.localPhotos[k] && psynced[k] !== photoFp(k));
+  const dels = Object.keys(psynced).filter(k => !S.localPhotos[k]);
+  let batch = [], bytes = 0;
+  const flush = async () => {
+    if (!batch.length) return;
+    await cloudPost('/v1/photos/push', {items:batch.map(x => x.item)});
+    for (const x of batch){
+      if (x.item.data == null) delete psynced[x.item.key]; else psynced[x.item.key] = x.fp;
+    }
+    save();
+    batch = [];
+    bytes = 0;
+  };
+  for (const k of dels){
+    batch.push({item:{key:k, data:null, updatedAt:now}});
+    if (batch.length >= 40) await flush();
+  }
+  for (const k of ups){
+    const d = S.localPhotos[k];
+    if (!d) continue;
+    const p = await lighterPhoto(d);
+    if (!p) continue;
+    const f = photoFp(k);
+    // 1 回で送るのは 1MB ほどまで
+    if (batch.length >= 40 || bytes + p.b64.length > 1000000) await flush();
+    batch.push({item:{key:k, type:p.type, data:p.b64, fp:f, updatedAt:now}, fp:f});
+    bytes += p.b64.length;
+  }
+  await flush();
+  // 2. 受け取る：ほかの端末で変わった写真の一覧を見て、中身が必要なものだけ取りに行きます
+  let guard = 0, need = [];
+  do {
+    const j = await cloudPost('/v1/photos/list', {cursor:pcursor});
+    for (const x of j.items || []){
+      const mine = S.localPhotos[x.key];
+      // この端末にまだ送っていない新しい写真があれば、こちらを残します
+      if (mine && psynced[x.key] !== photoFp(x.key)) continue;
+      if (x.deleted){
+        if (mine){
+          await putLocalPhoto(x.key, null);
+          changed = true;
+        }
+        delete psynced[x.key];
+      } else if (!mine || x.fp !== psynced[x.key]) need.push(x.key);
+    }
+    pcursor = j.cursor;
+    if (!j.hasMore) break;
+  } while (++guard < 50);
+  for (let i = 0; i < need.length; i += 30){
+    const j = await cloudPost('/v1/photos/get', {keys:need.slice(i, i + 30)});
+    for (const x of j.items || []){
+      const d = `data:${x.type};base64,${x.data}`;
+      await putLocalPhoto(x.key, d);
+      // 指紋は、この端末に入れた写真の中身で覚えます（次に送り返さないように）
+      psynced[x.key] = photoFp(x.key);
+      changed = true;
+    }
+    save();
+  }
+  if (changed) renderAll();
+  return {...ss, psynced, pcursor};
+}
+
+// 画面のうち、クラウドの状態を表すところ（上の「〇〇に保存」と、設定の欄）を描き直します
+function renderCloud(){
+  if (IN_CLAUDE) return;
+  const st = $('#status');
+  if (st && S.mode !== 'cloud'){
+    st.textContent = CS.user ? 'クラウドに保存' : 'この端末に保存';
+    st.className = 'pill' + (CS.user ? ' cloud' : '');
+  }
+  const box = $('#cloud-panel');
+  if (box) box.innerHTML = cloudPanelInner();
+}
+const cloudWhen = t => {
+  if (!t) return '';
+  const d = new Date(t), p = n => String(n).padStart(2, '0');
+  return `${d.getMonth() + 1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+// 設定の「クラウドに保存」の欄の中身です
+function cloudPanelInner(){
+  if (!CS.user){
+    const was = syncState().uid;
+    return `<h3>クラウドに保存<span class="s">Googleでログイン</span></h3>
+      <p>ログインすると、記録と設定がクラウドにも保存されます。スマホを替えたりブラウザのデータを消したりしても、ログインし直せば戻せます。ほかの端末でも同じ記録が見られます。</p>
+      <p class="hint" style="margin:0">写真もクラウドに保存されます（Xに共有するときの元の画質の写真は、この端末にだけ残ります）。ログインしなくても、今までどおりこの端末だけで使えます。</p>
+      ${CS.err && CS.err.startsWith('login:') ? `<p class="hint" style="margin:0;color:var(--accent)">前回のログインでエラーが出ました（${esc(CS.err.slice(6))}）</p>` : ''}
+      <div class="btn-row"><button type="button" class="btn sm primary" id="cl-login" ${was && !CS.auth ? 'disabled' : ''}>${was && !CS.auth ? 'ログインを確認中…' : 'Googleでログイン'}</button></div>
+      <p class="hint" style="margin:0">預かる情報と扱いは<a href="${PRIVACY_URL}" target="_blank" rel="noopener">プライバシーポリシー</a>をご覧ください。</p>`;
+  }
+  const ss = syncState();
+  const state = CS.st === 'busy' ? '保存しています…'
+    : CS.st === 'error' ? (CS.err === 'offline' ? 'ネットにつながっていません。つながったら保存します' : `クラウドに保存できませんでした。あとでもう一度ためします（${CS.err}）`)
+    : ss.lastAt ? `最後に保存：${cloudWhen(ss.lastAt)}` : '';
+  return `<h3>クラウドに保存<span class="s">ログイン中</span></h3>
+    <p>${esc(CS.user.email || 'Googleアカウント')} でログインしています。記録・写真・設定は、この端末とクラウドの両方に保存されます。</p>
+    <p class="hint" style="margin:0">${esc(state)}</p>
+    <div class="btn-row"><button type="button" class="btn sm" id="cl-sync" ${CS.st === 'busy' ? 'disabled' : ''}>今すぐ保存</button><button type="button" class="btn sm ghost" id="cl-logout">ログアウト</button></div>
+    <details class="cl-danger"><summary>${CLOUD_TEST ? 'テスト用のデータを消す' : 'アカウントを削除する'}</summary>
+      <p class="hint">${CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定をすべて消して、ログアウトします。本番のデータとログインのアカウントはそのままです。'
+        : 'クラウドに保存した記録・写真・設定をすべて消して、ぐみろぐのアカウントを削除します。この端末の記録は残ります。'}</p>
+      <button type="button" class="btn sm danger" id="cl-delete">${CLOUD_TEST ? 'テスト用のデータを消す' : 'アカウントを削除'}</button></details>`;
+}
+// 公開サイトでは、前にログインしていた人だけ、起動したときにログインの部品を読み込みます
+function cloudBoot(){
+  if (IN_CLAUDE) return;
+  if (syncState().uid || lsGet(LS_LOGINWAIT, 0)) loadFirebase().catch(() => {});
+  // 画面に戻ってきたときや、ネットにつながったときにもそろえます
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && CS.user) cloudSoon(800);
+  });
+  window.addEventListener('online', () => CS.user && cloudSoon(800));
+  // 開いている間は、5分ごとにほかの端末の変更を受け取ります
+  setInterval(() => {
+    if (CS.user && document.visibilityState === 'visible') cloudSync();
+  }, 5 * 60 * 1000);
 }
 
 /* ========== 保存したあとに出るお知らせ（スナックバー） ==========
@@ -4619,6 +5105,7 @@ async function setPhoto(key, data, big, gname){
       if (!data || !(await askShrinkBig(data.length)) || !(await put().then(() => true, () => false))) throw {code:'local_full'};
     }
     if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
+    cloudSoon();
     pruneLocalBig();
     // 大きい写真は保存できなければ、あきらめて外します。
     if (data && big){
@@ -4637,6 +5124,7 @@ async function setPhoto(key, data, big, gname){
   }
   // IndexedDB が使えないときは localStorage に保存します。容量がいっぱいなら元に戻してエラーにします。
   if (data) S.localPhotos[name] = data; else delete S.localPhotos[name];
+  cloudSoon();
   if (!lsSet(LS_PHOTOS, S.localPhotos) && !((await askShrinkBig((data || '').length)) && lsSet(LS_PHOTOS, S.localPhotos))){
     delete S.localPhotos[name];
     throw {code:'local_full'};
@@ -6029,12 +6517,14 @@ function renderAll(){
   renderSetBadge();
   setTimeout(fixDupNames, 0);
   offerMatchAll();
+  offerCloud();
   const demo = isDemo();
   $('#demo-banner').hidden = !demo;
   // 保存先（クラウド / この端末）の表示
   const st = $('#status');
-  st.textContent = S.mode === 'cloud' ? 'クラウドに保存' : 'この端末に保存';
-  st.className = 'pill' + (S.mode === 'cloud' ? ' cloud' : '');
+  const onCloud = S.mode === 'cloud' || !!CS.user;
+  st.textContent = onCloud ? 'クラウドに保存' : 'この端末に保存';
+  st.className = 'pill' + (onCloud ? ' cloud' : '');
   // クラウド利用中なのに端末に記録が残っていれば、移すためのお知らせを出します。
   const mb = $('#migrate-banner');
   if (S.mode === 'cloud' && (S.local.length || Object.keys(S.localPhotos).length)){
@@ -6275,18 +6765,21 @@ function saveList(key){
   }
 }
 // 設定（お店・タグ・テーマなど）をクラウドの 'settings' ドキュメントにまとめて保存します。
+// 設定をひとまとめにしたものです（アカウントに保存する形）
+const settingsDoc = () => ({kind:'settings',
+  shops:S.shops,
+  tags:S.tags,
+  theme:S.theme,
+  showStock:S.showStock,
+  bestPicks:S.bestPicks,
+  postTpls:S.postTpls,
+  monthItems:S.monthItems,
+  nameSkip:S.nameSkip,
+  ach:lsGet(LS_ACH, {}) || {}});
 function saveSettingsDoc(){
+  if (!IN_CLAUDE) cloudSoon();
   if (S.mode !== 'cloud' || !S.cap.col) return;
-  S.cap.col.doc('settings').set({kind:'settings',
-    shops:S.shops,
-    tags:S.tags,
-    theme:S.theme,
-    showStock:S.showStock,
-    bestPicks:S.bestPicks,
-    postTpls:S.postTpls,
-    monthItems:S.monthItems,
-    nameSkip:S.nameSkip,
-    ach:lsGet(LS_ACH, {}) || {}}).catch(() => toast('設定を保存できませんでした'));
+  S.cap.col.doc('settings').set(settingsDoc()).catch(() => toast('設定を保存できませんでした'));
 }
 // tplSaveT：テンプレート保存を待つタイマー、tplFocus：最後に触ったテンプレート欄の種類
 let tplSaveT = 0, tplFocus = 'detail';
@@ -8015,6 +8508,31 @@ function openMatchAll(){
 }
 // カタログに新しいグミが入っていて、そろえる候補があれば、まとめて確認するシートを出します
 let matchAskT = 0;
+// クラウドへの保存のおさそいを、まだログインしていない人に一度だけ出します。
+// 記録が 1 件以上あるとき（はじめての人は、最初の記録を保存したあと）に出します。
+const LS_CLOUDASK = 'gumilog.cloudAsk.v1';
+let cloudAskT = 0;
+function offerCloud(){
+  if (IN_CLAUDE || CS.user || syncState().uid || lsGet(LS_CLOUDASK, 0) || isDemo() || S.mode === 'cloud') return;
+  clearTimeout(cloudAskT);
+  cloudAskT = setTimeout(() => {
+    if (CS.user || lsGet(LS_CLOUDASK, 0) || isDemo()) return;
+    // ほかのシート（記録・称号のお祝い・名前合わせなど）が開いている間や、記録したあとのお知らせが出ている間は待ちます
+    if ([...document.querySelectorAll('.sheet')].some(x => !x.hidden) || !$('#snack').hidden){
+      cloudAskT = setTimeout(offerCloud, 3000);
+      return;
+    }
+    lsSet(LS_CLOUDASK, Date.now());
+    openSheet('#sh-cloudask');
+  }, 4000);
+}
+$('#ca-go').addEventListener('click', () => {
+  closeSheet('#sh-cloudask');
+  SET_GRP = 'data';
+  renderSettings();
+  openSheet('#sh-settings');
+});
+
 function offerMatchAll(){
   if (S.readOnly || isDemo()) return;
   const top = newestCat();
@@ -8229,14 +8747,20 @@ function renderSettings(){
     </div>
     <p class="set-sec" ${g ? 'hidden' : ''}>設定</p>
     <div class="set-menu" ${g ? 'hidden' : ''}>
-      ${item('data', '💾', 'データ', `${S.mode === 'cloud' ? 'クラウドに保存' : 'この端末に保存'}・${real.length}件・書き出し／読み込み`)}
+      ${item('data', '💾', 'データ', `${S.mode === 'cloud' || CS.user ? 'クラウドに保存' : 'この端末に保存'}・${real.length}件・${IN_CLAUDE ? '書き出し／読み込み' : CS.user ? '同期・書き出し' : 'ログイン・書き出し'}`)}
       ${item('look', '🎨', '見た目', 'カラーテーマ・表示')}
       ${item('input', '🏷️', '記録の候補', 'お店・タグ')}
       ${item('share', '💬', '共有の文章', '共有テンプレート・まとめの文章')}
     </div>
+    ${IN_CLAUDE ? '' : `<p class="set-sec" ${g ? 'hidden' : ''}>ぐみろぐについて</p>
+    <div class="set-menu" ${g ? 'hidden' : ''}>
+      <a class="set-item" href="${CONTACT_FORM}" target="_blank" rel="noopener">${inner('✉️', 'お問い合わせ', '不具合の報告・要望・アカウントについて')}</a>
+      <a class="set-item" href="${PRIVACY_URL}" target="_blank" rel="noopener">${inner('🔒', 'プライバシーポリシー', '預かる情報と、その扱い')}</a>
+    </div>`}
     <div class="set-grp" ${g === 'data' ? '' : 'hidden'}>
+    ${IN_CLAUDE ? '' : `<div class="panel" id="cloud-panel">${cloudPanelInner()}</div>`}
     <div class="panel"><h3>保存先</h3>
-      <p>${S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
+      <p>${!IN_CLAUDE && CS.user ? 'この端末とクラウドの両方に保存しています。Xに共有するときの元の画質の写真だけは、この端末にだけ保存されます。' : S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
       <p>記録数：<b class="num">${real.length}</b>件</p>${storageHTML()}</div>
     <div class="panel"><h3>書き出し</h3>
       <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
@@ -8650,6 +9174,15 @@ $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 $('#settings-body').addEventListener('click', e => e.target.closest('#ma-open') && openMatchAll());
 $('#settings-body').addEventListener('click', e => e.target.closest('#nc-open') && openNotCat());
+// クラウドの欄のボタン（ログイン・今すぐ保存・ログアウト・アカウント削除）
+$('#settings-body').addEventListener('click', e => {
+  const b = e.target.closest('#cl-login, #cl-sync, #cl-logout, #cl-delete');
+  if (!b) return;
+  if (b.id === 'cl-login') cloudLogin();
+  else if (b.id === 'cl-sync') cloudSync();
+  else if (b.id === 'cl-logout') cloudLogout();
+  else cloudDeleteAccount();
+});
 // 設定のメニューからグループを開く／もどるボタンでメニューに戻ります
 $('#settings-body').addEventListener('click', e => {
   const b = e.target.closest('.set-item[data-grp]');
@@ -8670,6 +9203,7 @@ renderAll();
 connect().catch(() => {});
 // ここから下は、Claude の外（公開サイト）で開いたときだけ行います
 if (!IN_CLAUDE){
+  cloudBoot();
   // iOS のホーム画面に追加したWebアプリは、キャッシュしたページを表示し続けるので、新しい版を探してそちらへ移ります
   checkUpdate();
   document.addEventListener('visibilitychange', () => {
