@@ -1,8 +1,10 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="54496c38fb"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="84ff8afd1c"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
-<link rel="stylesheet" id="webfont" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" id="webfont" href="https://fonts.googleapis.com/css2?family=Murecho:wght@900&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<!-- ロゴ「ぐみろぐ」だけは、アイコンと同じ Dela Gothic One のままにします（ロゴの 4 文字だけを読み込むので軽く済みます） -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&text=%E3%81%90%E3%81%BF%E3%82%8D&display=swap" media="print" onload="this.media='all'">
 <style>
 /*
  * レイアウトの全体像:
@@ -18,7 +20,7 @@
   --g-straw:#F0445F; --g-orange:#FF8A2B; --g-lemon:#F5C518; --g-melon:#3DBE7A;
   --g-soda:#2FA4E7; --g-grape:#8D5BD6; --g-cola:#8A5233; --g-milk:#F2E6D6; --g-rainbow:#E2559B;
   --rainbow:linear-gradient(135deg,#FF5C7A,#FFA53D 22%,#FFD93D 40%,#5CCB6E 60%,#4DA8FF 80%,#9B6BFF);
-  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-display:"Murecho","Hiragino Sans","Yu Gothic",sans-serif;
   --f-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
   --r-panel:20px;
   --shelf-board:color-mix(in srgb,var(--accent) 22%,var(--surface-2));
@@ -89,13 +91,13 @@ h1,h2,h3{text-wrap:balance;margin:0}
   gap:10px
 }
 .logo {
-  font-family:var(--f-display);
+  font-family:"Dela Gothic One",var(--f-display);
   font-size:24px;
   letter-spacing:.02em;
   line-height:1;
   display:flex;
   align-items:center;
-  gap:6px
+  gap:1px
 }
 .logo span{color:var(--accent-text)}
 /* 「クラウド」などの小さなラベル */
@@ -1963,23 +1965,6 @@ a.set-item{text-decoration:none}
 .cl-danger{font-size:13px;color:var(--ink-2)}
 .cl-danger summary{cursor:pointer;padding:4px 0}
 .cl-danger .btn{margin-top:6px}
-.font-trials{display:grid;gap:8px}
-.font-trial {
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:2px;
-  text-align:left;
-  padding:10px 12px;
-  border:1.5px solid var(--line);
-  border-radius:14px;
-  background:var(--surface);
-  color:var(--ink);
-  cursor:pointer
-}
-.font-trial[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.font-trial .ft-s{font-size:22px;line-height:1.2}
-.font-trial .ft-n{font-size:12px;color:var(--ink-2)}
 .set-sec{font-size:12px;font-weight:700;color:var(--ink-2);margin:4px 4px -6px;letter-spacing:.04em}
 .set-sec[hidden],.set-menu[hidden]{display:none}
 .set-item .ic{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:17px}
@@ -2540,7 +2525,11 @@ a.set-item{text-decoration:none}
 .nospend{font-size:11px}
 .unrated{font-size:12px}
 .set-item small{font-size:12.5px}
-/* データ画面の大きな数字：Dela Gothic One は数字の幅をそろえると「1」のまわりが空きすぎるので、数字ごとの幅にして少し詰めます */
+/* 見出し・大きな数字のフォント（Murecho Black）。いちばん太い 900 で表示します */
+.big,.month-h h2,.cal-h h2,.kpi .v,.type-line b,.shelf-sum b,.shelf-h h2,.pk .stamp,.sheet-h h2{font-weight:900}
+/* ロゴはアイコンと同じ Dela Gothic One（太さは 1 種類だけのフォント） */
+.logo{font-weight:400}
+/* データ画面などの大きな数字は、数字の幅をそろえると「1」のまわりが空きすぎるので、数字ごとの幅にして少し詰めます */
 .kpi .v,.kpi .v.num,.big.num,.shelf-sum b,.shelf-sum .num,.pk .stamp.num{font-variant-numeric:proportional-nums;letter-spacing:-.01em}
 /* カードの間隔：画面の中の大きなまとまりは 16px、カードの内側は 16px にそろえます */
 .view{gap:16px}
@@ -2989,6 +2978,7 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:202, k:'p', at:'2026-11-12 22:18', t:'見出しと大きな数字のフォントを、読みやすい太字のフォントに変更しました（ロゴはそのままです）。'},
   {v:201, k:'p', at:'2026-11-12 16:26', t:'画面全体の文字の大きさと色、余白、上の保存先の表示、下のタブを見やすく調整しました。詳細画面で、お店と値段を分けて表示するようにしました。'},
   {v:200, k:'p', at:'2026-11-12 16:21', t:'ログの一覧でグミの名前を2行まで表示し、評価・日付・お店を名前の下に移して見やすくしました。データ画面の月ごとのグラフが今月の位置から表示されない不具合を修正しました。'},
   {v:199, k:'f', at:'2026-11-12 03:57', t:'設定に「お問い合わせ」と「プライバシーポリシー」を追加しました。'},
@@ -5397,7 +5387,7 @@ function imgPalette(){
 // 画像に使うフォントを先に読み込んでおきます（失敗しても気にせず進みます）。
 async function imgFonts(){
   try {
-    await Promise.all([document.fonts.load('400 60px "Dela Gothic One"', 'ぐみろぐぐみ棚0123456789月'),
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 60px "Murecho"', 'ぐみろぐぐみ棚0123456789月'),
       document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ')]);
   } catch(e){}
 }
@@ -5456,7 +5446,7 @@ function drawGumCard(x, C, g, ph, X, Y, cw, fh, nameSize = 26){
     x.strokeStyle = C.accent;
     x.stroke();
     x.fillStyle = C.acc;
-    x.font = '400 22px "Dela Gothic One"';
+    x.font = '900 22px "Murecho"';
     x.textAlign = 'center';
     x.textBaseline = 'middle';
     x.fillText('×' + g.count, 0, 2);
@@ -5477,12 +5467,12 @@ function drawGumCard(x, C, g, ph, X, Y, cw, fh, nameSize = 26){
 // 左上の「ぐみろぐ」ロゴを描きます（「ぐみ」はアクセント色、「ろぐ」は文字色）。
 function drawLogo(x, C, X, Y){
   x.textBaseline = 'alphabetic';
-  x.font = '400 40px "Dela Gothic One"';
+  x.font = '400 40px "Dela Gothic One", "Murecho"';
   x.fillStyle = C.acc;
   x.fillText('ぐみ', X, Y);
   const gw = x.measureText('ぐみ').width;
   x.fillStyle = C.ink;
-  x.fillText('ろぐ', X + gw + 4, Y);
+  x.fillText('ろぐ', X + gw + 1, Y);
 }
 
 // 最近の n 種類を並べた「ぐみ棚」の画像を描き、JPEG の Blob を返します。
@@ -5501,7 +5491,7 @@ async function drawShelfImage(n){
   x.fillRect(0, 0, W, H);
   // 見出し：ロゴ、タイトル、日付
   drawLogo(x, C, pad, 92);
-  x.font = '400 76px "Dela Gothic One"';
+  x.font = '900 76px "Murecho"';
   x.fillStyle = C.ink;
   x.fillText('ぐみ棚', pad, 190);
   const d = new Date(), all = shelfMine().length;
@@ -5563,7 +5553,7 @@ async function drawMonthImage(){
   x.fillStyle = C.bg;
   x.fillRect(0, 0, W, H);
   drawLogo(x, C, pad, 92);
-  x.font = '400 76px "Dela Gothic One"';
+  x.font = '900 76px "Murecho"';
   x.fillStyle = C.ink;
   x.fillText(`${mon}月のぐみろぐ`, pad, 190);
   x.font = '700 28px "Zen Maru Gothic"';
@@ -5591,7 +5581,7 @@ async function drawMonthImage(){
     // 数字と単位が枠に収まるまで、文字を小さくします（いちばん小さくて 30px）
     let fs = 50;
     for (;;){
-      x.font = `400 ${fs}px "Dela Gothic One"`;
+      x.font = `900 ${fs}px "Murecho"`;
       const need = x.measureText(vs).width + 6 + 28;
       if (need <= kw - 36 || fs <= 30) break;
       fs -= 2;
@@ -5607,7 +5597,7 @@ async function drawMonthImage(){
   x.fillStyle = C.ink2;
   x.fillText('推しメーカー', pad, yM);
   const lw = x.measureText('推しメーカー').width;
-  x.font = '400 40px "Dela Gothic One"';
+  x.font = '900 40px "Murecho"';
   x.fillStyle = C.acc;
   x.fillText(ms.topMaker || '—', pad + lw + 20, yM + 2);
   // ベストグミ
@@ -6243,7 +6233,7 @@ async function drawAchAllImage(){
   const sec = all.filter(s => s.a.secret).length;
   await imgFonts();
   try {
-    await Promise.all([document.fonts.load('400 80px "Dela Gothic One"', '集めた称号個0123456789' + TIERS.map(t => t.n).join('') + 'シークレット'),
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 80px "Murecho"', '集めた称号個0123456789' + TIERS.map(t => t.n).join('') + 'シークレット'),
       document.fonts.load('700 26px "Zen Maru Gothic"', list.map(s => s.a.name).join('') + 'ほか個#ぐみろぐグミ.0123456789')]);
   } catch(e){}
   const C = imgPalette(), W = 1080, cols = 5, cw = 196, ch = 250, gx = (W - cols * cw) / 2;
@@ -6262,7 +6252,7 @@ async function drawAchAllImage(){
   x.textAlign = 'center';
   x.textBaseline = 'middle';
   x.fillStyle = C.ink;
-  x.font = '400 64px "Dela Gothic One"';
+  x.font = '900 64px "Murecho"';
   x.fillText(`集めた称号 ${all.length}個`, W / 2, 225);
   const chips = [...TIERS.map((t, i) => [t.k, `${t.n} ${per[i]}`]).reverse(), ['secret', `シークレット ${sec}`]].filter(c => !/ 0$/.test(c[1]));
   x.font = '700 26px "Zen Maru Gothic"';
@@ -6354,7 +6344,7 @@ async function drawAchImage(a, got){
   // 画像に使う文字をすべて読み込んでから描きます（読み込む前に描くと、別のフォントになってしまうため）
   await imgFonts();
   try {
-    await Promise.all([document.fonts.load('400 80px "Dela Gothic One"', a.name + tierName + head),
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 80px "Murecho"', a.name + tierName + head),
       document.fonts.load('700 36px "Zen Maru Gothic"', desc + date + '#ぐみろぐグミ')]);
   } catch(e){}
   const C = imgPalette(), W = 1080, H = 1350;
@@ -6389,13 +6379,13 @@ async function drawAchImage(a, got){
   }
   drawMedal(x, tier, a.icon, W / 2, 540, 200);
   // 段階・名前・条件
-  x.font = '400 46px "Dela Gothic One"';
+  x.font = '900 46px "Murecho"';
   x.fillStyle = TIER_INK[tier];
   x.fillText(tierName, W / 2, 935);
   // 名前は長いと文字を小さくして、横幅に収めます
   let fs = 84;
   do {
-    x.font = `400 ${fs}px "Dela Gothic One"`;
+    x.font = `900 ${fs}px "Murecho"`;
     fs -= 4;
   } while (x.measureText(a.name).width > W - 180 && fs > 40);
   x.fillStyle = C.ink;
@@ -6608,41 +6598,6 @@ function checkMonthAsk(){
 }
 // 称号を調べるのを待つタイマーです
 let achCheckT = 0;
-/* ----- 見出しのフォントのお試し（プレビュー版だけ） -----
-   見出し・大きな数字に使うフォント（--f-display）を切りかえて比べるためのものです。選んだフォントは使うときだけ読み込みます。 */
-const FONT_TRIALS = [
-  {k:'dela', n:'Dela Gothic One（今のフォント）', css:"'Dela Gothic One'", w:400, q:''},
-  {k:'mplusr', n:'M PLUS Rounded 1c（丸ゴシック・極太）', css:"'M PLUS Rounded 1c'", w:800, q:'M+PLUS+Rounded+1c:wght@800'},
-  {k:'zenmaru', n:'Zen Maru Gothic Black（本文と同じ丸ゴシックの最も太いもの）', css:"'Zen Maru Gothic'", w:900, q:'Zen+Maru+Gothic:wght@900'},
-  {k:'murecho', n:'Murecho Black（すっきりした極太ゴシック）', css:"'Murecho'", w:900, q:'Murecho:wght@900'},
-];
-const LS_FONTTRIAL = 'gumilog.fontTrial.v1';
-const fontTrialKey = () => (FONT_TRIALS.find(f => f.k === lsGet(LS_FONTTRIAL, 'dela')) || FONT_TRIALS[0]).k;
-const fontLoaded = new Set();
-function loadTrialFonts(list){
-  for (const f of list){
-    if (!f.q || fontLoaded.has(f.k)) continue;
-    fontLoaded.add(f.k);
-    const l = document.createElement('link');
-    l.rel = 'stylesheet';
-    l.href = `https://fonts.googleapis.com/css2?family=${f.q}&display=swap`;
-    document.head.appendChild(l);
-  }
-}
-function applyFontTrial(){
-  if (IN_CLAUDE || !CLOUD_TEST) return;
-  const f = FONT_TRIALS.find(x => x.k === fontTrialKey());
-  loadTrialFonts([f]);
-  document.documentElement.style.setProperty('--f-display', `${f.css},"Hiragino Sans","Yu Gothic",sans-serif`);
-  let st = $('#font-trial-style');
-  if (!st){
-    st = document.createElement('style');
-    st.id = 'font-trial-style';
-    document.head.appendChild(st);
-  }
-  st.textContent = `.logo,.big,.month-h h2,.cal-h h2,.kpi .v,.type-line b,.shelf-sum b,.shelf-h h2,.pk .stamp,.sheet-h h2{font-weight:${f.w}}`;
-}
-
 // 上の保存先の表示です。雲（クラウド）か端末のアイコンと短い文字だけにして、押すと設定の「データ」を開きます
 const ST_ICON = {
   cloud:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M9.5 13.5l1.8 1.8 3.4-3.6"/></svg>',
@@ -8919,9 +8874,6 @@ function renderSettings(){
     <div class="set-grp" ${g === 'look' ? '' : 'hidden'}>
     <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
     <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
-    ${!IN_CLAUDE && CLOUD_TEST ? `<div class="panel"><h3>見出しのフォント<span class="s">プレビュー版だけのお試し</span></h3>
-      <p class="hint" style="margin:0">見出しや大きな数字のフォントを切りかえて比べられます。本文のフォントは変わりません。</p>
-      <div class="font-trials">${FONT_TRIALS.map(f => `<button type="button" class="font-trial" data-font="${f.k}" aria-pressed="${fontTrialKey() === f.k}"><span class="ft-s" style="font-family:${f.css};font-weight:${f.w}">ぐみろぐ 1,126円</span><span class="ft-n">${esc(f.n)}</span></button>`).join('')}</div></div>` : ''}
     </div>
     <div class="set-grp" ${g === 'catalog' ? '' : 'hidden'}>
     <div class="panel"><h3>グミカタログ</h3>
@@ -9331,15 +9283,6 @@ $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 $('#settings-body').addEventListener('click', e => e.target.closest('#ma-open') && openMatchAll());
 $('#settings-body').addEventListener('click', e => e.target.closest('#nc-open') && openNotCat());
-// 見出しのフォントのお試し：押したフォントに切りかえます（設定を開いたら、見本のためにすべて読み込みます）
-$('#settings-body').addEventListener('click', e => {
-  const b = e.target.closest('[data-font]');
-  if (!b) return;
-  lsSet(LS_FONTTRIAL, b.dataset.font);
-  applyFontTrial();
-  $('#settings-body').querySelectorAll('[data-font]').forEach(x => x.setAttribute('aria-pressed', x === b));
-  renderAll();
-});
 // クラウドの欄のボタン（ログイン・今すぐ保存・ログアウト・アカウント削除）
 $('#settings-body').addEventListener('click', e => {
   const b = e.target.closest('#cl-login, #cl-sync, #cl-logout, #cl-delete');
@@ -9354,7 +9297,6 @@ $('#settings-body').addEventListener('click', e => {
   const b = e.target.closest('.set-item[data-grp]');
   if (!b) return;
   SET_GRP = b.dataset.grp;
-  if (SET_GRP === 'look' && !IN_CLAUDE && CLOUD_TEST) loadTrialFonts(FONT_TRIALS);
   renderSettings();
   $('#sh-settings').querySelectorAll('.sheet-p, #settings-body').forEach(x => { x.scrollTop = 0; });
 });
@@ -9370,7 +9312,6 @@ renderAll();
 connect().catch(() => {});
 // ここから下は、Claude の外（公開サイト）で開いたときだけ行います
 if (!IN_CLAUDE){
-  applyFontTrial();
   cloudBoot();
   // iOS のホーム画面に追加したWebアプリは、キャッシュしたページを表示し続けるので、新しい版を探してそちらへ移ります
   checkUpdate();
