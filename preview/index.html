@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="2d714ce901"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8026d68466"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -1738,7 +1738,10 @@ input[type=range] {
   font-size:12px;
   color:var(--ink-2);
   margin-top:2px;
-  line-height:1.5
+  line-height:1.5;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
 }
 .meter {
   display:flex;
@@ -8147,7 +8150,9 @@ function prevBuy(all, it){
   const [y, m, d] = prev.date.split('-').map(Number);
   // 2つの日付の差（ミリ秒）を1日のミリ秒数で割って日数にします
   const days = Math.round((parseYmd(it.date) - parseYmd(prev.date)) / 86400000);
-  return `<div class="prev-buy num">前回 ${y}/${m}/${d}<br>${days ? `${days}日ぶり` : '同じ日'}</div>`;
+  // 「前回 10/26（16日ぶり）」のように 1 行にまとめます（年がちがうときだけ年も出します）
+  const sameYear = y === parseYmd(it.date).getFullYear();
+  return `<div class="prev-buy num">前回 ${sameYear ? '' : y + '/'}${m}/${d}（${days ? `${days}日ぶり` : '同じ日'}）</div>`;
 }
 // 削除ボタンを1回押して「もう一度押すと削除」状態になっているかどうかです
 let delArmed = false;
