@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8026d68466"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="3199651367"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -8169,7 +8169,8 @@ function openDetail(id){
   const pKey = photoKeyFor(it), pOwn = pKey === ownKey(it);
   delArmed = false;
   // かたさ・すっぱさをアイコンと言葉で表すHTMLを作る小さな関数です（未記録なら「—」）
-  const meter = (kind, n) => n ? `<div class="meter">${shapesHTML(kind, n, 16)}<span class="hint" style="margin-left:6px">${LEVEL_LBL[kind][n-1]}</span></div>` : '<div class="v">—</div>';
+  // かたさ・すっぱさ：ほかの欄と同じように言葉（「ふにゃふにゃ」など）を値として出し、その下に形を並べます（横に並べると折り返してしまうため）
+  const meter = (kind, n) => n ? `<div class="v">${LEVEL_LBL[kind][n-1]}</div><div class="meter">${shapesHTML(kind, n, 16)}</div>` : '<div class="v">—</div>';
   $('#dt-no').textContent = it.demo ? 'サンプルの記録' : `No.${nums.get(it.id)}`;
   // シートの中身をまとめてHTMLで組み立てます（サンプルの記録では編集用の部分を出しません）
   $('#dt-body').innerHTML = `
