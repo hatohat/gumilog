@@ -1,8 +1,10 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="4c87b4613f"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="4fdc08d751"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
 <link rel="stylesheet" id="webfont" href="https://fonts.googleapis.com/css2?family=Murecho:wght@900&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<!-- ロゴ「ぐみろぐ」だけは、アイコンと同じ Dela Gothic One のままにします（ロゴの 4 文字だけを読み込むので軽く済みます） -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&text=%E3%81%90%E3%81%BF%E3%82%8D&display=swap" media="print" onload="this.media='all'">
 <style>
 /*
  * レイアウトの全体像:
@@ -89,7 +91,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
   gap:10px
 }
 .logo {
-  font-family:var(--f-display);
+  font-family:"Dela Gothic One",var(--f-display);
   font-size:24px;
   letter-spacing:.02em;
   line-height:1;
@@ -2524,7 +2526,9 @@ a.set-item{text-decoration:none}
 .unrated{font-size:12px}
 .set-item small{font-size:12.5px}
 /* 見出し・大きな数字のフォント（Murecho Black）。いちばん太い 900 で表示します */
-.logo,.big,.month-h h2,.cal-h h2,.kpi .v,.type-line b,.shelf-sum b,.shelf-h h2,.pk .stamp,.sheet-h h2{font-weight:900}
+.big,.month-h h2,.cal-h h2,.kpi .v,.type-line b,.shelf-sum b,.shelf-h h2,.pk .stamp,.sheet-h h2{font-weight:900}
+/* ロゴはアイコンと同じ Dela Gothic One（太さは 1 種類だけのフォント） */
+.logo{font-weight:400}
 /* データ画面などの大きな数字は、数字の幅をそろえると「1」のまわりが空きすぎるので、数字ごとの幅にして少し詰めます */
 .kpi .v,.kpi .v.num,.big.num,.shelf-sum b,.shelf-sum .num,.pk .stamp.num{font-variant-numeric:proportional-nums;letter-spacing:-.01em}
 /* カードの間隔：画面の中の大きなまとまりは 16px、カードの内側は 16px にそろえます */
@@ -3091,7 +3095,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
-  {v:202, k:'p', at:'2026-11-12 22:18', t:'見出しと大きな数字のフォントを、読みやすい太字のフォントに変更しました。'},
+  {v:202, k:'p', at:'2026-11-12 22:18', t:'見出しと大きな数字のフォントを、読みやすい太字のフォントに変更しました（ロゴはそのままです）。'},
   {v:201, k:'p', at:'2026-11-12 16:26', t:'画面全体の文字の大きさと色、余白、上の保存先の表示、下のタブを見やすく調整しました。詳細画面で、お店と値段を分けて表示するようにしました。'},
   {v:200, k:'p', at:'2026-11-12 16:21', t:'ログの一覧でグミの名前を2行まで表示し、評価・日付・お店を名前の下に移して見やすくしました。データ画面の月ごとのグラフが今月の位置から表示されない不具合を修正しました。'},
   {v:199, k:'f', at:'2026-11-12 03:57', t:'設定に「お問い合わせ」と「プライバシーポリシー」を追加しました。'},
@@ -5501,7 +5505,7 @@ function imgPalette(){
 // 画像に使うフォントを先に読み込んでおきます（失敗しても気にせず進みます）。
 async function imgFonts(){
   try {
-    await Promise.all([document.fonts.load('900 60px "Murecho"', 'ぐみろぐぐみ棚0123456789月'),
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 60px "Murecho"', 'ぐみろぐぐみ棚0123456789月'),
       document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ')]);
   } catch(e){}
 }
@@ -5581,7 +5585,7 @@ function drawGumCard(x, C, g, ph, X, Y, cw, fh, nameSize = 26){
 // 左上の「ぐみろぐ」ロゴを描きます（「ぐみ」はアクセント色、「ろぐ」は文字色）。
 function drawLogo(x, C, X, Y){
   x.textBaseline = 'alphabetic';
-  x.font = '900 40px "Murecho"';
+  x.font = '400 40px "Dela Gothic One", "Murecho"';
   x.fillStyle = C.acc;
   x.fillText('ぐみ', X, Y);
   const gw = x.measureText('ぐみ').width;
@@ -6347,7 +6351,7 @@ async function drawAchAllImage(){
   const sec = all.filter(s => s.a.secret).length;
   await imgFonts();
   try {
-    await Promise.all([document.fonts.load('900 80px "Murecho"', '集めた称号個0123456789' + TIERS.map(t => t.n).join('') + 'シークレット'),
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 80px "Murecho"', '集めた称号個0123456789' + TIERS.map(t => t.n).join('') + 'シークレット'),
       document.fonts.load('700 26px "Zen Maru Gothic"', list.map(s => s.a.name).join('') + 'ほか個#ぐみろぐグミ.0123456789')]);
   } catch(e){}
   const C = imgPalette(), W = 1080, cols = 5, cw = 196, ch = 250, gx = (W - cols * cw) / 2;
@@ -6458,7 +6462,7 @@ async function drawAchImage(a, got){
   // 画像に使う文字をすべて読み込んでから描きます（読み込む前に描くと、別のフォントになってしまうため）
   await imgFonts();
   try {
-    await Promise.all([document.fonts.load('900 80px "Murecho"', a.name + tierName + head),
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 80px "Murecho"', a.name + tierName + head),
       document.fonts.load('700 36px "Zen Maru Gothic"', desc + date + '#ぐみろぐグミ')]);
   } catch(e){}
   const C = imgPalette(), W = 1080, H = 1350;
