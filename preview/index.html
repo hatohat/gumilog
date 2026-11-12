@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="65c98f2557"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="2d714ce901"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -1574,8 +1574,7 @@ input[type=range] {
   padding:8px 12px
 }
 .dt-grid .v{font-weight:700}
-/* 「買った回数」は左側で 2 行分を使い、その横に「かたさ」と「すっぱさ」を縦に並べます */
-.dt-grid .dt-buys{grid-row:span 2}
+/* 左の列に「日付・お店・値段」、右の列に「買った回数・かたさ・すっぱさ」を並べます */
 .tpl-row {
   display:flex;
   flex-direction:column;
@@ -3102,7 +3101,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
-  {v:201, k:'p', at:'2026-11-12 16:26', t:'画面全体の文字の大きさと色、余白、上の保存先の表示、下のタブを見やすく調整しました。'},
+  {v:201, k:'p', at:'2026-11-12 16:26', t:'画面全体の文字の大きさと色、余白、上の保存先の表示、下のタブを見やすく調整しました。詳細画面で、お店と値段を分けて表示するようにしました。'},
   {v:200, k:'p', at:'2026-11-12 16:21', t:'ログの一覧でグミの名前を2行まで表示し、評価・日付・お店を名前の下に移して見やすくしました。データ画面の月ごとのグラフが今月の位置から表示されない不具合を修正しました。'},
   {v:199, k:'f', at:'2026-11-12 03:57', t:'設定に「お問い合わせ」と「プライバシーポリシー」を追加しました。'},
   {v:198, k:'M', at:'2026-11-12 02:50', t:'Googleでログインして、記録・写真・設定をクラウドに保存できるようにしました。機種変更やブラウザのデータ削除でも記録が消えず、ほかの端末でも同じ記録を見られます。'},
@@ -8173,9 +8172,10 @@ function openDetail(id){
       <div style="min-width:0"><div>${(it.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('')}</div><h3>${esc(it.name)}${statusMark(it)}</h3><div class="sub">${esc([it.maker, it.flavor].filter(Boolean).join('・'))}</div><span id="dt-stars-top">${starsHTML(it.rating||0)}</span></div></div>
     <div class="dt-grid">
       <div><span class="lbl">日付</span><div class="v num">${mdLabel(it.date)}</div></div>
-      <div><span class="lbl">お店・値段${it.noSpend ? '<span class="nospend">出費外</span>' : ''}</span><div class="v">${esc(it.shop || '—')}${it.price != null && it.price !== '' ? '・' + yen(+it.price) : ''}</div></div>
       <div class="dt-buys"><span class="lbl">買った回数</span><div class="v num">${rep.get(it.name)}回</div>${prevBuy(all, it)}</div>
+      <div><span class="lbl">お店</span><div class="v">${esc(it.shop || '—')}</div></div>
       <div><span class="lbl">かたさ</span><div id="dt-hard-top">${meter('hard', it.hard||0)}</div></div>
+      <div><span class="lbl">値段${it.noSpend ? '<span class="nospend">出費外</span>' : ''}</span><div class="v num">${it.price != null && it.price !== '' ? yen(+it.price) : '—'}</div></div>
       <div><span class="lbl">すっぱさ</span><div id="dt-sour-top">${meter('sour', it.sour||0)}</div></div>
     </div>
     <div class="note" id="dt-note-top" ${it.note ? '' : 'hidden'}>${esc(it.note || '')}</div>
