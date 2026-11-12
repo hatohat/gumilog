@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="91e9f96655"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="e4ac17e358"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -12,7 +12,7 @@
 
 /* ===== 色・フォントなどの共通設定（CSS 変数） ===== */
 :root{
-  --bg:#FFF5F3; --surface:#FFFFFF; --surface-2:#FCE9E7; --ink:#3A1830; --ink-2:#80607A; --line:#F1D9DA;
+  --bg:#FFF5F3; --surface:#FFFFFF; --surface-2:#FCE9E7; --ink:#3A1830; --ink-2:#6F5068; --line:#F1D9DA;
   --accent:#E3346A; --accent-text:#E3346A; --accent-ink:#FFFFFF; --accent-soft:#FFDCE6; --scrim:rgba(58,24,48,.42);
   --ok:#2F9E68; --warn:#C9831A;
   --g-straw:#F0445F; --g-orange:#FF8A2B; --g-lemon:#F5C518; --g-melon:#3DBE7A;
@@ -27,14 +27,14 @@
 /* ダークモード: 端末がダーク設定で、アプリ側で「ライト」を選んでいないときの色です */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1C1118; --surface:#271922; --surface-2:#33202C; --ink:#FBEAF1; --ink-2:#C6A6B8; --line:#42303B;
+    --bg:#1C1118; --surface:#271922; --surface-2:#33202C; --ink:#FBEAF1; --ink-2:#D3B8C7; --line:#42303B;
     --accent:#FF5C8D; --accent-text:#FF5C8D; --accent-ink:#2A0E1C; --accent-soft:#4B2234; --scrim:rgba(0,0,0,.6);
     --ok:#5BD198; --warn:#F0B34A; color-scheme:dark;
   }
 }
 /* ダークモード: アプリ側で「ダーク」を選んだときの色です（上と同じ値です） */
 :root[data-theme="dark"]{
-  --bg:#1C1118; --surface:#271922; --surface-2:#33202C; --ink:#FBEAF1; --ink-2:#C6A6B8; --line:#42303B;
+  --bg:#1C1118; --surface:#271922; --surface-2:#33202C; --ink:#FBEAF1; --ink-2:#D3B8C7; --line:#42303B;
   --accent:#FF5C8D; --accent-text:#FF5C8D; --accent-ink:#2A0E1C; --accent-soft:#4B2234; --scrim:rgba(0,0,0,.6);
   --ok:#5BD198; --warn:#F0B34A; color-scheme:dark;
 }
@@ -400,13 +400,21 @@ h1,h2,h3{text-wrap:balance;margin:0}
 /* 記録の 6 つの絞り込みは、スマホでも 1 行に収めます */
 #filters {
   flex-wrap:nowrap;
-  justify-content:space-between;
-  gap:4px
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  margin-right:-16px;
+  padding-right:28px;
+  /* 右端をうすくして、横に続きがあることを見せます */
+  -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);
+  mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent)
 }
+#filters::-webkit-scrollbar{display:none}
 #filters .chip {
-  padding:5px 8px;
+  padding:5px 11px;
   white-space:nowrap;
-  flex:0 1 auto
+  flex:none
 }
 .chip[aria-pressed="true"] {
   background:var(--ink);
@@ -440,7 +448,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 }
 .row {
   display:grid;
-  grid-template-columns:44px minmax(0,1fr) auto;
+  grid-template-columns:44px minmax(0,1fr);
   gap:12px;
   align-items:center;
   padding:12px 14px;
@@ -1319,14 +1327,30 @@ input[type=date].in::-webkit-date-and-time-value {
 .done-mark svg{width:100%;height:100%}
 .row .nm {
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   min-width:0
 }
+/* グミの名前は 2 行まで出します（長い名前でも、途中で切れにくいように） */
 .row .nm .nm-t {
   overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  white-space:normal;
+  word-break:break-all;
+  line-height:1.35;
   min-width:0
+}
+.row .row-main{min-width:0}
+/* 3 行目：評価・日付・値段 */
+.row .meta {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:2px 8px;
+  margin-top:3px;
+  font-size:12px;
+  color:var(--ink-2)
 }
 .unrated{font-size:11px;color:var(--ink-2)}
 .pick-lbl.none{font-weight:500}
@@ -1550,8 +1574,7 @@ input[type=range] {
   padding:8px 12px
 }
 .dt-grid .v{font-weight:700}
-/* 「買った回数」は左側で 2 行分を使い、その横に「かたさ」と「すっぱさ」を縦に並べます */
-.dt-grid .dt-buys{grid-row:span 2}
+/* 左の列に「日付・お店・値段」、右の列に「買った回数・かたさ・すっぱさ」を並べます */
 .tpl-row {
   display:flex;
   flex-direction:column;
@@ -1715,7 +1738,10 @@ input[type=range] {
   font-size:12px;
   color:var(--ink-2);
   margin-top:2px;
-  line-height:1.5
+  line-height:1.5;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
 }
 .meter {
   display:flex;
@@ -1937,6 +1963,23 @@ a.set-item{text-decoration:none}
 .cl-danger{font-size:13px;color:var(--ink-2)}
 .cl-danger summary{cursor:pointer;padding:4px 0}
 .cl-danger .btn{margin-top:6px}
+.font-trials{display:grid;gap:8px}
+.font-trial {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:2px;
+  text-align:left;
+  padding:10px 12px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:var(--surface);
+  color:var(--ink);
+  cursor:pointer
+}
+.font-trial[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.font-trial .ft-s{font-size:22px;line-height:1.2}
+.font-trial .ft-n{font-size:12px;color:var(--ink-2)}
 .set-sec{font-size:12px;font-weight:700;color:var(--ink-2);margin:4px 4px -6px;letter-spacing:.04em}
 .set-sec[hidden],.set-menu[hidden]{display:none}
 .set-item .ic{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:17px}
@@ -2467,6 +2510,56 @@ a.set-item{text-decoration:none}
 .data-seg[hidden] {
   display:none
 }
+
+/* ===== 見やすさの調整（2026-11） =====
+   補足の文字を少し大きく・濃くし、カードの間隔をそろえ、上の保存先の表示と下のタブを見やすくしました。 */
+.row .sub{font-size:13px}
+.row .meta{font-size:12.5px}
+.row .meta{flex-wrap:nowrap}
+/* 日付は写真の上に出します（3 行目を短くして、はみ出さないように） */
+/* 左の列は写真と同じ幅（56px）にして、写真が列いっぱいに入るようにします。左右の余白（カードの端・文字との間）は 14px にそろえます */
+.row{grid-template-columns:56px minmax(0,1fr);align-items:start;gap:14px;padding:9px 14px 10px}
+.row .row-left{display:flex;flex-direction:column;align-items:stretch;gap:3px;width:56px}
+/* タグの行は、タグがない記録でも同じ高さだけ空けて、名前の位置をそろえます */
+.row .row-tags{min-height:18px;margin-bottom:1px}
+.row .nm .nm-t{line-height:1.3}
+.row .sub{line-height:1.4}
+.row .meta{margin-top:1px}
+.row .row-date{font-size:11px;color:var(--ink-2);white-space:nowrap;line-height:1.2;text-align:center;letter-spacing:-.02em}
+.row .row-left .gf-row{width:56px;height:56px;border-radius:14px}
+.row .meta .stars{flex:none}
+.row .meta .when{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:0 1 auto}
+.hint{font-size:13px}
+.tag{font-size:11px;padding:1px 8px}
+.lbl{font-size:12px}
+.month-h span,.shelf-h span{font-size:13px}
+.panel h3 .s{font-size:12.5px}
+.ac-head{font-size:12px}
+.nospend{font-size:11px}
+.unrated{font-size:12px}
+.set-item small{font-size:12.5px}
+/* データ画面の大きな数字：Dela Gothic One は数字の幅をそろえると「1」のまわりが空きすぎるので、数字ごとの幅にして少し詰めます */
+.kpi .v,.kpi .v.num,.big.num,.shelf-sum b,.shelf-sum .num,.pk .stamp.num{font-variant-numeric:proportional-nums;letter-spacing:-.01em}
+/* カードの間隔：画面の中の大きなまとまりは 16px、カードの内側は 16px にそろえます */
+.view{gap:16px}
+.panel{padding:16px;gap:12px}
+/* 上の保存先の表示：アイコンと短い文字だけにして、押せるボタンにします */
+.st-pill {
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  border:0;
+  font:inherit;
+  font-size:12px;
+  letter-spacing:.04em;
+  padding:4px 10px 4px 8px;
+  cursor:pointer
+}
+.st-pill svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* 下のタブ：アイコンと文字を少し大きくし、いまのタブはアイコンの後ろに色のついた丸を出します */
+.tab{font-size:12px;gap:3px;padding:6px 0 9px}
+.tab svg{width:24px;height:24px;padding:3px 14px;box-sizing:content-box;border-radius:999px;transition:background .15s}
+.tab[aria-current="page"] svg{background:var(--accent-soft)}
 </style></head><body>
 
 <!-- ===== ヘッダー（画面上部に常に表示されるロゴ・保存状態・ボタン） ===== -->
@@ -2474,7 +2567,7 @@ a.set-item{text-decoration:none}
   <div class="top-in">
     <div class="logo" aria-label="ぐみろぐ"><span>ぐみ</span>ろぐ</div>
     <!-- データの保存先を表示します -->
-    <span class="pill" id="status">この端末に保存</span>
+    <button type="button" class="pill st-pill" id="status" aria-label="保存先：この端末">この端末</button>
     <!-- 余白です。右側のボタンを右端に寄せます -->
     <div class="sp"></div>
     <!-- お知らせボタン（未読があると小さな点が付きます） -->
@@ -2894,6 +2987,8 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:201, k:'p', at:'2026-11-12 16:26', t:'画面全体の文字の大きさと色、余白、上の保存先の表示、下のタブを見やすく調整しました。詳細画面で、お店と値段を分けて表示するようにしました。'},
+  {v:200, k:'p', at:'2026-11-12 16:21', t:'ログの一覧でグミの名前を2行まで表示し、評価・日付・お店を名前の下に移して見やすくしました。データ画面の月ごとのグラフが今月の位置から表示されない不具合を修正しました。'},
   {v:199, k:'f', at:'2026-11-12 03:57', t:'設定に「お問い合わせ」と「プライバシーポリシー」を追加しました。'},
   {v:198, k:'M', at:'2026-11-12 02:50', t:'Googleでログインして、記録・写真・設定をクラウドに保存できるようにしました。機種変更やブラウザのデータ削除でも記録が消えず、ほかの端末でも同じ記録を見られます。'},
   {v:197, k:'p', at:'2026-11-11 00:14', t:'共有の文章の初期テンプレートを、商品名・ひとこと・評価の間に空行が入る形に変更しました。お店の初期候補を、セブンイレブン・ファミリーマート・NewDays などの表記に変更しました。'},
@@ -4005,8 +4100,7 @@ function renderCloud(){
   if (IN_CLAUDE) return;
   const st = $('#status');
   if (st && S.mode !== 'cloud'){
-    st.textContent = CS.user ? 'クラウドに保存' : 'この端末に保存';
-    st.className = 'pill' + (CS.user ? ' cloud' : '');
+    statusPill(st, !!CS.user);
   }
   const box = $('#cloud-panel');
   if (box) box.innerHTML = cloudPanelInner();
@@ -4525,9 +4619,9 @@ function rowHTML(i, rep, nums){
   const tags = (i.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('');
   const r = rep.get(i.name) > 1 ? `<span class="tag">${rep.get(i.name)}回目まで</span>` : '';
   return `<button class="row" data-open="${esc(i.id)}">
-    ${gframe(i, 'row')}
-    <span style="min-width:0">${tags ? `<span class="row-tags">${tags}</span>` : ''}<span class="nm"><span class="nm-t">${esc(i.name)}</span>${statusMark(i)}</span><span class="sub">${esc([i.maker, i.flavor].filter(Boolean).join('・'))}${i.shop ? '　@' + esc(i.shop) : ''}</span></span>
-    <span class="rt">${starsHTML(i.rating||0)}<span class="num">${mdLabel(i.date)}${i.price ? '・' + yen(+i.price) : ''}</span>${i.noSpend ? '<span class="nospend">出費外</span>' : ''}</span>
+    <span class="row-left"><span class="row-date num">${mdLabel(i.date)}</span>${gframe(i, 'row')}</span>
+    <span class="row-main"><span class="row-tags"${tags ? '' : ' aria-hidden="true"'}>${tags}</span><span class="nm"><span class="nm-t">${esc(i.name)}</span>${statusMark(i)}</span>${i.maker || i.flavor ? `<span class="sub">${esc([i.maker, i.flavor].filter(Boolean).join('・'))}</span>` : ''}
+      <span class="meta">${starsHTML(i.rating||0)}${i.price || i.shop ? `<span class="when">${i.price ? `<span class="num">${yen(+i.price)}</span>` : ''}${i.price && i.shop ? '　' : ''}${i.shop ? '@' + esc(i.shop) : ''}</span>` : ''}${i.noSpend ? '<span class="nospend">出費外</span>' : ''}</span></span>
   </button>`;
 }
 
@@ -6512,6 +6606,51 @@ function checkMonthAsk(){
 }
 // 称号を調べるのを待つタイマーです
 let achCheckT = 0;
+/* ----- 見出しのフォントのお試し（プレビュー版だけ） -----
+   見出し・大きな数字に使うフォント（--f-display）を切りかえて比べるためのものです。選んだフォントは使うときだけ読み込みます。 */
+const FONT_TRIALS = [
+  {k:'dela', n:'Dela Gothic One（今のフォント）', css:"'Dela Gothic One'", w:400, q:''},
+  {k:'mplusr', n:'M PLUS Rounded 1c（丸ゴシック・極太）', css:"'M PLUS Rounded 1c'", w:800, q:'M+PLUS+Rounded+1c:wght@800'},
+  {k:'zenmaru', n:'Zen Maru Gothic Black（本文と同じ丸ゴシックの最も太いもの）', css:"'Zen Maru Gothic'", w:900, q:'Zen+Maru+Gothic:wght@900'},
+  {k:'murecho', n:'Murecho Black（すっきりした極太ゴシック）', css:"'Murecho'", w:900, q:'Murecho:wght@900'},
+];
+const LS_FONTTRIAL = 'gumilog.fontTrial.v1';
+const fontTrialKey = () => (FONT_TRIALS.find(f => f.k === lsGet(LS_FONTTRIAL, 'dela')) || FONT_TRIALS[0]).k;
+const fontLoaded = new Set();
+function loadTrialFonts(list){
+  for (const f of list){
+    if (!f.q || fontLoaded.has(f.k)) continue;
+    fontLoaded.add(f.k);
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = `https://fonts.googleapis.com/css2?family=${f.q}&display=swap`;
+    document.head.appendChild(l);
+  }
+}
+function applyFontTrial(){
+  if (IN_CLAUDE || !CLOUD_TEST) return;
+  const f = FONT_TRIALS.find(x => x.k === fontTrialKey());
+  loadTrialFonts([f]);
+  document.documentElement.style.setProperty('--f-display', `${f.css},"Hiragino Sans","Yu Gothic",sans-serif`);
+  let st = $('#font-trial-style');
+  if (!st){
+    st = document.createElement('style');
+    st.id = 'font-trial-style';
+    document.head.appendChild(st);
+  }
+  st.textContent = `.logo,.big,.month-h h2,.cal-h h2,.kpi .v,.type-line b,.shelf-sum b,.shelf-h h2,.pk .stamp,.sheet-h h2{font-weight:${f.w}}`;
+}
+
+// 上の保存先の表示です。雲（クラウド）か端末のアイコンと短い文字だけにして、押すと設定の「データ」を開きます
+const ST_ICON = {
+  cloud:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M9.5 13.5l1.8 1.8 3.4-3.6"/></svg>',
+  local:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg>'};
+function statusPill(st, onCloud){
+  const html = (onCloud ? ST_ICON.cloud : ST_ICON.local) + `<span>${onCloud ? 'クラウド' : 'この端末'}</span>`;
+  if (st.innerHTML !== html) st.innerHTML = html;
+  st.className = 'pill st-pill' + (onCloud ? ' cloud' : '');
+  st.setAttribute('aria-label', onCloud ? '保存先：クラウド（設定を開く）' : '保存先：この端末（設定を開く）');
+}
 function renderAll(){
   renderNewsBadge();
   renderSetBadge();
@@ -6523,8 +6662,7 @@ function renderAll(){
   // 保存先（クラウド / この端末）の表示
   const st = $('#status');
   const onCloud = S.mode === 'cloud' || !!CS.user;
-  st.textContent = onCloud ? 'クラウドに保存' : 'この端末に保存';
-  st.className = 'pill' + (onCloud ? ' cloud' : '');
+  statusPill(st, onCloud);
   // クラウド利用中なのに端末に記録が残っていれば、移すためのお知らせを出します。
   const mb = $('#migrate-banner');
   if (S.mode === 'cloud' && (S.local.length || Object.keys(S.localPhotos).length)){
@@ -6581,6 +6719,10 @@ function setTab(t){
     jarSetup();
     jarSync(true);
   }
+  // データ画面の月ごとのグラフは、隠れている間に描くと左端（昔の月）のままになるので、見えたときに今月（右端）へ動かします
+  if (t === 'cal') requestAnimationFrame(() => document.querySelectorAll('#v-stats [data-mchart]').forEach(el => {
+    if (el.scrollLeft < 4) el.scrollLeft = el.scrollWidth;
+  }));
   // シートを開いていて後ろの画面を止めているときは、閉じたときに一番上へ戻るようにします
   if (lockY !== null) lockY = 0;
   else window.scrollTo(0,0);
@@ -7890,7 +8032,9 @@ function prevBuy(all, it){
   const [y, m, d] = prev.date.split('-').map(Number);
   // 2つの日付の差（ミリ秒）を1日のミリ秒数で割って日数にします
   const days = Math.round((parseYmd(it.date) - parseYmd(prev.date)) / 86400000);
-  return `<div class="prev-buy num">前回 ${y}/${m}/${d}<br>${days ? `${days}日ぶり` : '同じ日'}</div>`;
+  // 「前回 10/26（16日ぶり）」のように 1 行にまとめます（年がちがうときだけ年も出します）
+  const sameYear = y === parseYmd(it.date).getFullYear();
+  return `<div class="prev-buy num">前回 ${sameYear ? '' : y + '/'}${m}/${d}（${days ? `${days}日ぶり` : '同じ日'}）</div>`;
 }
 // 削除ボタンを1回押して「もう一度押すと削除」状態になっているかどうかです
 let delArmed = false;
@@ -7907,7 +8051,8 @@ function openDetail(id){
   const pKey = photoKeyFor(it), pOwn = pKey === ownKey(it);
   delArmed = false;
   // かたさ・すっぱさをアイコンと言葉で表すHTMLを作る小さな関数です（未記録なら「—」）
-  const meter = (kind, n) => n ? `<div class="meter">${shapesHTML(kind, n, 16)}<span class="hint" style="margin-left:6px">${LEVEL_LBL[kind][n-1]}</span></div>` : '<div class="v">—</div>';
+  // かたさ・すっぱさ：ほかの欄と同じように言葉（「ふにゃふにゃ」など）を値として出し、その下に形を並べます（横に並べると折り返してしまうため）
+  const meter = (kind, n) => n ? `<div class="v">${LEVEL_LBL[kind][n-1]}</div><div class="meter">${shapesHTML(kind, n, 16)}</div>` : '<div class="v">—</div>';
   $('#dt-no').textContent = it.demo ? 'サンプルの記録' : `No.${nums.get(it.id)}`;
   // シートの中身をまとめてHTMLで組み立てます（サンプルの記録では編集用の部分を出しません）
   $('#dt-body').innerHTML = `
@@ -7915,9 +8060,10 @@ function openDetail(id){
       <div style="min-width:0"><div>${(it.tags||[]).map(t => `<span class="tag${t==='新商品'?' new':''}">${esc(t)}</span>`).join('')}</div><h3>${esc(it.name)}${statusMark(it)}</h3><div class="sub">${esc([it.maker, it.flavor].filter(Boolean).join('・'))}</div><span id="dt-stars-top">${starsHTML(it.rating||0)}</span></div></div>
     <div class="dt-grid">
       <div><span class="lbl">日付</span><div class="v num">${mdLabel(it.date)}</div></div>
-      <div><span class="lbl">お店・値段${it.noSpend ? '<span class="nospend">出費外</span>' : ''}</span><div class="v">${esc(it.shop || '—')}${it.price != null && it.price !== '' ? '・' + yen(+it.price) : ''}</div></div>
       <div class="dt-buys"><span class="lbl">買った回数</span><div class="v num">${rep.get(it.name)}回</div>${prevBuy(all, it)}</div>
+      <div><span class="lbl">お店</span><div class="v">${esc(it.shop || '—')}</div></div>
       <div><span class="lbl">かたさ</span><div id="dt-hard-top">${meter('hard', it.hard||0)}</div></div>
+      <div><span class="lbl">値段${it.noSpend ? '<span class="nospend">出費外</span>' : ''}</span><div class="v num">${it.price != null && it.price !== '' ? yen(+it.price) : '—'}</div></div>
       <div><span class="lbl">すっぱさ</span><div id="dt-sour-top">${meter('sour', it.sour||0)}</div></div>
     </div>
     <div class="note" id="dt-note-top" ${it.note ? '' : 'hidden'}>${esc(it.note || '')}</div>
@@ -8771,6 +8917,9 @@ function renderSettings(){
     <div class="set-grp" ${g === 'look' ? '' : 'hidden'}>
     <div class="panel"><h3>カラーテーマ<span class="s">好きなグミの色に</span></h3><div class="colors theme-picker" id="theme-picker"></div></div>
     <div class="panel"><h3>表示</h3><div id="stock-toggle"></div></div>
+    ${!IN_CLAUDE && CLOUD_TEST ? `<div class="panel"><h3>見出しのフォント<span class="s">プレビュー版だけのお試し</span></h3>
+      <p class="hint" style="margin:0">見出しや大きな数字のフォントを切りかえて比べられます。本文のフォントは変わりません。</p>
+      <div class="font-trials">${FONT_TRIALS.map(f => `<button type="button" class="font-trial" data-font="${f.k}" aria-pressed="${fontTrialKey() === f.k}"><span class="ft-s" style="font-family:${f.css};font-weight:${f.w}">ぐみろぐ 1,126円</span><span class="ft-n">${esc(f.n)}</span></button>`).join('')}</div></div>` : ''}
     </div>
     <div class="set-grp" ${g === 'catalog' ? '' : 'hidden'}>
     <div class="panel"><h3>グミカタログ</h3>
@@ -8942,6 +9091,12 @@ $('#data-seg').addEventListener('click', e => {
 // 「＋」ボタン：新しい記録の入力画面を開きます
 $('#fab').addEventListener('click', () => openForm(null, 'new'));
 // 設定ボタン
+// 保存先の表示を押したら、設定の「データ」を開きます
+$('#status').addEventListener('click', () => {
+  SET_GRP = 'data';
+  renderSettings();
+  openSheet('#sh-settings');
+});
 $('#btn-settings').addEventListener('click', () => {
   SET_GRP = '';
   renderSettings();
@@ -9174,6 +9329,15 @@ $('#dt-body').addEventListener('click', e => onMatchClick(e, () => openDetail(DT
 $('#settings-body').addEventListener('click', e => onMatchClick(e, () => renderSettings()));
 $('#settings-body').addEventListener('click', e => e.target.closest('#ma-open') && openMatchAll());
 $('#settings-body').addEventListener('click', e => e.target.closest('#nc-open') && openNotCat());
+// 見出しのフォントのお試し：押したフォントに切りかえます（設定を開いたら、見本のためにすべて読み込みます）
+$('#settings-body').addEventListener('click', e => {
+  const b = e.target.closest('[data-font]');
+  if (!b) return;
+  lsSet(LS_FONTTRIAL, b.dataset.font);
+  applyFontTrial();
+  $('#settings-body').querySelectorAll('[data-font]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderAll();
+});
 // クラウドの欄のボタン（ログイン・今すぐ保存・ログアウト・アカウント削除）
 $('#settings-body').addEventListener('click', e => {
   const b = e.target.closest('#cl-login, #cl-sync, #cl-logout, #cl-delete');
@@ -9188,6 +9352,7 @@ $('#settings-body').addEventListener('click', e => {
   const b = e.target.closest('.set-item[data-grp]');
   if (!b) return;
   SET_GRP = b.dataset.grp;
+  if (SET_GRP === 'look' && !IN_CLAUDE && CLOUD_TEST) loadTrialFonts(FONT_TRIALS);
   renderSettings();
   $('#sh-settings').querySelectorAll('.sheet-p, #settings-body').forEach(x => { x.scrollTop = 0; });
 });
@@ -9203,6 +9368,7 @@ renderAll();
 connect().catch(() => {});
 // ここから下は、Claude の外（公開サイト）で開いたときだけ行います
 if (!IN_CLAUDE){
+  applyFontTrial();
   cloudBoot();
   // iOS のホーム画面に追加したWebアプリは、キャッシュしたページを表示し続けるので、新しい版を探してそちらへ移ります
   checkUpdate();
