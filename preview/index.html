@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="13170da1d1"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="ef84c4aa04"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2508,6 +2508,8 @@ a.set-item{text-decoration:none}
 .nospend{font-size:11px}
 .unrated{font-size:12px}
 .set-item small{font-size:12.5px}
+/* データ画面の大きな数字：Dela Gothic One は数字の幅をそろえると「1」のまわりが空きすぎるので、数字ごとの幅にして少し詰めます */
+.kpi .v,.kpi .v.num,.big.num,.shelf-sum b,.shelf-sum .num,.pk .stamp.num{font-variant-numeric:proportional-nums;letter-spacing:-.01em}
 /* カードの間隔：画面の中の大きなまとまりは 16px、カードの内側は 16px にそろえます */
 .view{gap:16px}
 .panel{padding:16px;gap:12px}
@@ -4706,7 +4708,7 @@ function rowHTML(i, rep, nums){
   return `<button class="row" data-open="${esc(i.id)}">
     ${gframe(i, 'row')}
     <span class="row-main">${tags ? `<span class="row-tags">${tags}</span>` : ''}<span class="nm"><span class="nm-t">${esc(i.name)}</span>${statusMark(i)}</span>${i.maker || i.flavor ? `<span class="sub">${esc([i.maker, i.flavor].filter(Boolean).join('・'))}</span>` : ''}
-      <span class="meta">${starsHTML(i.rating||0)}<span class="when"><span class="num">${mdLabel(i.date)}${i.price ? '・' + yen(+i.price) : ''}</span>${i.shop ? '・' + esc(i.shop) : ''}</span>${i.noSpend ? '<span class="nospend">出費外</span>' : ''}</span></span>
+      <span class="meta">${starsHTML(i.rating||0)}<span class="when"><span class="num">${mdLabel(i.date)}${i.price ? '・' + yen(+i.price) : ''}</span>${i.shop ? '　@' + esc(i.shop) : ''}</span>${i.noSpend ? '<span class="nospend">出費外</span>' : ''}</span></span>
   </button>`;
 }
 
