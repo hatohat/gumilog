@@ -980,11 +980,12 @@
     "ピーチ",
     "フルーティエナジードリンク",
     "和梨",
-    "ソーダ"
+    "ソーダ",
+    "チェリースパークリング"
    ],
    "rel": "2026-10-06",
    "url": "https://www.bourbon.co.jp/news/detail/20261001103033.html",
-   "updated": "2026-11-02"
+   "updated": "2026-11-12"
   },
   {
    "n": "バウンシーグミ",
@@ -3795,6 +3796,30 @@
    ],
    "url": "https://www.amazon.co.jp/dp/B0DQVXZTGX",
    "updated": "2026-11-12",
+   "added": "2026-11-12"
+  },
+  {
+   "n": "パープルダイヤモンドグミ",
+   "r": "ぱーぷるだいやもんどぐみ",
+   "m": "ベストブロス",
+   "f": [
+    "グレープ"
+   ],
+   "p": 270,
+   "pt": "incl",
+   "url": "https://www.amazon.co.jp/dp/B0DQVXZTGX",
+   "updated": "2026-11-12",
+   "added": "2026-11-12"
+  },
+  {
+   "n": "ちびグミ",
+   "r": "ちびぐみ",
+   "m": "明治チューインガム",
+   "p": 45,
+   "pt": "incl",
+   "url": "https://yoshimi-s.com/products/detail/16751",
+   "updated": "2026-11-12",
+   "c": "rainbow",
    "added": "2026-11-12"
   }
  ]
