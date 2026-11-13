@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="38279ed333"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="7da01052ae"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2051,6 +2051,15 @@ a.set-item{text-decoration:none}
 }
 .shop-item:first-child{border-top:0}
 /* 並べかえのつまみ（右端）。指でつかんでもページがスクロールしないようにします */
+.shop-item [data-del].armed {
+  width:auto;
+  padding:0 12px;
+  font-size:13px;
+  font-weight:700;
+  color:#fff;
+  background:#D93A3A;
+  border-color:#D93A3A
+}
 .drag-grip {
   flex:none;
   width:36px;
@@ -3122,7 +3131,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
-  {v:203, k:'f', at:'2026-11-13 09:45', t:'お店とタグの候補を、右端のつまみをつかんで動かすことで並べかえられるようにしました。'},
+  {v:203, k:'f', at:'2026-11-13 09:45', t:'お店とタグの候補を、右端のつまみをつかんで動かすことで並べかえられるようにしました。候補を外すときは、✕のあとに表示される「削除」を押すように変更しました。'},
   {v:202, k:'p', at:'2026-11-12 22:18', t:'見出しと大きな数字のフォントを、読みやすい太字のフォントに変更しました（ロゴはそのままです）。'},
   {v:201, k:'p', at:'2026-11-12 16:26', t:'画面全体の文字の大きさと色、余白、上の保存先の表示、下のタブを見やすく調整しました。詳細画面で、お店と値段を分けて表示するようにしました。'},
   {v:200, k:'p', at:'2026-11-12 16:21', t:'ログの一覧でグミの名前を2行まで表示し、評価・日付・お店を名前の下に移して見やすくしました。データ画面の月ごとのグラフが今月の位置から表示されない不具合を修正しました。'},
@@ -7127,12 +7136,26 @@ function renderListEditor(key){
     ${used.length ? `<p>記録に出てくる${L.title}：</p><div class="chips">${used.map(n => `<button class="chip" data-list="${key}" data-add="${esc(n)}">＋ ${esc(n)}</button>`).join('')}</div>` : ''}
     <div class="btn-row"><button class="btn sm ghost" data-list="${key}" data-reset>最初の候補に戻す</button></div>`;
 }
+// 「削除」に変わっている ✕ ボタンを元に戻します（ほかの所を押したときや、少し時間がたったとき）
+let listDelT = 0;
+const DEL_ICON = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function disarmListDel(){
+  document.querySelectorAll('#settings-body [data-del].armed').forEach(b => {
+    b.classList.remove('armed');
+    b.innerHTML = DEL_ICON;
+    b.setAttribute('aria-label', b.getAttribute('aria-label').replace(/を本当に外す$/, 'を外す'));
+  });
+}
 /* 候補リストの並べかえ：右端のつまみを指（マウス）でつかんで上下に動かします。
    つかんだ行は指にぴったりついて動き（transform で動かすので重くなりません）、
    ほかの行は空いた場所へすっと動きます。指を離すと、その行が収まる位置へなめらかに動いてから保存します。
    つまみにフォーカスがあるときは、上下の矢印キーでも 1 つずつ動かせます。 */
 function wireListSort(){
   const body = $('#settings-body');
+  // 「削除」ボタン以外の所を押したら、元の ✕ に戻します
+  body.addEventListener('pointerdown', e => {
+    if (!e.target.closest('[data-del].armed')) disarmListDel();
+  });
   // drag：{key, list, item, items, from, to, startY, tops, heights, gap, id}
   let drag = null;
   const ease = 'transform .18s cubic-bezier(.2,.8,.2,1)';
@@ -7277,6 +7300,17 @@ function wireShopEditor(){
       if (!a.includes(t.dataset.add)) a.push(t.dataset.add);
     }
     else if (t.dataset.del != null){
+      // 1 回目の ✕ は「削除」ボタンに変わるだけで、もう一度押すと消します（うっかり消さないように）
+      if (!t.classList.contains('armed')){
+        disarmListDel();
+        t.classList.add('armed');
+        t.innerHTML = '削除';
+        t.setAttribute('aria-label', t.getAttribute('aria-label').replace(/を外す$/, 'を本当に外す'));
+        clearTimeout(listDelT);
+        listDelT = setTimeout(disarmListDel, 4000);
+        return;
+      }
+      clearTimeout(listDelT);
       a.splice(+t.dataset.del, 1);
     }
     else return;
