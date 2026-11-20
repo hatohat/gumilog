@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="060d8ea615"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="4394901416"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3157,7 +3157,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
-  {v:207, k:'f', at:'2026-11-20 09:59', t:'称号タブに「最近獲得した称号」を追加しました。獲得した日が新しい順に3つ表示します。'},
+  {v:207, k:'f', at:'2026-11-20 09:59', t:'称号タブに「最近獲得した称号」を追加しました。獲得した日が新しい順に3つ表示します。また、獲得した称号のカードに獲得日を表示するようにしました。'},
   {v:206, k:'p', at:'2026-11-20 09:52', t:'アプリ内の文章を見直し、表現と表記を統一しました。'},
   {v:205, k:'f', at:'2026-11-20 09:42', t:'「新商品」タグが付く期間を、発売から30日以内に変更しました。発売日を味ごとに判定するようにし、同じシリーズに新しい味が追加されたとき、以前からある味に「新商品」タグが付く不具合を修正しました。また、新商品の時期を過ぎてから同じグミを記録したとき、「新商品」タグが引き継がれないようにしました。'},
   {v:204, k:'f', at:'2026-11-20 09:35', t:'ログの「リピ」「★5」「新商品」の絞り込みで、同じグミの記録を1行にまとめて表示するようにしました。以前の記録は「前の記録」から開いて確認できます。'},
@@ -6356,6 +6356,10 @@ function achAtMark(gained, saved){
   });
   lsSet(LS_ACH_AT, at);
 }
+// 獲得した日の表示です（今年は「11/18」、去年より前は「2025/11/18」。曜日は付けません）
+const achDate = d => (d.slice(0, 4) === todayStr().slice(0, 4) ? '' : d.slice(0, 4) + '/') + (+d.slice(5, 7)) + '/' + (+d.slice(8, 10));
+// 称号 s の、いまの段階を獲得した日を返します（わからなければ ''）
+const achAtOf = (s, at = achAtGet()) => (s.got && at && at[s.a.id] && at[s.a.id][s.got - 1]) || '';
 // 最近獲得した称号を、新しい順に n 個返します（同じ称号は、いちばん新しい段階だけ）。
 function achRecent(st, n){
   const at = achAtGet();
@@ -6375,7 +6379,7 @@ function achCard(s, at){
   return `<button type="button" class="ach${s.got ? ' got' : ''}${hide ? ' hid' : ''}" data-ach="${a.id}">
     ${medalSVG(tier, hide ? '？' : a.icon, 50)}
     <span class="ach-n">${hide ? '？？？' : esc(a.name)}</span>
-    ${at ? `<span class="ach-when num">${mdLabel(at)} 獲得</span>` : ''}
+    ${at ? `<span class="ach-when num">${achDate(at)} 獲得</span>` : ''}
     ${a.secret
       ? `<span class="ach-t ${tier || ''}">${s.got ? 'シークレット' : esc(a.hint)}</span>`
       : `<span class="ach-t ${tier || ''}">${s.got ? TIERS[s.got - 1].n : '未獲得'}</span>
@@ -6401,7 +6405,7 @@ function renderAch(){
   const near = st.filter(s => !s.a.secret && s.got < s.a.tiers.length && s.cur > 0)
     .sort((x, y) => y.cur / y.a.tiers[y.got] - x.cur / x.a.tiers[x.got]).slice(0, 3);
   // 最近獲得した称号：獲得した日が新しい順に 3 つ
-  const recent = demo ? [] : achRecent(st, 3);
+  const recent = demo ? [] : achRecent(st, 3), at = demo ? null : achAtGet();
   if (!demo) achBackfill();
   v.innerHTML = `
     <div class="panel ach-top">
@@ -6419,7 +6423,7 @@ function renderAch(){
       // グループの見出しには、集めた称号の数 / グループの称号の数 を出します
       const g = list.filter(s => s.got).length, all = list.length;
       // グループごとに、見出しを押すと閉じたり開いたりできます（閉じたグループは S.ui.catClosed に覚えます）
-      return `<details class="panel ach-near ach-cat" data-cat="${k}" ${(S.ui.catClosed || []).includes(k) ? '' : 'open'}><summary><h3>${n}<span class="s">${g} / ${all}</span></h3></summary><div class="ach-grid">${list.map(s => achCard(s)).join('')}</div></details>`;
+      return `<details class="panel ach-near ach-cat" data-cat="${k}" ${(S.ui.catClosed || []).includes(k) ? '' : 'open'}><summary><h3>${n}<span class="s">${g} / ${all}</span></h3></summary><div class="ach-grid">${list.map(s => achCard(s, achAtOf(s, at))).join('')}</div></details>`;
     }).join('')}`;
 }
 
