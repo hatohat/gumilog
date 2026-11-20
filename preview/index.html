@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="4394901416"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="cc0e0156c5"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3157,6 +3157,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:208, k:'f', at:'2026-11-20 10:52', t:'データタブの「殿堂入り」に、新しく★5をつけたグミが表示されない不具合を修正しました。★5をつけた記録が新しい順に表示されます。'},
   {v:207, k:'f', at:'2026-11-20 09:59', t:'称号タブに「最近獲得した称号」を追加しました。獲得した日が新しい順に3つ表示します。また、獲得した称号のカードに獲得日を表示するようにしました。'},
   {v:206, k:'p', at:'2026-11-20 09:52', t:'アプリ内の文章を見直し、表現と表記を統一しました。'},
   {v:205, k:'f', at:'2026-11-20 09:42', t:'「新商品」タグが付く期間を、発売から30日以内に変更しました。発売日を味ごとに判定するようにし、同じシリーズに新しい味が追加されたとき、以前からある味に「新商品」タグが付く不具合を修正しました。また、新商品の時期を過ぎてから同じグミを記録したとき、「新商品」タグが引き継がれないようにしました。'},
@@ -4971,9 +4972,11 @@ function renderStats(){
   const mh = mean('hard'), msour = mean('sour');
   // 平均から「かため×すっぱい」のような好みのタイプ名を作ります。
   const type = `${mh >= 3.5 ? 'かため' : mh <= 2.5 ? 'やわらか' : 'もちもち'}×${msour >= 3.5 ? 'すっぱい' : msour <= 2.5 ? 'あまい' : 'あまずっぱ'}`;
-  // 殿堂入り：★5 のグミを、名前が重ならないように 5 件まで選びます。
-  const best = [...all].filter(i => (i.rating||0) === 5);
-  const bestUnique = [...new Map(best.map(i => [i.name, i])).values()].slice(0, 5);
+  // 殿堂入り：★5 のグミを、新しく記録した順に、名前が重ならないように 5 件まで選びます。
+  // （同じグミは、いちばん新しい ★5 の記録を出します）
+  const best = [...all].filter(i => (i.rating||0) === 5).sort(byDateDesc);
+  const bestUnique = [];
+  best.forEach(i => { if (bestUnique.length < 5 && !bestUnique.some(b => b.name === i.name)) bestUnique.push(i); });
   const statsBox = $('#v-stats');
   keepChartScroll(statsBox, () => statsBox.innerHTML = `
     <div class="kpis">
