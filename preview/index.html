@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="52dc9a7f1f"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="5f55b6bd76"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2745,7 +2745,7 @@ a.set-item{text-decoration:none}
 <!-- ===== メイン画面（下のタブで切り替わる4つの画面が入ります） ===== -->
 <main class="wrap" id="app">
   <!-- お知らせ帯です。サンプル表示中や、データ移行のときだけ表示されます -->
-  <div class="banner" id="demo-banner" hidden><span><b>サンプル表示中</b>　下の記録は見本です。最初のグミを記録すると、あなたのログに切り替わります。</span></div>
+  <div class="banner" id="demo-banner" hidden><span><b>サンプル表示中</b>　記録は見本です。最初のグミを記録すると、あなたのログに切り替わります。</span></div>
   <div class="banner" id="migrate-banner" hidden></div>
 
   <!-- ===== ログ画面（最初に表示される、記録の一覧） ===== -->
@@ -2836,7 +2836,7 @@ a.set-item{text-decoration:none}
           <div class="ac-list" id="ac-list" role="listbox" aria-label="グミの候補" hidden></div>
         </div>
         <div class="ac-hint" id="ac-hint" hidden></div>
-        <span class="err" id="f-err" hidden>グミの名前を入れてください</span>
+        <span class="err" id="f-err" hidden>グミの名前を入力してください</span>
       </div>
       <!-- メーカーと味 -->
       <div class="f2">
@@ -2846,7 +2846,7 @@ a.set-item{text-decoration:none}
       <div class="f"><span class="fl-t">グミの色</span><div class="colors" id="f-colors"></div></div>
       <!-- 写真（選ぶと「写真の調整」画面が開きます） -->
       <div class="f"><span class="fl-t">写真</span><div class="photo-row" style="margin-top:0"><label class="gf-tap sm" for="f-photo" id="f-photo-thumb"></label>
-          <label class="btn sm ghost" for="f-photo" id="f-photo-lbl">自分で撮った写真をつける</label><input type="file" id="f-photo" accept="image/*" hidden>
+          <label class="btn sm ghost" for="f-photo" id="f-photo-lbl">写真をつける</label><input type="file" id="f-photo" accept="image/*" hidden>
           <button type="button" class="btn sm ghost" id="f-photo-del" hidden>外す</button></div></div>
       <div class="f"><span class="fl-t">買ったお店</span><div class="chips" id="f-shops"></div><input class="in" id="f-shop" placeholder="お店の名前（自由入力）" autocomplete="off"></div>
       <!-- 値段と日付 -->
@@ -2856,7 +2856,7 @@ a.set-item{text-decoration:none}
         <div class="f"><label for="f-date">日付</label><input class="in" id="f-date" type="date"></div>
       </div>
       <div class="f"><span class="fl-t">食べた？</span><div class="seg" id="f-status" role="radiogroup" aria-label="食べたかどうか"></div></div>
-      <div class="f"><label for="f-note">ひとこと</label><textarea class="in" id="f-note" placeholder="弾力がすごい。後半でぶどう感が来る"></textarea></div>
+      <div class="f"><label for="f-note">ひとこと</label><textarea class="in" id="f-note" placeholder="味が濃くておいしい"></textarea></div>
       <div class="f"><span class="fl-t">タグ</span><div class="chips" id="f-tags"></div></div>
       <!-- 評価（おいしさ・かたさ・すっぱさ）。どれも空のままでかまいません -->
       <p class="hint rate-hint" id="f-rate-hint">おいしさ・かたさ・すっぱさは、わからなければ空のままで大丈夫です。選んだものをもう一度タップすると取り消せます。</p>
@@ -2883,7 +2883,7 @@ a.set-item{text-decoration:none}
     <span class="fl-t" id="si-count-l">並べる数（新しい順）</span>
     <div class="seg si-seg" id="si-count" role="radiogroup" aria-label="並べる数"></div>
     <!-- できあがった画像のプレビュー -->
-    <div class="si-prev"><img id="si-img" alt="ぐみ棚の画像"><p class="hint" id="si-wait">画像を作っています…</p></div>
+    <div class="si-prev"><img id="si-img" alt="ぐみ棚の画像"><p class="hint" id="si-wait">画像を作成中…</p></div>
     <p class="hint" id="si-hint"></p>
     <div class="btn-row si-btns"><button class="btn primary" type="button" id="si-share">共有する</button><button class="btn ghost" type="button" id="si-save">画像を保存</button></div>
     <button class="si-text" type="button" id="si-text" hidden>画像なしで、文章だけ共有する</button>
@@ -2895,8 +2895,8 @@ a.set-item{text-decoration:none}
 <div class="sheet" id="sh-cloudask" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ca-title">
     <div class="sheet-h"><h2 id="ca-title">クラウドに保存してみませんか？</h2></div>
-    <p class="sg-text">Googleでログインすると、記録と写真がクラウドにも保存されます。スマホを替えたりブラウザのデータを消したりしても、記録が消えずに戻せます。</p>
-    <p class="hint" style="margin:0">ログインしなくても、今までどおりこの端末だけで使えます。設定の「データ」からいつでもログインできます。</p>
+    <p class="sg-text">Googleでログインすると、記録と写真がクラウドにも保存されます。<br>機種変更やブラウザのデータ消去を行っても記録が引き継げます。</p>
+    <p class="hint" style="margin:0">ログインしなくても、この端末で引き続き利用できます。ログインは設定の「データ」からいつでも行えます。</p>
     <div class="sheet-actions"><button class="btn ghost" type="button" data-close>あとで</button><button class="btn primary" type="button" id="ca-go">設定を開く</button></div>
   </div>
 </div>
@@ -2905,7 +2905,7 @@ a.set-item{text-decoration:none}
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="sg-title">
     <div class="sheet-h"><h2 id="sg-title">カタログに提案してみませんか？</h2></div>
     <p class="sg-text" id="sg-text"></p>
-    <p class="hint" style="margin:0">フォームから教えてもらえると、確認してカタログに追加します。追加されると、みんなの名前の候補に出るようになります。</p>
+    <p class="hint" style="margin:0">提案いただいた商品は、確認後にカタログへ追加します。追加後は、名前の候補に表示されます。</p>
     <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>あとで</button><a class="btn primary" id="sg-go" href="#" target="_blank" rel="noopener" data-suggest="{}">提案する</a></div>
   </div>
 </div>
@@ -2968,7 +2968,7 @@ a.set-item{text-decoration:none}
 <div class="sheet" id="sh-matchall" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ma-title">
     <div class="sheet-h"><h2 id="ma-title">カタログと名前をそろえますか？</h2></div>
-    <p class="hint" style="margin:0">カタログに近いグミが入った記録があります。チェックした記録の名前をカタログに合わせます（写真や評価はそのまま）。違うときは「どれでもない」を選ぶと、もう候補に出ません。</p>
+    <p class="hint" style="margin:0">カタログに近いグミが入った記録があります。チェックした記録の名前をカタログに合わせます。</p>
     <div class="sheet-body ma-list" id="ma-list"></div>
     <div class="sheet-actions"><button class="btn ghost" type="button" data-close>あとで</button><button class="btn primary" type="button" id="ma-go">合わせる</button></div>
   </div>
@@ -2988,13 +2988,13 @@ a.set-item{text-decoration:none}
     <div class="sheet-h"><h2 id="crop-title">写真を調整</h2></div>
     <div class="crop">
       <div class="crop-view" id="crop-view"><canvas id="crop-cv"></canvas></div>
-      <p class="hint">ドラッグで位置、ピンチかスライダーで大きさを変えられます。</p>
+      <p class="hint">ドラッグで位置、ピンチかスライダーでサイズを変更</p>
       <!-- 大きさのスライダー -->
       <div class="crop-zoom"><span>小</span><input type="range" id="crop-zoom" min="1" max="5" step="0.01" value="1" aria-label="大きさ"><span>大</span></div>
       <!-- 回転・リセットのボタン -->
       <div class="btn-row crop-tools">
-        <button class="btn sm ghost" type="button" id="crop-rl">⟲ 左に回す</button>
-        <button class="btn sm ghost" type="button" id="crop-rr">右に回す ⟳</button>
+        <button class="btn sm ghost" type="button" id="crop-rl">⟲ 左回転</button>
+        <button class="btn sm ghost" type="button" id="crop-rr">右回転 ⟳</button>
         <button class="btn sm ghost" type="button" id="crop-reset">元に戻す</button>
       </div>
     </div>
@@ -3007,17 +3007,17 @@ a.set-item{text-decoration:none}
 <div class="sheet" id="sh-sform" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="sf-title">
     <div class="sheet-h"><h2 id="sf-title">カタログに提案する</h2></div>
-    <p class="hint" style="margin:0 0 10px">送る前に内容を確かめてください。直してから送れます。</p>
+    <p class="hint" style="margin:0 0 10px">内容を確認してから送信してください。</p>
     <div class="form" id="sf-form">
-      <div class="f"><label for="sf-name">商品名</label><input class="in" id="sf-name" autocomplete="off" placeholder="例：忍者めし鋼 金剛石 ゴールデンパイン"><span class="err" id="sf-err" hidden>商品名を入れてください</span></div>
+      <div class="f"><label for="sf-name">商品名</label><input class="in" id="sf-name" autocomplete="off" placeholder="例：忍者めし鋼 金剛石 ゴールデンパイン"><span class="err" id="sf-err" hidden>商品名を入力してください</span></div>
       <div class="f2">
         <div class="f"><label for="sf-maker">メーカー</label><input class="in" id="sf-maker" autocomplete="off" placeholder="例：UHA味覚糖"></div>
-        <div class="f"><label for="sf-flavor">味</label><input class="in" id="sf-flavor" autocomplete="off" placeholder="いろいろ入りは「アソート」"></div>
+        <div class="f"><label for="sf-flavor">味</label><input class="in" id="sf-flavor" autocomplete="off" placeholder="複数の味が入ったものは「アソート」"></div>
       </div>
-      <div class="f"><label for="sf-price">値段（円）</label><input class="in num" id="sf-price" type="number" inputmode="numeric" min="0" placeholder="わからなければ空のまま"></div>
+      <div class="f"><label for="sf-price">値段（円）</label><input class="in num" id="sf-price" type="number" inputmode="numeric" min="0" placeholder="不明な場合は空欄"></div>
     </div>
     <!-- 送信に失敗したときだけ表示されます -->
-    <p class="sf-fail" id="sf-fail" hidden>この画面からは送れませんでした。下のボタンからフォームを開いて送ってください。<br><a class="btn sm" id="sf-fallback" href="#" target="_blank" rel="noopener">フォームを開いて送る</a></p>
+    <p class="sf-fail" id="sf-fail" hidden>この画面からは送信できませんでした。下のボタンからフォームを開いて送信してください。<br><a class="btn sm" id="sf-fallback" href="#" target="_blank" rel="noopener">フォームを開いて送信</a></p>
     <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="sf-send">送信する</button></div>
   </div>
 </div>
@@ -3062,7 +3062,7 @@ a.set-item{text-decoration:none}
 <!-- ===== 称号をとったときのお祝い（紙吹雪とメダルが出ます） ===== -->
 <div class="sheet" id="sh-achwin" hidden>
   <div class="sheet-p ach-win" role="dialog" aria-modal="true" aria-labelledby="aw-title">
-    <div class="sheet-h"><h2 id="aw-title">称号をとりました！</h2></div>
+    <div class="sheet-h"><h2 id="aw-title">称号を獲得しました！</h2></div>
     <div class="aw-stage">
       <div class="aw-confetti" id="aw-confetti" aria-hidden="true"></div>
       <div class="aw-medal" id="aw-medal"></div>
@@ -3079,9 +3079,9 @@ a.set-item{text-decoration:none}
 <div class="sheet" id="sh-bigfull" hidden>
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="bf-title">
     <div class="sheet-h"><h2 id="bf-title">この端末の容量がいっぱいです</h2></div>
-    <p class="hint" id="bf-q" style="margin:0 0 8px">いま残している元の画質の写真を、すべて圧縮しますか？</p>
+    <p class="hint" id="bf-q" style="margin:0 0 8px">元の画質の写真を全て圧縮しますか？</p>
     <p class="hint" id="bf-text" style="margin:0"></p>
-    <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="bf-go">すべて圧縮する</button></div>
+    <div class="sheet-actions sg-actions"><button class="btn ghost" type="button" data-close>やめる</button><button class="btn primary" type="button" id="bf-go">全て圧縮する</button></div>
   </div>
 </div>
 
@@ -3115,7 +3115,7 @@ document.querySelectorAll('.sheet-p').forEach(p => {
 const COLORS = [
   {k:'straw',n:'いちご',v:'--g-straw'},{k:'orange',n:'オレンジ',v:'--g-orange'},{k:'lemon',n:'レモン',v:'--g-lemon'},
   {k:'melon',n:'マスカット',v:'--g-melon'},{k:'soda',n:'ソーダ',v:'--g-soda'},{k:'grape',n:'ぶどう',v:'--g-grape'},
-  {k:'cola',n:'コーラ',v:'--g-cola'},{k:'milk',n:'ヨーグルト',v:'--g-milk'},{k:'rainbow',n:'虹色',v:'--g-rainbow'}
+  {k:'cola',n:'コーラ',v:'--g-cola'},{k:'milk',n:'ヨーグルト',v:'--g-milk'},{k:'rainbow',n:'レインボー',v:'--g-rainbow'}
 ];
 // 「虹色」のグラデーションに使う6色です
 const RAINBOW = ['#FF5C7A','#FFA53D','#FFD93D','#5CCB6E','#4DA8FF','#9B6BFF'];
@@ -3152,6 +3152,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:206, k:'p', at:'2026-11-20 09:52', t:'アプリ内の文章を見直し、表現と表記を統一しました。'},
   {v:205, k:'f', at:'2026-11-20 09:42', t:'「新商品」タグが付く期間を、発売から30日以内に変更しました。発売日を味ごとに判定するようにし、同じシリーズに新しい味が追加されたとき、以前からある味に「新商品」タグが付く不具合を修正しました。また、新商品の時期を過ぎてから同じグミを記録したとき、「新商品」タグが引き継がれないようにしました。'},
   {v:204, k:'f', at:'2026-11-20 09:35', t:'ログの「リピ」「★5」「新商品」の絞り込みで、同じグミの記録を1行にまとめて表示するようにしました。以前の記録は「前の記録」から開いて確認できます。'},
   {v:203, k:'f', at:'2026-11-13 09:45', t:'お店とタグの候補を、右端のつまみをつかんで動かすことで並べかえられるようにしました。候補を外すときは、✕のあとに表示される「削除」を押すように変更しました。'},
@@ -3957,7 +3958,7 @@ function loginError(e){
   if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
   console.warn(e);
   CS.err = 'login:' + (code || String(e && e.message || e)).slice(0, 80);
-  toast(code === 'auth/network-request-failed' ? 'ネットにつながらないため、ログインできませんでした' : `ログインできませんでした（${code || 'エラー'}）`);
+  toast(code === 'auth/network-request-failed' ? 'インターネットに接続できません' : `ログインできませんでした（${code || 'エラー'}）`);
   renderCloud();
 }
 // 「Googleでログイン」：ページごとGoogleの画面に移ってログインし、終わったらぐみろぐに戻ってきます。
@@ -3967,7 +3968,7 @@ async function cloudLogin(){
   try {
     auth = await loadFirebase();
   } catch(e){
-    toast('ログインの準備ができませんでした。ネットにつながっているか確かめてください');
+    toast('ログインの準備ができませんでした。接続を確認してください');
     return;
   }
   const provider = new CS.fb.GoogleAuthProvider();
@@ -3982,7 +3983,7 @@ async function cloudLogin(){
 }
 async function cloudLogout(){
   if (!CS.auth) return;
-  if (!confirm('ログアウトしますか？\nこの端末の記録はそのまま残ります。クラウドに保存した記録も消えません。')) return;
+  if (!confirm('ログアウトしますか？\nこの端末とクラウドの記録は削除されません。')) return;
   await CS.fb.signOut(CS.auth).catch(() => {});
   localStorage.removeItem(LS_SYNC);
   CS.user = null;
@@ -3998,7 +3999,7 @@ const CLOUD_TEST = CLOUD_API.includes('-preview.');
 async function cloudDeleteAccount(){
   if (!CS.user) return;
   if (!confirm(CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定をすべて消しますか？\n本番のデータとログインのアカウントはそのままです。'
-    : 'クラウドに保存した記録・写真・設定をすべて消して、アカウントを削除しますか？\nこの操作は取り消せません。この端末の記録は残ります。')) return;
+    : 'クラウドに保存した記録・写真・設定を全て削除して、アカウントを削除しますか？\nこの操作は取り消せません。この端末の記録は残ります。')) return;
   try {
     const r = await fetch(CLOUD_API + '/v1/account', {method:'DELETE', headers:{Authorization:'Bearer ' + await CS.user.getIdToken()}});
     if (!r.ok) throw new Error('http ' + r.status);
@@ -4293,23 +4294,22 @@ function cloudPanelInner(){
   if (!CS.user){
     const was = syncState().uid;
     return `<h3>クラウドに保存<span class="s">Googleでログイン</span></h3>
-      <p>ログインすると、記録と設定がクラウドにも保存されます。スマホを替えたりブラウザのデータを消したりしても、ログインし直せば戻せます。ほかの端末でも同じ記録が見られます。</p>
-      <p class="hint" style="margin:0">写真もクラウドに保存されます（Xに共有するときの元の画質の写真は、この端末にだけ残ります）。ログインしなくても、今までどおりこの端末だけで使えます。</p>
-      ${CS.err && CS.err.startsWith('login:') ? `<p class="hint" style="margin:0;color:var(--accent)">前回のログインでエラーが出ました（${esc(CS.err.slice(6))}）</p>` : ''}
+      <p>Googleでログインすると、記録と写真がクラウドにも保存されます。<br>機種変更やブラウザのデータ消去を行っても記録が引き継げます。<br>他の端末でも同じ記録が閲覧可能です。</p>
+      ${CS.err && CS.err.startsWith('login:') ? `<p class="hint" style="margin:0;color:var(--accent)">前回のログインでエラーが発生しました（${esc(CS.err.slice(6))}）</p>` : ''}
       <div class="btn-row"><button type="button" class="btn sm primary" id="cl-login" ${was && !CS.auth ? 'disabled' : ''}>${was && !CS.auth ? 'ログインを確認中…' : 'Googleでログイン'}</button></div>
       <p class="hint" style="margin:0">預かる情報と扱いは<a href="${PRIVACY_URL}" target="_blank" rel="noopener">プライバシーポリシー</a>をご覧ください。</p>`;
   }
   const ss = syncState();
-  const state = CS.st === 'busy' ? '保存しています…'
-    : CS.st === 'error' ? (CS.err === 'offline' ? 'ネットにつながっていません。つながったら保存します' : `クラウドに保存できませんでした。あとでもう一度ためします（${CS.err}）`)
-    : ss.lastAt ? `最後に保存：${cloudWhen(ss.lastAt)}` : '';
+  const state = CS.st === 'busy' ? '保存中…'
+    : CS.st === 'error' ? (CS.err === 'offline' ? 'インターネットに接続されていません' : `クラウドに保存できませんでした。後ほど再試行します（${CS.err}）`)
+    : ss.lastAt ? `最終同期日時：${cloudWhen(ss.lastAt)}` : '';
   return `<h3>クラウドに保存<span class="s">ログイン中</span></h3>
     <p>${esc(CS.user.email || 'Googleアカウント')} でログインしています。記録・写真・設定は、この端末とクラウドの両方に保存されます。</p>
     <p class="hint" style="margin:0">${esc(state)}</p>
     <div class="btn-row"><button type="button" class="btn sm" id="cl-sync" ${CS.st === 'busy' ? 'disabled' : ''}>今すぐ保存</button><button type="button" class="btn sm ghost" id="cl-logout">ログアウト</button></div>
     <details class="cl-danger"><summary>${CLOUD_TEST ? 'テスト用のデータを消す' : 'アカウントを削除する'}</summary>
-      <p class="hint">${CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定をすべて消して、ログアウトします。本番のデータとログインのアカウントはそのままです。'
-        : 'クラウドに保存した記録・写真・設定をすべて消して、ぐみろぐのアカウントを削除します。この端末の記録は残ります。'}</p>
+      <p class="hint">${CLOUD_TEST ? 'テスト用のサーバーに保存した記録・写真・設定を全て削除して、ログアウトします。本番のデータとログインのアカウントはそのままです。'
+        : 'クラウドに保存した記録・写真・設定を全て削除して、ぐみろぐのアカウントを削除します。この端末の記録は残ります。'}</p>
       <button type="button" class="btn sm danger" id="cl-delete">${CLOUD_TEST ? 'テスト用のデータを消す' : 'アカウントを削除'}</button></details>`;
 }
 // 公開サイトでは、前にログインしていた人だけ、起動したときにログインの部品を読み込みます
@@ -4650,9 +4650,9 @@ function jarDraw(){
     ctx.fillStyle = ink2;
     ctx.font = '600 13px ' + cssv('--f-body');
     ctx.textAlign = 'center';
-    ctx.fillText('まだ空っぽ', (L+Rr)/2, (T+Bt)/2 - 4);
+    ctx.fillText('まだ空です', (L+Rr)/2, (T+Bt)/2 - 4);
     ctx.font = '12px ' + cssv('--f-body');
-    ctx.fillText('記録するとグミが入るよ', (L+Rr)/2, (T+Bt)/2 + 16);
+    ctx.fillText('記録するとグミが入ります', (L+Rr)/2, (T+Bt)/2 + 16);
   }
 }
 
@@ -4735,7 +4735,7 @@ function jarSync(force){
 
 // 絞り込みボタンの一覧です（k: 種類のキー、n: ボタンの文字）。
 const FILTERS = [
-  {k:'all',n:'すべて'},
+  {k:'all',n:'全て'},
   {k:'stock',n:'手持ち'},
   {k:'unopened',n:'未開封'},
   {k:'new',n:'新商品'},
@@ -4769,7 +4769,7 @@ function renderLog(){
   if (S.ui.filter === 'stock') list = list.filter(i => statusOf(i) !== 'finished');
   if (S.ui.filter === 'rep') list = list.filter(i => rep.get(i.name) > 1);
   if (!list.length){
-    $('#list').innerHTML = `<div class="rows"><div class="empty">${q || S.ui.filter!=='all' ? '条件に合うグミはありません' : 'まだ記録がありません。下の＋から最初のグミを記録しましょう'}</div></div>`;
+    $('#list').innerHTML = `<div class="rows"><div class="empty">${q || S.ui.filter!=='all' ? '条件に合うグミがありません' : '記録がありません。下の＋から最初のグミを記録してみよう！'}</div></div>`;
     return;
   }
   // リピ・★5・新商品の絞り込みでは、同じグミの記録を 1 行にまとめます（いちばん新しい記録を代表にして、残りは開いて見られます）。
@@ -4862,7 +4862,7 @@ function renderCal(){
     const arr = (byDay.get(sel) || []).sort(byDateDesc), rep = repeatCount(all), nums = numbering(all);
     const d = parseYmd(sel);
     $('#cal-day').innerHTML = `<div class="month"><div class="month-h"><h2>${d.getMonth()+1}月${d.getDate()}日(${WD[d.getDay()]})</h2><span>${arr.length}袋</span></div><div class="rows">${arr.length ? arr.map(i => rowHTML(i, rep, nums)).join('') : '<div class="empty">この日の記録はありません</div>'}</div></div>`;
-  } else $('#cal-day').innerHTML = `<p class="hint" style="margin:0;text-align:center">日付をタップすると、その日に買ったグミが出ます</p>`;
+  } else $('#cal-day').innerHTML = `<p class="hint" style="margin:0;text-align:center">日付をタップすると、その日の記録を表示します</p>`;
 }
 
 /* ========== 画面表示：きろく（統計） ==========
@@ -4931,7 +4931,7 @@ function renderStats(){
   // [名前, 回数] の配列から、上位 6 件の横棒グラフの HTML を返します。
   const bars = (arr) => {
     const mx = Math.max(1, ...arr.map(a => a[1]));
-    return arr.length ? `<div class="bars">${arr.slice(0,6).map(([n,c]) => `<div class="bar"><span class="n">${esc(n)}</span><span class="tr"><span class="fl" style="width:${c/mx*100}%;display:block"></span></span><span class="c num">${c}</span></div>`).join('')}</div>` : '<p class="hint" style="margin:0">記録がたまると出てきます</p>';
+    return arr.length ? `<div class="bars">${arr.slice(0,6).map(([n,c]) => `<div class="bar"><span class="n">${esc(n)}</span><span class="tr"><span class="fl" style="width:${c/mx*100}%;display:block"></span></span><span class="c num">${c}</span></div>`).join('')}</div>` : '<p class="hint" style="margin:0">記録が増えると表示されます</p>';
   };
   // 好みマップ：すっぱさ（縦）× かたさ（横）の 5×5 のマスに、袋数を数えます。
   const grid = Array.from({length:5}, () => Array(5).fill(0));
@@ -5134,7 +5134,7 @@ function askShrinkBig(need){
   if (S.mode === 'cloud' || !n || JSON.stringify(S.localBig).length < need) return Promise.resolve(false);
   $('#bf-title').textContent = 'この端末の容量がいっぱいです';
   $('#bf-q').hidden = false;
-  $('#bf-text').textContent = `元の画質の写真が${n}枚残っていて、容量を多く使っています。圧縮しても、ぐみ棚やログの写真はそのまま残ります（Xに投稿するときの写真が小さくなります）。`;
+  $('#bf-text').innerHTML = `元の画質の写真：${n}枚<br>圧縮しても、ぐみ棚や記録の写真はそのまま残ります`;
   openSheet('#sh-bigfull');
   return new Promise(res => { bigFullDone = res; });
 }
@@ -5144,7 +5144,7 @@ function askShrinkBigNow(){
   if (!n) return;
   $('#bf-title').textContent = '元の画質の写真を圧縮しますか？';
   $('#bf-q').hidden = true;
-  $('#bf-text').textContent = `元の画質の写真${n}枚を、すべて圧縮します。ぐみ棚やログの写真はそのまま残ります（Xに投稿するときの写真が小さくなります）。`;
+  $('#bf-text').innerHTML = `元の画質の写真${n}枚を、全て圧縮します。<br>ぐみ棚やログの写真はそのまま残ります。`;
   openSheet('#sh-bigfull');
   bigFullDone = ok => ok && renderSettings();
 }
@@ -5501,9 +5501,9 @@ function renderShelf(){
       ${cat.length ? `<div><span>カタログ ${inCat} / ${cat.length}</span></div>` : ''}
       ${topRep && topRep.count > 1 ? `<div><span>いちばんリピ：<strong>${esc(topRep.name)}</strong> ×${topRep.count}</span></div>` : ''}
     </div>
-    <p class="hint" style="margin:0">最近買ったグミほど上に並びます。写真はいちばん新しいものが出ます。</p>
+    
     ${mine.length ? `<div class="shelf-box"><div class="shelf-grid">${mine.map(card).join('')}${shelfGaps(mine.length)}</div></div>`
-      : '<div class="rows"><div class="empty">まだ棚は空っぽです。グミを記録すると、ここに並んでいきます</div></div>'}`;
+      : '<div class="rows"><div class="empty">グミを記録すると、ここに並びます</div></div>'}`;
 }
 /* ========== ぐみ棚を画像にする（保存、またはスマホの共有画面から LINE / X へ） ========== */
 /* ぐみ棚や「今月のまとめ」を canvas に描いて JPEG 画像を作り、
@@ -5887,7 +5887,7 @@ function openMonthImage(){
 function siShareHint(){
   const share = canShareFiles();
   $('#si-share').hidden = !share;
-  $('#si-hint').textContent = share ? '「共有する」を押すと、LINE や X などを選べる画面が開きます。' : 'この画面では共有ボタンが使えないので、画像を保存してから LINE や X に貼ってください。';
+  $('#si-hint').textContent = share ? '' : 'この画面では共有ボタンが使えないため、画像を保存してからLINEやXに貼り付けてください。';
 }
 
 // 「ぐみ棚を画像に」のシートを開きます。並べる種類の数（12 / 16 / 24 / ぜんぶ）の選択肢も作ります。
@@ -5901,7 +5901,7 @@ function openShelfImage(){
   const opts = [...new Set([12, 16, 24].filter(k => k < total).concat([Math.min(total, 24)]))];
   if (!opts.includes(SI.n)) SI.n = opts[0];
   $('#si-count').style.gridTemplateColumns = `repeat(${opts.length},minmax(0,1fr))`;
-  $('#si-count').innerHTML = opts.map(k => `<button type="button" role="radio" data-n="${k}" aria-checked="${SI.n === k}">${k === total && k <= 24 ? `ぜんぶ（${k}）` : k + '種類'}</button>`).join('');
+  $('#si-count').innerHTML = opts.map(k => `<button type="button" role="radio" data-n="${k}" aria-checked="${SI.n === k}">${k === total && k <= 24 ? `全て（${k}）` : k + '種類'}</button>`).join('');
   siShareHint();
   openSheet('#sh-shelfimg');
   renderShelfImage();
@@ -5957,7 +5957,7 @@ function wireShelfImage(){
     }
     catch(e){
       // 共有画面を閉じただけ（AbortError）のときは何も言いません。
-      if (e && e.name !== 'AbortError') toast('共有できませんでした。画像を保存してから貼ってください');
+      if (e && e.name !== 'AbortError') toast('共有できませんでした。画像を保存してから貼り付けてください');
     }
   });
 }
@@ -6157,7 +6157,7 @@ const ACH = [
   {id:'staples', cat:'explore', icon:'🥇', name:'定番グミ制覇', unit:'種類', tiers:[3, 5, 8, 10], what:n => `定番グミ（果汁グミ・ピュレグミなど10種）を${n}種類記録`, v:c => STAPLES.filter(k => c.L.some(i => norm(i.name).includes(norm(k)))).length},
   {id:'release', cat:'explore', icon:'🏃', name:'発売日ハンター', unit:'袋', tiers:[1, 3, 5, 10], what:n => `発売日から7日以内に新作を${n}袋記録`, v:c => c.release},
   {id:'newflavor', cat:'explore', icon:'🧪', name:'新しい味の発見者', unit:'種類', tiers:[1, 3, 10, 30], what:n => `知っているシリーズの、カタログにない味を${n}種類記録`, v:c => c.newFlavors},
-  {id:'suggest', cat:'explore', icon:'💌', name:'グミ情報屋', unit:'回', tiers:[1, 3, 10, 30], what:n => `アプリから「カタログに提案」を${n}回送る`, v:c => c.suggests},
+  {id:'suggest', cat:'explore', icon:'💌', name:'グミ情報屋', unit:'回', tiers:[1, 3, 10, 30], what:n => `アプリから「カタログに提案」を${n}回送信`, v:c => c.suggests},
   {id:'gotouchi', cat:'explore', icon:'🗺️', name:'ご当地グミめぐり', unit:'都道府県', tiers:[3, 10, 20, 47], what:n => `名前に都道府県が入ったグミを、${n}都道府県ぶん記録`, v:c => c.gotouchi},
   {id:'minor', cat:'explore', icon:'🏭', name:'知る人ぞ知るメーカー', unit:'社', tiers:[1, 3, 5, 10], what:n => `カタログにないメーカーのグミを${n}社ぶん記録`, v:c => c.minorMakers},
   // 味マニア・メーカー通（表から作ります）
@@ -6319,10 +6319,10 @@ function renderAch(){
       <div class="ach-bar big"><span style="width:${Math.round(got / total * 100)}%"></span></div>
       <div class="ach-rank">ランク <b class="num">${got}</b> / ${total}</div>
       <div class="ach-sum">${TIERS.map((t, i) => `<span>${medalSVG(t.k, '', 22)}<b class="num">${per[i]}</b></span>`).reverse().join('')}<span>${medalSVG('secret', '', 22)}<b class="num">${secGot}/${secAll}</b></span></div>
-      ${demo ? '<p class="hint" style="margin:0">グミを記録すると、称号が集まっていきます。</p>' : ''}
+      ${demo ? '<p class="hint" style="margin:0">グミを記録すると、称号を獲得できます。</p>' : ''}
       ${got ? `<button class="btn sm photo-cta ach-all-btn" type="button" id="ach-all">${IMG_ICON}集めた称号をまとめて見る・共有</button>` : ''}
     </div>
-    ${near.length ? `<details class="panel ach-near" id="ach-near" ${S.ui.nearOpen === false ? '' : 'open'}><summary><h3>もうすぐとれる称号</h3></summary><div class="ach-grid">${near.map(achCard).join('')}</div></details>` : ''}
+    ${near.length ? `<details class="panel ach-near" id="ach-near" ${S.ui.nearOpen === false ? '' : 'open'}><summary><h3>もうすぐ獲得できる称号</h3></summary><div class="ach-grid">${near.map(achCard).join('')}</div></details>` : ''}
     ${ACH_CATS.map(([k, n]) => {
       const list = st.filter(s => s.a.cat === k);
       // グループの見出しには、集めた称号の数 / グループの称号の数 を出します
@@ -6336,7 +6336,7 @@ function renderAch(){
 function achShareText(a, got){
   return a.secret
     ? `シークレット称号「${a.name}」を見つけました🤫\n${a.what()}\n#ぐみろぐ #グミ`
-    : `称号「${a.name}」${TIERS[got - 1].n}をとりました🏅\n${a.what(a.tiers[got - 1])}\n#ぐみろぐ #グミ`;
+    : `称号「${a.name}」${TIERS[got - 1].n}を獲得しました🏅\n${a.what(a.tiers[got - 1])}\n#ぐみろぐ #グミ`;
 }
 // X の投稿画面を開くリンクです（「Xで開く」と同じ形式）。
 const achXUrl = t => 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(t);
@@ -6509,14 +6509,14 @@ async function drawAchAllImage(){
 async function shareAchAll(btn){
   btn.disabled = true;
   btn.dataset.label = btn.dataset.label || btn.innerHTML;
-  btn.textContent = '画像を作っています…';
+  btn.textContent = '画像を作成中…';
   try {
     const blob = await drawAchAllImage(), name = 'gumilog-titles.jpg';
     if (canShareFiles()){
       try {
         await navigator.share({files:[new File([blob], name, {type:'image/jpeg'})], text:achAllText(achGotList())});
       } catch(e){
-        if (e && e.name !== 'AbortError') toast('共有できませんでした。保存してから貼ってください');
+        if (e && e.name !== 'AbortError') toast('共有できませんでした。画像を保存してから貼り付けてください');
       }
     } else await saveBlob(blob, name);
   } finally {
@@ -6545,7 +6545,7 @@ function achGainsIn(key){
 // 上からロゴ、見出し、紙吹雪とメダル、段階、称号の名前、条件、日付、ハッシュタグの順です。
 async function drawAchImage(a, got){
   const tier = a.secret ? 'secret' : TIERS[got - 1].k;
-  const head = a.secret ? 'シークレット称号を見つけました！' : '称号をとりました！';
+  const head = a.secret ? 'シークレット称号を見つけました！' : '称号を獲得しました！';
   const tierName = a.secret ? 'シークレット' : TIERS[got - 1].n;
   const desc = a.secret ? a.what() : a.what(a.tiers[got - 1]);
   const d = new Date(), date = `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
@@ -6613,7 +6613,7 @@ async function shareAchImage(a, got, btn){
   if (btn){
     btn.disabled = true;
     btn.dataset.label = btn.dataset.label || btn.innerHTML;
-    btn.textContent = '画像を作っています…';
+    btn.textContent = '画像を作成中…';
   }
   try {
     const blob = await drawAchImage(a, got), name = `gumilog-${a.id}.jpg`;
@@ -6621,7 +6621,7 @@ async function shareAchImage(a, got, btn){
       try {
         await navigator.share({files:[new File([blob], name, {type:'image/jpeg'})], text:achShareText(a, got)});
       } catch(e){
-        if (e && e.name !== 'AbortError') toast('共有できませんでした。保存してから貼ってください');
+        if (e && e.name !== 'AbortError') toast('共有できませんでした。画像を保存してから貼り付けてください');
       }
     } else await saveBlob(blob, name);
   } finally {
@@ -6679,15 +6679,15 @@ function showAchWin(){
   if (q.intro){
     $('#aw-title').textContent = '称号が登場しました！';
     $('#aw-medal').innerHTML = medalSVG('gold', '🏅', 110);
-    $('#aw-name').textContent = `これまでの記録で、${q.intro}個の称号をとっています`;
+    $('#aw-name').textContent = `これまでの記録で、${q.intro}個の称号を獲得しています`;
     $('#aw-tier').textContent = '';
-    $('#aw-desc').textContent = 'グミを記録するほど、ブロンズ → シルバー → ゴールド → ダイヤモンドと上がっていきます。シークレット称号もあります。';
+    $('#aw-desc').textContent = '記録を重ねると、ブロンズ → シルバー → ゴールド → ダイヤモンドとランクが上がります。シークレット称号もあります。';
     sh.hidden = true;
     $('#aw-img').hidden = true;
     more.hidden = true;
   } else {
     const s = q.main, a = s.a;
-    $('#aw-title').textContent = a.secret ? 'シークレット称号を見つけました！' : '称号をとりました！';
+    $('#aw-title').textContent = a.secret ? 'シークレット称号を見つけました！' : '称号を獲得しました！';
     $('#aw-medal').innerHTML = medalSVG(achTier({a, got:s.reached}), a.icon, 110);
     $('#aw-name').textContent = a.name;
     $('#aw-tier').textContent = a.secret ? 'シークレット' : TIERS[s.reached - 1].n;
@@ -6698,7 +6698,7 @@ function showAchWin(){
     achShown = {a, got:s.reached};
     sh.href = achXUrl(achShareText(a, s.reached));
     more.hidden = !q.more;
-    more.textContent = `ほかにも${q.more}個の称号をとりました`;
+    more.textContent = `ほかに${q.more}個の称号を獲得しました`;
   }
   // 紙吹雪：色と位置と速さをばらばらにした小さな四角を降らせます（「動きを減らす」設定では出しません）。
   const cf = $('#aw-confetti');
@@ -6792,7 +6792,7 @@ function checkMonthAsk(){
   lsSet(LS_MONTHASK, now);
   if (!ms.count) return;
   $('#ma-title').textContent = `${+last.slice(5)}月のまとめを共有してみませんか？`;
-  $('#ma-text').textContent = `${+last.slice(5)}月は${ms.count}袋（${new Set(ms.list.map(i => i.name)).size}種類）のグミを記録しました。まとめを画像にして、X や LINE で共有できます。`;
+  $('#ma-text').textContent = `${+last.slice(5)}月は${ms.count}袋（${new Set(ms.list.map(i => i.name)).size}種類）のグミを記録しました。まとめを画像にして、XやLINEで共有できます。`;
   const show = () => {
     // ほかのシート（記録・称号のお祝いなど）が開いている間は待ちます
     if ([...document.querySelectorAll('.sheet')].some(x => !x.hidden)){
@@ -6854,7 +6854,7 @@ function renderAll(){
     const names = new Set(realItems().map(i => i.name));
     if (lastShelf){
       const nw = [...names].filter(n => !lastShelf.has(n));
-      if (nw.length === 1) setTimeout(() => toast(`ぐみ棚に「${nw[0]}」が並びました`), 2600);
+      if (nw.length === 1) setTimeout(() => toast(`ぐみ棚に「${nw[0]}」が追加されました`), 2600);
     }
     lastShelf = names;
   }
@@ -7036,7 +7036,7 @@ function buildFormStatic(){
 
 // 候補リストごとの設定です（見出し、最初の候補、保存キー、文字数の上限、記録で使われている候補の集め方など）。
 const LISTS = {
-  shops: { title:'お店', defaults:SHOPS, ls:LS_SHOPS, max:30, field:'shop', placeholder:'例：成城石井、ドンキ、〇〇駅のNewDays',
+  shops: { title:'お店', defaults:SHOPS, ls:LS_SHOPS, max:30, field:'shop', placeholder:'例：成城石井、ドンキ',
            used: () => countBy(realItems(), i => i.shop).map(x => x[0]) },
   tags:  { title:'タグ', defaults:TAGS, ls:LS_TAGS, max:12, field:'tags', placeholder:'例：ハード系、コラボ、おみやげ',
            used: () => countBy(realItems().flatMap(i => (i.tags || []).map(t => ({t}))), x => x.t).map(x => x[0]),
@@ -7094,7 +7094,7 @@ let tplSaveT = 0, tplFocus = 'detail';
 function renderTplEditor(){
   const box = $('#tpl-editor');
   if (!box) return;
-  box.innerHTML = `<p class="hint" style="margin:0 0 8px">{おいしさ} などは記録の内容に置きかわります。記録していない項目がある行は、ポストするときにその行ごと消えます。</p>
+  box.innerHTML = `<p class="hint" style="margin:0 0 8px">{おいしさ} などは記録の内容に置きかわります。<br>記録していない項目がある行は、ポスト時に行ごと消えます。</p>
     ${Object.keys(POST_TPL_DEFAULT).map(k => `<div class="tpl-row"><div class="tpl-h"><b>${POST_TPL_NAMES[k]}</b>
       <button type="button" class="btn sm ghost" data-tpl-reset="${k}" ${postTplOf(k) === POST_TPL_DEFAULT[k] ? 'disabled' : ''}>初期に戻す</button></div>
       <div class="tpl-wrap"><div class="tpl-hl" aria-hidden="true"></div><textarea class="in tpl-in" data-tpl-edit="${k}" rows="7" aria-label="${POST_TPL_NAMES[k]}のテンプレート">${esc(postTplOf(k))}</textarea></div></div>`).join('')}
@@ -7152,14 +7152,14 @@ function renderTplEditor(){
 function renderStockToggle(){
   const box = $('#stock-toggle');
   if (!box) return;
-  box.innerHTML = `<label class="switch-row" for="opt-stock"><span><b>手持ちのグミを表示</b><span class="hint">ログ画面に、まだ食べてない・食べた袋の数を出します</span></span>
+  box.innerHTML = `<label class="switch-row" for="opt-stock"><span><b>手持ちのグミを表示</b><span class="hint">ログ画面に、完食していない袋の数を表示します</span></span>
     <input type="checkbox" id="opt-stock" role="switch" ${S.showStock ? 'checked' : ''}></label>`;
 }
 // 「○月のまとめ」の共有の文章に入れる項目（オン・オフのスイッチ）です
 const MONTH_ITEMS = [
-  ['gumi', '集めたグミ', '袋数・種類・金額'], ['news', '新商品', '新商品の数（0 個の月は入りません）'],
+  ['gumi', '集めたグミ', '袋数・種類・金額'], ['news', '新商品', '新商品の数（0個の月は表示しません）'],
   ['maker', '推しメーカー', ''], ['best', '月間ベスト', ''], ['days', '記録した日', 'その月に記録した日数'],
-  ['suggest', 'カタログに提案', '提案した数（0 件の月は入りません）'], ['ach', '獲得した称号', 'その月にとった称号'], ['tags', 'ハッシュタグ', '#ぐみろぐ #グミ'],
+  ['suggest', 'カタログに提案', '提案した数（0件の月は表示しません）'], ['ach', '獲得した称号', 'その月に獲得した称号'], ['tags', 'ハッシュタグ', '#ぐみろぐ #グミ'],
 ];
 // 設定画面の「まとめの文章」のスイッチを描きます
 function renderMonthItems(){
@@ -7414,7 +7414,7 @@ function renderFormPhoto(){
   $('#f-photo-thumb').innerHTML = p ? `<span class="gframe gf-row${isRb(F.color) ? ' rb' : ''}" style="--gc:${colorOf(F.color)}"><img src="${p}" alt="写真"></span><span class="cam-badge">${CAM}</span>` : '';
   const set = F.photo || own;
   $('#f-photo-lbl').className = set ? 'btn sm ghost' : 'photo-cta';
-  $('#f-photo-lbl').innerHTML = CAM + (set ? '写真を変える' : p ? 'この記録の写真をつける' : '自分で撮った写真をつける');
+  $('#f-photo-lbl').innerHTML = CAM + (set ? '写真を変える' : p ? 'この記録の写真をつける' : '写真をつける');
   $('#f-photo-del').hidden = !(F.photo || own);
 }
 // 名前 name のグミが、自分の記録で最初に「新商品」タグを付けた日を返します（なければ null）
@@ -7476,7 +7476,7 @@ function askClose(id){
   if (id === '#sh-form' && formDirty()){
     const edit = !!F.editing;
     $('#dc-title').textContent = edit ? '変更を破棄しますか？' : '記録を破棄しますか？';
-    $('#dc-text').textContent = edit ? '直した内容は保存されません。' : '入力した内容は保存されません。';
+    $('#dc-text').textContent = edit ? '修正内容は保存されません。' : '入力した内容は保存されません。';
     $('#sh-discard').querySelector('[data-close]').textContent = edit ? '直すのを続ける' : '記録を続ける';
     openSheet('#sh-discard');
     return;
@@ -7677,7 +7677,7 @@ function applyCand(c, note){
 // 候補をどこから入力したかを説明する文章を返します
 function noteFor(c){
   if (c.src === 'mine') return `前回（${mdLabel(c.last)}${c.shop ? '・' + esc(c.shop) : ''}）の記録から、お店・日付・ひとこと以外を入力しました。`;
-  if (c.src === 'cat') return `カタログから入力しました。${c.price ? '値段はメーカーの希望小売価格（税込の目安）です。お店の値段と違えば直してください。' : 'メーカーが値段を公開していないため、値段は入っていません。'}${c.rel && isRecent(c.rel, $('#f-date').value) ? '発売から間もないので「新商品」タグを付けました。' : ''}`;
+  if (c.src === 'cat') return `カタログから入力しました。${c.price ? '値段はメーカーの希望小売価格（税込）です。' : 'メーカーが公開していないため、値段は空欄です。'}${c.rel && isRecent(c.rel, $('#f-date').value) ? '発売から間もないため「新商品」タグを付けました。' : ''}`;
   return c.note || '';
 }
 
@@ -7792,7 +7792,7 @@ function wireAutocomplete(){
     if (v && AC.applied !== v){
       AC.applied = v;
       if (!predictLocal(v)){
-        setHint(S.cap.sample ? 'カタログにない商品です。<button type="button" class="btn sm ghost" id="ac-ai">AIでメーカーと値段を予測</button>' : 'カタログにない商品です。メーカーなどは手で入力してください。');
+        setHint(S.cap.sample ? 'カタログにない商品です。<button type="button" class="btn sm ghost" id="ac-ai">AIでメーカーと値段を予測</button>' : 'カタログにない商品です。メーカーなどを入力してください。');
       }
     }
   }, 120));
@@ -7976,9 +7976,9 @@ function wireForm(){
       try {
         if (photo) await setPhoto(ownKey(it), photo.small, photo.big, name);
         else if (photoDel && photoOf(ownKey(it))) await setPhoto(ownKey(it), '');
-      } catch(err){ toast(err && err.code === 'local_full' ? '記録はできましたが、端末の容量がいっぱいで写真は保存できませんでした' : '記録はできましたが、写真は保存できませんでした'); }
+      } catch(err){ toast(err && err.code === 'local_full' ? '記録できましたが、容量不足のため写真が保存できませんでした' : '記録できましたが、写真が保存できませんでした'); }
     } catch(err){
-      toast(err && err.code === 'quota_exceeded' ? '保存できる件数の上限です。古い記録を消すと保存できます' : '保存できませんでした。もう一度試してください');
+      toast(err && err.code === 'quota_exceeded' ? '保存件数の上限です。古い記録を消すと保存できます' : '保存できませんでした。もう一度お試しください');
       openSheet('#sh-form');
     } finally { btn.disabled = false; }
   });
@@ -8054,7 +8054,7 @@ function newFlavorOf(it){
 // 「カタログにない味です」という案内と提案リンクの HTML を返します
 function newFlavorHTML(it, nf){
   const d = {name:nf.c.n + (nf.flavor ? ' ' + nf.flavor : ''), maker:nf.c.m, flavor:nf.flavor, price:it.price ?? ''};
-  return `<p class="suggest hint">${nf.flavor ? `「${esc(nf.c.n)}」の${esc(nf.flavor)}はカタログにない味です。` : `「${esc(nf.c.n)}」のどの味かが入っていません。カタログにない味なら、`}<a ${sgAttrs(d)}>カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。${nf.flavor ? '' : '（味は「直す」から入れられます）'}</p>`;
+  return `<p class="suggest hint">${nf.flavor ? `「${esc(nf.c.n)}」の${esc(nf.flavor)}はカタログにない味です。` : `「${esc(nf.c.n)}」のどの味かが入っていません。カタログにない味なら、`}<a ${sgAttrs(d)}>カタログに提案する</a>と、名前の候補に追加される場合があります。${nf.flavor ? '' : '（味は「直す」から入力できます）'}</p>`;
 }
 
 /* ========== 記録の名前をカタログに合わせる ==========
@@ -8224,10 +8224,10 @@ function suggestOffer(it){
   const nf = newFlavorOf(it);
   if (nf){
     const d = {name:nf.c.n + (nf.flavor ? ' ' + nf.flavor : ''), maker:nf.c.m, flavor:nf.flavor, price:it.price ?? ''};
-    return {text: nf.flavor ? `「${nf.c.n}」の${nf.flavor}は、カタログにない味みたいです。` : `「${nf.c.n}」のどの味か、カタログにないものみたいです。`, d};
+    return {text: nf.flavor ? `「${nf.c.n}」の${nf.flavor}は、カタログに登録されていません。` : `「${nf.c.n}」の味が、カタログに登録されていません。`, d};
   }
   if (inCatalog(it.name) || catMatches(it).length) return null;
-  return {text:`「${it.name}」は、カタログにないグミみたいです。`, d:sgData(it)};
+  return {text:`「${it.name}」は、カタログに登録されていません。`, d:sgData(it)};
 }
 // おさそいを出すタイマーの番号
 let suggestT = 0;
@@ -8285,7 +8285,7 @@ async function sendSuggest(){
   try {
     await new Promise(r => setTimeout(r, 400));   // プレビュー版では送信しません
     closeSheet('#sh-sform');
-    toast('送りました！確認してカタログに追加します');
+    toast('送信完了');
     // 送った回数を数えて、称号（グミ情報屋）を調べ直します
     lsSet(LS_SUGG, (+lsGet(LS_SUGG, 0) || 0) + 1);
     lsSet(LS_SUGG_LOG, [...suggestLog(), todayStr()].slice(-500));
@@ -8297,7 +8297,7 @@ async function sendSuggest(){
     $('#sf-fallback').href = suggestUrl(v);
     $('#sf-fail').hidden = false;
     btn.disabled = false;
-    btn.textContent = 'もう一度送る';
+    btn.textContent = '再送信';
   }
 }
 // 提案フォームまわりのイベントを設定します
@@ -8365,20 +8365,20 @@ function openDetail(id){
     <div class="note" id="dt-note-top" ${it.note ? '' : 'hidden'}>${esc(it.note || '')}</div>
     ${needsMatch(it) ? matchHTML(it) : ''}
     ${newFlavorOf(it) ? newFlavorHTML(it, newFlavorOf(it)) : ''}
-    ${!it.demo && !inCatalog(it.name) && !newFlavorOf(it) && !(needsMatch(it) && catMatches(it).length) ? `<p class="suggest hint">カタログにないグミです。<a ${sgAttrs(sgData(it))}>カタログに提案する</a>と、みんなの候補に出るようになるかもしれません。</p>` : ''}
+    ${!it.demo && !inCatalog(it.name) && !newFlavorOf(it) && !(needsMatch(it) && catMatches(it).length) ? `<p class="suggest hint">カタログにないグミです。<a ${sgAttrs(sgData(it))}>カタログに提案する</a>と、名前の候補に追加される場合があります。</p>` : ''}
     <div class="dt-status"><span class="lbl">食べた？</span><div class="seg" id="dt-status" role="radiogroup" aria-label="食べたかどうか">${STATUS.map(x => `<button type="button" role="radio" data-status="${x.k}" aria-checked="${statusOf(it) === x.k}" ${it.demo ? 'disabled' : ''}>${x.n}</button>`).join('')}</div>
       ${it.demo ? '' : `<div class="dt-rate" id="dt-rate" ${statusOf(it) !== 'unopened' && !it.rating ? '' : 'hidden'}>
-        <p class="hint" style="margin:0">食べた感想をつけましょう。タップや入力ですぐ保存されます（もう一度タップで取り消し）。</p>
+        <p class="hint" style="margin:0">食べた感想をつけましょう</p>
         <div class="dt-rate-r"><span class="lbl">おいしさ</span><div class="starin" id="dt-stars"></div></div>
         <div class="dt-rate-r"><span class="lbl">かたさ</span><div class="shapein" id="dt-hard"></div></div>
         <div class="dt-rate-r"><span class="lbl">すっぱさ</span><div class="shapein" id="dt-sour"></div></div>
-        <div class="dt-rate-r"><label class="lbl" for="dt-note">ひとこと</label><textarea class="in dt-note" id="dt-note" rows="2" placeholder="弾力がすごい。後半でぶどう感が来る">${esc(it.note || '')}</textarea></div>
+        <div class="dt-rate-r"><label class="lbl" for="dt-note">ひとこと</label><textarea class="in dt-note" id="dt-note" rows="2" placeholder="味が濃くておいしい">${esc(it.note || '')}</textarea></div>
       </div>`}</div>
     ${it.demo ? '' : `<div class="photo-row">
-      ${pOwn ? `<label class="btn sm ghost" for="dt-photo">${CAM}写真を変える</label>` : `<label class="photo-cta" for="dt-photo">${CAM}${pKey ? 'この記録の写真をつける' : '自分で撮った写真をつける'}</label>`}
+      ${pOwn ? `<label class="btn sm ghost" for="dt-photo">${CAM}写真を変える</label>` : `<label class="photo-cta" for="dt-photo">${CAM}${pKey ? 'この記録の写真をつける' : '写真をつける'}</label>`}
       <input type="file" id="dt-photo" accept="image/*" hidden>
       ${pOwn || pKey === it.name ? '<button class="btn sm ghost" id="dt-photo-del" type="button">写真を外す</button>' : ''}
-      <span class="hint">${pOwn ? 'この記録の写真です。' : pKey === it.name ? 'この写真は前のしくみでつけた「' + esc(it.name) + '」共通の写真です。' : pKey ? '前に買ったときの写真を表示しています。この記録だけの写真もつけられます。' : 'つけた写真はこの記録に使われます。'}ぐみ棚にはいちばん新しい写真が出ます。${bigNote(pKey)}</span>
+      <span class="hint">${pOwn ? 'この記録の写真です。' : pKey === it.name ? 'この写真は前のしくみでつけた「' + esc(it.name) + '」共通の写真です。' : pKey ? '前回の写真を表示しています' : 'つけた写真はこの記録に使われます。'}ぐみ棚にはいちばん新しい写真が出ます。${bigNote(pKey)}</span>
     </div>`}
     <div class="sheet-actions">
       <button class="btn primary" id="dt-post">${SHARE_ICON}共有</button>
@@ -8404,7 +8404,7 @@ function openDetail(id){
         openDetail(it.id);
       }
       catch(err){
-        toast(err && err.code === 'local_full' ? 'この端末の保存容量がいっぱいで保存できませんでした' : 'この写真は保存できませんでした');
+        toast(err && err.code === 'local_full' ? '容量不足のため保存できませんでした' : 'この写真は保存できませんでした');
       }
     };
     // 「写真を外す」ボタン（あるときだけ）
@@ -8673,7 +8673,7 @@ function bigNote(key){
   const b = bigOf(key);
   if (!b) return '';
   const d = new Date(bigUntil(b.at) - 1);
-  return `共有用の大きい写真は${d.getMonth()+1}/${d.getDate()}まで残り、そのあとは小さい写真だけになります。`;
+  return `元の画質の写真は${d.getMonth()+1}/${d.getDate()}まで保存され、その後は圧縮されます。`;
 }
 // 投稿する写真を File にして返します（Promise）。写真がなければ null を返します
 function photoFile(){
@@ -8705,7 +8705,7 @@ function setupPhotoShare(){
   po.textContent = share ? (month ? '画像なしでポスト' : '写真なしでポスト') : 'Xで開く';
   po.className = share ? 'btn ghost' : 'btn x';
   $('#post-hint').textContent = share
-    ? `共有画面から X や LINE などを選べます。文章だけなら「${month ? '画像' : '写真'}なしでポスト」。`
+    ? `共有画面からXやLINEなどを選べます。文章のみの場合は「${month ? '画像' : '写真'}なしでポスト」。`
     : '「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。';
   $('#post-photo').hidden = !d;
   if (!d) return;
@@ -8716,7 +8716,7 @@ function setupPhotoShare(){
   $('#post-photo-hint').textContent = share ? ''
     : copy ? '写真をコピーしてから「Xで開く」を押し、Xの投稿画面で長押しして「ペースト」すると写真が付きます。'
     : '写真を保存してから「Xで開く」を押し、Xの投稿画面で写真を選んでください。';
-  if (!bigOf(photoKeyFor(P.item))) $('#post-photo-hint').textContent += '大きい写真は登録した翌日いっぱいで消えるので、小さい写真で送られます。';
+  if (!bigOf(photoKeyFor(P.item))) $('#post-photo-hint').textContent += '元の写真は登録した翌日いっぱいで削除されるため、圧縮サイズで送信されます。';
 }
 // data: URL の画像を PNG の Blob に変換して返します（クリップボード用）
 async function pngFromDataUrl(d){
@@ -8749,7 +8749,7 @@ function wirePhotoShare(){
     // ClipboardItem はタップの処理の中ですぐ作る必要があります。Safari では画像の代わりに Promise を渡せます
     try {
       navigator.clipboard.write([new ClipboardItem({'image/png': pngFromDataUrl(d)})])
-        .then(() => toast('写真をコピーしました。Xの投稿画面で長押し→ペースト'), () => {
+        .then(() => toast('写真をコピーしました'), () => {
           toast('この画面ではコピーできませんでした。写真を保存します');
           savePhoto();
         });
@@ -8870,7 +8870,7 @@ function matchListHTML(){
     }
   }
   return rows.length ? `<div class="panel" id="match-panel"><h3>カタログと名前をそろえる<span class="s">${rows.length}件</span></h3>
-    <p class="hint" style="margin:0">カタログに入っていない名前で記録したグミのうち、近いグミがカタログに入ったものです。合わせると、同じ名前の記録がまとめて変わります（写真や評価はそのまま）。</p>
+    <p class="hint" style="margin:0">カタログに入っていない名前で記録したグミのうち、近いグミがカタログに入ったものです。</p>
     ${rows.length > 1 ? '<div class="btn-row"><button type="button" class="btn sm" id="ma-open">まとめて確認する</button></div>' : ''}${rows.join('')}</div>` : '';
 }
 /* ========== カタログにないグミの一覧 ==========
@@ -8899,12 +8899,12 @@ function renderNotCat(){
     }
     const nf = newFlavorOf(it);
     other.push(`<div class="nc-row">${head}${nf ? newFlavorHTML(it, nf)
-      : `<p class="suggest hint">${S.nameSkip.includes(it.name) ? '近いグミは「ちがう」にしたグミです。' : 'カタログに近いグミがありません。'}<a ${sgAttrs(sgData(it))}>カタログに提案する</a></p>`}</div>`);
+      : `<p class="suggest hint">${S.nameSkip.includes(it.name) ? '「ちがう」を選んだグミです。' : 'カタログに近いグミがありません。'}<a ${sgAttrs(sgData(it))}>カタログに提案する</a></p>`}</div>`);
   }
   $('#nc-list').innerHTML = (match.length || other.length)
     ? (match.length ? `<p class="nc-h">近いグミがカタログにあるもの（${match.length}）</p>${match.join('')}` : '')
-      + (other.length ? `<p class="nc-h">カタログにないもの（${other.length}）</p><p class="hint" style="margin:0">提案してもらえると、確認してカタログに追加します。</p>${other.join('')}` : '')
-    : '<p class="hint">記録したグミは、すべてカタログに載っています。</p>';
+      + (other.length ? `<p class="nc-h">カタログにないもの（${other.length}）</p><p class="hint" style="margin:0">提案いただいた商品は、確認後にカタログへ追加します。</p>${other.join('')}` : '')
+    : '<p class="hint">記録したグミは、全てカタログに登録されています。</p>';
 }
 function openNotCat(){
   renderNotCat();
@@ -9144,7 +9144,7 @@ function storageHTML(){
   if (PDB.db){
     const mb = [...Object.values(S.localPhotos), ...Object.values(S.localBig).map(b => b.data)].reduce((t, d) => t + d.length * .75, 0) / 1048576;
     return `<p>写真：<b class="num">${Object.keys(S.localPhotos).length}</b>枚${nb ? `（元の画質 ${nb}枚）` : ''}・約<b class="num">${mb < 1 ? Math.max(1, Math.round(mb * 1024)) + '</b>KB' : (mb < 10 ? mb.toFixed(1) : Math.round(mb)) + '</b>MB'}</p>
-      <p class="hint" style="margin:0">写真は、この端末の空き容量に合わせてたくさん保存できます。元の画質の写真は登録した翌日いっぱいで圧縮されます。</p>${btn}`;
+      ${btn}`;
   }
   let used = 0;
   try {
@@ -9154,7 +9154,7 @@ function storageHTML(){
     }
   } catch(e){}
   return `<p>写真：<b class="num">${Object.keys(S.localPhotos).length}</b>枚${nb ? `（元の画質 ${nb}枚）` : ''}・使用量 約<b class="num">${Math.min(99, Math.ceil(used / LS_QUOTA * 100))}</b>%</p>
-      <p class="hint" style="margin:0">使用量は、この端末に保存できる量のめやすに対する割合です。元の画質の写真は登録した翌日いっぱいで圧縮されます。</p>${btn}`;
+      <p class="hint" style="margin:0">使用量は、この端末に保存できる容量の目安に対する割合です。</p>${btn}`;
 }
 // 設定シートの中身を描き、書き出し・読み込みのボタンに動きをつけます
 // 設定で開いているグループ（'' ならメニュー）と、グループの見出しです
@@ -9183,8 +9183,8 @@ function renderSettings(){
   $('#settings-body').innerHTML = `
     <p class="set-sec" ${g ? 'hidden' : ''}>グミカタログ</p>
     <div class="set-menu" ${g ? 'hidden' : ''}>
-      <button type="button" class="set-item" id="nc-open">${inner('🔍', 'カタログにないグミ', ncN ? `${ncN}種類・${mcN ? '名前をそろえる／' : ''}提案する` : '記録したグミは、すべてカタログに載っています', mcN || '')}</button>
-      <a class="set-item" ${sgAttrs({})}>${inner('📮', '新しいグミを提案する', 'カタログにないグミを見つけたら教えてください')}</a>
+      <button type="button" class="set-item" id="nc-open">${inner('🔍', 'カタログにないグミ', ncN ? `${ncN}種類・${mcN ? '名前をそろえる／' : ''}提案する` : '記録したグミは、全てカタログに登録されています', mcN || '')}</button>
+      <a class="set-item" ${sgAttrs({})}>${inner('📮', '新しいグミを提案する', 'カタログにないグミを提案できます')}</a>
       ${item('catalog', '📖', 'カタログについて', `${catList().length}シリーズ・最終更新 ${esc(REMOTE_CAT_AT || CATALOG_AT)}`)}
     </div>
     <p class="set-sec" ${g ? 'hidden' : ''}>設定</p>
@@ -9202,12 +9202,12 @@ function renderSettings(){
     <div class="set-grp" ${g === 'data' ? '' : 'hidden'}>
     ${IN_CLAUDE ? '' : `<div class="panel" id="cloud-panel">${cloudPanelInner()}</div>`}
     <div class="panel"><h3>保存先</h3>
-      <p>${!IN_CLAUDE && CS.user ? 'この端末とクラウドの両方に保存しています。Xに共有するときの元の画質の写真だけは、この端末にだけ保存されます。' : S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザの中に保存しています。ブラウザのデータを消すと記録も消えるので、ときどき書き出しておくと安心です。`}</p>
+      <p>${!IN_CLAUDE && CS.user ? 'この端末とクラウドの両方に保存しています。元の画質の写真は、この端末にのみ保存されます。' : S.mode === 'cloud' ? 'あなたのアカウントに保存しています。ほかの端末で開いても同じログが見られます。記録はあなただけが見られます。' : `${S.readOnly ? 'このページは閲覧のみの権限で共有されているため、アカウントには保存できません。' : ''}このブラウザに保存しています。ブラウザのデータを消去すると記録も消えるため、定期的な書き出しをおすすめします。`}</p>
       <p>記録数：<b class="num">${real.length}</b>件</p>${storageHTML()}</div>
     <div class="panel"><h3>書き出し</h3>
-      <p>${dl ? 'バックアップ用のJSON（記録・写真・設定が入ります）か、表計算ソフトで開けるCSV（記録だけ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
+      <p>${dl ? 'バックアップ用のJSON（記録・写真・設定）か、表計算ソフト用のCSV（記録のみ）を保存できます。' : 'この画面ではファイルを保存できません。'}</p>
       <div class="btn-row"><button class="btn sm" id="ex-json" ${dl && real.length ? '' : 'disabled'}>JSONで保存</button><button class="btn sm" id="ex-csv" ${dl && real.length ? '' : 'disabled'}>CSVで保存</button></div></div>
-    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録と写真を戻せます。同じ記録は重複せず、すでにある写真はそのままです。</p>
+    <div class="panel"><h3>読み込み</h3><p>「JSONで保存」したファイルから記録と写真を復元できます。重複する記録や写真は読み込みません。</p>
       <div class="btn-row"><label class="btn sm" for="im-file">JSONを読み込む</label><input type="file" id="im-file" accept="application/json,.json" hidden></div></div>
     </div>
     <div class="set-grp" ${g === 'look' ? '' : 'hidden'}>
@@ -9216,9 +9216,9 @@ function renderSettings(){
     </div>
     <div class="set-grp" ${g === 'catalog' ? '' : 'hidden'}>
     <div class="panel"><h3>グミカタログ</h3>
-      <p>名前を入れたときの候補に使うカタログです。メーカーの公式サイトをもとに更新しています。</p>
-      <div class="btn-row"><a class="btn sm" ${sgAttrs({})}>新しいグミを教える</a></div>
-      <p class="hint" style="margin:0">カタログにないグミを見つけたら、フォームから教えてください。確認してからカタログに追加します。</p>
+      <p>名前の候補に使用するカタログです。メーカーの公式サイトをもとに更新しています。</p>
+      <div class="btn-row"><a class="btn sm" ${sgAttrs({})}>新しいグミを提案する</a></div>
+      <p class="hint" style="margin:0">カタログにないグミは、フォームから提案できます。確認後にカタログへ追加します。</p>
       ${CAT_PROBLEMS.length ? `<p class="cat-problems">カタログの表に読めない所があります（その行は空欄として扱っています）：<br>${CAT_PROBLEMS.slice(0, 10).map(esc).join('<br>')}${CAT_PROBLEMS.length > 10 ? `<br>ほか${CAT_PROBLEMS.length - 10}件` : ''}</p>` : ''}
       <p>登録数：<b class="num">${catList().length}</b>シリーズ　最終更新：${esc(REMOTE_CAT_AT || CATALOG_AT)}</p></div>
     ${mlH}
@@ -9361,7 +9361,7 @@ function renderSettings(){
         renderShopChips();
         renderTagChips();
       }
-      toast(`${n}件の記録${np ? `と${np}枚の写真` : ''}を読み込みました${pf ? `（${pf}枚の写真は容量がいっぱいで入りませんでした）` : ''}`);
+      toast(`${n}件の記録${np ? `と${np}枚の写真` : ''}を読み込みました${pf ? `（${pf}枚の写真は容量不足のため読み込めませんでした）` : ''}`);
       renderAll();
       renderSettings();
     } catch(err){
