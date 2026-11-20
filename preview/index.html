@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="d20694115a"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="060d8ea615"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2321,6 +2321,11 @@ a.set-item{text-decoration:none}
 .ach-pips i.silver { background:#A3B0C2 }
 .ach-pips i.gold { background:#F0B21C }
 .ach-pips i.diamond { background:linear-gradient(135deg,#7FDBFF,#B9A4FF,#FF9FD2) }
+.ach-when {
+  font-size:11px;
+  font-weight:700;
+  color:var(--accent-text)
+}
 .ach-next {
   font-size:11px;
   color:var(--ink-2)
@@ -3152,6 +3157,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:207, k:'f', at:'2026-11-20 09:59', t:'称号タブに「最近獲得した称号」を追加しました。獲得した日が新しい順に3つ表示します。'},
   {v:206, k:'p', at:'2026-11-20 09:52', t:'アプリ内の文章を見直し、表現と表記を統一しました。'},
   {v:205, k:'f', at:'2026-11-20 09:42', t:'「新商品」タグが付く期間を、発売から30日以内に変更しました。発売日を味ごとに判定するようにし、同じシリーズに新しい味が追加されたとき、以前からある味に「新商品」タグが付く不具合を修正しました。また、新商品の時期を過ぎてから同じグミを記録したとき、「新商品」タグが引き継がれないようにしました。'},
   {v:204, k:'f', at:'2026-11-20 09:35', t:'ログの「リピ」「★5」「新商品」の絞り込みで、同じグミの記録を1行にまとめて表示するようにしました。以前の記録は「前の記録」から開いて確認できます。'},
@@ -3751,6 +3757,14 @@ function applySettingsDoc(d){
   if (d && Array.isArray(d.nameSkip) && d.nameSkip.join('|') !== S.nameSkip.join('|')){
     S.nameSkip = d.nameSkip.map(String);
     lsSet(LS_NAMESKIP, S.nameSkip);
+  }
+  // ほかの端末で獲得した日も合わせます（同じ段階は早いほうの日を残します）
+  if (d && d.achAt && typeof d.achAt === 'object' && Object.keys(d.achAt).length){
+    const at = achAtGet() || {};
+    if (achAtMerge(at, d.achAt) || !achAtGet()){
+      lsSet(LS_ACH_AT, at);
+      renderAch();
+    }
   }
   // ほかの端末でとった称号も合わせます（段階の大きいほうを残します）
   if (d && d.ach && typeof d.ach === 'object'){
@@ -6281,7 +6295,79 @@ function medalSVG(tier, icon, size = 56){
 }
 
 // 称号 1 つ分のカード（称号タブに並べるボタン）を作ります。
-function achCard(s){
+// 称号を獲得した日です。{称号のid: [1段階目の日, 2段階目の日, …]} の形で、この端末とクラウドの設定に保存します。
+// 新しく獲得したときは、その日の日付を入れます。
+const LS_ACH_AT = 'gumilog-pv.achAt.v1';
+const achAtGet = () => { const v = lsGet(LS_ACH_AT, null); return v && typeof v === 'object' ? v : null; };
+// 2つの「獲得した日」を合わせます（同じ段階は早いほうの日を残します）。変わったら true を返します
+function achAtMerge(dst, src){
+  let ch = false;
+  for (const [k, arr] of Object.entries(src || {})){
+    if (!Array.isArray(arr)) continue;
+    const cur = dst[k] || (dst[k] = []);
+    arr.forEach((d, i) => {
+      if (typeof d !== 'string' || !/^\d{4}-\d\d-\d\d$/.test(d)) return;
+      if (!cur[i] || d < cur[i]){ cur[i] = d; ch = true; }
+    });
+  }
+  return ch;
+}
+// この機能より前に獲得した称号の日付を、記録をさかのぼって求めます（最初の1回だけ）。
+// 記録の日付を古い順にたどり、その日までの記録で各段階に届いた最初の日を獲得した日とします。
+// 記録が多いと時間がかかるので、少しずつ進めて画面が止まらないようにします。
+let achBackfilling = false;
+function achBackfill(){
+  if (achBackfilling || achAtGet() || isDemo()) return;
+  achBackfilling = true;
+  const sorted = [...realItems()].sort((x, y) => x.date < y.date ? -1 : x.date > y.date ? 1 : 0);
+  const days = [...new Set(sorted.map(i => i.date))], map = {};
+  let di = 0, n = 0;
+  const step = () => {
+    const t0 = performance.now();
+    while (di < days.length && performance.now() - t0 < 30){
+      const d = days[di++];
+      while (n < sorted.length && sorted[n].date <= d) n++;
+      const c = achCtx(sorted.slice(0, n));
+      for (const a of ACH){
+        const got = map[a.id] || (map[a.id] = []);
+        if (got.length >= a.tiers.length) continue;
+        const raw = a.v(c), cur = typeof raw === 'boolean' ? +raw : raw;
+        while (got.length < a.tiers.length && cur >= a.tiers[got.length]) got.push(d);
+      }
+    }
+    if (di < days.length) return setTimeout(step, 0);
+    const at = achAtGet() || {};
+    achAtMerge(at, map);
+    lsSet(LS_ACH_AT, at);
+    achBackfilling = false;
+    saveSettingsDoc();
+    renderAch();
+  };
+  setTimeout(step, 0);
+}
+// 新しく届いた段階に、今日の日付を入れます（まだ日付のない段階だけ）
+function achAtMark(gained, saved){
+  const at = achAtGet();
+  if (!at) return;   // さかのぼりの計算がまだのときは、そちらで日付が入ります
+  const today = todayStr();
+  gained.forEach(s => {
+    const cur = at[s.a.id] || (at[s.a.id] = []);
+    for (let i = +saved[s.a.id] || 0; i < s.reached; i++) if (!cur[i]) cur[i] = today;
+  });
+  lsSet(LS_ACH_AT, at);
+}
+// 最近獲得した称号を、新しい順に n 個返します（同じ称号は、いちばん新しい段階だけ）。
+function achRecent(st, n){
+  const at = achAtGet();
+  if (!at) return [];
+  return st.filter(s => s.got && at[s.a.id] && at[s.a.id][s.got - 1])
+    .map(s => ({s, at:at[s.a.id][s.got - 1]}))
+    .sort((x, y) => x.at < y.at ? 1 : x.at > y.at ? -1 : y.s.got - x.s.got)
+    .slice(0, n);
+}
+
+// at を渡すと、カードに「獲得した日」を出します（最近獲得した称号で使います）。
+function achCard(s, at){
   const a = s.a, hide = a.secret && !s.got, tier = achTier(s);
   const done = s.got >= a.tiers.length;
   const next = a.tiers[Math.min(s.got, a.tiers.length - 1)];
@@ -6289,6 +6375,7 @@ function achCard(s){
   return `<button type="button" class="ach${s.got ? ' got' : ''}${hide ? ' hid' : ''}" data-ach="${a.id}">
     ${medalSVG(tier, hide ? '？' : a.icon, 50)}
     <span class="ach-n">${hide ? '？？？' : esc(a.name)}</span>
+    ${at ? `<span class="ach-when num">${mdLabel(at)} 獲得</span>` : ''}
     ${a.secret
       ? `<span class="ach-t ${tier || ''}">${s.got ? 'シークレット' : esc(a.hint)}</span>`
       : `<span class="ach-t ${tier || ''}">${s.got ? TIERS[s.got - 1].n : '未獲得'}</span>
@@ -6313,6 +6400,9 @@ function renderAch(){
   // もうすぐとれる称号：次の段階までの進み具合が大きい順に 3 つ
   const near = st.filter(s => !s.a.secret && s.got < s.a.tiers.length && s.cur > 0)
     .sort((x, y) => y.cur / y.a.tiers[y.got] - x.cur / x.a.tiers[x.got]).slice(0, 3);
+  // 最近獲得した称号：獲得した日が新しい順に 3 つ
+  const recent = demo ? [] : achRecent(st, 3);
+  if (!demo) achBackfill();
   v.innerHTML = `
     <div class="panel ach-top">
       <div class="ach-score"><span class="lbl">集めた称号</span><span class="big num">${titles}<small>個 / ${st.length}</small></span></div>
@@ -6322,13 +6412,14 @@ function renderAch(){
       ${demo ? '<p class="hint" style="margin:0">グミを記録すると、称号を獲得できます。</p>' : ''}
       ${got ? `<button class="btn sm photo-cta ach-all-btn" type="button" id="ach-all">${IMG_ICON}集めた称号をまとめて見る・共有</button>` : ''}
     </div>
-    ${near.length ? `<details class="panel ach-near" id="ach-near" ${S.ui.nearOpen === false ? '' : 'open'}><summary><h3>もうすぐ獲得できる称号</h3></summary><div class="ach-grid">${near.map(achCard).join('')}</div></details>` : ''}
+    ${recent.length ? `<details class="panel ach-near" id="ach-recent" ${S.ui.recentOpen === false ? '' : 'open'}><summary><h3>最近獲得した称号</h3></summary><div class="ach-grid">${recent.map(r => achCard(r.s, r.at)).join('')}</div></details>` : ''}
+    ${near.length ? `<details class="panel ach-near" id="ach-near" ${S.ui.nearOpen === false ? '' : 'open'}><summary><h3>もうすぐ獲得できる称号</h3></summary><div class="ach-grid">${near.map(s => achCard(s)).join('')}</div></details>` : ''}
     ${ACH_CATS.map(([k, n]) => {
       const list = st.filter(s => s.a.cat === k);
       // グループの見出しには、集めた称号の数 / グループの称号の数 を出します
       const g = list.filter(s => s.got).length, all = list.length;
       // グループごとに、見出しを押すと閉じたり開いたりできます（閉じたグループは S.ui.catClosed に覚えます）
-      return `<details class="panel ach-near ach-cat" data-cat="${k}" ${(S.ui.catClosed || []).includes(k) ? '' : 'open'}><summary><h3>${n}<span class="s">${g} / ${all}</span></h3></summary><div class="ach-grid">${list.map(achCard).join('')}</div></details>`;
+      return `<details class="panel ach-near ach-cat" data-cat="${k}" ${(S.ui.catClosed || []).includes(k) ? '' : 'open'}><summary><h3>${n}<span class="s">${g} / ${all}</span></h3></summary><div class="ach-grid">${list.map(s => achCard(s)).join('')}</div></details>`;
     }).join('')}`;
 }
 
@@ -6652,6 +6743,7 @@ function checkAch(){
   const gained = st.filter(s => s.reached > (+saved[s.a.id] || 0));
   if (!gained.length) return;
   const merged = {...saved};
+  achAtMark(gained, saved);
   gained.forEach(s => merged[s.a.id] = s.reached);
   lsSet(LS_ACH, merged);
   saveSettingsDoc();
@@ -6719,8 +6811,9 @@ function wireAch(){
       if (e.target.open) set.delete(cat); else set.add(cat);
       S.ui.catClosed = [...set];
     } else if (e.target.id === 'ach-near') S.ui.nearOpen = e.target.open;
+    else if (e.target.id === 'ach-recent') S.ui.recentOpen = e.target.open;
     else return;
-    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, catClosed:S.ui.catClosed});
+    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
   }, true);
   $('#v-ach').addEventListener('click', e => {
     if (e.target.closest('#ach-all')) return openAchAll();
@@ -6748,7 +6841,7 @@ function wireAch(){
   $('#ma-go').addEventListener('click', () => {
     closeSheet('#sh-monthask');
     S.ui.sumMonth = 'last';
-    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, catClosed:S.ui.catClosed});
+    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
     renderStats();
     openMonthImage();
   });
@@ -6867,7 +6960,7 @@ function renderAll(){
 // 「データ」タブ（'cal'）では、上の切り替えで選んだほう（データ＝統計 v-stats／カレンダー v-cal）を表示します。
 function setTab(t){
   S.ui.tab = t;
-  lsSet(LS_UI, {tab:t, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, catClosed:S.ui.catClosed});
+  lsSet(LS_UI, {tab:t, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
   const dv = S.ui.dataView === 'cal' ? 'cal' : 'stats';
   ['log','cal','stats','ach','shelf'].forEach(k => {
     $('#v-' + k).hidden = t === 'cal' ? k !== dv : k !== t;
@@ -7082,7 +7175,8 @@ const settingsDoc = () => ({kind:'settings',
   postTpls:S.postTpls,
   monthItems:S.monthItems,
   nameSkip:S.nameSkip,
-  ach:lsGet(LS_ACH, {}) || {}});
+  ach:lsGet(LS_ACH, {}) || {},
+  achAt:achAtGet() || {}});
 function saveSettingsDoc(){
   if (!IN_CLAUDE) cloudSoon();
   if (S.mode !== 'cloud' || !S.cap.col) return;
@@ -9422,7 +9516,7 @@ $('#app').addEventListener('click', async e => {
   const f = e.target.closest('[data-filter]');
   if (f){
     S.ui.filter = f.dataset.filter;
-    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, catClosed:S.ui.catClosed});
+    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
     renderLog();
     if (f.classList.contains('stock')) $('#filters').scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
     return;
@@ -9460,7 +9554,7 @@ $('#app').addEventListener('click', async e => {
   const sm = e.target.closest('[data-sum]');
   if (sm){
     S.ui.sumMonth = sm.dataset.sum;
-    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, catClosed:S.ui.catClosed});
+    lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
     renderStats();
     return;
   }
