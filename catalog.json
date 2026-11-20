@@ -32,7 +32,8 @@
    "m": "明治",
    "rel": "2026-02-24",
    "url": "https://www.meiji.co.jp/corporate/pressrelease/2026/02_08/index.html",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20",
+   "mix": "フルーツミックス"
   },
   {
    "n": "FRUBI by 果汁グミ",
@@ -60,7 +61,8 @@
    "rel": "2026-03-31",
    "url": "https://www.meiji.co.jp/corporate/pressrelease/2026/03_20/index.html",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "ラズベリー・レモン・青りんご・グレープ"
   },
   {
    "n": "アップグミ",
@@ -149,7 +151,8 @@
    "m": "ロッテ",
    "url": "https://www.lotte.co.jp/products/catalogue/candy/22/detail06.html",
    "updated": "2026-10-12",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "レモンソーダ・コーラ・ソーダ・グレープソーダ"
   },
   {
    "n": "ポケぷに<フルーツ>",
@@ -157,7 +160,8 @@
    "m": "ロッテ",
    "url": "https://www.lotte.co.jp/products/catalogue/candy/22/detail11.html",
    "updated": "2026-10-12",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "みかん・りんご・マスカット・ライチ"
   },
   {
    "n": "グミチョコボール",
@@ -199,7 +203,8 @@
    "m": "不二家",
    "url": "https://www.fujiya-peko.co.jp/sweets/item/12735.html",
    "updated": "2026-10-12",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "グレープ・ストロベリー"
   },
   {
    "n": "ガツン、とみかんグミ",
@@ -441,7 +446,8 @@
    "rel": "2026-04-21",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1525_ext_2_0.pdf",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "モンストロベリー・わくわくメロン・ストライグレープ"
   },
   {
    "n": "カンデミーナグミ センタースプラッシュ",
@@ -513,7 +519,7 @@
    "pt": "incl",
    "rel": "2026-04-28",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1543_ext_2_0.pdf",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20"
   },
   {
    "n": "とろみ~グミ",
@@ -559,7 +565,9 @@
    "r": "かみきんぐ",
    "m": "カンロ",
    "url": "https://kanro.jp/products/9054328062111",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "エナジーソーダ・エナジーコーラ・エナジージンジャーエール"
   },
   {
    "n": "グミッツェル",
@@ -750,7 +758,9 @@
    "r": "こぐみ ぷれみあむ どーる",
    "m": "UHA味覚糖",
    "url": "https://www.uha-mikakuto.co.jp/catalog/gummy/gu305.html",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "グレープ・パイナップル・ピーチ"
   },
   {
    "n": "コグミ トイ・ストーリー5",
@@ -758,7 +768,8 @@
    "m": "UHA味覚糖",
    "url": "https://www.uha-mikakuto.co.jp/catalog/gummy/gu318.html",
    "updated": "2026-10-12",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "スペースグレープソーダ・レンジャーメロンソーダ"
   },
   {
    "n": "さけるグミ",
@@ -1038,7 +1049,8 @@
    "m": "春日井製菓",
    "url": "https://www.kasugai.co.jp/product/gummy_tsubugumi_04374/",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "5種類のヨーグルト味"
   },
   {
    "n": "つぶグミPREMIUM",
@@ -1137,7 +1149,8 @@
    "rel": "2026-06-09",
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3178.html",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "パイン・ピーチ"
   },
   {
    "n": "タフグミ(100円ショップ限定)",
@@ -1203,7 +1216,9 @@
    "m": "カバヤ食品",
    "rel": "2026-09-29",
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3185.html",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "いちごヨーグルト・マスカットヨーグルト・みかんヨーグルト"
   },
   {
    "n": "雪ふるいちごグミ",
@@ -1212,7 +1227,8 @@
    "rel": "2026-09-29",
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3186.html",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "いちご・いちごミルク"
   },
   {
    "n": "ペタグーグミ",
@@ -1251,7 +1267,8 @@
    "m": "ノーベル製菓",
    "url": "https://www.nobel.co.jp/products/784/",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "4種類のドリンク味"
   },
   {
    "n": "カチカチちびカメカメサワーズグミ",
@@ -1259,7 +1276,8 @@
    "m": "ノーベル製菓",
    "url": "https://www.nobel.co.jp/products/809/",
    "updated": "2026-11-02",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "もも・温州みかん・ぶどう・りんご"
   },
   {
    "n": "キラふわグミ",
@@ -1302,7 +1320,8 @@
    "m": "ノーベル製菓",
    "url": "https://www.nobel.co.jp/products/7801/",
    "updated": "2026-10-12",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "4種類のフルーツソーダ味"
   },
   {
    "n": "スーパーマリオグミ",
@@ -1359,7 +1378,9 @@
    "p": 218,
    "pt": "excl",
    "url": "https://www.mitsubishi-shokuhin.com/confectionery/haribo/20220803087070.html",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ゴールドベア・ハッピーコーラ・ストロベリー・ヨーグルト風"
   },
   {
    "n": "ハッピーグレープ 80g",
@@ -1404,7 +1425,9 @@
    "p": 218,
    "pt": "excl",
    "url": "https://www.mitsubishi-shokuhin.com/confectionery/haribo/20230630174523.html",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "サワーゴールドベア・サワーハッピーコーラ・サワーハッピーチェリー"
   },
   {
    "n": "フロッグ 175g",
@@ -1413,7 +1436,8 @@
    "p": 448,
    "pt": "excl",
    "url": "https://www.mitsubishi-shokuhin.com/confectionery/haribo/20220803087142.html",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "mix": "青りんご"
   },
   {
    "n": "ハッピーチェリー 175g",
@@ -1431,7 +1455,9 @@
    "p": 218,
    "pt": "excl",
    "url": "https://www.mitsubishi-shokuhin.com/confectionery/haribo/20260619183042.html",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "オレンジ＆ピーチ・マンゴー＆ラズベリー・ラズベリー＆アプリコット"
   },
   {
    "n": "ぷるぷるゴースト",
@@ -1452,42 +1478,50 @@
    "r": "さわーぐろーわーむす とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "チェリー＆レモン・ライム＆オレンジ・ストロベリー＆グレープ"
   },
   {
    "n": "ネオンスクイーグルス",
    "r": "ねおんすくいーぐるす とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "レモン・オレンジ・ストロベリー・ラズベリー・トゥッティフルッティ・アップル"
   },
   {
    "n": "タランチュラ",
    "r": "たらんちゅら とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ラズベリー・ブラックベリー・アップル・ストロベリー・オレンジ"
   },
   {
    "n": "オクトパスブルー",
    "r": "おくとぱすぶるー とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20"
   },
   {
    "n": "サワーオクトパス",
    "r": "さわーおくとぱす とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-11-02"
+   "updated": "2026-11-20"
   },
   {
    "n": "シャーク",
    "r": "しゃーく とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ラズベリー・トゥッティフルッティ"
   },
   {
    "n": "ストロベリーキス",
@@ -1520,14 +1554,15 @@
    "r": "ぷらねっとぐみ とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "mix": "ラズベリー"
   },
   {
    "n": "ポップアイ",
    "r": "ぽっぷあい とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20"
   },
   {
    "n": "フレーバーボム",
@@ -1545,14 +1580,18 @@
    "r": "ぱーてぃーばーがーぐみ とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ストロベリー・ラズベリー・ルバーブ・パイン・キウイ・カシス・ヨーグルト風"
   },
   {
    "n": "ビッグバーガー",
    "r": "びっぐばーがー とろーり",
    "m": "トローリ",
    "url": "https://trolli-japan.com/",
-   "updated": "2026-10-06"
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ストロベリー・ラズベリー・パイナップル・ルバーブ・ヨーグルト風"
   },
   {
    "n": "幸せにくきゅうグミ",
@@ -1571,7 +1610,8 @@
    "m": "扇雀飴本舗",
    "url": "https://www.senjakuame.co.jp/20240904131212",
    "updated": "2026-10-12",
-   "c": "rainbow"
+   "c": "rainbow",
+   "mix": "グレープ・アップル"
   },
   {
    "n": "34g贅沢なグミ",
@@ -1964,7 +2004,8 @@
    "r": "にっぽんえーる みるぐみ",
    "m": "JA全農",
    "url": "https://www.zennoh.or.jp/nippon-yell/lineup/",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "mix": "ミルク",
    "added": "2026-10-11"
   },
   {
@@ -1988,7 +2029,8 @@
    "r": "かみせぶんぐみ",
    "m": "JA全農",
    "url": "https://www.zennoh.or.jp/nippon-yell/lineup/",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "mix": "フルーツミックス",
    "added": "2026-10-11"
   },
   {
@@ -2055,6 +2097,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2025/4570117913730251.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "ぶどう・オレンジ",
    "added": "2026-10-11"
   },
   {
@@ -2066,6 +2109,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2025/4570117927799000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "やわいちご・すっぱいちご・かたいちご",
    "added": "2026-10-11"
   },
   {
@@ -2077,6 +2121,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2025/4570117927805000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "マスカット・レモン・りんご",
    "added": "2026-10-11"
   },
   {
@@ -2101,6 +2146,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2025/4570117923791000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "ピーチ・ヨーグルト",
    "added": "2026-10-11"
   },
   {
@@ -2123,7 +2169,7 @@
    "pt": "excl",
    "rel": "2026-07-20",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117932007000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
    "added": "2026-10-11"
   },
   {
@@ -2146,7 +2192,8 @@
    "pt": "excl",
    "rel": "2026-01-19",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117926457000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "mix": "ヨーグルト×ソーダ",
    "added": "2026-10-11"
   },
   {
@@ -2169,7 +2216,7 @@
    "pt": "excl",
    "rel": "2026-01-26",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117927850000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
    "added": "2026-10-11"
   },
   {
@@ -2179,7 +2226,9 @@
    "pt": "excl",
    "rel": "2026-02-02",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117928468000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ピーチ・グレープ・アップル＆ソーダ",
    "added": "2026-10-11"
   },
   {
@@ -2204,6 +2253,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117928444000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "ぶどう・もも",
    "added": "2026-10-11"
   },
   {
@@ -2226,7 +2276,7 @@
    "pt": "excl",
    "rel": "2026-10-05",
    "url": "https://www.bandai.co.jp/candy/products/2026/4549660424024262.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
    "added": "2026-10-11"
   },
   {
@@ -2238,6 +2288,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117929830000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "グレープ・マスカット",
    "added": "2026-10-11"
   },
   {
@@ -2273,7 +2324,8 @@
    "pt": "excl",
    "rel": "2026-03-02",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117924996000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "mix": "いちご",
    "added": "2026-10-11"
   },
   {
@@ -2285,6 +2337,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117927829000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "グレープ・オレンジ",
    "added": "2026-10-11"
   },
   {
@@ -2296,6 +2349,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117926440261.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "グレープ・マスカット・コーラ",
    "added": "2026-10-11"
   },
   {
@@ -2307,6 +2361,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117916243268.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "ソーダ・リンゴ・マスカット",
    "added": "2026-10-11"
   },
   {
@@ -2318,6 +2373,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117912818263.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "大戦ソーダ・にゃんコーラ・暗黒ブドウ",
    "added": "2026-10-11"
   },
   {
@@ -2342,6 +2398,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117919787264.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "グレープ・オレンジ",
    "added": "2026-10-11"
   },
   {
@@ -2366,6 +2423,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117922527264.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "りんご・レモン・ぶどう",
    "added": "2026-10-11"
   },
   {
@@ -2375,7 +2433,7 @@
    "pt": "excl",
    "rel": "2026-04-20",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117929724000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
    "added": "2026-10-11"
   },
   {
@@ -2398,7 +2456,9 @@
    "pt": "excl",
    "rel": "2026-05-11",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117929991000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ソーダ・ホワイトソーダ",
    "added": "2026-10-11"
   },
   {
@@ -2410,6 +2470,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117929199000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "みかん・パイン・サイダー",
    "added": "2026-10-11"
   },
   {
@@ -2447,6 +2508,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117930591000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "ソーダ・レモン",
    "added": "2026-10-11"
   },
   {
@@ -2458,6 +2520,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117932670000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "りんご＆レモン・ぶどう＆いちご・パイン＆マスカット",
    "added": "2026-10-11"
   },
   {
@@ -2467,7 +2530,9 @@
    "pt": "excl",
    "rel": "2026-06-15",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117930102000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "パイン・ホワイトソーダ",
    "added": "2026-10-11"
   },
   {
@@ -2479,6 +2544,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117932724000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "トロピカルフルーツ",
    "added": "2026-10-11"
   },
   {
@@ -2516,6 +2582,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117930607000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "トロピカルタンサン・パイナップルタンサン",
    "added": "2026-10-11"
   },
   {
@@ -2564,7 +2631,8 @@
    "pt": "excl",
    "rel": "2026-08-10",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117927959000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "mix": "ピーチ",
    "added": "2026-10-11"
   },
   {
@@ -2587,7 +2655,9 @@
    "pt": "excl",
    "rel": "2026-08-24",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117933264000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "グレープ・オレンジ・ひみつの味",
    "added": "2026-10-11"
   },
   {
@@ -2597,7 +2667,9 @@
    "pt": "excl",
    "rel": "2026-08-24",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117930614000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "キウイ・パイン・ひみつの味",
    "added": "2026-10-11"
   },
   {
@@ -2622,6 +2694,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117933875000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "マスカット×ソーダ・アップル×エナジードリンク・レモン×コーラ",
    "added": "2026-10-11"
   },
   {
@@ -2633,6 +2706,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117932755000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "ピーチ・レモン・マスカット・ソーダ",
    "added": "2026-10-11"
   },
   {
@@ -2693,7 +2767,9 @@
    "p": 120,
    "pt": "excl",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117934445000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ライチ・なし・ぶどう・オレンジ・りんご・マスカット・白桃・パイン",
    "added": "2026-10-11"
   },
   {
@@ -2705,6 +2781,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117934759000.html",
    "updated": "2026-10-11",
    "c": "grape",
+   "mix": "やわ実・あまずっぱ実・かた実",
    "added": "2026-10-11"
   },
   {
@@ -2768,6 +2845,7 @@
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117932922000.html",
    "updated": "2026-10-11",
    "c": "rainbow",
+   "mix": "イチゴ・マスカット",
    "added": "2026-10-11"
   },
   {
@@ -2789,7 +2867,9 @@
    "p": 350,
    "pt": "excl",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117926495000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
+   "c": "rainbow",
+   "mix": "ぶどう・パイン",
    "added": "2026-10-11"
   },
   {
@@ -2798,7 +2878,7 @@
    "p": 360,
    "pt": "excl",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117932816000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
    "added": "2026-10-11"
   },
   {
@@ -2843,7 +2923,7 @@
    "p": 350,
    "pt": "excl",
    "url": "https://www.bandai.co.jp/candy/products/2026/4570117931857000.html",
-   "updated": "2026-10-11",
+   "updated": "2026-11-20",
    "added": "2026-10-11"
   },
   {
@@ -2929,6 +3009,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000087/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "コーラ・レモン",
    "added": "2026-10-14"
   },
   {
@@ -2940,6 +3021,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000088/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "うめ・しそ",
    "added": "2026-10-14"
   },
   {
@@ -2951,6 +3033,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000089/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "エナジードリンク・トロピカルフルーツ",
    "added": "2026-10-14"
   },
   {
@@ -2962,6 +3045,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000072/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "パイナップル・ライチ",
    "added": "2026-10-14"
   },
   {
@@ -2973,6 +3057,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000079/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "ストロベリー・ブルーベリー・ラズベリー・カシス",
    "added": "2026-10-14"
   },
   {
@@ -2984,6 +3069,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000099/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "ぶどう・マスカット",
    "added": "2026-10-14"
   },
   {
@@ -2995,6 +3081,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000106/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "黄マンゴー・青マンゴー・赤マンゴー",
    "added": "2026-10-14"
   },
   {
@@ -3006,6 +3093,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000093/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "乳酸菌ドリンク・白い乳酸菌ドリンク",
    "added": "2026-10-14"
   },
   {
@@ -3017,6 +3105,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000096/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "青いレモン・アセロラ",
    "added": "2026-10-14"
   },
   {
@@ -3028,6 +3117,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000073/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "コーラ・レモン・エナジードリンク・トロピカルフルーツ",
    "added": "2026-10-14"
   },
   {
@@ -3039,6 +3129,7 @@
    "url": "https://wantwant.jp/shopdetail/000000000107/",
    "updated": "2026-10-14",
    "c": "rainbow",
+   "mix": "コーラ・ぶどう・乳酸菌ドリンク",
    "added": "2026-10-14"
   },
   {
@@ -3062,6 +3153,7 @@
    "url": "https://heart-ltd.jp/product/112339/",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "レモン・マスカット・ピーチ・ブルーベリー",
    "added": "2026-10-16"
   },
   {
@@ -3074,6 +3166,7 @@
    "url": "https://news.nissyoku.co.jp/?p=1320430",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "アップルソーダ・ホワイトソーダ",
    "added": "2026-10-16"
   },
   {
@@ -3310,6 +3403,7 @@
    "url": "https://www.kasugai.co.jp/information/information-15687-2/",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "二十世紀梨・幸水・ラ・フランス",
    "added": "2026-10-16"
   },
   {
@@ -3320,6 +3414,7 @@
    "url": "https://www.kabaya.co.jp/news/1ktp54xnal.html",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "ホワイトソーダ・ストロベリーソーダ",
    "added": "2026-10-16"
   },
   {
@@ -3332,6 +3427,7 @@
    "url": "https://www.kabaya.co.jp/news/9ttz375su.html",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "ピーチα・ピーチβ",
    "added": "2026-10-16"
   },
   {
@@ -3400,6 +3496,7 @@
    "url": "https://kanro.jp/collections/gummy/products/15197638590832",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "スーパーベストの味いろいろ",
    "added": "2026-10-16"
   },
   {
@@ -3410,6 +3507,7 @@
    "url": "https://prtimes.jp/main/html/rd/p/000000496.000016394.html",
    "updated": "2026-10-16",
    "c": "rainbow",
+   "mix": "ぶどう・ソーダ",
    "added": "2026-10-16"
   },
   {
@@ -3447,6 +3545,7 @@
    "url": "https://shop.seikatsuclub.coop/product_detail.html?S_CD=094676&CATE=z004",
    "updated": "2026-10-26",
    "c": "rainbow",
+   "mix": "りんご・みかん・ぶどう",
    "added": "2026-10-26"
   },
   {
@@ -3496,6 +3595,7 @@
    "url": "https://kyodonewsprwire.jp/release/202610218375",
    "updated": "2026-10-26",
    "c": "rainbow",
+   "mix": "ぶどう・マスカット",
    "added": "2026-10-26"
   },
   {
@@ -3575,7 +3675,8 @@
    "pt": "incl",
    "rel": "2026-11-02",
    "url": "https://prtimes.jp/main/html/rd/p/000000093.000058726.html",
-   "updated": "2026-11-02",
+   "updated": "2026-11-20",
+   "mix": "プルーン",
    "added": "2026-11-02"
   },
   {
@@ -3680,6 +3781,7 @@
    "url": "https://www.instagram.com/p/DfTYrajz7jT/",
    "updated": "2026-11-11",
    "c": "rainbow",
+   "mix": "マスカット・ソーダ・アップル",
    "added": "2026-11-08"
   },
   {
@@ -3690,6 +3792,7 @@
    "url": "https://x.com/UMikakuto/status/2112302786490896565",
    "updated": "2026-11-08",
    "c": "rainbow",
+   "mix": "ピオーネ・とちあいか・シャインマスカット",
    "added": "2026-11-08"
   },
   {
@@ -3715,6 +3818,7 @@
    "url": "https://www.lawson.co.jp/lab/tsuushin/art/1487966_4659.html",
    "updated": "2026-11-08",
    "c": "rainbow",
+   "mix": "ふわもふヨーグル・ピーチ",
    "added": "2026-11-08"
   },
   {
@@ -3755,6 +3859,7 @@
    "url": "https://report.iko-yo.net/articles/30911",
    "updated": "2026-11-11",
    "c": "rainbow",
+   "mix": "キウイ・ピーチ・オレンジ",
    "added": "2026-11-11"
   },
   {
@@ -3793,6 +3898,7 @@
    "url": "https://prtimes.jp/main/html/rd/p/000000139.000030852.html",
    "updated": "2026-11-12",
    "c": "rainbow",
+   "mix": "マスカット・ヨーグルトスカッシュ",
    "added": "2026-11-12"
   },
   {
@@ -3866,6 +3972,7 @@
    "url": "https://yoshimi-s.com/products/detail/16751",
    "updated": "2026-11-12",
    "c": "rainbow",
+   "mix": "グレープ・マスカット",
    "added": "2026-11-12"
   },
   {
