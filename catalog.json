@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20",
+ "updated": "2026-11-23",
  "items": [
   {
    "n": "果汁グミ",
@@ -4004,6 +4004,41 @@
    "url": "https://oggi.jp/7952710",
    "updated": "2026-11-18",
    "added": "2026-11-18"
+  },
+  {
+   "n": "ラムネアップ ザハード",
+   "r": "らむねあっぷ ざはーど",
+   "m": "明治",
+   "p": 300,
+   "pt": "incl",
+   "url": "https://www.lawson.co.jp/recommend/original/detail/1534269_1996.html",
+   "updated": "2026-11-23",
+   "c": "soda",
+   "mix": "ラムネ",
+   "added": "2026-11-23"
+  },
+  {
+   "n": "くちぱっちのくちびるグミ",
+   "r": "くちぱっちのくちびるぐみ",
+   "m": "バンダイ",
+   "p": 194,
+   "pt": "incl",
+   "url": "https://sweetroad5.com/news/32235/",
+   "updated": "2026-11-23",
+   "c": "melon",
+   "mix": "青りんご",
+   "added": "2026-11-23"
+  },
+  {
+   "n": "熱海れもんグミ",
+   "r": "あたみれもんぐみ",
+   "m": "フジノネ",
+   "p": 510,
+   "url": "https://paypayfleamarket.yahoo.co.jp/item/z545268494",
+   "updated": "2026-11-23",
+   "c": "lemon",
+   "mix": "レモン",
+   "added": "2026-11-23"
   }
  ]
 }
