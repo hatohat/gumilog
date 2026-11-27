@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="d10c8dcec4"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="e27ce6b13a"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3240,6 +3240,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:212, k:'p', at:'2026-11-27 09:35', t:'月のまとめの「文章だけ共有する」画面に、画像つきで共有するボタンが表示される不具合を修正しました。'},
   {v:211, k:'f', at:'2026-11-27 09:17', t:'データタブに「年間・半期のまとめ」を追加しました。1年・上半期・下半期ごとの袋数、月ごとの推移、いちばん買ったグミなどをまとめ、画像と文章で共有できます。6月と12月は欄を開いて上のほうに表示し、それ以外の月は閉じた状態で表示します。'},
   {v:210, k:'f', at:'2026-11-23 17:15', t:'店舗限定の商品を名前の候補から選んだとき、「店舗限定」タグが付くようにしました。'},
   {v:209, k:'p', at:'2026-11-20 10:56', t:'1袋に複数の味が入った商品を名前の候補から選んだとき、入っている味が味の欄に入るようにしました。'},
@@ -9172,17 +9173,17 @@ function canShareFiles(){
 //     「写真つきで共有」（または「画像つきで共有」）を大きく出し、となりに「写真なしでポスト」を置きます
 // ・それ以外：これまでどおり「Xで開く」を大きく出し、写真があればコピー・保存のボタンを出します
 function setupPhotoShare(){
-  const month = P.kind === 'month' || P.kind === 'period';
-  const d = !month && P.item && photoFor(P.item);
-  const share = canShareFiles() && (month || !!d);
+  // まとめの文章は、画像の画面の「文章だけ共有する」から開くので、画像つきの共有ボタンは出しません
+  const d = P.kind === 'item' && P.item && photoFor(P.item);
+  const share = canShareFiles() && !!d;
   const copy = !!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write);
   const ps = $('#post-share'), po = $('#post-open');
   ps.hidden = !share;
-  ps.innerHTML = SHARE_ICON + (month ? '画像つきで共有' : '写真つきで共有');
-  po.textContent = share ? (month ? '画像なしでポスト' : '写真なしでポスト') : 'Xで開く';
+  ps.innerHTML = SHARE_ICON + '写真つきで共有';
+  po.textContent = share ? '写真なしでポスト' : 'Xで開く';
   po.className = share ? 'btn ghost' : 'btn x';
   $('#post-hint').textContent = share
-    ? `共有画面からXやLINEなどを選べます。文章のみの場合は「${month ? '画像' : '写真'}なしでポスト」。`
+    ? `共有画面からXやLINEなどを選べます。文章のみの場合は「写真なしでポスト」。`
     : '「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。';
   $('#post-photo').hidden = !d;
   if (!d) return;
@@ -9210,13 +9211,8 @@ async function pngFromDataUrl(d){
 function wirePhotoShare(){
   $('#post-share').addEventListener('click', async () => {
     try {
-      // 今月のまとめなら、まとめの画像を作って付けます。記録なら、その記録の写真を付けます
-      const per = curPeriod();
-      const f = P.kind === 'month'
-        ? new File([await drawMonthImage()], `gumilog-${sumKey().replace('-', '')}.jpg`, {type:'image/jpeg'})
-        : P.kind === 'period'
-        ? new File([await drawPeriodImage(per)], `gumilog-${per.y}${per.k === 'year' ? '' : per.k}.jpg`, {type:'image/jpeg'})
-        : await photoFile();
+      // 記録の写真を付けます
+      const f = await photoFile();
       await navigator.share({files:[f], text:$('#post-text').value});
     }
     catch(e){
