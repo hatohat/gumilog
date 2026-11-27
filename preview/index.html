@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8c2f336568"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="d10c8dcec4"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2620,7 +2620,8 @@ a.set-item{text-decoration:none}
 </style></head><body><script>/* プレビュー版（preview/）だけに入る起動用のスクリプトです。tools/build_web.py --preview が本体の前に差しこみます。
    プレビュー版は本番と同じサイトにあるので、ブラウザの保存場所（localStorage・IndexedDB）を本番と共有しています。
    そのため、プレビュー版のキーは 'gumilog-pv.'、写真のデータベースは 'gumilog-pv-photos' に名前を変えてあります。
-   初めて開いたときは、本番の記録と写真をプレビュー版の保存場所に写します。本番の保存場所は読むだけで、書きかえません。 */
+   初めて開いたときは、去年の1月から今日までのダミーの記録を入れます（テストしやすくするため）。
+   右端の「プレビュー」つまみから、ダミーデータ・記録ゼロ・本番のデータの写しに切りかえられます。本番の保存場所は読むだけで、書きかえません。 */
 (function(){
   var FLAG = 'gumilog-pv.copied';
   var SRC_DB = 'gumilog-photos', DST_DB = 'gumilog-pv-photos';
@@ -2678,27 +2679,72 @@ a.set-item{text-decoration:none}
     dst.close();
   }
 
-  var copied = false;
-  try { copied = !!localStorage.getItem(FLAG); } catch(e){}
-  if (!copied){
-    // 記録や設定（'gumilog.' で始まるキー）を写します
-    try {
-      var keys = [];
-      for (var i = 0; i < localStorage.length; i++){
-        var k = localStorage.key(i);
-        // クラウドとそろえた記録（gumilog.sync.）は本番のサーバーのものなので写しません
-        if (k && k.indexOf('gumilog.') === 0 && k.indexOf('gumilog.sync.') !== 0) keys.push(k);
+  // ダミーの記録を作ります。去年の1月1日から今日まで、月に3〜8袋ずつ。毎回同じ中身になるよう、決まった順の乱数を使います
+  var DUMMY = [
+    // [商品名, メーカー, 味, 色, 価格, かたさ, すっぱさ, 出やすさ]
+    ['果汁グミ ぶどう','明治','ぶどう','grape',140,2,2,6], ['つぶグミ','春日井製菓','','rainbow',178,3,2,5],
+    ['シゲキックス グレープ','UHA味覚糖','グレープ','grape',150,5,5,3], ['ピュレグミ レモン','カンロ','レモン','lemon',162,2,4,4],
+    ['コロロ シャインマスカット','UHA味覚糖','シャインマスカット','melon',140,1,2,3], ['忍者めし鋼 グレープ','UHA味覚糖','グレープ','grape',150,5,2,3],
+    ['フェットチーネグミ イタリアングレープ','ブルボン','グレープ','grape',98,3,3,2], ['ゴールドベア 80g','ハリボー','','rainbow',258,5,1,2],
+    ['タフグミ','カバヤ食品','ソーダ','soda',120,4,3,2], ['ピュレグミ グレープ','カンロ','グレープ','grape',162,2,3,2],
+    ['さけるグミ 巨峰','UHA味覚糖','巨峰','grape',150,3,2,1], ['果汁グミ 温州みかん','明治','温州みかん','orange',140,2,2,2],
+    ['つぶグミヨーグルト','春日井製菓','','milk',178,2,2,1], ['グミッツェル ソーダ','カンロ','ソーダ','soda',540,3,2,1]
+  ];
+  var SHOPS_D = ['セブンイレブン','セブンイレブン','ファミリーマート','ローソン','ローソン','スーパー','ドラッグストア','ミニストップ'];
+  var NOTES = ['安定のおいしさ','すっぱさで目が覚める','ほぼ果実。ぷるぷる','噛みごたえ最強クラス','あごが鍛えられる','また買いたい','',''];
+  function dummyItems(){
+    var seed = 20260101;
+    var rnd = function(){ seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+    var pick = function(a){ return a[Math.floor(rnd() * a.length)]; };
+    var bag = [];
+    DUMMY.forEach(function(g){ for (var n = 0; n < g[7]; n++) bag.push(g); });
+    var now = new Date(), pad = function(n){ return String(n).padStart(2, '0'); };
+    var today = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+    var out = [], seen = {};
+    for (var y = now.getFullYear() - 1; y <= now.getFullYear(); y++) for (var m = 1; m <= 12; m++){
+      var dim = new Date(y, m, 0).getDate(), cnt = 3 + Math.floor(rnd() * 6);
+      for (var k = 0; k < cnt; k++){
+        var date = y + '-' + pad(m) + '-' + pad(1 + Math.floor(rnd() * dim));
+        if (date > today) continue;
+        var g = pick(bag), first = !seen[g[0]];
+        seen[g[0]] = true;
+        var r = rnd(), tags = [];
+        if (!first && r < .3) tags.push('リピ確定');
+        if (r > .85) tags.push('推し');
+        if (rnd() < .08) tags.push('期間限定');
+        out.push({id: 'pv' + y + pad(m) + pad(k) + Math.floor(rnd() * 1e6).toString(36), kind: 'gummy', name: g[0], maker: g[1], flavor: g[2], color: g[3],
+          shop: pick(SHOPS_D), price: g[4], noSpend: false, date: date, rating: 2 + Math.floor(rnd() * 4), hard: g[5], sour: g[6],
+          status: date === today ? 'unopened' : rnd() < .7 ? 'finished' : 'eating', tags: tags, note: pick(NOTES), createdAt: new Date(date + 'T12:00:00').getTime() + k});
       }
-      keys.forEach(function(k){ localStorage.setItem('gumilog-pv.' + k.slice(8), localStorage.getItem(k)); });
-      localStorage.setItem(FLAG, String(Date.now()));
-    } catch(e){}
+    }
+    return out;
   }
-  // 本体は写真を読む前にこれを待ちます（build_web.py が photoDBReady に差しこみます）
-  window.__pvReady = copied ? Promise.resolve() : copyPhotos().catch(function(){});
 
-  // プレビュー版のデータを消して、本番のデータを写し直します
-  window.__pvReset = function(){
-    if (!confirm('プレビュー版のデータを消して、本番のデータを写し直しますか？\n（本番のデータは変わりません）')) return;
+  // 本番の記録や設定（'gumilog.' で始まるキー）をプレビュー版に写します
+  function copyKeys(){
+    var keys = [];
+    for (var i = 0; i < localStorage.length; i++){
+      var k = localStorage.key(i);
+      // クラウドとそろえた記録（gumilog.sync.）は本番のサーバーのものなので写しません
+      if (k && k.indexOf('gumilog.') === 0 && k.indexOf('gumilog.sync.') !== 0) keys.push(k);
+    }
+    keys.forEach(function(k){ localStorage.setItem('gumilog-pv.' + k.slice(8), localStorage.getItem(k)); });
+  }
+
+  // FLAG の値: 無し＝初めて（ダミーを入れます）｜'prod-pending'＝本番の写真をこれから写します｜それ以外＝準備ずみ
+  var flag = null;
+  try { flag = localStorage.getItem(FLAG); } catch(e){}
+  try {
+    if (!flag) localStorage.setItem('gumilog-pv.items.v1', JSON.stringify(dummyItems()));
+    if (flag !== 'prod-pending') { if (!flag) localStorage.setItem(FLAG, 'dummy'); }
+    else localStorage.setItem(FLAG, String(Date.now()));
+  } catch(e){}
+  // 本体は写真を読む前にこれを待ちます（build_web.py が photoDBReady に差しこみます）
+  window.__pvReady = flag === 'prod-pending' ? copyPhotos().catch(function(){}) : Promise.resolve();
+
+  // プレビュー版のデータをすべて消してから、how の状態にして読みこみ直します（本番のデータは変わりません）
+  //   'dummy' ダミーの記録｜'zero' 記録ゼロ（初めて使う人と同じ状態）｜'prod' 本番のデータの写し
+  window.__pvReset = function(how){
     try {
       var del = [];
       for (var i = 0; i < localStorage.length; i++){
@@ -2706,6 +2752,9 @@ a.set-item{text-decoration:none}
         if (k && k.indexOf('gumilog-pv.') === 0) del.push(k);
       }
       del.forEach(function(k){ localStorage.removeItem(k); });
+      if (how === 'zero') localStorage.setItem(FLAG, 'zero');
+      if (how === 'prod') { copyKeys(); localStorage.setItem(FLAG, 'prod-pending'); }
+      // 'dummy' は FLAG を消したままにして、読みこみ直したときに入れます
     } catch(e){}
     var done = function(){ location.reload(); };
     try {
@@ -2714,17 +2763,47 @@ a.set-item{text-decoration:none}
     } catch(e){ done(); }
   };
 
-  // 「プレビュー」の印を出します。タップすると本番のデータを写し直せます
+  // つまみを押したときに出す、データを切りかえるメニューです
+  function menu(){
+    var old = document.getElementById('pv-menu');
+    if (old) { old.remove(); return; }
+    var m = document.createElement('div');
+    m.id = 'pv-menu';
+    m.style.cssText = 'position:fixed;z-index:2147483001;right:22px;top:38%;width:220px;padding:10px;border-radius:12px;background:#fff;color:#3A1830;'
+      + 'box-shadow:0 4px 18px rgba(0,0,0,.25);font:500 13px/1.4 system-ui,sans-serif;display:grid;gap:6px';
+    var t = document.createElement('div');
+    t.textContent = 'プレビュー版のデータ（本番のデータは変わりません）';
+    t.style.cssText = 'font-size:11px;color:#8A6A7E;padding:0 2px 2px';
+    m.appendChild(t);
+    [['dummy', 'ダミーの記録にする', '去年の1月から今日までの記録を入れます'], ['zero', '記録ゼロにする', '初めて使う人と同じ状態です'],
+     ['prod', '本番のデータを写す', 'この端末の本番の記録と写真を写します']].forEach(function(o){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.innerHTML = '<b style="display:block;font-size:13px">' + o[1] + '</b><span style="font-size:11px;color:#8A6A7E">' + o[2] + '</span>';
+      b.style.cssText = 'text-align:left;padding:8px 10px;border:1px solid #F0D8E0;border-radius:8px;background:#FFF8F6;color:inherit;cursor:pointer;font:inherit';
+      b.addEventListener('click', function(){
+        if (confirm('プレビュー版のデータをすべて消して、「' + o[1].replace('にする', '').replace('を写す', '') + '」の状態にしますか？')) window.__pvReset(o[0]);
+      });
+      m.appendChild(b);
+    });
+    document.body.appendChild(m);
+    setTimeout(function(){
+      document.addEventListener('click', function off(e){ if (!m.contains(e.target) && e.target.id !== 'pv-badge') { m.remove(); document.removeEventListener('click', off, true); } }, true);
+    });
+  }
+
+  // 「プレビュー」の印を出します。タップすると、データを切りかえるメニューが出ます
   function badge(){
     var b = document.createElement('button');
     b.type = 'button';
+    b.id = 'pv-badge';
     b.textContent = 'プレビュー';
-    b.title = 'タップで本番のデータを写し直します';
+    b.title = 'タップでデータを切りかえます';
     // 画面の右端のまん中あたりに、縦書きの小さなつまみとして出します（ヘッダーやボタンと重ならないように）
     b.style.cssText = 'position:fixed;z-index:2147483000;right:0;top:38%;writing-mode:vertical-rl;'
       + 'padding:8px 3px 8px 4px;border:0;border-radius:8px 0 0 8px;background:#E8590C;color:#fff;'
       + 'font:700 10px/1 system-ui,sans-serif;letter-spacing:.15em;box-shadow:0 1px 4px rgba(0,0,0,.2);opacity:.9;cursor:pointer';
-    b.addEventListener('click', window.__pvReset);
+    b.addEventListener('click', menu);
     document.body.appendChild(b);
     // 画面のふちをオレンジの枠で囲みます。上に重ねるだけで、タップは下の画面にそのまま届きます（レイアウトは本番と同じ）
     var f = document.createElement('div');
