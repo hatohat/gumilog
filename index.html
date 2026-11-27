@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="86b959b1d2"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="1af0c4f447"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF5F3"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2407,7 +2407,8 @@ a.set-item{text-decoration:none}
 .ach-steps li.ok {
   color:var(--ink)
 }
-.ach-steps li span {
+/* 説明文の欄だけを広げます（メダルを包む .medal-w は広げません） */
+.ach-steps li > span:not(.medal-w) {
   flex:1;
   display:flex;
   flex-direction:column
@@ -2518,7 +2519,7 @@ a.set-item{text-decoration:none}
   font-size:13px;
   color:var(--ink-2)
 }
-/* お祝いのボタン 3 つ（閉じる・画像で共有・Xで共有）を 1 行に並べます */
+/* お祝いのボタン 3 つ（閉じる・文章だけ共有・画像で共有）を 1 行に並べます */
 .aw-actions .btn {
   padding-inline:12px
 }
@@ -2530,6 +2531,10 @@ a.set-item{text-decoration:none}
   .aw-medal { animation:none }
 }
 /* 「○月のまとめ」の見出しと、今月／先月の切り替え */
+.per-kinds{margin:0 0 10px}
+.per-hot{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.per-years{margin:0 0 10px;max-width:280px}
+.per-years button{padding:5px 4px;font-size:12px}
 .sum-h {
   display:flex;
   align-items:center;
@@ -2557,6 +2562,35 @@ a.set-item{text-decoration:none}
 .data-seg[hidden] {
   display:none
 }
+.upd-seg.data-seg{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* くわしいデータ：期間の切りかえ、開拓とリピートの帯、色の一覧、曜日のグラフ、押せる横棒 */
+.upd-seg.dt-per{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 2px}
+.dt-split{display:flex;height:14px;border-radius:999px;overflow:hidden;background:var(--surface-2)}
+.dt-new{background:var(--accent)}
+.dt-rep{background:var(--accent-soft)}
+.dt-colors{display:flex;flex-wrap:wrap;gap:6px}
+.dt-color{display:inline-flex;align-items:center;gap:5px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--surface-2);font-size:12px}
+.dt-color i{width:14px;height:14px;border-radius:50%;display:block}
+.dt-color b{font-weight:700;margin-left:2px}
+.dt-wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;height:120px;align-items:end}
+.dt-wkc{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px;font-size:11px;color:var(--ink-2)}
+.dt-wkc i{display:block;width:70%;min-height:2px;max-height:calc(100% - 36px);border-radius:6px 6px 3px 3px;background:var(--accent-soft)}
+.dt-wkc.wk-top i{background:var(--accent)}
+.dt-wkc b{font-size:12px;color:var(--ink)}
+.dt-sub{margin:4px 0 0;font-size:13px;font-weight:700;display:flex;gap:8px;align-items:center}
+.dt-sub .s{font-weight:400;color:var(--ink-2);font-size:12px}
+.bar-btn{border:0;background:none;padding:2px 0;font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+.bar-btn[data-wide]{grid-template-columns:minmax(0,1fr) 2.6em;row-gap:3px}
+.bar-btn[data-wide] .n{grid-column:1 / -1}
+.bar-btn .n{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.dt-comp{grid-template-columns:7.5em minmax(0,1fr) 3.6em}
+.dr-body{display:flex;flex-direction:column;gap:10px}
+.dr-body .panel{padding:12px 14px}
+.dr-hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;font-size:13px}
+.dr-hist li{display:grid;grid-template-columns:6.5em minmax(0,1fr) auto 2.6em;gap:8px;padding:6px 0;border-top:1px solid var(--line)}
+.dr-hist li:first-child{border-top:0}
+.dr-hist li > span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-star{color:var(--accent-text);font-weight:700;text-align:right}
 
 /* ===== 見やすさの調整（2026-11） =====
    補足の文字を少し大きく・濃くし、カードの間隔をそろえ、上の保存先の表示と下のタブを見やすくしました。 */
@@ -2657,9 +2691,10 @@ a.set-item{text-decoration:none}
     <div id="list"></div>
   </section>
 
-  <!-- ===== データタブの切り替え（データ／カレンダー）。お知らせの「アプリ／カタログ」と同じ形です ===== -->
+  <!-- ===== データタブの切り替え（データ／くわしく／カレンダー）。お知らせの「アプリ／カタログ」と同じ形です ===== -->
   <div class="seg upd-seg data-seg" id="data-seg" role="tablist" aria-label="データの種類" hidden>
     <button type="button" role="tab" data-dview="stats">データ</button>
+    <button type="button" role="tab" data-dview="detail">くわしく</button>
     <button type="button" role="tab" data-dview="cal">カレンダー</button>
   </div>
 
@@ -2681,6 +2716,8 @@ a.set-item{text-decoration:none}
 
   <!-- ===== データ画面（「データ」タブで、カレンダーの下に表示。中身はJavaScriptで作ります） ===== -->
   <section class="view" id="v-stats" hidden></section>
+  <!-- ===== くわしいデータ（「データ」タブの「くわしく」で表示。中身はJavaScriptで作ります） ===== -->
+  <section class="view" id="v-detail" hidden></section>
 
   <!-- ===== 称号画面（「称号」タブで表示。中身はJavaScriptで作ります） ===== -->
   <section class="view" id="v-ach" hidden></section>
@@ -2925,7 +2962,15 @@ a.set-item{text-decoration:none}
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="ach-title">
     <div class="sheet-h"><h2 id="ach-title">称号</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div id="ach-body"></div>
-    <div class="sheet-actions"><button class="btn" type="button" id="ach-img" hidden>画像で共有</button><a class="btn primary x" id="ach-share" href="#" target="_blank" rel="noopener" hidden>Xで共有</a></div>
+    <div class="sheet-actions"><a class="btn" id="ach-share" href="#" target="_blank" rel="noopener" hidden>文章だけ共有</a><button class="btn primary" type="button" id="ach-img" hidden>画像で共有</button></div>
+  </div>
+</div>
+
+<!-- ===== メーカー・お店・グミの中身（データの「くわしく」などで名前を押すと開きます） ===== -->
+<div class="sheet" id="sh-drill" hidden>
+  <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="dr-title">
+    <div class="sheet-h"><h2 id="dr-title"></h2><button class="btn sm ghost" data-close>閉じる</button></div>
+    <div class="dr-body" id="dr-body"></div>
   </div>
 </div>
 
@@ -2943,7 +2988,7 @@ a.set-item{text-decoration:none}
   <div class="sheet-p" role="dialog" aria-modal="true" aria-labelledby="aa-title">
     <div class="sheet-h"><h2 id="aa-title">集めた称号</h2><button class="btn sm ghost" data-close>閉じる</button></div>
     <div id="aa-body"></div>
-    <div class="sheet-actions"><button class="btn" type="button" id="aa-img">画像で共有</button><a class="btn primary x" id="aa-share" href="#" target="_blank" rel="noopener">Xで共有</a></div>
+    <div class="sheet-actions"><a class="btn" id="aa-share" href="#" target="_blank" rel="noopener">文章だけ共有</a><button class="btn primary" type="button" id="aa-img">画像で共有</button></div>
   </div>
 </div>
 
@@ -2959,7 +3004,7 @@ a.set-item{text-decoration:none}
     <p class="aw-tier" id="aw-tier"></p>
     <p class="hint aw-desc" id="aw-desc"></p>
     <p class="aw-more"><span id="aw-more" hidden></span> <button class="btn sm ghost" type="button" id="aw-go">称号を見る</button></p>
-    <div class="sheet-actions sg-actions aw-actions"><button class="btn ghost" type="button" data-close>閉じる</button><button class="btn" type="button" id="aw-img">画像で共有</button><a class="btn primary x" id="aw-share" href="#" target="_blank" rel="noopener">Xで共有</a></div>
+    <div class="sheet-actions sg-actions aw-actions"><button class="btn ghost" type="button" data-close>閉じる</button><a class="btn" id="aw-share" href="#" target="_blank" rel="noopener">文章だけ共有</a><button class="btn primary" type="button" id="aw-img">画像で共有</button></div>
   </div>
 </div>
 
@@ -3040,6 +3085,12 @@ const LS_PHOTOS = 'gumilog.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:216, k:'p', at:'2026-11-27 09:56', t:'記録を消したあとも、その記録で獲得した称号が残る不具合を修正しました。アプリを開いたときと記録を変えたときに、記録と称号が合っているかを確認し、合わない称号は取り消します。'},
+  {v:215, k:'f', at:'2026-11-27 09:50', t:'データタブに「くわしく」を追加しました。期間を選んで、初めて買ったグミとリピートの割合、味と色、曜日ごとの袋数、おいしさ、1袋の値段、新商品を買った早さ、カタログ制覇率、手持ちの状況を確認できます。メーカー・お店・グミの名前を押すと、その記録の内訳を表示します。'},
+  {v:214, k:'p', at:'2026-11-27 09:44', t:'称号のくわしい画面で、各ランクの説明文がメダルから離れて表示される不具合を修正しました。'},
+  {v:213, k:'f', at:'2026-11-27 09:39', t:'称号の共有ボタンを「文章だけ共有」と「画像で共有」に変更しました。「文章だけ共有」は、スマホの共有画面からXやInstagram、LINEなどを選べます。'},
+  {v:212, k:'p', at:'2026-11-27 09:35', t:'月のまとめの「文章だけ共有する」画面に、画像つきで共有するボタンが表示される不具合を修正しました。'},
+  {v:211, k:'f', at:'2026-11-27 09:17', t:'データタブに「年間・半期のまとめ」を追加しました。1年・上半期・下半期ごとの袋数、月ごとの推移、いちばん買ったグミなどをまとめ、画像と文章で共有できます。6月と12月は欄を開いて上のほうに表示し、それ以外の月は閉じた状態で表示します。'},
   {v:210, k:'f', at:'2026-11-23 17:15', t:'店舗限定の商品を名前の候補から選んだとき、「店舗限定」タグが付くようにしました。'},
   {v:209, k:'p', at:'2026-11-20 10:56', t:'1袋に複数の味が入った商品を名前の候補から選んだとき、入っている味が味の欄に入るようにしました。'},
   {v:208, k:'f', at:'2026-11-20 10:52', t:'データタブの「殿堂入り」に、新しく★5をつけたグミが表示されない不具合を修正しました。★5をつけた記録が新しい順に表示されます。'},
@@ -3672,6 +3723,9 @@ function applySettingsDoc(d){
     if (ch){
       lsSet(LS_ACH, cur);
       renderAch();
+      // 届いた段階が、いまの記録で届くかどうかを確かめ直します（届かない段階は checkAch が取り消します）
+      clearTimeout(achCheckT);
+      achCheckT = setTimeout(checkAch, 400);
     }
   }
   if (d && d.monthItems && typeof d.monthItems === 'object' && JSON.stringify(d.monthItems) !== JSON.stringify(S.monthItems)){
@@ -4324,6 +4378,73 @@ function monthStats(list, key){
   const best = [...l].sort((a,b) => b.rating - a.rating || byDateDesc(a,b))[0];
   return { list:l, count:l.length, spend:l.reduce((s,i) => s + spendOf(i), 0), news:l.filter(i => (i.tags||[]).includes('新商品')).length, topMaker:(countBy(l, i => i.maker)[0]||[])[0], best };
 }
+/* ========== 年間・半期のまとめ ==========
+   1年（1〜12月）、上半期（1〜6月）、下半期（7〜12月）の記録をまとめます。データ画面の欄と、共有用の画像・文章で使います。 */
+
+// 期間（年 y、種類 k：'year' 年間｜'h1' 上半期｜'h2' 下半期）の、始まりと終わりの日付と名前を返します
+function periodOf(y, k){
+  return {y, k, start: k === 'h2' ? `${y}-07-01` : `${y}-01-01`, end: k === 'h1' ? `${y}-06-30` : `${y}-12-31`,
+    label: k === 'year' ? `${y}年` : `${y}年${k === 'h1' ? '上半期' : '下半期'}`};
+}
+// まとめを選べる年（記録のある年と今年）を、新しい順に返します
+function periodYears(){
+  const ys = new Set(items().map(i => +String(i.date).slice(0, 4)).filter(Boolean));
+  ys.add(+todayStr().slice(0, 4));
+  return [...ys].sort((a, b) => b - a);
+}
+// 年 y で選べるまとめの種類です（下半期は7月になってから選べます）
+const periodKinds = y => [['year', '年間'], ['h1', '上半期'], ...(todayStr() >= `${y}-07-01` ? [['h2', '下半期']] : [])];
+// いま選んでいる期間を返します。選んでいなければ今年の年間です（1月は、去年に記録があれば去年の年間）
+function curPeriod(){
+  const t = todayStr(), y0 = +t.slice(0, 4), ys = periodYears();
+  let y = S.ui.perY, k = S.ui.perK;
+  if (!ys.includes(y)) y = t.slice(5, 7) === '01' && ys.includes(y0 - 1) ? y0 - 1 : y0;
+  if (!periodKinds(y).some(([kk]) => kk === k)) k = t.slice(5, 7) === '06' && y === y0 ? 'h1' : 'year';
+  return periodOf(y, k);
+}
+// まとめの時期（6月と12月）なら true です。この時期だけ、データ画面のまとめ欄を開いて上のほうに出します
+const periodSeason = () => ['06', '12'].includes(todayStr().slice(5, 7));
+// 期間がまだ終わっていなければ true です
+const periodOngoing = p => todayStr() <= p.end;
+// 期間の「1/1〜12/31」のような表示です（終わっていない期間は今日まで）
+const periodRange = p => {
+  const f = d => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
+  return `${p.y}/${f(p.start)}〜${f(periodOngoing(p) ? todayStr() : p.end)}`;
+};
+// 好みのタイプ名（「かため×すっぱい」など）を、記録 list のかたさ・すっぱさの平均から作ります（記録がなければ ''）
+function prefType(list){
+  const mean = k => {
+    const l = list.filter(i => i[k]);
+    return l.length ? l.reduce((t, i) => t + i[k], 0) / l.length : 0;
+  };
+  const h = mean('hard'), so = mean('sour');
+  if (!h || !so) return '';
+  return `${h >= 3.5 ? 'かため' : h <= 2.5 ? 'やわらか' : 'もちもち'}×${so >= 3.5 ? 'すっぱい' : so <= 2.5 ? 'あまい' : 'あまずっぱ'}`;
+}
+// 期間 p のまとめを返します。
+// reps：グミごとの回数（多い順）、months：月ごとの袋数、gains：期間中に獲得した称号（獲得日が分からないときは null）
+function periodStats(all, p){
+  const l = all.filter(i => i.date >= p.start && i.date <= p.end);
+  const byName = new Map();
+  [...l].sort(byDateDesc).forEach(i => {
+    const g = byName.get(i.name);
+    if (g){
+      g.count++;
+      g.best = Math.max(g.best, i.rating || 0);
+    } else byName.set(i.name, {name:i.name, last:i, count:1, best:i.rating || 0});
+  });
+  // よく買った順（回数が同じなら、おいしさの高い順）
+  const reps = [...byName.values()].sort((a, b) => b.count - a.count || b.best - a.best);
+  const months = [];
+  for (let m = +p.start.slice(5, 7); m <= +p.end.slice(5, 7); m++) months.push({m, count:l.filter(i => +i.date.slice(5, 7) === m).length});
+  const at = isDemo() ? null : achAtGet();
+  const gains = at ? ACH.filter(a => (at[a.id] || []).some(d => d >= p.start && d <= p.end)) : null;
+  return {list:l, count:l.length, kinds:byName.size, spend:l.reduce((t, i) => t + spendOf(i), 0),
+    days:new Set(l.map(i => i.date)).size, news:l.filter(i => (i.tags || []).includes('新商品')).length,
+    reps, months, topMaker:(countBy(l, i => i.maker)[0] || [])[0], topShop:(countBy(l, i => i.shop)[0] || [])[0],
+    type:prefType(l), gains};
+}
+
 /* ========== グミのびん（キャンバスで物理演算） ==========
    今月記録したグミを、くまの形の粒としてびんの絵の中に入れます。
    粒には重力・ぶつかり合い・壁での跳ね返りがあり、タップすると跳ねます。 */
@@ -4834,6 +4955,8 @@ function renderStats(){
   const ms = monthStats(all, key);
   // 「○月のまとめ」の欄だけは、今月／先月の切り替えで選んだ月を使います
   const sk = sumKey(), sms = monthStats(all, sk);
+  // 「年間・半期のまとめ」の欄で選んでいる期間
+  const P = curPeriod(), ps = periodStats(all, P), pys = periodYears();
   const unique = new Set(all.map(i => i.name)).size;
   // 評価のついた記録だけで、おいしさの平均を出します。
   const rated = all.filter(i => i.rating), avg = rated.length ? rated.reduce((s,i) => s + i.rating, 0) / rated.length : 0;
@@ -4871,6 +4994,14 @@ function renderStats(){
   const best = [...all].filter(i => (i.rating||0) === 5).sort(byDateDesc);
   const bestUnique = [];
   best.forEach(i => { if (bestUnique.length < 5 && !bestUnique.some(b => b.name === i.name)) bestUnique.push(i); });
+  // 年間・半期のまとめ欄（6月・12月は開いて今月のまとめの上に、それ以外の月は閉じて下に出します）
+  const season = periodSeason(), perPanel = `
+    <details class="panel ach-near per-panel${season ? ' per-hot' : ''}" id="per-panel" ${(S.ui.perOpen ?? season) ? 'open' : ''}><summary><h3>${season ? P.label + 'のまとめ' : '年間・半期のまとめ'}</h3></summary>
+      <div class="seg upd-seg per-kinds" role="tablist" aria-label="まとめる期間" style="grid-template-columns:repeat(${periodKinds(P.y).length},minmax(0,1fr));width:${periodKinds(P.y).length * 66}px">${periodKinds(P.y).map(([k, n]) => `<button type="button" role="tab" data-per="${k}" aria-checked="${P.k === k}">${n}</button>`).join('')}</div>
+      ${pys.length > 1 ? `<div class="seg upd-seg per-years" role="tablist" aria-label="まとめる年" style="grid-template-columns:repeat(${Math.min(pys.length, 4)},minmax(0,1fr))">${pys.map(y => `<button type="button" role="tab" data-pery="${y}" aria-checked="${P.y === y}">${y}年</button>`).join('')}</div>` : ''}
+      ${ps.count ? `<dl class="facts"><dt>袋数</dt><dd>${ps.count}袋（${ps.kinds}種類）・${yen(ps.spend)}</dd><dt>記録した日</dt><dd>${ps.days}日</dd><dt>いちばんリピ</dt><dd>${ps.reps[0].count > 1 ? `${esc(ps.reps[0].name)}（${ps.reps[0].count}回）` : '—'}</dd><dt>推しメーカー</dt><dd>${esc(ps.topMaker || '—')}</dd><dt>好み</dt><dd>${ps.type ? esc(ps.type) + '派' : '—'}</dd><dt>獲得した称号</dt><dd>${ps.gains ? ps.gains.length + '個' : '—'}</dd></dl>
+      ${periodOngoing(P) ? `<p class="hint" style="margin:0">${periodRange(P)}の記録です（途中経過）。</p>` : ''}
+      <div class="btn-row"><button class="btn primary month-img" type="button" id="per-img">${IMG_ICON}${P.label}のまとめを画像で共有</button></div>` : '<p class="hint" style="margin:0">この期間の記録はまだありません。</p>'}</details>`;
   const statsBox = $('#v-stats');
   keepChartScroll(statsBox, () => statsBox.innerHTML = `
     <div class="kpis">
@@ -4879,20 +5010,171 @@ function renderStats(){
       <div class="kpi"><div class="lbl">ぜんぶで</div><div class="v num">${all.length}<small>袋</small></div></div>
       <div class="kpi"><div class="lbl">記録した種類</div><div class="v num">${unique}<small>種</small></div></div>
     </div>
+${season ? perPanel : ''}
     <div class="panel"><div class="sum-h"><h3>${+sk.slice(5)}月のまとめ</h3>
         <div class="seg upd-seg sum-seg" role="tablist" aria-label="まとめる月">${[['this','今月'],['last','先月']].map(([k, n]) => `<button type="button" role="tab" data-sum="${k}" aria-checked="${(S.ui.sumMonth === 'last' ? 'last' : 'this') === k}">${n}</button>`).join('')}</div></div>
       <dl class="facts"><dt>袋数</dt><dd>${sms.count}袋（${new Set(sms.list.map(i => i.name)).size}種類）・${yen(sms.spend)}</dd><dt>カタログに提案</dt><dd>${suggestLog().filter(d => ym(d) === sk).length}件</dd><dt>推しメーカー</dt><dd>${esc(sms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, sk)}</dd></dl>
       <div class="btn-row"><button class="btn primary month-img" type="button" id="month-img">${IMG_ICON}${+sk.slice(5)}月のまとめを画像で共有</button></div></div>
+${season ? '' : perPanel}
     <div class="panel chart"><h3>月ごとの袋数<span class="s">横にスクロールで前の月へ</span></h3>${monthBars('bags', all, l => l.length, n => n)}</div>
     <div class="panel chart"><h3>月ごとの出費<span class="s">横にスクロールで前の月へ</span></h3>${monthBars('spend', all, l => l.reduce((t, i) => t + spendOf(i), 0), n => n >= 10000 ? (n / 10000).toFixed(n >= 100000 ? 0 : 1) + '万' : n.toLocaleString('ja-JP'))}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
       <div class="type-line">あなたは <b>${type}</b> 派</div>
       <div class="hint">平均おいしさ ${avg ? avg.toFixed(1) : '—'}</div>
       <div class="map">${map}</div><div class="map-x"><span>ふにゃ</span><span>かたさ →</span><span>かちかち</span></div></div>
-    <div class="panel"><h3>メーカーランキング</h3>${bars(countBy(all, i => i.maker))}</div>
-    <div class="panel"><h3>よく買うお店</h3>${bars(countBy(all, i => i.shop))}</div>
+    <div class="panel"><h3>メーカーランキング<span class="s">押すとくわしく</span></h3>${drillBars(countBy(all, i => i.maker), 'maker')}</div>
+    <div class="panel"><h3>よく買うお店<span class="s">押すとくわしく</span></h3>${drillBars(countBy(all, i => i.shop), 'shop')}</div>
     <div class="panel"><h3>殿堂入り<span class="s">★5をつけたグミ</span></h3>${bestUnique.length ? `<div class="rows" style="border:0">${bestUnique.map(i => rowHTML(i, repeatCount(all), numbering(all))).join('')}</div>` : '<p class="hint" style="margin:0">★5のグミはまだありません</p>'}</div>`);
 }
+
+/* ========== 画面表示：くわしいデータ（データタブの「くわしく」） ==========
+   期間（今月・3か月・今年・ぜんぶ）で絞りこんだ記録から、開拓とリピート、ランキング、味と色、曜日、おいしさ、
+   値段、新商品を買った早さ、カタログ制覇率、手持ちの状況を出します。
+   メーカー・お店・グミの名前を押すと、その中身（openDrill）を開きます。 */
+
+// 「くわしく」で選べる期間です。S.ui.dtPer に入れます（アプリを開いているあいだだけ覚えます）
+const DT_PERS = [['m1', '今月'], ['m3', '3か月'], ['y', '今年'], ['all', 'ぜんぶ']];
+// 期間 k の始まりの日（'YYYY-MM-DD'）を返します。ぜんぶなら ''
+function dtStart(k){
+  const t = parseYmd(todayStr());
+  if (k === 'm1') return ymd(new Date(t.getFullYear(), t.getMonth(), 1));
+  if (k === 'm3') return ymd(new Date(t.getFullYear(), t.getMonth() - 2, 1));
+  if (k === 'y') return `${t.getFullYear()}-01-01`;
+  return '';
+}
+// 名前ごとに、いちばん最初に買った記録の ID の集合を返します（「初めて買った」を見分けるのに使います）
+function firstIds(all){
+  const m = new Map();
+  [...all].sort(byDateAsc).forEach(i => { if (!m.has(i.name)) m.set(i.name, i.id); });
+  return new Set(m.values());
+}
+// 2つの日付（'YYYY-MM-DD'）の差を日数で返します
+const dayDiff = (a, b) => Math.round((parseYmd(a) - parseYmd(b)) / 86400000);
+// 押すと中身を開く横棒グラフ（[名前, 数] の配列の上位 n 件）の HTML を返します。kind は 'maker' | 'shop' | 'name'
+function drillBars(arr, kind, n = 6, fmt = c => c){
+  if (!arr.length) return '<p class="hint" style="margin:0">記録が増えると表示されます</p>';
+  const mx = Math.max(1, ...arr.map(a => a[1]));
+  return `<div class="bars">${arr.slice(0, n).map(([k, c]) => `<button type="button" class="bar bar-btn" data-drill="${kind}" data-v="${esc(k)}"${kind === 'name' ? ' data-wide' : ''}><span class="n">${esc(k)}</span><span class="tr"><span class="fl" style="width:${c / mx * 100}%;display:block"></span></span><span class="c num">${fmt(c)}</span></button>`).join('')}</div>`;
+}
+// 数字のカード 1 枚の HTML です
+const dtKpi = (lbl, v, unit) => `<div class="kpi"><div class="lbl">${lbl}</div><div class="v num">${v}<small>${unit}</small></div></div>`;
+// おいしさの平均（評価のある記録だけ）を返します。評価がなければ 0
+const avgRating = l => {
+  const r = l.filter(i => i.rating);
+  return r.length ? r.reduce((t, i) => t + i.rating, 0) / r.length : 0;
+};
+// 値段の入った記録だけで、1袋の平均の値段を返します（なければ 0）
+const avgPrice = l => {
+  const p = l.filter(i => !i.noSpend && +i.price > 0);
+  return p.length ? Math.round(p.reduce((t, i) => t + +i.price, 0) / p.length) : 0;
+};
+// カタログの「名前 → 発売日」と、メーカーごとの商品の一覧を作ります（描くたびに作ると重いので、カタログが変わるまで使い回します）
+let dtCatCache = null;
+function dtCat(){
+  const list = catList();
+  if (dtCatCache && dtCatCache.src === REMOTE_CAT && dtCatCache.n === list.length) return dtCatCache;
+  const rel = new Map(), byMaker = new Map();
+  for (const c of list){
+    const names = (c.f && c.f.length ? c.f : ['']).map(f => catName(c, f));
+    (c.f && c.f.length ? c.f : ['']).forEach((f, k) => { const r = relOf(c, f); if (r) rel.set(names[k], r); });
+    if (!byMaker.has(c.m)) byMaker.set(c.m, []);
+    byMaker.get(c.m).push({n:c.n, keys:[...new Set([c.n, ...names].map(norm))]});
+  }
+  dtCatCache = {src:REMOTE_CAT, n:list.length, rel, byMaker};
+  return dtCatCache;
+}
+// くわしいデータの画面を描き直します
+function renderDetail(){
+  const box = $('#v-detail');
+  if (!box) return;
+  const all = items(), per = DT_PERS.some(([k]) => k === S.ui.dtPer) ? S.ui.dtPer : 'all';
+  const st = dtStart(per), l = st ? all.filter(i => i.date >= st) : all;
+  const spend = l.reduce((t, i) => t + spendOf(i), 0), avg = avgRating(l), ap = avgPrice(l);
+  const firsts = firstIds(all), news = l.filter(i => firsts.has(i.id));
+  const repRate = l.length ? Math.round((l.length - news.length) / l.length * 100) : 0;
+  const empty = '<p class="hint" style="margin:0">記録が増えると表示されます</p>';
+  // 味（味の欄が空なら名前は使いません）と色
+  const flavors = countBy(l, i => i.flavor);
+  const colors = countBy(l, i => i.color);
+  // 曜日ごとの袋数（日曜はじまり）
+  const wk = Array(7).fill(0);
+  l.forEach(i => wk[parseYmd(i.date).getDay()]++);
+  const wkMax = Math.max(1, ...wk), wkTop = wk.indexOf(Math.max(...wk));
+  // おいしさの分布と、メーカーごとの平均（評価のある記録が 2 件以上のメーカー）
+  const stars = [5, 4, 3, 2, 1].map(r => [`★${r}`, l.filter(i => i.rating === r).length]);
+  const mkAvg = [...new Set(l.map(i => i.maker).filter(Boolean))]
+    .map(m => { const r = l.filter(i => i.maker === m && i.rating); return [m, r.length >= 2 ? avgRating(r) : 0]; })
+    .filter(a => a[1]).sort((a, b) => b[1] - a[1]);
+  // 値段：いちばん安い・高い
+  const priced = l.filter(i => !i.noSpend && +i.price > 0).sort((a, b) => a.price - b.price);
+  // 新商品を買った早さ：発売日が分かるグミを、発売の14日前〜90日後に初めて買ったときの日数
+  const C = dtCat();
+  const hunt = [...news].map(i => { const r = C.rel.get(i.name) || firstNewTag(i.name); return r ? {i, d: dayDiff(i.date, r)} : null; })
+    .filter(x => x && x.d >= -14 && x.d <= 90).sort((a, b) => a.d - b.d);
+  const huntAvg = hunt.length ? Math.round(hunt.reduce((t, x) => t + Math.max(0, x.d), 0) / hunt.length) : null;
+  // カタログ制覇率（期間に関係なく、ぜんぶの記録で数えます）：記録したことのあるメーカーごとに、カタログの商品のうち食べた数
+  const eaten = new Set(all.map(i => norm(i.name)));
+  const comp = [...new Set(all.map(i => i.maker).filter(m => C.byMaker.has(m)))].map(m => {
+    const ps = C.byMaker.get(m);
+    return [m, ps.filter(p => p.keys.some(k => eaten.has(k))).length, ps.length];
+  }).filter(a => a[1]).sort((a, b) => b[1] / b[2] - a[1] / a[2] || b[1] - a[1]);
+  // 手持ちの状況（期間に関係なく、いまの状態）：まだ食べていない袋と、いちばん古いもの
+  const unopened = all.filter(i => statusOf(i) === 'unopened').sort(byDateAsc);
+  const old = unopened[0];
+  const fmtAvg = v => v ? v.toFixed(1) : '—';
+  box.innerHTML = `
+    <div class="seg upd-seg dt-per" role="tablist" aria-label="集計する期間">${DT_PERS.map(([k, n]) => `<button type="button" role="tab" data-dtper="${k}" aria-checked="${per === k}">${n}</button>`).join('')}</div>
+    <div class="kpis">${dtKpi('袋数', l.length, '袋')}${dtKpi('出費', spend.toLocaleString('ja-JP'), '円')}${dtKpi('1袋の平均', ap ? ap.toLocaleString('ja-JP') : '—', ap ? '円' : '')}${dtKpi('おいしさの平均', fmtAvg(avg), '')}</div>
+    <div class="panel"><h3>開拓とリピート</h3>
+      ${l.length ? `<div class="dt-split"><span class="dt-new" style="flex:${news.length}"></span><span class="dt-rep" style="flex:${l.length - news.length}"></span></div>
+      <dl class="facts"><dt>初めて買った</dt><dd>${news.length}種類</dd><dt>リピート</dt><dd>${l.length - news.length}袋（${repRate}%）</dd></dl>` : empty}</div>
+    <div class="panel chart"><h3>初めて買ったグミ<span class="s">月ごとの種類数</span></h3>${monthBars('dtnew', all, ml => ml.filter(i => firsts.has(i.id)).length, n => n)}</div>
+    <div class="panel"><h3>よく買うグミ<span class="s">押すとくわしく</span></h3>${drillBars(countBy(l, i => i.name), 'name', 8)}</div>
+    <div class="panel"><h3>メーカー<span class="s">押すとくわしく</span></h3>${drillBars(countBy(l, i => i.maker), 'maker', 8)}</div>
+    <div class="panel"><h3>お店<span class="s">押すとくわしく</span></h3>${drillBars(countBy(l, i => i.shop), 'shop', 8)}</div>
+    <div class="panel"><h3>味と色</h3>
+      ${colors.length ? `<div class="dt-colors">${colors.map(([k, c]) => `<span class="dt-color"><i style="background:${paintOf(k)}"></i>${esc((COLORS.find(x => x.k === k) || {}).n || k)}<b class="num">${c}</b></span>`).join('')}</div>` : ''}
+      ${flavors.length ? `<div class="bars">${flavors.slice(0, 6).map(([n, c]) => `<div class="bar"><span class="n">${esc(n)}</span><span class="tr"><span class="fl" style="width:${c / flavors[0][1] * 100}%;display:block"></span></span><span class="c num">${c}</span></div>`).join('')}</div>` : colors.length ? '' : empty}</div>
+    <div class="panel"><h3>曜日ごとの袋数</h3>
+      ${l.length ? `<div class="dt-wk">${wk.map((c, d) => `<div class="dt-wkc${d === wkTop && c ? ' wk-top' : ''}"><span class="num">${c || ''}</span><i style="height:${c / wkMax * 100}%"></i><b>${WD[d]}</b></div>`).join('')}</div>
+      <p class="hint" style="margin:0">${WD[wkTop]}曜日がいちばん多いです。</p>` : empty}</div>
+    <div class="panel"><h3>おいしさ</h3>
+      ${l.some(i => i.rating) ? `<div class="bars">${stars.map(([n, c]) => `<div class="bar"><span class="n">${n}</span><span class="tr"><span class="fl" style="width:${c / Math.max(1, ...stars.map(s => s[1])) * 100}%;display:block"></span></span><span class="c num">${c}</span></div>`).join('')}</div>
+      ${mkAvg.length ? `<p class="dt-sub">メーカーごとの平均<span class="s">評価が2件以上</span></p>${drillBars(mkAvg, 'maker', 6, fmtAvg)}` : ''}` : empty}</div>
+    <div class="panel"><h3>1袋の値段</h3>
+      ${priced.length ? `<dl class="facts"><dt>平均</dt><dd>${yen(ap)}</dd><dt>いちばん安い</dt><dd>${yen(priced[0].price)}（${esc(priced[0].name)}）</dd><dt>いちばん高い</dt><dd>${yen(priced.at(-1).price)}（${esc(priced.at(-1).name)}）</dd></dl>` : empty}</div>
+    <div class="panel chart"><h3>1袋の平均の値段<span class="s">月ごと</span></h3>${monthBars('dtprice', all, avgPrice, n => n)}</div>
+    <div class="panel"><h3>新商品を買った早さ</h3>
+      ${hunt.length ? `<dl class="facts"><dt>平均</dt><dd>発売から${huntAvg}日</dd><dt>いちばん早い</dt><dd>${esc(hunt[0].i.name)}（${hunt[0].d <= 0 ? '発売日' + (hunt[0].d < 0 ? 'より前' : '') : `発売から${hunt[0].d}日`}）</dd><dt>数えたグミ</dt><dd>${hunt.length}種類</dd></dl>
+      <p class="hint" style="margin:0">カタログの発売日から、初めて買った日までの日数です。</p>` : '<p class="hint" style="margin:0">発売日が分かる新商品を買うと表示されます</p>'}</div>
+    <div class="panel"><h3>カタログ制覇率<span class="s">ぜんぶの記録</span></h3>
+      ${comp.length ? `<div class="bars">${comp.slice(0, 8).map(([m, e, t]) => `<button type="button" class="bar bar-btn dt-comp" data-drill="maker" data-v="${esc(m)}"><span class="n">${esc(m)}</span><span class="tr"><span class="fl" style="width:${e / t * 100}%;display:block"></span></span><span class="c num">${e}/${t}</span></button>`).join('')}</div>` : '<p class="hint" style="margin:0">カタログにあるグミを記録すると表示されます</p>'}</div>
+    <div class="panel"><h3>手持ちの状況<span class="s">いま</span></h3>
+      ${unopened.length ? `<dl class="facts"><dt>まだ食べていない</dt><dd>${unopened.length}袋</dd><dt>いちばん古い</dt><dd>${esc(old.name)}（${dayDiff(todayStr(), old.date)}日前に購入）</dd></dl>` : '<p class="hint" style="margin:0">まだ食べていない袋はありません</p>'}</div>`;
+  box.querySelectorAll('[data-mchart]').forEach(el => el.scrollLeft = el.scrollWidth);
+}
+// メーカー・お店・グミの名前を押したときの中身を開きます（ぜんぶの記録で数えます）
+function openDrill(kind, v){
+  const all = items(), key = {maker: 'maker', shop: 'shop', name: 'name'}[kind];
+  if (!key) return;
+  const l = all.filter(i => i[key] === v).sort(byDateDesc);
+  const spend = l.reduce((t, i) => t + spendOf(i), 0), avg = avgRating(l), ap = avgPrice(l);
+  const sub = (title, k, f) => `<div class="panel"><h3>${title}</h3>${drillBars(countBy(l, f), k, 6)}</div>`;
+  $('#dr-title').textContent = v;
+  $('#dr-body').innerHTML = `
+    <p class="hint" style="margin:0">${kind === 'maker' ? 'メーカー' : kind === 'shop' ? 'お店' : esc(l[0] && l[0].maker || 'グミ')}</p>
+    <div class="kpis">${dtKpi('袋数', l.length, '袋')}${dtKpi('出費', spend.toLocaleString('ja-JP'), '円')}${dtKpi('1袋の平均', ap ? ap.toLocaleString('ja-JP') : '—', ap ? '円' : '')}${dtKpi('おいしさ', avg ? avg.toFixed(1) : '—', '')}</div>
+    <dl class="facts"><dt>初めて買った日</dt><dd>${l.length ? fmtDate(l.at(-1).date) : '—'}</dd><dt>最後に買った日</dt><dd>${l.length ? fmtDate(l[0].date) : '—'}</dd>${kind !== 'name' ? `<dt>種類</dt><dd>${new Set(l.map(i => i.name)).size}種類</dd>` : ''}</dl>
+    ${kind !== 'name' ? sub('よく買うグミ', 'name', i => i.name) : ''}
+    ${kind !== 'maker' ? sub('メーカー', 'maker', i => i.maker) : ''}
+    ${kind !== 'shop' ? sub('お店', 'shop', i => i.shop) : ''}
+    ${kind === 'name' ? `<div class="panel"><h3>買った記録</h3><ul class="dr-hist">${l.slice(0, 50).map(i => `<li><span class="num">${fmtDate(i.date)}</span><span>${esc(i.shop || '—')}</span><span class="num">${+i.price > 0 && !i.noSpend ? yen(i.price) : '—'}</span><span class="dr-star">${i.rating ? '★' + i.rating : ''}</span></li>`).join('')}</ul></div>` : ''}`;
+  const s = $('#sh-drill');
+  if (s.hidden) openSheet('#sh-drill');
+  else s.querySelector('.sheet-p').scrollTop = 0;
+}
+// 日付 'YYYY-MM-DD' を「2026/11/27」の形にします
+const fmtDate = d => `${d.slice(0, 4)}/${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
 
 /* ========== 自分で撮った写真（描いた袋の絵の代わりに表示） ==========
    写真は小さな JPEG の data URL にして記録と同じ場所に保存するので、別のファイル置き場はいりません。
@@ -5503,10 +5785,11 @@ function imgPalette(){
 }
 
 // 画像に使うフォントを先に読み込んでおきます（失敗しても気にせず進みます）。
-async function imgFonts(){
+// 画像に描く前に、使う文字のフォントを読み込んでおきます（extra は追加で使う文字。読み込んでいない字は別のフォントで描かれるため）
+async function imgFonts(extra = ''){
   try {
-    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 60px "Murecho"', 'ぐみろぐぐみ棚0123456789月'),
-      document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ')]);
+    await Promise.all([document.fonts.load('400 40px "Dela Gothic One"', 'ぐみろ'), document.fonts.load('900 60px "Murecho"', 'ぐみろぐぐみ棚0123456789月' + extra),
+      document.fonts.load('700 26px "Zen Maru Gothic"', 'グミ' + extra)]);
   } catch(e){}
 }
 
@@ -5647,8 +5930,8 @@ async function drawShelfImage(n){
 
 // 「今月のまとめ」の画像（数字4つ、推しメーカー、ベストグミ、今月買ったグミ）を描き、JPEG の Blob を返します。
 async function drawMonthImage(){
-  await imgFonts();
   const C = imgPalette(), all = items(), key = sumKey(), ms = monthStats(all, key), mon = +key.slice(5);
+  await imgFonts((ms.topMaker || '') + ms.list.map(i => i.name).join(''));
   const W = 1080, pad = 56, gap = 24, cols = 4, cw = (W - pad * 2 - gap * (cols - 1)) / cols, fh = cw * 5 / 4;
   // 今月のグミを新しい順に、名前ごとに1枚のカードにまとめます（回数と最高評価も数えます）。
   const byName = new Map();
@@ -5767,12 +6050,125 @@ async function drawMonthImage(){
   return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
 }
 
+// 「年間・半期のまとめ」の画像（数字4つ、月ごとの袋数、いちばん買ったグミ、推しメーカーなど）を描き、JPEG の Blob を返します。
+async function drawPeriodImage(p){
+  const C = imgPalette(), ps = periodStats(items(), p);
+  const W = 1080, pad = 56, gap = 24, cols = 4, cw = (W - pad * 2 - gap * (cols - 1)) / cols, fh = cw * 5 / 4;
+  const cards = ps.reps.slice(0, 4);
+  const facts = [['推しメーカー', ps.topMaker], ['よく行くお店', ps.topShop], ['好み', ps.type ? ps.type + '派' : ''],
+    ['獲得した称号', ps.gains && ps.gains.length ? ps.gains.length + '個' : '']].filter(f => f[1]);
+  // 各ブロックの縦位置：yK＝数字、yC＝月ごとのグラフ、yR＝いちばん買ったグミ、yF＝推しメーカーなど
+  const yK = 282, kH = 150, yC = yK + kH + 90, cH = 330, yR = yC + cH + 70, rowH = fh + 14 + 66 + 26;
+  const yF = yR + 30 + (cards.length ? rowH : 70) + 50, H = yF + facts.length * 66 + 100;
+  await imgFonts(p.label + 'のまとめ途中経過袋種類出費記録した日月ごとの数いちばん買ったグミまだありません' + facts.flat().join('') + cards.map(g => g.name).join(''));
+  const cv = document.createElement('canvas');
+  cv.width = W;
+  cv.height = H;
+  const x = cv.getContext('2d');
+  x.fillStyle = C.bg;
+  x.fillRect(0, 0, W, H);
+  drawLogo(x, C, pad, 92);
+  // 見出しは横幅に収まるまで小さくします
+  const title = `${p.label}のぐみろぐ`;
+  let fs = 76;
+  for (;;){
+    x.font = `900 ${fs}px "Murecho"`;
+    if (x.measureText(title).width <= W - pad * 2 || fs <= 44) break;
+    fs -= 2;
+  }
+  x.fillStyle = C.ink;
+  x.fillText(title, pad, 190);
+  x.font = '700 28px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  x.fillText(`${periodRange(p)}のまとめ${periodOngoing(p) ? '（途中経過）' : ''}`, pad, 238);
+  // 4つの数字（袋数・種類・出費・記録した日）。けたが多くなる出費の枠を広くします
+  const kws = [0.8, 0.85, 1.45, 0.9].map(r => (W - pad * 2 - 20 * 3) * r / 4);
+  [['袋数', ps.count, '袋'], ['種類', ps.kinds, '種類'], ['出費', ps.spend.toLocaleString('ja-JP'), '円'], ['記録した日', ps.days, '日']].forEach(([l, v, u], i) => {
+    const kw = kws[i], X = pad + kws.slice(0, i).reduce((a, b) => a + b + 20, 0);
+    rrect(x, X, yK, kw, kH, 24);
+    x.fillStyle = C.surface;
+    x.fill();
+    x.lineWidth = 2;
+    x.strokeStyle = C.line;
+    x.stroke();
+    x.font = '700 24px "Zen Maru Gothic"';
+    x.fillStyle = C.ink2;
+    x.fillText(l, X + 22, yK + 44);
+    x.fillStyle = C.ink;
+    const vs = String(v);
+    // 数字と単位が枠に収まるまで、数字を小さくします（いちばん小さくて 30px）
+    x.font = '700 24px "Zen Maru Gothic"';
+    const uw = x.measureText(u).width;
+    let vf = 50;
+    for (;;){
+      x.font = `900 ${vf}px "Murecho"`;
+      if (x.measureText(vs).width + 6 + uw <= kw - 36 || vf <= 30) break;
+      vf -= 2;
+    }
+    x.fillText(vs, X + 22, yK + 112);
+    const vw = x.measureText(vs).width;
+    x.font = '700 24px "Zen Maru Gothic"';
+    x.fillText(u, X + 22 + vw + 6, yK + 112);
+  });
+  // 月ごとの袋数の棒グラフ（いちばん多い月を濃い色にします）
+  x.font = '700 28px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  x.fillText('月ごとの袋数', pad, yC);
+  const n = ps.months.length, slot = (W - pad * 2) / n, bw = Math.min(64, slot * .58);
+  const mx = Math.max(1, ...ps.months.map(o => o.count)), base = yC + cH - 44, maxH = cH - 44 - 30 - 40;
+  ps.months.forEach((o, i) => {
+    const cx = pad + slot * i + slot / 2, h = o.count ? Math.max(8, maxH * o.count / mx) : 4;
+    rrect(x, cx - bw / 2, base - h, bw, h, Math.min(12, h / 2));
+    x.fillStyle = o.count === mx && o.count ? C.accent : C.soft;
+    x.fill();
+    x.textAlign = 'center';
+    if (o.count){
+      x.font = '900 26px "Murecho"';
+      x.fillStyle = C.ink;
+      x.fillText(String(o.count), cx, base - h - 12);
+    }
+    x.font = '700 24px "Zen Maru Gothic"';
+    x.fillStyle = C.ink2;
+    x.fillText(`${o.m}月`, cx, base + 34);
+    x.textAlign = 'left';
+  });
+  // いちばん買ったグミ（回数の多い順に4つ）
+  x.font = '700 28px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  x.fillText('いちばん買ったグミ', pad, yR);
+  if (!cards.length) x.fillText('まだありません', pad, yR + 60);
+  const photos = await Promise.all(cards.map(g => {
+    const ph = photoFor(g.last);
+    return ph ? loadImg(ph) : null;
+  }));
+  cards.forEach((g, i) => drawGumCard(x, C, g, photos[i], pad + i * (cw + gap), yR + 30, cw, fh));
+  // 推しメーカー・よく行くお店・好み・獲得した称号
+  facts.forEach(([l, v], i) => {
+    const Y = yF + i * 66;
+    x.font = '700 28px "Zen Maru Gothic"';
+    x.fillStyle = C.ink2;
+    x.fillText(l, pad, Y);
+    const lw = x.measureText(l).width;
+    x.font = '900 40px "Murecho"';
+    x.fillStyle = C.acc;
+    let t = String(v);
+    while (x.measureText(t).width > W - pad * 2 - lw - 20 && t.length > 1) t = t.slice(0, -2) + '…';
+    x.fillText(t, pad + lw + 20, Y + 2);
+  });
+  x.font = '700 28px "Zen Maru Gothic"';
+  x.fillStyle = C.ink2;
+  x.textAlign = 'center';
+  x.fillText('#ぐみろぐ  #グミ', W / 2, H - 42);
+  x.textAlign = 'left';
+  return new Promise(res => cv.toBlob(res, 'image/jpeg', .92));
+}
+
 // 画像シートのプレビューを作り直します。描いている間は「待ってね」を出し、ボタンを押せなくします。
 async function renderShelfImage(){
   $('#si-wait').hidden = false;
   $('#si-img').removeAttribute('src');
   $('#si-share').disabled = $('#si-save').disabled = true;
-  const blob = SI.kind === 'month' ? await drawMonthImage() : await drawShelfImage(SI.n);
+  const blob = SI.kind === 'month' ? await drawMonthImage() : SI.kind === 'period' ? await drawPeriodImage(SI.per) : await drawShelfImage(SI.n);
   // 前の画像の URL は使わなくなるので解放します。
   if (SI.url) URL.revokeObjectURL(SI.url);
   SI.blob = blob;
@@ -5786,6 +6182,18 @@ async function renderShelfImage(){
 function openMonthImage(){
   SI.kind = 'month';
   $('#si-title').textContent = `${+sumKey().slice(5)}月のまとめを画像に`;
+  $('#si-count').hidden = $('#si-count-l').hidden = true;
+  $('#si-text').hidden = false;
+  siShareHint();
+  openSheet('#sh-shelfimg');
+  renderShelfImage();
+}
+
+// 「年間・半期のまとめを画像に」のシートを開きます（データ画面で選んでいる期間）。
+function openPeriodImage(){
+  SI.kind = 'period';
+  SI.per = curPeriod();
+  $('#si-title').textContent = `${SI.per.label}のまとめを画像に`;
   $('#si-count').hidden = $('#si-count-l').hidden = true;
   $('#si-text').hidden = false;
   siShareHint();
@@ -5853,15 +6261,17 @@ function wireShelfImage(){
     renderShelfImage();
   });
   // 保存・共有するときのファイル名（例：gumilog-shelf-20261030.jpg）
-  const name = () => SI.kind === 'month' ? `gumilog-${sumKey().replace('-', '')}.jpg` : `gumilog-shelf-${todayStr().replace(/-/g, '')}.jpg`;
+  const name = () => SI.kind === 'month' ? `gumilog-${sumKey().replace('-', '')}.jpg`
+    : SI.kind === 'period' ? `gumilog-${SI.per.y}${SI.per.k === 'year' ? '' : SI.per.k}.jpg`
+    : `gumilog-shelf-${todayStr().replace(/-/g, '')}.jpg`;
   $('#si-save').addEventListener('click', () => SI.blob && saveBlob(SI.blob, name()));
   $('#si-text').addEventListener('click', () => {
     closeSheet('#sh-shelfimg');
-    openPost(null, 'month');
+    openPost(null, SI.kind === 'period' ? 'period' : 'month');
   });
   $('#si-share').addEventListener('click', async () => {
     if (!SI.blob) return;
-    const text = SI.kind === 'month' ? monthPost() : 'わたしのぐみ棚 #ぐみ棚 #ぐみろぐ #グミ';
+    const text = SI.kind === 'month' ? monthPost() : SI.kind === 'period' ? periodPost(SI.per) : 'わたしのぐみ棚 #ぐみ棚 #ぐみろぐ #グミ';
     try {
       await navigator.share({files:[new File([SI.blob], name(), {type:'image/jpeg'})], text});
     }
@@ -6152,6 +6562,7 @@ const achSaved = () => {
 
 // すべての称号の、いまの状態を返します。
 // cur: いまの数、got: とった段階の数（保存してある段階と、いまの数で届く段階の大きいほう）、reached: いまの数で届く段階の数
+// （届かなくなった段階は、checkAch が保存から取り消します）
 function achStatus(){
   const c = achCtx(), saved = achSaved() || {};
   return ACH.map(a => {
@@ -6625,6 +7036,10 @@ async function shareAchImage(a, got, btn){
 // いまお祝い・くわしい画面に出している称号です（画像のボタンで使います）。
 let achShown = null;
 
+// 記録を消さなくても数が減る称号です。一度獲得したら、記録と合わなくても取り消しません
+// （食べると減る：積みグミ・積みすぎ注意・完食率／写真の読みこみや端末で変わる：グミカメラマン・グミ情報屋／
+//   カタログが追いつくと減る：新しい味の発見者・知る人ぞ知るメーカー・グミの開拓者）
+const ACH_KEEP = new Set(['stock', 's-tsumi', 'finrate', 'photos', 'suggest', 'newflavor', 'minor', 'explorer']);
 // 称号をとったときのお祝いを順番に出すための待ち行列です。
 let achQueue = null, achT = 0;
 // 記録が変わるたびに、新しくとった称号がないかを調べます。
@@ -6639,6 +7054,21 @@ function checkAch(){
     const n = st.reduce((m, s) => m + s.reached, 0);
     if (n) queueAchWin({intro:n});
     return;
+  }
+  // 記録を消したり直したりして、いまの記録では届かなくなった段階は取り消します（獲得した日も消します）。
+  // 間違えて記録したときに獲得した称号が、記録を消したあとも残らないようにするためです
+  const lost = st.filter(s => !ACH_KEEP.has(s.a.id) && (+saved[s.a.id] || 0) > s.reached);
+  if (lost.length){
+    const at = achAtGet();
+    lost.forEach(s => {
+      saved[s.a.id] = s.reached;
+      if (at && Array.isArray(at[s.a.id]) && at[s.a.id].length > s.reached) at[s.a.id].length = s.reached;
+    });
+    if (at) lsSet(LS_ACH_AT, at);
+    lsSet(LS_ACH, saved);
+    saveSettingsDoc();
+    renderAch();
+    toast(`記録に合わない称号を${lost.length}個取り消しました`);
   }
   const gained = st.filter(s => s.reached > (+saved[s.a.id] || 0));
   if (!gained.length) return;
@@ -6704,6 +7134,8 @@ function showAchWin(){
 // 称号タブのカード、くわしい画面、お祝いのボタンの動きを登録します。
 function wireAch(){
   // 「もうすぐとれる称号」を閉じたか開いたかを覚えておきます（描き直しても、次に開いたときもそのままにするため）
+  // 年間・半期のまとめ欄を開いたか閉じたかを、アプリを開いているあいだ覚えておきます（次に開いたときは、時期に合わせて開閉します）
+  $('#v-stats').addEventListener('toggle', e => { if (e.target.id === 'per-panel') S.ui.perOpen = e.target.open; }, true);
   $('#v-ach').addEventListener('toggle', e => {
     const cat = e.target.dataset && e.target.dataset.cat;
     if (cat){
@@ -6740,16 +7172,22 @@ function wireAch(){
   }).observe($('#sh-bigfull'), {attributes:true, attributeFilter:['hidden']});
   $('#ma-go').addEventListener('click', () => {
     closeSheet('#sh-monthask');
+    // 年間・半期のまとめのおさそいなら、その期間の画像を開きます
+    if (maPeriod){
+      S.ui.perY = maPeriod.y;
+      S.ui.perK = maPeriod.k;
+      renderStats();
+      openPeriodImage();
+      return;
+    }
     S.ui.sumMonth = 'last';
     lsSet(LS_UI, {tab:S.ui.tab, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
     renderStats();
     openMonthImage();
   });
-  // 集めた称号のまとめ：画像で共有・X で共有
+  // 集めた称号のまとめ：文章だけ共有・画像で共有
   $('#aa-img').innerHTML = IMG_ICON + '画像で共有';
   $('#aa-img').addEventListener('click', () => shareAchAll($('#aa-img')));
-  $('#aa-share').innerHTML = SHARE_ICON + 'Xで共有';
-  $('#aa-share').addEventListener('click', () => setTimeout(() => closeSheet('#sh-achall'), 300));
   $('#aw-go').addEventListener('click', () => {
     closeSheet('#sh-achwin');
     setTab('ach');
@@ -6759,10 +7197,18 @@ function wireAch(){
     b.innerHTML = IMG_ICON + '画像で共有';
     b.addEventListener('click', () => achShown && shareAchImage(achShown.a, achShown.got, b));
   });
-  // 「Xで共有」には、ほかの共有ボタンと同じマークをつけます。押したら少し待ってシートを閉じます。
-  [$('#aw-share'), $('#ach-share')].forEach(a => {
-    a.innerHTML = SHARE_ICON + 'Xで共有';
-    a.addEventListener('click', () => setTimeout(() => closeSheet('#' + a.closest('.sheet').id), 300));
+  // 「文章だけ共有」：共有画面が使えるスマホでは、そこからインスタ・LINE・X などを選べるようにします。
+  // 使えないときは、リンク先（文章が入ったXの投稿画面）を開きます。共有したら少し待ってシートを閉じます
+  [$('#aw-share'), $('#ach-share'), $('#aa-share')].forEach(a => {
+    a.innerHTML = SHARE_ICON + '文章だけ共有';
+    a.addEventListener('click', async e => {
+      const close = () => setTimeout(() => closeSheet('#' + a.closest('.sheet').id), 300);
+      if (!navigator.share) return close();
+      e.preventDefault();
+      const text = new URL(a.href).searchParams.get('text') || '';
+      try { await navigator.share({text}); close(); }
+      catch(err){ if (err && err.name !== 'AbortError') window.open(a.href, '_blank', 'noopener'); }
+    });
   });
 }
 
@@ -6777,8 +7223,40 @@ let lastShelf = null;
 // 出した月を覚えておき、同じ月には 1 回だけ出します。
 const LS_MONTHASK = 'gumilog.monthAsk.v1';
 let monthAskT = 0;
+// 1月には去年の年間まとめ、7月には上半期のまとめを「共有してみませんか？」と1回だけ聞きます。
+// 聞いたときは true を返します（同じ日に月のまとめは聞きません）。
+const LS_PERIODASK = 'gumilog.periodAsk.v1';
+let maPeriod = null;
+function checkPeriodAsk(){
+  const t = todayStr(), y = +t.slice(0, 4), m = +t.slice(5, 7);
+  const p = m === 1 ? periodOf(y - 1, 'year') : m === 7 ? periodOf(y, 'h1') : null;
+  if (!p) return false;
+  const key = `${p.y}-${p.k}`;
+  if (lsGet(LS_PERIODASK, '') === key) return false;
+  lsSet(LS_PERIODASK, key);
+  const ps = periodStats(realItems(), p);
+  if (!ps.count) return false;
+  maPeriod = p;
+  $('#ma-title').textContent = `${p.label}のまとめを共有してみませんか？`;
+  $('#ma-text').textContent = `${p.label}は${ps.count}袋（${ps.kinds}種類）のグミを記録しました。まとめを画像にして、XやLINEで共有できます。`;
+  return true;
+}
 function checkMonthAsk(){
   if (isDemo() || S.readOnly) return;
+  maPeriod = null;
+  if (checkPeriodAsk()){
+    lsSet(LS_MONTHASK, ym(todayStr()));
+    clearTimeout(monthAskT);
+    const showP = () => {
+      if ([...document.querySelectorAll('.sheet')].some(x => !x.hidden)){
+        monthAskT = setTimeout(showP, 1500);
+        return;
+      }
+      openSheet('#sh-monthask');
+    };
+    monthAskT = setTimeout(showP, 1800);
+    return;
+  }
   const now = ym(todayStr());
   if (lsGet(LS_MONTHASK, '') === now) return;
   const last = prevMonthKey(), ms = monthStats(realItems(), last);
@@ -6830,6 +7308,7 @@ function renderAll(){
   renderLog();
   renderCal();
   renderStats();
+  renderDetail();
   renderAch();
   renderShelf();
   jarSync(false);
@@ -6861,8 +7340,8 @@ function renderAll(){
 function setTab(t){
   S.ui.tab = t;
   lsSet(LS_UI, {tab:t, filter:S.ui.filter, dataView:S.ui.dataView, sumMonth:S.ui.sumMonth, nearOpen:S.ui.nearOpen, recentOpen:S.ui.recentOpen, catClosed:S.ui.catClosed});
-  const dv = S.ui.dataView === 'cal' ? 'cal' : 'stats';
-  ['log','cal','stats','ach','shelf'].forEach(k => {
+  const dv = ['cal', 'detail'].includes(S.ui.dataView) ? S.ui.dataView : 'stats';
+  ['log','cal','stats','detail','ach','shelf'].forEach(k => {
     $('#v-' + k).hidden = t === 'cal' ? k !== dv : k !== t;
   });
   // データタブの切り替えボタン
@@ -6878,7 +7357,7 @@ function setTab(t){
     jarSync(true);
   }
   // データ画面の月ごとのグラフは、隠れている間に描くと左端（昔の月）のままになるので、見えたときに今月（右端）へ動かします
-  if (t === 'cal') requestAnimationFrame(() => document.querySelectorAll('#v-stats [data-mchart]').forEach(el => {
+  if (t === 'cal') requestAnimationFrame(() => document.querySelectorAll('#v-stats [data-mchart], #v-detail [data-mchart]').forEach(el => {
     if (el.scrollLeft < 4) el.scrollLeft = el.scrollWidth;
   }));
   // シートを開いていて後ろの画面を止めているときは、閉じたときに一番上へ戻るようにします
@@ -8635,6 +9114,19 @@ function monthPost(){
     on('ach') ? gl : '',
     on('tags') ? POST_TAGS : ''].filter(Boolean).join('\n');
 }
+// 「年間・半期のまとめ」の投稿文を作って返します。設定の「まとめの文章」でオフにした項目は入れません
+function periodPost(p){
+  const ps = periodStats(items(), p), on = k => S.monthItems[k] !== false, top = ps.reps[0];
+  return [`【${p.label}のぐみろぐ】`,
+    on('gumi') ? `集めたグミ ${ps.count}袋（${ps.kinds}種類）/ ${yen(ps.spend)}` : '',
+    top && top.count > 1 ? `いちばんリピ：${top.name}（${top.count}回）` : '',
+    on('news') && ps.news ? `新商品 ${ps.news}個` : '',
+    on('maker') ? `推しメーカー：${ps.topMaker || '—'}` : '',
+    ps.type ? `好み：${ps.type}派` : '',
+    on('days') ? `記録した日 ${ps.days}日` : '',
+    on('ach') && ps.gains && ps.gains.length ? `獲得した称号 ${ps.gains.length}個` : '',
+    on('tags') ? POST_TAGS : ''].filter(Boolean).join('\n');
+}
 // 投稿文の入力欄に文章を入れて、文字数などの表示を更新します
 function setPostText(t){
   $('#post-text').value = t;
@@ -8653,7 +9145,7 @@ function updatePost(){
 function openPost(it, kind){
   P.item = it;
   P.kind = kind || 'item';
-  $('#post-title').textContent = P.kind === 'month' ? `${+sumKey().slice(5)}月のまとめを共有` : '共有';
+  $('#post-title').textContent = P.kind === 'month' ? `${+sumKey().slice(5)}月のまとめを共有` : P.kind === 'period' ? `${curPeriod().label}のまとめを共有` : '共有';
   // 記録の共有のときだけ、テンプレートの切り替えボタンを出します
   const tpls = P.kind === 'item' ? [{k:'detail',n:'くわしく'},{k:'simple',n:'シンプル'}] : [];
   $('#post-tpl').innerHTML = tpls.map(t => `<button class="chip" data-tpl="${t.k}" aria-pressed="${P.tpl===t.k}">${t.n}</button>`).join('');
@@ -8662,6 +9154,7 @@ function openPost(it, kind){
   $('#post-ai').hidden = !S.cap.sample || P.kind !== 'item';
   $('#post-ai-state').textContent = '';
   if (P.kind === 'month') setPostText(monthPost());
+  else if (P.kind === 'period') setPostText(periodPost(curPeriod()));
   else setPostText(itemPost(it, P.tpl));
   setupPhotoShare();
   openSheet('#sh-post');
@@ -8707,17 +9200,17 @@ function canShareFiles(){
 //     「写真つきで共有」（または「画像つきで共有」）を大きく出し、となりに「写真なしでポスト」を置きます
 // ・それ以外：これまでどおり「Xで開く」を大きく出し、写真があればコピー・保存のボタンを出します
 function setupPhotoShare(){
-  const month = P.kind === 'month';
-  const d = !month && P.item && photoFor(P.item);
-  const share = canShareFiles() && (month || !!d);
+  // まとめの文章は、画像の画面の「文章だけ共有する」から開くので、画像つきの共有ボタンは出しません
+  const d = P.kind === 'item' && P.item && photoFor(P.item);
+  const share = canShareFiles() && !!d;
   const copy = !!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write);
   const ps = $('#post-share'), po = $('#post-open');
   ps.hidden = !share;
-  ps.innerHTML = SHARE_ICON + (month ? '画像つきで共有' : '写真つきで共有');
-  po.textContent = share ? (month ? '画像なしでポスト' : '写真なしでポスト') : 'Xで開く';
+  ps.innerHTML = SHARE_ICON + '写真つきで共有';
+  po.textContent = share ? '写真なしでポスト' : 'Xで開く';
   po.className = share ? 'btn ghost' : 'btn x';
   $('#post-hint').textContent = share
-    ? `共有画面からXやLINEなどを選べます。文章のみの場合は「${month ? '画像' : '写真'}なしでポスト」。`
+    ? `共有画面からXやLINEなどを選べます。文章のみの場合は「写真なしでポスト」。`
     : '「Xで開く」を押すと、この文章が入った投稿画面がXで開きます。';
   $('#post-photo').hidden = !d;
   if (!d) return;
@@ -8745,10 +9238,8 @@ async function pngFromDataUrl(d){
 function wirePhotoShare(){
   $('#post-share').addEventListener('click', async () => {
     try {
-      // 今月のまとめなら、まとめの画像を作って付けます。記録なら、その記録の写真を付けます
-      const f = P.kind === 'month'
-        ? new File([await drawMonthImage()], `gumilog-${sumKey().replace('-', '')}.jpg`, {type:'image/jpeg'})
-        : await photoFile();
+      // 記録の写真を付けます
+      const f = await photoFile();
       await navigator.share({files:[f], text:$('#post-text').value});
     }
     catch(e){
@@ -9386,7 +9877,18 @@ function renderSettings(){
    タブ・ボタン・検索欄などのクリックや入力に、それぞれの動きを結びつけます。 */
 // 下のタブの切り替え
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
-// データタブの「データ／カレンダー」の切り替え
+// くわしいデータ：期間の切りかえと、名前を押したときの中身（データ画面・中身のシートの中でも使います）
+document.addEventListener('click', e => {
+  const p = e.target.closest('[data-dtper]');
+  if (p){
+    S.ui.dtPer = p.dataset.dtper;
+    renderDetail();
+    return;
+  }
+  const d = e.target.closest('[data-drill]');
+  if (d) openDrill(d.dataset.drill, d.dataset.v);
+});
+// データタブの「データ／くわしく／カレンダー」の切り替え
 $('#data-seg').addEventListener('click', e => {
   const b = e.target.closest('[data-dview]');
   if (!b) return;
@@ -9466,6 +9968,19 @@ $('#app').addEventListener('click', async e => {
   }
   if (e.target.closest('#month-img')){
     openMonthImage();
+    return;
+  }
+  if (e.target.closest('#per-img')){
+    openPeriodImage();
+    return;
+  }
+  // 「年間・半期のまとめ」の期間と年の切り替え
+  const pk = e.target.closest('[data-per]'), py = e.target.closest('[data-pery]');
+  if (pk || py){
+    const P = curPeriod();
+    S.ui.perY = py ? +py.dataset.pery : P.y;
+    S.ui.perK = pk ? pk.dataset.per : P.k;
+    renderStats();
     return;
   }
   // 「○月のまとめ」の今月／先月の切り替え
