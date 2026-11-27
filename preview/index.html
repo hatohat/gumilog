@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="4ec85da0cb"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="4939fbdd74"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -3281,6 +3281,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:216, k:'p', at:'2026-11-27 09:56', t:'記録を消したあとも、その記録で獲得した称号が残る不具合を修正しました。アプリを開いたときと記録を変えたときに、記録と称号が合っているかを確認し、合わない称号は取り消します。'},
   {v:215, k:'f', at:'2026-11-27 09:50', t:'データタブに「くわしく」を追加しました。期間を選んで、初めて買ったグミとリピートの割合、味と色、曜日ごとの袋数、おいしさ、1袋の値段、新商品を買った早さ、カタログ制覇率、手持ちの状況を確認できます。メーカー・お店・グミの名前を押すと、その記録の内訳を表示します。'},
   {v:214, k:'p', at:'2026-11-27 09:44', t:'称号のくわしい画面で、各ランクの説明文がメダルから離れて表示される不具合を修正しました。'},
   {v:213, k:'f', at:'2026-11-27 09:39', t:'称号の共有ボタンを「文章だけ共有」と「画像で共有」に変更しました。「文章だけ共有」は、スマホの共有画面からXやInstagram、LINEなどを選べます。'},
@@ -3918,6 +3919,9 @@ function applySettingsDoc(d){
     if (ch){
       lsSet(LS_ACH, cur);
       renderAch();
+      // 届いた段階が、いまの記録で届くかどうかを確かめ直します（届かない段階は checkAch が取り消します）
+      clearTimeout(achCheckT);
+      achCheckT = setTimeout(checkAch, 400);
     }
   }
   if (d && d.monthItems && typeof d.monthItems === 'object' && JSON.stringify(d.monthItems) !== JSON.stringify(S.monthItems)){
@@ -6755,6 +6759,7 @@ const achSaved = () => {
 
 // すべての称号の、いまの状態を返します。
 // cur: いまの数、got: とった段階の数（保存してある段階と、いまの数で届く段階の大きいほう）、reached: いまの数で届く段階の数
+// （届かなくなった段階は、checkAch が保存から取り消します）
 function achStatus(){
   const c = achCtx(), saved = achSaved() || {};
   return ACH.map(a => {
@@ -7228,6 +7233,10 @@ async function shareAchImage(a, got, btn){
 // いまお祝い・くわしい画面に出している称号です（画像のボタンで使います）。
 let achShown = null;
 
+// 記録を消さなくても数が減る称号です。一度獲得したら、記録と合わなくても取り消しません
+// （食べると減る：積みグミ・積みすぎ注意・完食率／写真の読みこみや端末で変わる：グミカメラマン・グミ情報屋／
+//   カタログが追いつくと減る：新しい味の発見者・知る人ぞ知るメーカー・グミの開拓者）
+const ACH_KEEP = new Set(['stock', 's-tsumi', 'finrate', 'photos', 'suggest', 'newflavor', 'minor', 'explorer']);
 // 称号をとったときのお祝いを順番に出すための待ち行列です。
 let achQueue = null, achT = 0;
 // 記録が変わるたびに、新しくとった称号がないかを調べます。
@@ -7242,6 +7251,21 @@ function checkAch(){
     const n = st.reduce((m, s) => m + s.reached, 0);
     if (n) queueAchWin({intro:n});
     return;
+  }
+  // 記録を消したり直したりして、いまの記録では届かなくなった段階は取り消します（獲得した日も消します）。
+  // 間違えて記録したときに獲得した称号が、記録を消したあとも残らないようにするためです
+  const lost = st.filter(s => !ACH_KEEP.has(s.a.id) && (+saved[s.a.id] || 0) > s.reached);
+  if (lost.length){
+    const at = achAtGet();
+    lost.forEach(s => {
+      saved[s.a.id] = s.reached;
+      if (at && Array.isArray(at[s.a.id]) && at[s.a.id].length > s.reached) at[s.a.id].length = s.reached;
+    });
+    if (at) lsSet(LS_ACH_AT, at);
+    lsSet(LS_ACH, saved);
+    saveSettingsDoc();
+    renderAch();
+    toast(`記録に合わない称号を${lost.length}個取り消しました`);
   }
   const gained = st.filter(s => s.reached > (+saved[s.a.id] || 0));
   if (!gained.length) return;
