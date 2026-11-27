@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="91485ae3d2"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8c2f336568"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2530,6 +2530,8 @@ a.set-item{text-decoration:none}
   .aw-medal { animation:none }
 }
 /* 「○月のまとめ」の見出しと、今月／先月の切り替え */
+.per-kinds{margin:0 0 10px}
+.per-hot{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .per-years{margin:0 0 10px;max-width:280px}
 .per-years button{padding:5px 4px;font-size:12px}
 .sum-h {
@@ -3159,7 +3161,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
-  {v:211, k:'f', at:'2026-11-27 09:17', t:'データタブに「年間・半期のまとめ」を追加しました。1年・上半期・下半期ごとの袋数、月ごとの推移、いちばん買ったグミなどをまとめ、画像と文章で共有できます。'},
+  {v:211, k:'f', at:'2026-11-27 09:17', t:'データタブに「年間・半期のまとめ」を追加しました。1年・上半期・下半期ごとの袋数、月ごとの推移、いちばん買ったグミなどをまとめ、画像と文章で共有できます。6月と12月は欄を開いて上のほうに表示し、それ以外の月は閉じた状態で表示します。'},
   {v:210, k:'f', at:'2026-11-23 17:15', t:'店舗限定の商品を名前の候補から選んだとき、「店舗限定」タグが付くようにしました。'},
   {v:209, k:'p', at:'2026-11-20 10:56', t:'1袋に複数の味が入った商品を名前の候補から選んだとき、入っている味が味の欄に入るようにしました。'},
   {v:208, k:'f', at:'2026-11-20 10:52', t:'データタブの「殿堂入り」に、新しく★5をつけたグミが表示されない不具合を修正しました。★5をつけた記録が新しい順に表示されます。'},
@@ -4465,9 +4467,11 @@ function curPeriod(){
   const t = todayStr(), y0 = +t.slice(0, 4), ys = periodYears();
   let y = S.ui.perY, k = S.ui.perK;
   if (!ys.includes(y)) y = t.slice(5, 7) === '01' && ys.includes(y0 - 1) ? y0 - 1 : y0;
-  if (!periodKinds(y).some(([kk]) => kk === k)) k = 'year';
+  if (!periodKinds(y).some(([kk]) => kk === k)) k = t.slice(5, 7) === '06' && y === y0 ? 'h1' : 'year';
   return periodOf(y, k);
 }
+// まとめの時期（6月と12月）なら true です。この時期だけ、データ画面のまとめ欄を開いて上のほうに出します
+const periodSeason = () => ['06', '12'].includes(todayStr().slice(5, 7));
 // 期間がまだ終わっていなければ true です
 const periodOngoing = p => todayStr() <= p.end;
 // 期間の「1/1〜12/31」のような表示です（終わっていない期間は今日まで）
@@ -5058,6 +5062,14 @@ function renderStats(){
   const best = [...all].filter(i => (i.rating||0) === 5).sort(byDateDesc);
   const bestUnique = [];
   best.forEach(i => { if (bestUnique.length < 5 && !bestUnique.some(b => b.name === i.name)) bestUnique.push(i); });
+  // 年間・半期のまとめ欄（6月・12月は開いて今月のまとめの上に、それ以外の月は閉じて下に出します）
+  const season = periodSeason(), perPanel = `
+    <details class="panel ach-near per-panel${season ? ' per-hot' : ''}" id="per-panel" ${(S.ui.perOpen ?? season) ? 'open' : ''}><summary><h3>${season ? P.label + 'のまとめ' : '年間・半期のまとめ'}</h3></summary>
+      <div class="seg upd-seg per-kinds" role="tablist" aria-label="まとめる期間" style="grid-template-columns:repeat(${periodKinds(P.y).length},minmax(0,1fr));width:${periodKinds(P.y).length * 66}px">${periodKinds(P.y).map(([k, n]) => `<button type="button" role="tab" data-per="${k}" aria-checked="${P.k === k}">${n}</button>`).join('')}</div>
+      ${pys.length > 1 ? `<div class="seg upd-seg per-years" role="tablist" aria-label="まとめる年" style="grid-template-columns:repeat(${Math.min(pys.length, 4)},minmax(0,1fr))">${pys.map(y => `<button type="button" role="tab" data-pery="${y}" aria-checked="${P.y === y}">${y}年</button>`).join('')}</div>` : ''}
+      ${ps.count ? `<dl class="facts"><dt>袋数</dt><dd>${ps.count}袋（${ps.kinds}種類）・${yen(ps.spend)}</dd><dt>記録した日</dt><dd>${ps.days}日</dd><dt>いちばんリピ</dt><dd>${ps.reps[0].count > 1 ? `${esc(ps.reps[0].name)}（${ps.reps[0].count}回）` : '—'}</dd><dt>推しメーカー</dt><dd>${esc(ps.topMaker || '—')}</dd><dt>好み</dt><dd>${ps.type ? esc(ps.type) + '派' : '—'}</dd><dt>獲得した称号</dt><dd>${ps.gains ? ps.gains.length + '個' : '—'}</dd></dl>
+      ${periodOngoing(P) ? `<p class="hint" style="margin:0">${periodRange(P)}の記録です（途中経過）。</p>` : ''}
+      <div class="btn-row"><button class="btn primary month-img" type="button" id="per-img">${IMG_ICON}${P.label}のまとめを画像で共有</button></div>` : '<p class="hint" style="margin:0">この期間の記録はまだありません。</p>'}</details>`;
   const statsBox = $('#v-stats');
   keepChartScroll(statsBox, () => statsBox.innerHTML = `
     <div class="kpis">
@@ -5066,16 +5078,12 @@ function renderStats(){
       <div class="kpi"><div class="lbl">ぜんぶで</div><div class="v num">${all.length}<small>袋</small></div></div>
       <div class="kpi"><div class="lbl">記録した種類</div><div class="v num">${unique}<small>種</small></div></div>
     </div>
+${season ? perPanel : ''}
     <div class="panel"><div class="sum-h"><h3>${+sk.slice(5)}月のまとめ</h3>
         <div class="seg upd-seg sum-seg" role="tablist" aria-label="まとめる月">${[['this','今月'],['last','先月']].map(([k, n]) => `<button type="button" role="tab" data-sum="${k}" aria-checked="${(S.ui.sumMonth === 'last' ? 'last' : 'this') === k}">${n}</button>`).join('')}</div></div>
       <dl class="facts"><dt>袋数</dt><dd>${sms.count}袋（${new Set(sms.list.map(i => i.name)).size}種類）・${yen(sms.spend)}</dd><dt>カタログに提案</dt><dd>${suggestLog().filter(d => ym(d) === sk).length}件</dd><dt>推しメーカー</dt><dd>${esc(sms.topMaker || '—')}</dd><dt>ベストグミ</dt><dd>${bestCell(all, sk)}</dd></dl>
       <div class="btn-row"><button class="btn primary month-img" type="button" id="month-img">${IMG_ICON}${+sk.slice(5)}月のまとめを画像で共有</button></div></div>
-    <div class="panel"><div class="sum-h"><h3>${P.label}のまとめ</h3>
-        <div class="seg upd-seg sum-seg" role="tablist" aria-label="まとめる期間" style="grid-template-columns:repeat(${periodKinds(P.y).length},minmax(0,1fr));width:${periodKinds(P.y).length * 66}px">${periodKinds(P.y).map(([k, n]) => `<button type="button" role="tab" data-per="${k}" aria-checked="${P.k === k}">${n}</button>`).join('')}</div></div>
-      ${pys.length > 1 ? `<div class="seg upd-seg per-years" role="tablist" aria-label="まとめる年" style="grid-template-columns:repeat(${Math.min(pys.length, 4)},minmax(0,1fr))">${pys.map(y => `<button type="button" role="tab" data-pery="${y}" aria-checked="${P.y === y}">${y}年</button>`).join('')}</div>` : ''}
-      ${ps.count ? `<dl class="facts"><dt>袋数</dt><dd>${ps.count}袋（${ps.kinds}種類）・${yen(ps.spend)}</dd><dt>記録した日</dt><dd>${ps.days}日</dd><dt>いちばんリピ</dt><dd>${ps.reps[0].count > 1 ? `${esc(ps.reps[0].name)}（${ps.reps[0].count}回）` : '—'}</dd><dt>推しメーカー</dt><dd>${esc(ps.topMaker || '—')}</dd><dt>好み</dt><dd>${ps.type ? esc(ps.type) + '派' : '—'}</dd><dt>獲得した称号</dt><dd>${ps.gains ? ps.gains.length + '個' : '—'}</dd></dl>
-      ${periodOngoing(P) ? `<p class="hint" style="margin:0">${periodRange(P)}の記録です（途中経過）。</p>` : ''}
-      <div class="btn-row"><button class="btn primary month-img" type="button" id="per-img">${IMG_ICON}${P.label}のまとめを画像で共有</button></div>` : '<p class="hint" style="margin:0">この期間の記録はまだありません。</p>'}</div>
+${season ? '' : perPanel}
     <div class="panel chart"><h3>月ごとの袋数<span class="s">横にスクロールで前の月へ</span></h3>${monthBars('bags', all, l => l.length, n => n)}</div>
     <div class="panel chart"><h3>月ごとの出費<span class="s">横にスクロールで前の月へ</span></h3>${monthBars('spend', all, l => l.reduce((t, i) => t + spendOf(i), 0), n => n >= 10000 ? (n / 10000).toFixed(n >= 100000 ? 0 : 1) + '万' : n.toLocaleString('ja-JP'))}</div>
     <div class="panel"><h3>グミの好みマップ<span class="s">かたさ × すっぱさ</span></h3>
@@ -7026,6 +7034,8 @@ function showAchWin(){
 // 称号タブのカード、くわしい画面、お祝いのボタンの動きを登録します。
 function wireAch(){
   // 「もうすぐとれる称号」を閉じたか開いたかを覚えておきます（描き直しても、次に開いたときもそのままにするため）
+  // 年間・半期のまとめ欄を開いたか閉じたかを、アプリを開いているあいだ覚えておきます（次に開いたときは、時期に合わせて開閉します）
+  $('#v-stats').addEventListener('toggle', e => { if (e.target.id === 'per-panel') S.ui.perOpen = e.target.open; }, true);
   $('#v-ach').addEventListener('toggle', e => {
     const cat = e.target.dataset && e.target.dataset.cat;
     if (cat){
