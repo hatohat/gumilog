@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="8d0f90580c"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="gumilog-build" content="6f4761d238"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="買って食べたグミを記録して、びんに貯めて、Xにポストできるグミ活ログ"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="ぐみろぐプレビュー"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#E8590C"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>ぐみろぐ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 文字のフォントは、読み込みが終わるまで画面の表示を待たせないよう、あとから効かせます（最初は端末の文字で出ます） -->
@@ -2407,7 +2407,8 @@ a.set-item{text-decoration:none}
 .ach-steps li.ok {
   color:var(--ink)
 }
-.ach-steps li span {
+/* 説明文の欄だけを広げます（メダルを包む .medal-w は広げません） */
+.ach-steps li > span:not(.medal-w) {
   flex:1;
   display:flex;
   flex-direction:column
@@ -3240,6 +3241,7 @@ const LS_PHOTOS = 'gumilog-pv.photos.v1';
 // 画面に出す「Ver.2.10.5」のような番号は、k から古い順に数えて決めます（updVer）。v は Claude 版の公開回数です（時刻は日本時間です）。
 // カタログへの追加はここには書きません。お知らせ → カタログ のタブは、カタログの「追加日」の列から読み取ります。
 const UPDATES = [
+  {v:214, k:'p', at:'2026-11-27 09:44', t:'称号のくわしい画面で、各ランクの説明文がメダルから離れて表示される不具合を修正しました。'},
   {v:213, k:'f', at:'2026-11-27 09:39', t:'称号の共有ボタンを「文章だけ共有」と「画像で共有」に変更しました。「文章だけ共有」は、スマホの共有画面からXやInstagram、LINEなどを選べます。'},
   {v:212, k:'p', at:'2026-11-27 09:35', t:'月のまとめの「文章だけ共有する」画面に、画像つきで共有するボタンが表示される不具合を修正しました。'},
   {v:211, k:'f', at:'2026-11-27 09:17', t:'データタブに「年間・半期のまとめ」を追加しました。1年・上半期・下半期ごとの袋数、月ごとの推移、いちばん買ったグミなどをまとめ、画像と文章で共有できます。6月と12月は欄を開いて上のほうに表示し、それ以外の月は閉じた状態で表示します。'},
