@@ -548,7 +548,10 @@
    "pt": "incl",
    "rel": "2026-08-21",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1611_ext_2_0.pdf",
-   "updated": "2026-11-02"
+   "updated": "2026-11-27",
+   "j": {
+    "4901351027073": ""
+   }
   },
   {
    "n": "ピュレサプリ アサイーベリーヨーグルト",
@@ -558,7 +561,10 @@
    "pt": "incl",
    "rel": "2026-07-21",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1586_ext_2_0.pdf",
-   "updated": "2026-11-02"
+   "updated": "2026-11-27",
+   "j": {
+    "4901351026861": ""
+   }
   },
   {
    "n": "カンデミーナグミ スーパーベスト",
@@ -607,7 +613,10 @@
    ],
    "rel": "2026-07-28",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1595_ext_2_0.pdf",
-   "updated": "2026-11-02"
+   "updated": "2026-11-27",
+   "j": {
+    "4901351027080": "クールレモンソーダ"
+   }
   },
   {
    "n": "カンロ ザ・ストロンググミ",
@@ -704,7 +713,10 @@
    "pt": "incl",
    "rel": "2026-09-01",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1610_ext_2_0.pdf",
-   "updated": "2026-11-02"
+   "updated": "2026-11-27",
+   "j": {
+    "4901351027134": "レモン"
+   }
   },
   {
    "n": "やさしい塩グミ",
@@ -717,7 +729,10 @@
    "pt": "incl",
    "rel": "2026-06-11",
    "url": "https://kanro-corp.g.kuroco-img.app/files/topics/1575_ext_2_0.pdf",
-   "updated": "2026-11-02"
+   "updated": "2026-11-27",
+   "j": {
+    "4901351027042": "塩グレープフルーツ"
+   }
   },
   {
    "n": "グミ学 ウマイパウダーの定理",
@@ -759,7 +774,10 @@
    "p": 190,
    "pt": "incl",
    "url": "https://kanro.jp/products/9243578335391",
-   "updated": "2026-10-06"
+   "updated": "2026-11-27",
+   "j": {
+    "4901351068380": "ラフランス"
+   }
   },
   {
    "n": "グミッツェルプチ",
@@ -1549,7 +1567,8 @@
    "url": "https://www.kabaya.co.jp/products/catalog/gummy/3175.html",
    "updated": "2026-11-27",
    "j": {
-    "4901550271888": "レモン&ソーダデュオ"
+    "4901550271888": "レモン&ソーダデュオ",
+    "4901550272403": "グレープ&マスカットデュオ"
    }
   },
   {
@@ -2308,9 +2327,12 @@
     "マスカットソーダ"
    ],
    "url": "https://x.com/kanro_pr/status/2029385206868967910",
-   "updated": "2026-11-23",
+   "updated": "2026-11-27",
    "sl": {
     "*": "JR東日本"
+   },
+   "j": {
+    "4901351027219": "マスカットソーダ"
    },
    "added": "2026-10-09"
   },
@@ -4623,11 +4645,14 @@
    "p": 186,
    "pt": "excl",
    "url": "https://shop.seikatsuclub.coop/product_detail.html?S_CD=094676&CATE=z004",
-   "updated": "2026-11-23",
+   "updated": "2026-11-27",
    "c": "rainbow",
    "mix": "りんご・みかん・ぶどう",
    "sl": {
     "*": "生活クラブ生協"
+   },
+   "j": {
+    "4967973069846": ""
    },
    "added": "2026-10-26"
   },
@@ -5168,11 +5193,14 @@
    "p": 300,
    "pt": "incl",
    "url": "https://www.lawson.co.jp/recommend/original/detail/1534269_1996.html",
-   "updated": "2026-11-23",
+   "updated": "2026-11-27",
    "c": "soda",
    "mix": "ラムネ",
    "sl": {
     "*": "ローソン"
+   },
+   "j": {
+    "4902777265612": ""
    },
    "added": "2026-11-23"
   },
@@ -6701,6 +6729,9 @@
    "rel": "2026-12-07",
    "url": "https://www.sej.co.jp/products/a/item/322683/",
    "updated": "2026-11-27",
+   "j": {
+    "4901351026342": "爽快ラムネ"
+   },
    "added": "2026-11-27"
   },
   {
